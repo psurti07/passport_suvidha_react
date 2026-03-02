@@ -172,7 +172,7 @@ export default function PortalLayout({
   useEffect(() => {
     const fetchApplicationProgress = async () => {
       try {
-        const response = await fetch("https://lendingindia.in/api/application-progress");
+        const response = await fetch("/api/application-progress");
         if (!response.ok) throw new Error("Failed to fetch application progress");
         const data = await response.json();
         setApplicationProgress(data);

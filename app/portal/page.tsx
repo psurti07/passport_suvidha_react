@@ -185,7 +185,7 @@ export default function PortalDashboard() {
   useEffect(() => {
     const fetchApplicationProgress = async () => {
       try {
-        const response = await fetch("https://lendingindia.in/api/application-progress");
+        const response = await fetch("/api/application-progress");
 
         if (!response.ok) {
           // Parse the error response

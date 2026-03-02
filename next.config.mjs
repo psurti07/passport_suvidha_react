@@ -7,8 +7,6 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: '/passport', 
   eslint: {
     ignoreDuringBuilds: true,
   },

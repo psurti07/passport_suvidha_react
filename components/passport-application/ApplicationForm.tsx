@@ -399,33 +399,28 @@ function ApplicationForm() {
     }
   };
 
-  const verifyOTP = async () => {
+  const verifyOTP = async (e?: React.FormEvent) => {
     setLoading(true);
     setErrorMessage("");
 
     try {
       // Prevent default form submission behavior that might cause navigation
-      event?.preventDefault?.();
+      e?.preventDefault?.();
 
       try {
-        console.log({
-          mobile_number: formData.mobile,
-          otp: formData.otp,
-          purpose: "registration",
-        });
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/otp/verify`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            otp: formData.otp,
-            purpose: "registration",
-          }),
-        });
+        const response = await fetch(`/api/otp/verify`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              otp: formData.otp,
+              purpose: "registration",
+            }),
+          });
 
         const data = await response.json();
 
@@ -484,7 +479,7 @@ function ApplicationForm() {
       try {
         // ✅ STEP 1: Create Customer
         const customerResponse = await fetch(
-          "http://localhost:8000/api/customers/create",
+          "/api/customers/create",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -498,7 +493,6 @@ function ApplicationForm() {
         );
 
         const customerData = await customerResponse.json();
-        console.log("Customer API:", customerData);
 
         if (!customerResponse.ok) {
           if (customerData.errors) {
@@ -513,7 +507,7 @@ function ApplicationForm() {
         }
 
         // ✅ STEP 2: Send OTP
-        const otpResponse = await fetch("http://localhost:8000/api/otp/send", {
+        const otpResponse = await fetch("/api/otp/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -523,7 +517,6 @@ function ApplicationForm() {
         });
 
         const otpData = await otpResponse.json();
-        console.log("OTP API:", otpData);
 
         if (!otpResponse.ok) {
           if (otpData.errors?.mobile_number) {
@@ -566,22 +559,25 @@ function ApplicationForm() {
         const formattedDob = formatDateForApi(formData.dateOfBirth);
 
         // Send additional information to API using the internal API route
-        const response = await fetch("/api/customer/additional-info", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `/api/customer/additional-info`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              address: formData.address,
+              pin_code: formData.zipCode,
+              city: formData.city,
+              state: formData.state,
+              gender: formData.gender,
+              date_of_birth: formattedDob,
+              place_of_birth: formData.placeOfBirth,
+            }),
           },
-          body: JSON.stringify({
-            address: formData.address,
-            pin_code: formData.zipCode,
-            city: formData.city,
-            state: formData.state,
-            gender: formData.gender,
-            date_of_birth: formattedDob,
-            place_of_birth: formData.placeOfBirth,
-          }),
-        });
+        );
 
         const data = await response.json();
 
@@ -656,14 +652,30 @@ function ApplicationForm() {
       }
 
       // Send service selection to API using internal API route
-      const response = await fetch("/api/customer/select-service", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/customer/select-service`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: JSON.stringify({ service_code: serviceCode }),
+      // });
+
+      const response = await fetch("/api/customer/select-service",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            service_code: serviceCode,
+            book_size: formData.bookSize,
+            passport_type: formData.passportType,
+            nationality: formData.nationality,
+          }),
         },
-        body: JSON.stringify({ service_code: serviceCode }),
-      });
+      );
 
       const data = await response.json();
 

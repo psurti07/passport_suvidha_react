@@ -97,17 +97,17 @@ const stateNameToCode: { [key: string]: string } = {
 
 // Helper function to convert date from DD/MM/YYYY to YYYY-MM-DD format
 const formatDateForApi = (dateString: string): string => {
-  if (!dateString) return '';
-  
+  if (!dateString) return "";
+
   // Check if it's already in YYYY-MM-DD format
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
     return dateString;
   }
-  
+
   // Convert from DD/MM/YYYY to YYYY-MM-DD
-  const parts = dateString.split('/');
+  const parts = dateString.split("/");
   if (parts.length !== 3) return dateString;
-  
+
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
 };
 
@@ -151,12 +151,15 @@ function ApplicationForm() {
       const savedStep = localStorage.getItem("passportFormStep");
       const savedOtpVerified = localStorage.getItem("otpVerified");
       const savedTimestamp = localStorage.getItem("passportFormTimestamp");
-      
+
       const currentTime = Date.now();
       const threeHoursInMs = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-      
+
       // Check if data is older than 3 hours
-      if (savedTimestamp && currentTime - parseInt(savedTimestamp) > threeHoursInMs) {
+      if (
+        savedTimestamp &&
+        currentTime - parseInt(savedTimestamp) > threeHoursInMs
+      ) {
         // Clear expired data
         clearSavedFormData();
         return;
@@ -242,7 +245,7 @@ function ApplicationForm() {
       localStorage.removeItem("passportFormStep");
       localStorage.removeItem("otpVerified");
       localStorage.removeItem("passportFormTimestamp");
-      
+
       // Also clear authentication tokens
       clearToken();
     }
@@ -276,7 +279,7 @@ function ApplicationForm() {
       setZipLoading(true);
       try {
         const response = await fetch(
-          `https://api.postalpincode.in/pincode/${value}`
+          `https://api.postalpincode.in/pincode/${value}`,
         );
         const data: PinCodeResponse[] = await response.json();
 
@@ -317,7 +320,7 @@ function ApplicationForm() {
     // Auto-focus next input if value is entered
     if (value && index < 3) {
       const nextInput = document.querySelector(
-        `input[name=otp-${index + 1}]`
+        `input[name=otp-${index + 1}]`,
       ) as HTMLInputElement;
       if (nextInput) nextInput.focus();
     }
@@ -325,12 +328,12 @@ function ApplicationForm() {
 
   const handleOTPKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     // Handle backspace
     if (e.key === "Backspace" && !otpDigits[index] && index > 0) {
       const prevInput = document.querySelector(
-        `input[name=otp-${index - 1}]`
+        `input[name=otp-${index - 1}]`,
       ) as HTMLInputElement;
       if (prevInput) {
         prevInput.focus();
@@ -364,32 +367,32 @@ function ApplicationForm() {
 
     try {
       // Use internal API route instead of direct external API call
-      const otpResponse = await fetch('/api/otp/send', {
-        method: 'POST',
+      const otpResponse = await fetch("/api/otp/send", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           mobile_number: formData.mobile,
-          purpose: 'registration',
+          purpose: "registration",
         }),
       });
-      
+
       const data = await otpResponse.json();
-      
+
       if (!otpResponse.ok) {
         throw { response: { data, status: otpResponse.status } };
       }
-      
+
       setOtpSent(true);
     } catch (error: any) {
-      console.error('Error sending OTP:', error);
-      
+      console.error("Error sending OTP:", error);
+
       // Set error message for OTP send errors
       if (error.response?.data?.errors?.mobile_number) {
         setErrorMessage(error.response.data.errors.mobile_number[0]);
       } else {
-        setErrorMessage('Failed to send OTP. Please try again.');
+        setErrorMessage("Failed to send OTP. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -399,40 +402,45 @@ function ApplicationForm() {
   const verifyOTP = async () => {
     setLoading(true);
     setErrorMessage("");
-    
+
     try {
       // Prevent default form submission behavior that might cause navigation
       event?.preventDefault?.();
-      
+
       try {
-        const response = await fetch('/api/otp/verify', {
-          method: 'POST',
+        console.log({
+          mobile_number: formData.mobile,
+          otp: formData.otp,
+          purpose: "registration",
+        });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/otp/verify`, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            Accept: "application/json",
           },
           body: JSON.stringify({
             mobile_number: formData.mobile,
             otp: formData.otp,
-            purpose: 'registration',
-          })
+            purpose: "registration",
+          }),
         });
-        
+
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw { response: { data, status: response.status } };
         }
-  
+
         // OTP verification successful
         setOtpVerified(true);
-        
+
         // Store the auth token if needed for future authenticated requests
         if (data?.token) {
-          localStorage.setItem('token', data.token);
+          localStorage.setItem("token", data.token);
         }
-        
+
         // Automatically move to the next step after successful verification
         setTimeout(() => {
           setStep((prevStep) => prevStep + 1);
@@ -440,28 +448,28 @@ function ApplicationForm() {
       } catch (apiError: any) {
         // Handle API error (invalid OTP)
         // console.log('OTP validation failed:', apiError.response?.status);
-        
+
         // Reset OTP digits
-        setOtpDigits(['', '', '', '']);
-        setFormData((prev) => ({ ...prev, otp: '' }));
-        
+        setOtpDigits(["", "", "", ""]);
+        setFormData((prev) => ({ ...prev, otp: "" }));
+
         // Set appropriate error message based on response
         if (apiError.response?.status === 401) {
-          setErrorMessage('Invalid or expired OTP. Please request a new one.');
+          setErrorMessage("Invalid or expired OTP. Please request a new one.");
         } else if (apiError.response?.data?.errors?.otp) {
           setErrorMessage(apiError.response.data.errors.otp[0]);
         } else {
-          setErrorMessage('Invalid OTP. Please try again.');
+          setErrorMessage("Invalid OTP. Please try again.");
         }
       }
     } catch (error) {
       // Handle any other unexpected errors
-      console.error('Unexpected error during OTP verification:', error);
-      setErrorMessage('An unexpected error occurred. Please try again.');
-      
+      console.error("Unexpected error during OTP verification:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+
       // Reset OTP digits
-      setOtpDigits(['', '', '', '']);
-      setFormData((prev) => ({ ...prev, otp: '' }));
+      setOtpDigits(["", "", "", ""]);
+      setFormData((prev) => ({ ...prev, otp: "" }));
     } finally {
       setLoading(false);
     }
@@ -472,110 +480,97 @@ function ApplicationForm() {
     if (step === 1) {
       setLoading(true);
       setErrorMessage("");
-      
+
       try {
-        // First save the basic customer information and send OTP
-        try {
-          const customerResponse = await fetch('/api/customers/create', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        // ✅ STEP 1: Create Customer
+        const customerResponse = await fetch(
+          "http://localhost:8000/api/customers/create",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               first_name: formData.firstName,
               last_name: formData.lastName,
               email: formData.email,
               mobile_number: formData.mobile,
             }),
-          });
-          
-          const customerData = await customerResponse.json();
-          
-          if (!customerResponse.ok) {
-            throw { response: { data: customerData, status: customerResponse.status } };
-          }
-          
-          // If successful, send OTP
-          try {
-            const otpResponse = await fetch('/api/otp/send', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                mobile_number: formData.mobile,
-                purpose: 'registration',
-              }),
-            });
-            
-            const otpData = await otpResponse.json();
-            
-            if (!otpResponse.ok) {
-              throw { response: { data: otpData, status: otpResponse.status } };
-            }
-            
-            setOtpSent(true);
-            // Now proceed to next step
-            setStep((prevStep) => prevStep + 1);
-          } catch (otpError: any) {
-            console.error('Error sending OTP:', otpError);
-            
-            // Set error message for OTP send errors
-            if (otpError.response?.data?.errors?.mobile_number) {
-              setErrorMessage(otpError.response.data.errors.mobile_number[0]);
-            } else {
-              setErrorMessage('Failed to send OTP. Please try again.');
-            }
-          }
-        } catch (customerError: any) {
-          console.error('Error saving customer information:', customerError);
-          
-          // Set error message for customer data validation errors
-          if (customerError.response?.data?.errors) {
-            const firstError = Object.values(customerError.response.data.errors)[0];
-            if (Array.isArray(firstError) && firstError.length > 0) {
-              setErrorMessage(firstError[0]);
-            } else {
-              setErrorMessage('Invalid customer information. Please check your details.');
-            }
+          },
+        );
+
+        const customerData = await customerResponse.json();
+        console.log("Customer API:", customerData);
+
+        if (!customerResponse.ok) {
+          if (customerData.errors) {
+            const firstError = Object.values(customerData.errors)[0];
+            setErrorMessage(
+              Array.isArray(firstError) ? firstError[0] : "Validation error",
+            );
           } else {
-            setErrorMessage('Failed to save customer information. Please try again.');
+            setErrorMessage("Failed to save customer information.");
           }
+          return;
         }
+
+        // ✅ STEP 2: Send OTP
+        const otpResponse = await fetch("http://localhost:8000/api/otp/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mobile_number: formData.mobile,
+            purpose: "registration",
+          }),
+        });
+
+        const otpData = await otpResponse.json();
+        console.log("OTP API:", otpData);
+
+        if (!otpResponse.ok) {
+          if (otpData.errors?.mobile_number) {
+            setErrorMessage(otpData.errors.mobile_number[0]);
+          } else {
+            setErrorMessage("Failed to send OTP.");
+          }
+          return;
+        }
+
+        // ✅ SUCCESS
+        setOtpSent(true);
+        setStep((prev) => prev + 1);
       } catch (error) {
-        console.error('Error in OTP process:', error);
-        setErrorMessage('An unexpected error occurred. Please try again.');
+        console.error("Unexpected Error:", error);
+        setErrorMessage("Something went wrong. Please try again.");
       } finally {
         setLoading(false);
       }
-      
-      return; // Return here to prevent moving to next step if there was an error
+
+      return;
     }
-    
+
     // If moving from step 3 to 4, submit additional information
     if (step === 3) {
       setLoading(true);
       setErrorMessage("");
-      
+
       try {
         // Get the stored token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
-          console.error('Authentication token not found');
-          setErrorMessage('Session expired. Please start over.');
+          console.error("Authentication token not found");
+          setErrorMessage("Session expired. Please start over.");
           setLoading(false);
           return;
         }
-        
+
         // Format date for API
         const formattedDob = formatDateForApi(formData.dateOfBirth);
-        
+
         // Send additional information to API using the internal API route
-        const response = await fetch('/api/customer/additional-info', {
-          method: 'POST',
+        const response = await fetch("/api/customer/additional-info", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             address: formData.address,
@@ -584,39 +579,39 @@ function ApplicationForm() {
             state: formData.state,
             gender: formData.gender,
             date_of_birth: formattedDob,
-            place_of_birth: formData.placeOfBirth
-          })
+            place_of_birth: formData.placeOfBirth,
+          }),
         });
-        
+
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw { response: { data, status: response.status } };
         }
-        
+
         // If we get here, the API call was successful
       } catch (error: any) {
-        console.error('Error submitting additional information:', error);
-        
+        console.error("Error submitting additional information:", error);
+
         // Handle errors
         if (error.response?.data?.errors) {
           const firstError = Object.values(error.response.data.errors)[0];
           if (Array.isArray(firstError) && firstError.length > 0) {
             setErrorMessage(firstError[0]);
           } else {
-            setErrorMessage('Invalid information. Please check your details.');
+            setErrorMessage("Invalid information. Please check your details.");
           }
         } else {
-          setErrorMessage('Failed to save your information. Please try again.');
+          setErrorMessage("Failed to save your information. Please try again.");
         }
-        
+
         setLoading(false);
         return;
       } finally {
         setLoading(false);
       }
     }
-    
+
     // Move to the next step for other transitions
     setStep((prevStep) => prevStep + 1);
   };
@@ -628,65 +623,76 @@ function ApplicationForm() {
   const completePayment = async () => {
     setLoading(true);
     setErrorMessage("");
-    
+
     try {
       // Get the stored token from localStorage
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        console.error('Authentication token not found');
-        setErrorMessage('Session expired. Please start over.');
+        console.error("Authentication token not found");
+        setErrorMessage("Session expired. Please start over.");
         setLoading(false);
         return;
       }
-      
+
       // Map the passport type and book size to the API's service codes
       let serviceCode;
-      if (formData.passportType === 'normal' && formData.bookSize === '36') {
-        serviceCode = 'NORMAL_36';
-      } else if (formData.passportType === 'normal' && formData.bookSize === '60') {
-        serviceCode = 'NORMAL_60';
-      } else if (formData.passportType === 'tatkal' && formData.bookSize === '36') {
-        serviceCode = 'TATKAL_36';
-      } else if (formData.passportType === 'tatkal' && formData.bookSize === '60') {
-        serviceCode = 'TATKAL_60';
+      if (formData.passportType === "normal" && formData.bookSize === "36") {
+        serviceCode = "NORMAL_36";
+      } else if (
+        formData.passportType === "normal" &&
+        formData.bookSize === "60"
+      ) {
+        serviceCode = "NORMAL_60";
+      } else if (
+        formData.passportType === "tatkal" &&
+        formData.bookSize === "36"
+      ) {
+        serviceCode = "TATKAL_36";
+      } else if (
+        formData.passportType === "tatkal" &&
+        formData.bookSize === "60"
+      ) {
+        serviceCode = "TATKAL_60";
       }
-      
+
       // Send service selection to API using internal API route
-      const response = await fetch('/api/customer/select-service', {
-        method: 'POST',
+      const response = await fetch("/api/customer/select-service", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ service_code: serviceCode })
+        body: JSON.stringify({ service_code: serviceCode }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw { response: { data, status: response.status } };
       }
-      
+
       // If we get here, the API call was successful
       // Show confetti for successful submission
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
-      
+
       // Clear saved form data on successful completion
       clearSavedFormData();
     } catch (error: any) {
-      console.error('Error completing payment:', error);
-      
+      console.error("Error completing payment:", error);
+
       // Handle errors
       if (error.response?.data?.errors) {
         const firstError = Object.values(error.response.data.errors)[0];
         if (Array.isArray(firstError) && firstError.length > 0) {
           setErrorMessage(firstError[0]);
         } else {
-          setErrorMessage('Invalid service selection. Please try again.');
+          setErrorMessage("Invalid service selection. Please try again.");
         }
       } else {
-        setErrorMessage('Failed to complete your application. Please try again.');
+        setErrorMessage(
+          "Failed to complete your application. Please try again.",
+        );
       }
     } finally {
       setLoading(false);
@@ -794,7 +800,12 @@ function ApplicationForm() {
           </motion.div>
         )}
         {step === 3 && (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" exit="exit">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
             <StepAddressDetails
               formData={formData}
               handleChange={handleChange}
@@ -807,7 +818,12 @@ function ApplicationForm() {
           </motion.div>
         )}
         {step === 4 && (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" exit="exit">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
             <StepPassportType
               formData={formData}
               handlePassportTypeChange={handlePassportTypeChange}
@@ -839,4 +855,4 @@ function ApplicationForm() {
   );
 }
 
-export default ApplicationForm; 
+export default ApplicationForm;

@@ -1106,7 +1106,7 @@ export default function Home() {
                             Email Support
                           </h4>
                           <p className="text-muted-foreground">
-                            support@PassportSuvidha.gov
+                            support@PassportSuvidha.com
                           </p>
                           <p className="text-sm text-muted-foreground">
                             Responses within 24-48 hours

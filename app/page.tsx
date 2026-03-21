@@ -201,12 +201,12 @@ export default function Home() {
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center relative">
-              <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy mb-2 sm:mb-4">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
+              <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy">
                 <span>Our Services</span>
               </div>
               <div className="space-y-2">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter gradient-heading">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Your Passport, Your Preference!
                 </h2>
                 <p className="max-w-[900px] text-sm sm:text-base md:text-lg text-muted-foreground">
@@ -215,10 +215,10 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mt-8 sm:mt-16">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
               <div className="group relative">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full">
+                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
                   <CardHeader className="pb-2">
                     <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
                       <FileText className="h-6 sm:h-7 w-6 sm:w-7" />
@@ -417,16 +417,20 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy mb-4">
-                  <span>Why Choose Us</span>
+                <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
+                  <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
+                    <span>Why Choose Us</span>
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+                      Our Achievements
+                    </h2>
+                    <p className="mt-4 text-muted-foreground md:text-xl">
+                      We take pride in our track record of excellence and
+                      customer satisfaction.
+                    </p>
+                  </div>
                 </div>
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
-                  Our Achievements
-                </h2>
-                <p className="mt-4 text-muted-foreground md:text-xl">
-                  We take pride in our track record of excellence and customer
-                  satisfaction.
-                </p>
               </motion.div>
             </div>
 
@@ -662,12 +666,12 @@ export default function Home() {
         {/* Locations Section */}
         <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy mb-4">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
                 <span>Find Us</span>
               </div>
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Passport Office Locations
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -675,7 +679,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto max-w-5xl mt-16 relative">
+            <div className="mx-auto max-w-5xl relative">
               <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
               <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
                 <CardContent className="p-0">
@@ -814,12 +818,12 @@ export default function Home() {
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[300px] h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[400px] h-[400px] left-0 bottom-0"></div>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center relative">
-              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy mb-4">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center relative  mb-12">
+              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
                 <span>Common Questions</span>
               </div>
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Frequently Asked Questions
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -827,7 +831,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto max-w-3xl mt-16 space-y-6">
+            <div className="mx-auto max-w-3xl space-y-6">
               <Card className="rounded-xl border-0 shadow-lg overflow-hidden">
                 <CardContent className="p-6">
                   <Accordion type="single" collapsible className="w-full">
@@ -940,11 +944,11 @@ export default function Home() {
         <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy mb-4">
+              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
                 <span>Get In Touch</span>
               </div>
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Contact Us
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -1087,9 +1091,7 @@ export default function Home() {
                           <h4 className="font-medium text-teal">
                             Phone Support
                           </h4>
-                          <p className="text-muted-foreground">
-                            1-800-123-4567
-                          </p>
+                          <p className="text-muted-foreground">7486046591</p>
                           <p className="text-sm text-muted-foreground">
                             Monday-Friday, 8am-8pm EST
                           </p>
@@ -1115,14 +1117,27 @@ export default function Home() {
                         <div className="p-3 rounded-full bg-teal/10 text-teal">
                           <MapPin className="h-6 w-6" />
                         </div>
-                        <div>
-                          <h4 className="font-medium text-teal">Main Office</h4>
-                          <p className="text-muted-foreground">
-                            123 Federal Plaza
-                          </p>
-                          <p className="text-muted-foreground">
-                            Washington, DC 20001
-                          </p>
+                        <div className="flex items-start gap-4">
+                          <div>
+                            <h4 className="font-medium text-teal">
+                              Main Office
+                            </h4>
+                            <p className="text-muted-foreground">
+                              Second Floor, Shop No. 227,
+                            </p>
+                            <p className="text-muted-foreground">
+                              Unique Square,
+                            </p>
+                            <p className="text-muted-foreground">
+                              Opposite Shubham K Mart,
+                            </p>
+                            <p className="text-muted-foreground">
+                              Singanpore Road, Singanpore,
+                            </p>
+                            <p className="text-muted-foreground">
+                              Surat, Gujarat - 395004
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -1140,13 +1155,13 @@ export default function Home() {
                     <CardContent>
                       <div className="space-y-3">
                         <div className="flex justify-between p-3 rounded-xl bg-gold/5">
-                          <span className="font-medium">Monday - Friday</span>
-                          <span>8:00 AM - 5:00 PM</span>
+                          <span className="font-medium">Monday - Saturday</span>
+                          <span>10:00 AM to 05:00 PM</span>
                         </div>
-                        <div className="flex justify-between p-3 rounded-xl bg-gold/5">
+                        {/* <div className="flex justify-between p-3 rounded-xl bg-gold/5">
                           <span className="font-medium">Saturday</span>
                           <span>9:00 AM - 1:00 PM</span>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between p-3 rounded-xl bg-gold/5">
                           <span className="font-medium">Sunday</span>
                           <span>Closed</span>

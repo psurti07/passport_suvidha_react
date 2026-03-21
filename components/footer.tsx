@@ -223,12 +223,20 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/disclaimer"
+                  className="text-white/70 hover:text-gold transition-colors"
+                >
+                  Disclaimer
+                </Link>
+              </li>
+              {/* <li>
+                <Link
                   href="/accessibility"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
                   Accessibility
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/refund-policy"
@@ -257,7 +265,7 @@ export function Footer() {
                 <Phone className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                 <div>
                   <p className="text-white/90 font-medium">Phone Support</p>
-                  <p className="text-white/70">+91 1800-123-4567</p>
+                  <p className="text-white/70">7486046591</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">

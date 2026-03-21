@@ -1,13 +1,33 @@
 "use client";
 
-import Link from "next/link"
+import Link from "next/link";
 import { useState } from "react";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FileText, Mail, Phone, MapPin, Clock, Send, MessageSquare } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  FileText,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Send,
+  MessageSquare,
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function Contact() {
@@ -19,7 +39,9 @@ export default function Contact() {
   const [inquiryType, setInquiryType] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,10 +79,10 @@ export default function Contact() {
       // console.log("Attempting to show success toast...");
       toast({
         title: "Message Sent!",
-        description: "We have received your message and will get back to you soon.",
+        description:
+          "We have received your message and will get back to you soon.",
         variant: "default",
       });
-
     } catch (error) {
       console.error("Error submitting form:", error);
       setSubmitStatus("error");
@@ -72,7 +94,6 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
@@ -80,7 +101,9 @@ export default function Contact() {
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">
                 Contact Us
               </h1>
-              <p className="text-muted-foreground md:text-xl">Get in touch with our support team for assistance</p>
+              <p className="text-muted-foreground md:text-xl">
+                Get in touch with our support team for assistance
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -93,13 +116,19 @@ export default function Contact() {
                         <MessageSquare className="h-5 w-5 text-navy" />
                         Send Us a Message
                       </CardTitle>
-                      <CardDescription>Fill out the form and we'll get back to you as soon as possible</CardDescription>
+                      <CardDescription>
+                        Fill out the form and we'll get back to you as soon as
+                        possible
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                           <div className="space-y-2">
-                            <label htmlFor="first-name-contact" className="text-sm font-medium">
+                            <label
+                              htmlFor="first-name-contact"
+                              className="text-sm font-medium"
+                            >
                               First Name
                             </label>
                             <Input
@@ -112,7 +141,10 @@ export default function Contact() {
                             />
                           </div>
                           <div className="space-y-2">
-                            <label htmlFor="last-name-contact" className="text-sm font-medium">
+                            <label
+                              htmlFor="last-name-contact"
+                              className="text-sm font-medium"
+                            >
                               Last Name
                             </label>
                             <Input
@@ -126,7 +158,10 @@ export default function Contact() {
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label htmlFor="email-contact" className="text-sm font-medium">
+                          <label
+                            htmlFor="email-contact"
+                            className="text-sm font-medium"
+                          >
                             Email
                           </label>
                           <Input
@@ -140,7 +175,10 @@ export default function Contact() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label htmlFor="phone-contact" className="text-sm font-medium">
+                          <label
+                            htmlFor="phone-contact"
+                            className="text-sm font-medium"
+                          >
                             Phone Number (Optional)
                           </label>
                           <Input
@@ -152,25 +190,44 @@ export default function Contact() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label htmlFor="inquiry-type" className="text-sm font-medium">
+                          <label
+                            htmlFor="inquiry-type"
+                            className="text-sm font-medium"
+                          >
                             Inquiry Type
                           </label>
-                          <Select value={inquiryType} onValueChange={setInquiryType}>
+                          <Select
+                            value={inquiryType}
+                            onValueChange={setInquiryType}
+                          >
                             <SelectTrigger className="modern-input">
                               <SelectValue placeholder="Select inquiry type" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="application">Application Help</SelectItem>
-                              <SelectItem value="status">Application Status</SelectItem>
-                              <SelectItem value="requirements">Document Requirements</SelectItem>
-                              <SelectItem value="fees">Fees & Payment</SelectItem>
-                              <SelectItem value="locations">Office Locations</SelectItem>
+                              <SelectItem value="application">
+                                Application Help
+                              </SelectItem>
+                              <SelectItem value="status">
+                                Application Status
+                              </SelectItem>
+                              <SelectItem value="requirements">
+                                Document Requirements
+                              </SelectItem>
+                              <SelectItem value="fees">
+                                Fees & Payment
+                              </SelectItem>
+                              <SelectItem value="locations">
+                                Office Locations
+                              </SelectItem>
                               <SelectItem value="other">Other</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div className="space-y-2">
-                          <label htmlFor="message" className="text-sm font-medium">
+                          <label
+                            htmlFor="message"
+                            className="text-sm font-medium"
+                          >
                             Message
                           </label>
                           <Textarea
@@ -187,10 +244,20 @@ export default function Contact() {
                           className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
                           disabled={isSubmitting}
                         >
-                          {isSubmitting ? "Sending..." : <> <Send className="mr-2 h-4 w-4" /> Send Message </> }
+                          {isSubmitting ? (
+                            "Sending..."
+                          ) : (
+                            <>
+                              {" "}
+                              <Send className="mr-2 h-4 w-4" /> Send
+                              Message{" "}
+                            </>
+                          )}
                         </Button>
                         {submitStatus === "error" && (
-                          <p className="text-red-600 text-sm text-center">Failed to send message. Please try again.</p>
+                          <p className="text-red-600 text-sm text-center">
+                            Failed to send message. Please try again.
+                          </p>
                         )}
                       </form>
                     </CardContent>
@@ -207,7 +274,9 @@ export default function Contact() {
                         <Phone className="h-5 w-5 text-teal" />
                         Contact Information
                       </CardTitle>
-                      <CardDescription>Reach out to us through these channels</CardDescription>
+                      <CardDescription>
+                        Reach out to us through these channels
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="flex items-start gap-4">
@@ -215,9 +284,13 @@ export default function Contact() {
                           <Phone className="h-6 w-6" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-teal">Phone Support</h4>
-                          <p className="text-muted-foreground">1-800-123-4567</p>
-                          <p className="text-sm text-muted-foreground">Monday-Friday, 8am-8pm EST</p>
+                          <h4 className="font-medium text-teal">
+                            Phone Support
+                          </h4>
+                          <p className="text-muted-foreground">7486046591</p>
+                          <p className="text-sm text-muted-foreground">
+                            Monday-Friday, 8am-8pm EST
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -225,9 +298,15 @@ export default function Contact() {
                           <Mail className="h-6 w-6" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-teal">Email Support</h4>
-                          <p className="text-muted-foreground">support@PassportSuvidha.gov</p>
-                          <p className="text-sm text-muted-foreground">Responses within 24-48 hours</p>
+                          <h4 className="font-medium text-teal">
+                            Email Support
+                          </h4>
+                          <p className="text-muted-foreground">
+                            support@passportsuvidha.com
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Responses within 24-48 hours
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -236,8 +315,21 @@ export default function Contact() {
                         </div>
                         <div>
                           <h4 className="font-medium text-teal">Main Office</h4>
-                          <p className="text-muted-foreground">123 Federal Plaza</p>
-                          <p className="text-muted-foreground">Washington, DC 20001</p>
+                          <p className="text-muted-foreground">
+                            Second Floor, Shop No. 227,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Unique Square,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Opposite Shubham K Mart,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Singanpore Road, Singanpore,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Surat, Gujarat - 395004
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -256,24 +348,27 @@ export default function Contact() {
                     <CardContent>
                       <div className="space-y-3">
                         <div className="flex justify-between p-3 rounded-xl bg-gold/5">
-                          <span className="font-medium">Monday - Friday</span>
-                          <span>8:00 AM - 5:00 PM</span>
+                          <span className="font-medium">Monday - Saturday</span>
+                          <span>10:00 AM to 05:00 PM</span>
                         </div>
-                        <div className="flex justify-between p-3 rounded-xl bg-gold/5">
+                        {/* <div className="flex justify-between p-3 rounded-xl bg-gold/5">
                           <span className="font-medium">Saturday</span>
                           <span>9:00 AM - 1:00 PM</span>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between p-3 rounded-xl bg-gold/5">
                           <span className="font-medium">Sunday</span>
                           <span>Closed</span>
                         </div>
                         <div className="pt-3 text-sm text-muted-foreground">
-                          <p>Hours may vary by location. Please check with your local office before visiting.</p>
+                          <p>
+                            Hours may vary by location. Please check with your
+                            local office before visiting.
+                          </p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                </div>                
+                </div>
               </div>
             </div>
 
@@ -286,10 +381,12 @@ export default function Contact() {
                       <MapPin className="h-5 w-5 text-navy" />
                       Find Us
                     </CardTitle>
-                    <CardDescription>Visit our main office or find a location near you</CardDescription>
+                    <CardDescription>
+                      Visit our main office or find a location near you
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="aspect-video bg-muted rounded-xl overflow-hidden relative">
+                    {/* <div className="aspect-video bg-muted rounded-xl overflow-hidden relative">
                       <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-center p-4">
@@ -300,6 +397,18 @@ export default function Contact() {
                           <p className="text-sm text-navy/60">Showing our main office location</p>
                         </div>
                       </div>
+                    </div> */}
+                    <div className="aspect-video rounded-xl overflow-hidden">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d29751.157881229865!2d72.7900887!3d21.2360224!3m2!1i1024!2i768!4f13.1!2m1!1sSecond%20Floor%20Shop%20No%20227%20Unique%20Square%20Opposite%20Shubham%20K%20Mart%20Singanpore%20Road%20Singanpore%20Surat%20Gujarat%20395004!5e0!3m2!1sen!2sin!4v1774001253699!5m2!1sen!2sin"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="w-full h-full"
+                      ></iframe>
                     </div>
                     <div className="mt-6 flex justify-center">
                       <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button">
@@ -313,8 +422,6 @@ export default function Contact() {
           </div>
         </section>
       </main>
-            
     </div>
-  )
+  );
 }
-

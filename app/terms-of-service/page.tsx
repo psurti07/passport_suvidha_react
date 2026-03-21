@@ -255,15 +255,28 @@ export default function TermsOfService() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-5 w-5 text-navy" />
-                      <span>1-800-123-4567 (Legal Department)</span>
+                      <span>7486046591 (Legal Department)</span>
                     </div>
                     <div className="flex items-start gap-2">
                       <MapPin className="h-5 w-5 text-navy mt-0.5" />
                       <div>
-                        <p className="m-0">Legal Department</p>
-                        <p className="m-0">PassportSuvidha</p>
-                        <p className="m-0">123 Federal Plaza, Washington, DC 20001</p>
-                      </div>
+                          <h4 className="font-medium text-teal">Main Office</h4>
+                          <p className="text-muted-foreground">
+                            Second Floor, Shop No. 227,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Unique Square,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Opposite Shubham K Mart,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Singanpore Road, Singanpore,
+                          </p>
+                          <p className="text-muted-foreground">
+                            Surat, Gujarat - 395004
+                          </p>
+                        </div>
                     </div>
                   </div>
                 </div>

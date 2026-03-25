@@ -289,7 +289,7 @@ export default function Contact() {
                           </h4>
                           <p className="text-muted-foreground">7486046591</p>
                           <p className="text-sm text-muted-foreground">
-                            Monday-Friday, 10am-5pm IST
+                            Monday-Saturday, 10am-5pm IST
                           </p>
                         </div>
                       </div>

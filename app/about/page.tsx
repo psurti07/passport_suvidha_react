@@ -35,7 +35,7 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-20 lg:py-20 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
+        <section className="w-full py-12 sm:py-16 md:py-24 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
           <div className="blob-shape bg-teal/20 w-[500px] h-[500px] -left-64 top-0"></div>
           <div className="blob-shape bg-gold/20 w-[600px] h-[600px] -right-96 bottom-0 pulse-animation"></div>
           <div className="container px-4 md:px-6 relative">
@@ -138,7 +138,7 @@ export default function AboutUs() {
           </div>
         </section>
 
-        <section className="w-full py-20 md:py-20 bg-white">
+        <section className="w-full py-12 sm:py-16 md:py-24 bg-white">
           <div className="container px-4 md:px-6">
             <div className="mx-auto max-w-3xl text-center mb-12">
               <motion.div
@@ -703,7 +703,7 @@ export default function AboutUs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <p className="font-medium">1-800-123-4567</p>
+                    <p className="font-medium">7486046591</p>
                     <p className="text-sm text-muted-foreground">
                       Monday-Friday, 8am-8pm EST
                     </p>

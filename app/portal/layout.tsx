@@ -20,12 +20,13 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { ApplicationProgress } from "@/app/types/application";
+import axiosServer from "@/lib/axiosServer";
 
 // Component to handle sidebar items visibility
-function SidebarNavigation({ 
+function SidebarNavigation({
   applicationProgress,
-  onSignOut 
-}: { 
+  onSignOut,
+}: {
   applicationProgress: ApplicationProgress | null;
   onSignOut: () => void;
 }) {
@@ -36,7 +37,7 @@ function SidebarNavigation({
   const findStage = (title: string): boolean => {
     if (!applicationProgress?.stages) return false;
     return applicationProgress.stages.some(
-      (stage) => stage.title.toLowerCase() === title.toLowerCase()
+      (stage) => stage.title.toLowerCase() === title.toLowerCase(),
     );
   };
 
@@ -54,7 +55,7 @@ function SidebarNavigation({
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
           isActive("/portal")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <Home className="h-5 w-5" />
@@ -66,7 +67,7 @@ function SidebarNavigation({
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
           isActive("/portal/documents")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <FileText className="h-5 w-5" />
@@ -79,7 +80,7 @@ function SidebarNavigation({
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
             isActive("/portal/application-review")
               ? "bg-navy text-white"
-              : "text-navy hover:bg-navy/5"
+              : "text-navy hover:bg-navy/5",
           )}
         >
           <CheckCircle className="h-5 w-5" />
@@ -93,7 +94,7 @@ function SidebarNavigation({
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
             isActive("/portal/appointment-letter")
               ? "bg-navy text-white"
-              : "text-navy hover:bg-navy/5"
+              : "text-navy hover:bg-navy/5",
           )}
         >
           <Clock className="h-5 w-5" />
@@ -106,7 +107,7 @@ function SidebarNavigation({
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
           isActive("/portal/profile")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <User className="h-5 w-5" />
@@ -118,7 +119,7 @@ function SidebarNavigation({
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
           isActive("/portal/support")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <HelpCircle className="h-5 w-5" />
@@ -144,7 +145,8 @@ export default function PortalLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [applicationProgress, setApplicationProgress] = useState<ApplicationProgress | null>(null);
+  const [applicationProgress, setApplicationProgress] =
+    useState<ApplicationProgress | null>(null);
   const [loading, setLoading] = useState(true);
 
   const isActive = (path: string) => {
@@ -153,31 +155,54 @@ export default function PortalLayout({
 
   const handleSignOut = async () => {
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to sign out');
+        throw new Error("Failed to sign out");
       }
 
-      router.push('/signin');
-      toast.success('Signed out successfully');
+      router.push("/signin");
+      toast.success("Signed out successfully");
     } catch (error) {
-      console.error('Sign out error:', error);
-      toast.error('Failed to sign out. Please try again.');
+      console.error("Sign out error:", error);
+      toast.error("Failed to sign out. Please try again.");
     }
   };
 
   useEffect(() => {
     const fetchApplicationProgress = async () => {
       try {
-        const response = await fetch("/api/application-progress");
-        if (!response.ok) throw new Error("Failed to fetch application progress");
-        const data = await response.json();
-        setApplicationProgress(data);
-      } catch (error) {
+        setLoading(true);
+
+        const token = localStorage.getItem("authToken");
+
+        // ✅ Redirect if no token
+        if (!token) {
+          window.location.href = "/signin";
+          return;
+        }
+
+        // ✅ Axios request (no need for .ok or .json)
+        const response = await axiosServer.get("/application-progress", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // ✅ Axios gives data directly
+        setApplicationProgress(response.data);
+      } catch (error: any) {
         console.error("Error fetching application progress:", error);
+
+        // ✅ Handle 401 properly
+        if (error.response?.status === 401) {
+          localStorage.removeItem("authToken"); // cleanup
+          window.location.href = "/signin";
+        } else {
+          console.error("Unexpected error:", error.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -185,7 +210,6 @@ export default function PortalLayout({
 
     fetchApplicationProgress();
   }, []);
-
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -247,8 +271,8 @@ export default function PortalLayout({
               <div className="h-10 bg-gray-100 rounded animate-pulse" />
             </div>
           ) : (
-            <SidebarNavigation 
-              applicationProgress={applicationProgress} 
+            <SidebarNavigation
+              applicationProgress={applicationProgress}
               onSignOut={handleSignOut}
             />
           )}
@@ -266,69 +290,87 @@ export default function PortalLayout({
               href="/portal"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal" && "text-gold"
+                pathname === "/portal" && "text-gold",
               )}
             >
-              <Home className={cn(
-                "h-5 w-5",
-                pathname === "/portal" ? "text-gold" : "text-navy"
-              )} />
+              <Home
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Home</span>
             </Link>
             <Link
               href="/portal/documents"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/documents" && "text-gold"
+                pathname === "/portal/documents" && "text-gold",
               )}
             >
-              <FileText className={cn(
-                "h-5 w-5",
-                pathname === "/portal/documents" ? "text-gold" : "text-navy"
-              )} />
+              <FileText
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal/documents" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Docs</span>
             </Link>
-            {applicationProgress?.stages?.some(stage => stage.title.toLowerCase() === "details_verification") && (
+            {applicationProgress?.stages?.some(
+              (stage) => stage.title.toLowerCase() === "details_verification",
+            ) && (
               <Link
                 href="/portal/application-review"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/application-review" && "text-gold"
+                  pathname === "/portal/application-review" && "text-gold",
                 )}
               >
-                <CheckCircle className={cn(
-                  "h-5 w-5",
-                  pathname === "/portal/application-review" ? "text-gold" : "text-navy"
-                )} />
+                <CheckCircle
+                  className={cn(
+                    "h-5 w-5",
+                    pathname === "/portal/application-review"
+                      ? "text-gold"
+                      : "text-navy",
+                  )}
+                />
                 <span className="text-[10px] mt-0.5">Review</span>
               </Link>
             )}
-            {applicationProgress?.stages?.some(stage => stage.title.toLowerCase() === "appointment_scheduled") && (
+            {applicationProgress?.stages?.some(
+              (stage) => stage.title.toLowerCase() === "appointment_scheduled",
+            ) && (
               <Link
                 href="/portal/appointment-letter"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/appointment-letter" && "text-gold"
+                  pathname === "/portal/appointment-letter" && "text-gold",
                 )}
               >
-                <Clock className={cn(
-                  "h-5 w-5",
-                  pathname === "/portal/appointment-letter" ? "text-gold" : "text-navy"
-                )} />
+                <Clock
+                  className={cn(
+                    "h-5 w-5",
+                    pathname === "/portal/appointment-letter"
+                      ? "text-gold"
+                      : "text-navy",
+                  )}
+                />
                 <span className="text-[10px] mt-0.5">Appt</span>
               </Link>
-            )}            
+            )}
             <Link
               href="/portal/support"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/support" && "text-gold"
+                pathname === "/portal/support" && "text-gold",
               )}
             >
-              <HelpCircle className={cn(
-                "h-5 w-5",
-                pathname === "/portal/support" ? "text-gold" : "text-navy"
-              )} />
+              <HelpCircle
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal/support" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Help</span>
             </Link>
           </div>

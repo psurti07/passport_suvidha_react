@@ -20,13 +20,13 @@ interface StepBasicInfoProps {
   loading?: boolean;
 }
 
-const StepBasicInfo = ({ 
-  formData, 
-  handleChange, 
-  nextStep, 
-  itemVariants, 
-  errorMessage, 
-  loading = false 
+const StepBasicInfo = ({
+  formData,
+  handleChange,
+  nextStep,
+  itemVariants,
+  errorMessage,
+  loading = false
 }: StepBasicInfoProps) => {
   const [touched, setTouched] = useState({
     firstName: false,
@@ -36,40 +36,33 @@ const StepBasicInfo = ({
   });
 
   const errors = {
-    firstName:
-      !formData.firstName.trim()
-        ? "First name is required"
-        : !/^[A-Za-z ]+$/.test(formData.firstName)
+    firstName: !formData.firstName.trim()
+      ? "First name is required"
+      : !/^[A-Za-z ]+$/.test(formData.firstName)
         ? "First name should only contain letters"
         : "",
-    lastName:
-      !formData.lastName.trim()
-        ? "Last name is required"
-        : !/^[A-Za-z ]+$/.test(formData.lastName)
+    lastName: !formData.lastName.trim()
+      ? "Last name is required"
+      : !/^[A-Za-z ]+$/.test(formData.lastName)
         ? "Last name should only contain letters"
         : "",
-    email:
-      !formData.email.trim()
-        ? "Email is required"
-        : !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)
+    email: !formData.email.trim()
+      ? "Email is required"
+      : !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)
         ? "Enter a valid email address"
         : "",
-    mobile:
-      !formData.mobile.trim()
-        ? "Mobile number is required"
-        : !/^\d{10}$/.test(formData.mobile)
+    mobile: !formData.mobile.trim()
+      ? "Mobile number is required"
+      : !/^\d{10}$/.test(formData.mobile)
         ? "Enter a valid 10-digit mobile number"
         : !/^[6-9]/.test(formData.mobile)
-        ? "Mobile number should start with 6, 7, 8, or 9"
-        : "",
+          ? "Mobile number should start with 6, 7, 8, or 9"
+          : "",
   };
 
-  const isValid =
-    !errors.firstName &&
-    !errors.lastName &&
-    !errors.email &&
-    !errors.mobile;
-
+  const isValid = !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
+  const [termsAccepted, setTermsAccepted] = useState(true); // ✅ default checked
+  const [marketingConsent, setMarketingConsent] = useState(true); // optional
   return (
     <>
       <CardHeader>
@@ -94,7 +87,7 @@ const StepBasicInfo = ({
             <p className="text-sm text-red-600">{errorMessage}</p>
           </motion.div>
         )}
-        
+
         <div className="space-y-6">
           <motion.div
             variants={itemVariants}
@@ -162,7 +155,7 @@ const StepBasicInfo = ({
                 name="mobile"
                 type="tel"
                 value={formData.mobile}
-                onChange={e => {
+                onChange={(e) => {
                   // Only allow digits
                   const value = e.target.value.replace(/[^\d]/g, "");
                   e.target.value = value;
@@ -182,6 +175,47 @@ const StepBasicInfo = ({
               {touched.mobile && errors.mobile && (
                 <p className="text-xs text-red-600 mt-1">{errors.mobile}</p>
               )}
+            </div>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="space-y-4">
+            {/* Terms & Privacy */}
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                required
+                className="mt-1"
+              />
+              <Label htmlFor="terms" className="text-xs leading-5">
+                By submitting the form, you agree to the{" "}
+                <a href="/terms" className="text-muted-foreground">
+                  Terms of Use
+                </a>{" "}
+                and{" "}
+                <a href="/privacy-policy" className="text-muted-foreground">
+                  Privacy Policy
+                </a>{" "}
+                of PassportSuvidha.
+              </Label>
+            </div>
+
+            {/* Marketing Consent */}
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                id="marketing"
+                checked={marketingConsent}
+                onChange={(e) => setMarketingConsent(e.target.checked)}
+                name="marketing"
+                className="mt-1"
+              />
+              <Label htmlFor="marketing" className="text-xs leading-5">
+                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS Services.
+              </Label>
             </div>
           </motion.div>
 
@@ -206,7 +240,7 @@ const StepBasicInfo = ({
           <Button
             className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
             onClick={nextStep}
-            disabled={!isValid || loading}
+            disabled={!isValid || loading || !termsAccepted || !marketingConsent}
           >
             {loading ? (
               <>
@@ -226,4 +260,4 @@ const StepBasicInfo = ({
   );
 };
 
-export default StepBasicInfo; 
+export default StepBasicInfo;

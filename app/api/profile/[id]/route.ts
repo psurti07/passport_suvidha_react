@@ -42,15 +42,28 @@ export async function PUT(
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
 
+      let message = "Update failed";
+
+      const responseData = axiosError.response?.data as any;
+
+      if (responseData) {
+        // ✅ Laravel validation errors
+        if (responseData.errors) {
+          const firstErrorKey = Object.keys(responseData.errors)[0];
+          message = responseData.errors[firstErrorKey][0];
+        }
+        // ✅ Normal message
+        else if (responseData.message) {
+          message = responseData.message;
+        }
+        // ✅ Fallback
+        else {
+          message = JSON.stringify(responseData);
+        }
+      }
+
       return NextResponse.json(
-        {
-          message:
-            typeof axiosError.response?.data === "string"
-              ? axiosError.response.data
-              : axiosError.response?.data?.message ||
-                JSON.stringify(axiosError.response?.data) ||
-                "Update failed",
-        },
+        { message },
         { status: axiosError.response?.status || 500 },
       );
     }

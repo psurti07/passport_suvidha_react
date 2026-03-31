@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import axiosServer from "@/lib/axiosServer";
 
 // Add this type if you expect user data or a token back on successful sign-in
 interface SignInResponse {
@@ -67,28 +68,22 @@ export default function SignIn() {
     try {
       setIsLoading(true);
 
-      // Step 1: Mobile Number Verification
-      // const verifyResponse = await fetch("/api/auth/login", {
+      // ✅ Step 1: Verify mobile (Next.js API)
       const verifyResponse = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          mobile_number: mobile,
-        }),
+        body: JSON.stringify({ mobile_number: mobile }),
       });
 
       const verifyData = await verifyResponse.json();
 
       if (!verifyResponse.ok) {
-        throw new Error(
-          verifyData.message ||
-            "Failed to verify mobile number. Please try again.",
-        );
+        throw new Error(verifyData.message || "Mobile verification failed");
       }
 
-      // Step 2: Send OTP if mobile verification is successful
+      // ✅ Step 2: Send OTP (Next.js API)
       const otpResponse = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: {
@@ -96,28 +91,25 @@ export default function SignIn() {
         },
         body: JSON.stringify({
           mobile_number: mobile,
-          purpose: "login", // ✅ THIS IS REQUIRED
+          purpose: "login",
         }),
       });
 
-      const otpResponseData = await otpResponse.json();
+      const otpData = await otpResponse.json();
 
       if (!otpResponse.ok) {
-        throw new Error(
-          otpResponseData.message || "Failed to send OTP. Please try again.",
-        );
+        throw new Error(otpData.message || "Failed to send OTP");
       }
 
+      // ✅ Success
       setIsOtpSent(true);
       setCountdown(30);
-      // Use message from API response if available
-      toast.success(otpResponseData.message || "OTP sent successfully!");
-    } catch (error: any) {
-      const errorMessage =
-        error.message || "An unexpected error occurred while sending OTP.";
 
-      // Display the error message from the API or the thrown error
-      toast.error(errorMessage); // Use the extracted message
+      toast.success(otpData.message || "OTP sent successfully!");
+    } catch (error: any) {
+      console.error("OTP ERROR:", error);
+
+      toast.error(error.message || "Failed to send OTP");
     } finally {
       setIsLoading(false);
     }

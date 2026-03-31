@@ -32,6 +32,7 @@ export default function PortalDashboard() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
 
   // Stage helper functions
   const findStage = (
@@ -189,91 +190,108 @@ export default function PortalDashboard() {
   // useEffect(() => {
   //   const fetchApplicationProgress = async () => {
   //     try {
-  //       const token = localStorage.getItem("token");
-  //       // const response = await fetch("http://127.0.0.1:8000/api/application-progress");
+  //       const token = localStorage.getItem("authToken");
 
-  //       const response = await fetch(
-  //         "http://127.0.0.1:8000/api/application-progress",
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`, // ✅ MUST
-  //           },
-  //         },
-  //       );
-
-  //       if (!response.ok) {
-  //         // Parse the error response
-  //         const errorData = await response.json();
-
-  //         // Check if it's an authentication error and handle logout
-  //         if (await handleApiAuthError(errorData)) {
-  //           // Don't need to do anything else here, as handleApiAuthError will handle the redirect
-  //           return;
-  //         }
-
-  //         throw new Error(
-  //           errorData.message || "Failed to fetch application progress",
-  //         );
+  //       // ✅ AUTH CHECK FIRST
+  //       if (!token) {
+  //         router.replace("/signin");
+  //         return;
   //       }
 
-  //       const data = await response.json();
-  //       setApplicationProgress(data);
-  //     } catch (error) {
-  //       console.error("Error fetching application progress:", error);
-  //       setError(
-  //         "Failed to load application progress. Please try again later.",
-  //       );
+  //       const response = await axiosServer.get("/application-progress", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       setApplicationProgress(response.data);
+  //     } catch (err: any) {
+  //       console.error("Error fetching application progress:", err);
+
+  //       if (err.response?.status === 401) {
+  //         localStorage.removeItem("authToken");
+  //         router.replace("/signin");
+  //       } else {
+  //         setError(
+  //           err.response?.data?.message ||
+  //             "Failed to load application progress.",
+  //         );
+  //       }
   //     } finally {
   //       setLoading(false);
+  //       setIsChecking(false);
   //     }
   //   };
 
   //   fetchApplicationProgress();
-  // }, []);
+  // }, []); // ❗ remove router dependency
+
+  // if (isChecking) {
+  //   return <div>Loading...</div>;
+  // }
 
   useEffect(() => {
-    const fetchApplicationProgress = async () => {
+    const fetchData = async () => {
       try {
+        setLoading(true);
+        setIsChecking(true);
+
         const token = localStorage.getItem("authToken");
 
-        // ✅ AUTH CHECK FIRST
+        // ✅ AUTH CHECK
         if (!token) {
           router.replace("/signin");
           return;
         }
 
-        const response = await axiosServer.get("/application-progress", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // ✅ PARALLEL API CALLS
+        const [progressRes, profileRes] = await Promise.all([
+          axiosServer.get("/application-progress", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
 
-        setApplicationProgress(response.data);
+          fetch("/api/profile", {
+            credentials: "include",
+          }).then(async (res) => {
+            if (!res.ok) {
+              throw new Error("Failed to fetch profile");
+            }
+            return res.json();
+          }),
+        ]);
+
+        // ✅ SET DATA
+        setApplicationProgress(progressRes.data);
+
+        // handle both formats safely
+        setProfile(profileRes?.data || profileRes);
       } catch (err: any) {
-        console.error("Error fetching application progress:", err);
+        console.error("Error fetching data:", err);
 
-        if (err.response?.status === 401) {
+        // ✅ HANDLE AUTH ERROR
+        if (
+          err.response?.status === 401 ||
+          err.message === "Failed to fetch profile"
+        ) {
           localStorage.removeItem("authToken");
           router.replace("/signin");
         } else {
           setError(
             err.response?.data?.message ||
-              "Failed to load application progress.",
+              err.message ||
+              "Failed to load data.",
           );
         }
       } finally {
         setLoading(false);
-        setIsChecking(false); // ✅ VERY IMPORTANT
+        setIsChecking(false);
       }
     };
 
-    fetchApplicationProgress();
-  }, [router]);
-
-  // if (isChecking) {
-  //   return <div>Loading...</div>;
-  // }
+    fetchData();
+  }, []); // ✅ NO router dependency
   return (
     <motion.div
       variants={containerVariants}
@@ -288,7 +306,12 @@ export default function PortalDashboard() {
       >
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-navy">
-            Welcome, John
+            Welcome,{" "}
+            {profile
+              ? profile.first_name
+                ? `${profile.first_name} ${profile.last_name ?? ""}`
+                : profile.name || "User"
+              : "User"}
           </h1>
           <p className="text-sm md:text-base text-muted-foreground">
             Here's an overview of your passport applications and account
@@ -1411,7 +1434,7 @@ export default function PortalDashboard() {
                   className="w-full md:w-auto rounded-xl border-navy/20 hover:bg-navy/5"
                   asChild
                 >
-                  <Link href="/portal/faq">
+                  <Link href="/portal/support">
                     <HelpCircle className="h-4 w-4 mr-2 hidden sm:block" />
                     View FAQs
                   </Link>

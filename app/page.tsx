@@ -1093,7 +1093,7 @@ export default function Home() {
                           </h4>
                           <p className="text-muted-foreground">7486046591</p>
                           <p className="text-sm text-muted-foreground">
-                            Monday-Friday, 10:00 AM to 05:00 PM
+                            Monday-Saturday, 10:00 AM to 05:00 PM
                           </p>
                         </div>
                       </div>

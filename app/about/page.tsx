@@ -705,10 +705,7 @@ export default function AboutUs() {
                   <CardContent className="space-y-2">
                     <p className="font-medium">7486046591</p>
                     <p className="text-sm text-muted-foreground">
-                      Monday-Friday, 8am-8pm EST
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Saturday, 9am-5pm EST
+                      Monday-Saturday, 10:00 AM to 05:00 PM
                     </p>
                   </CardContent>
                 </Card>
@@ -764,15 +761,9 @@ export default function AboutUs() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="flex justify-between">
-                      <p className="font-medium">Monday - Friday</p>
+                      <p className="font-medium">Monday - Saturday</p>
                       <p className="text-sm text-muted-foreground">
-                        8:00 AM - 5:00 PM
-                      </p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="font-medium">Saturday</p>
-                      <p className="text-sm text-muted-foreground">
-                        9:00 AM - 1:00 PM
+                        10:00 AM to 05:00 PM
                       </p>
                     </div>
                     <div className="flex justify-between">

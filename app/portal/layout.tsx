@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { ApplicationProgress } from "@/app/types/application";
 import axiosServer from "@/lib/axiosServer";
 
-// Component to handle sidebar items visibility
 function SidebarNavigation({
   applicationProgress,
   onSignOut,
@@ -31,29 +30,30 @@ function SidebarNavigation({
   onSignOut: () => void;
 }) {
   const pathname = usePathname();
+
   const isActive = (path: string) => pathname === path;
 
-  // Helper function to find stage by title
+  // ✅ Safe helper function
   const findStage = (title: string): boolean => {
-    if (!applicationProgress?.stages) return false;
-    return applicationProgress.stages.some(
-      (stage) => stage.title.toLowerCase() === title.toLowerCase(),
+    return (
+      applicationProgress?.stages?.some(
+        (stage) => stage.title?.toLowerCase() === title.toLowerCase(),
+      ) || false
     );
   };
 
-  // Determine if Application Review should be shown
+  // ✅ Conditions
   const showApplicationReview = findStage("details_verification");
-
-  // Determine if Appointment Letter should be shown
   const showAppointmentLetter = findStage("appointment_scheduled");
 
   return (
     <nav className="space-y-1 p-4">
+      {/* Dashboard */}
       <Link
         href="/portal"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal")
+          pathname === "/portal"
             ? "bg-navy text-white"
             : "text-navy hover:bg-navy/5",
         )}
@@ -61,11 +61,13 @@ function SidebarNavigation({
         <Home className="h-5 w-5" />
         Dashboard
       </Link>
+
+      {/* Documents */}
       <Link
         href="/portal/documents"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/documents")
+          pathname.startsWith("/portal/documents")
             ? "bg-navy text-white"
             : "text-navy hover:bg-navy/5",
         )}
@@ -73,12 +75,14 @@ function SidebarNavigation({
         <FileText className="h-5 w-5" />
         Documents
       </Link>
+
+      {/* Application Review */}
       {showApplicationReview && (
         <Link
           href="/portal/application-review"
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-            isActive("/portal/application-review")
+            pathname.startsWith("/portal/application-review")
               ? "bg-navy text-white"
               : "text-navy hover:bg-navy/5",
           )}
@@ -87,12 +91,14 @@ function SidebarNavigation({
           Application Review
         </Link>
       )}
+
+      {/* Appointment Letter */}
       {showAppointmentLetter && (
         <Link
           href="/portal/appointment-letter"
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-            isActive("/portal/appointment-letter")
+            pathname.startsWith("/portal/appointment-letter")
               ? "bg-navy text-white"
               : "text-navy hover:bg-navy/5",
           )}
@@ -101,11 +107,13 @@ function SidebarNavigation({
           Appointment Letter
         </Link>
       )}
+
+      {/* Profile */}
       <Link
         href="/portal/profile"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/profile")
+          pathname.startsWith("/portal/profile")
             ? "bg-navy text-white"
             : "text-navy hover:bg-navy/5",
         )}
@@ -113,11 +121,13 @@ function SidebarNavigation({
         <User className="h-5 w-5" />
         Personal Details
       </Link>
+
+      {/* Support */}
       <Link
         href="/portal/support"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/support")
+          pathname.startsWith("/portal/support")
             ? "bg-navy text-white"
             : "text-navy hover:bg-navy/5",
         )}
@@ -125,6 +135,8 @@ function SidebarNavigation({
         <HelpCircle className="h-5 w-5" />
         Support
       </Link>
+
+      {/* Sign Out */}
       <div className="pt-4 mt-4 border-t">
         <button
           onClick={onSignOut}
@@ -148,6 +160,7 @@ export default function PortalLayout({
   const [applicationProgress, setApplicationProgress] =
     useState<ApplicationProgress | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -172,44 +185,44 @@ export default function PortalLayout({
   };
 
   useEffect(() => {
-    const fetchApplicationProgress = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
 
         const token = localStorage.getItem("authToken");
 
-        // ✅ Redirect if no token
         if (!token) {
           window.location.href = "/signin";
           return;
         }
 
-        // ✅ Axios request (no need for .ok or .json)
-        const response = await axiosServer.get("/application-progress", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // ✅ Fetch both APIs together
+        const [progressRes, profileRes] = await Promise.all([
+          axiosServer.get("/application-progress", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch("/api/profile", {
+            credentials: "include",
+          }).then((res) => res.json()),
+        ]);
 
-        // ✅ Axios gives data directly
-        setApplicationProgress(response.data);
+        setApplicationProgress(progressRes.data);
+        setProfile(profileRes.data || profileRes);
       } catch (error: any) {
-        console.error("Error fetching application progress:", error);
+        console.error("Error:", error);
 
-        // ✅ Handle 401 properly
         if (error.response?.status === 401) {
-          localStorage.removeItem("authToken"); // cleanup
+          localStorage.removeItem("authToken");
           window.location.href = "/signin";
-        } else {
-          console.error("Unexpected error:", error.message);
         }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchApplicationProgress();
+    fetchData();
   }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -233,10 +246,18 @@ export default function PortalLayout({
               </button>
               <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="p-3 border-b">
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-xs text-muted-foreground">
-                    john.doe@example.com
-                  </p>
+                  {profile ? (
+                    <>
+                      <p className="font-medium capitalize">
+                        {profile?.first_name} {profile?.last_name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {profile?.email}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Loading...</p>
+                  )}
                 </div>
                 <div className="p-2">
                   <Link

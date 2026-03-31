@@ -30,6 +30,7 @@ import {
   Download,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import axiosServer from "@/lib/axiosServer";
 
 interface Document {
   id: number;
@@ -79,27 +80,26 @@ export default function DocumentsPage() {
   const fetchDocuments = async () => {
     try {
       setIsLoading(true);
+
       const token = localStorage.getItem("authToken");
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/required-documents",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
+      const response = await fetch("/api/required-documents", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
+
       const data = await response.json();
 
-      if (data.status === "success") {
-        setDocuments(data.data.documents);
-      } else {
-        toast.error(data.message || "Failed to fetch documents");
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch documents");
       }
-    } catch (error) {
-      toast.error("Failed to fetch documents");
-      console.error(error);
+
+      setDocuments(data.data.documents);
+    } catch (error: any) {
+      console.error("Fetch error:", error);
+      toast.error(error.message || "Failed to fetch documents");
     } finally {
       setIsLoading(false);
     }
@@ -115,51 +115,6 @@ export default function DocumentsPage() {
     }
   };
 
-  // const handleUpload = async (docId: number) => {
-  //   if (!selectedFile || selectedDocId !== docId) {
-  //     toast.error("Please select a file to upload");
-  //     return;
-  //   }
-
-  //   try {
-  //     setIsLoading(true);
-  //     const formData = new FormData();
-  //     formData.append("document", selectedFile);
-
-  //     // const response = await fetch(
-  //     //   `http://127.0.0.1:8000/api/required-documents?document_type_id=${docId}`,
-  //     //   {
-  //     //     method: "POST",
-  //     //     body: formData,
-  //     //   },
-  //     // );
-
-  //     const response = await fetch(
-  //       `http://127.0.0.1:8000/api/required-documents/upload/${docId}`,
-  //       {
-  //         method: "POST",
-  //         body: formData,
-  //       },
-  //     );
-
-  //     const data = await response.json();
-
-  //     if (data.status === "success") {
-  //       toast.success("Document uploaded successfully!");
-  //       fetchDocuments(); // Refresh the documents list
-  //     } else {
-  //       toast.error(data.message || "Failed to upload document");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Failed to upload document");
-  //     console.error(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //     setSelectedFile(null);
-  //     setSelectedDocId(null);
-  //   }
-  // };
-
   const handleUpload = async (docId: number) => {
     if (!selectedFile || selectedDocId !== docId) {
       toast.error("Please select a file to upload");
@@ -169,19 +124,16 @@ export default function DocumentsPage() {
     try {
       setIsLoading(true);
 
-      const token = localStorage.getItem("authToken"); // ✅ GET TOKEN
-
       const formData = new FormData();
       formData.append("document", selectedFile);
 
+      // ✅ FIXED URL (query param instead of dynamic route)
       const response = await fetch(
-        `http://127.0.0.1:8000/api/required-documents/upload/${docId}`,
+        `/api/required-documents?document_type_id=${docId}`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // ✅ IMPORTANT
-          },
           body: formData,
+          credentials: "include", // ✅ IMPORTANT (for cookies)
         },
       );
 

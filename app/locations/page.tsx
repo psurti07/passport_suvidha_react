@@ -9,18 +9,15 @@ export default function Locations() {
     <div className="min-h-screen flex flex-col relative overflow-hidden">
             
       <main className="flex-1">
-        <section className="py-12 sm:py-16 md:py-24 relative overflow-hidden">
+        <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
-            <div className="max-w-3xl mx-auto text-center mb-12">
-              <div className="space-y-2">
-    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+            <div className="max-w-3xl mx-auto text-center mb-10">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">
                 Passport Office Locations
               </h1>
               <p className="text-muted-foreground md:text-xl">
                 Find your nearest passport office or Seva Kendra
               </p>
-              </div>
-          
             </div>
 
             <div className="relative max-w-4xl mx-auto mb-16">
@@ -265,7 +262,7 @@ export default function Locations() {
               </div>
             </div>
 
-            <div className="mt-16 max-w-4xl mx-auto mt-8">
+            <div className="mt-16 max-w-4xl mx-auto">
               <div className="relative">
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
                 <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">

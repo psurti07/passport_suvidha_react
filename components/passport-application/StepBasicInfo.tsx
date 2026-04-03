@@ -1,10 +1,4 @@
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -32,7 +26,7 @@ const StepBasicInfo = ({
   nextStep,
   itemVariants,
   errorMessage,
-  loading = false,
+  loading = false
 }: StepBasicInfoProps) => {
   const [touched, setTouched] = useState({
     firstName: false,
@@ -66,8 +60,7 @@ const StepBasicInfo = ({
           : "",
   };
 
-  const isValid =
-    !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
+  const isValid = !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
   const [termsAccepted, setTermsAccepted] = useState(true); // ✅ default checked
   const [marketingConsent, setMarketingConsent] = useState(true); // optional
   return (
@@ -81,8 +74,7 @@ const StepBasicInfo = ({
         </motion.div>
         <motion.div variants={itemVariants}>
           <CardDescription>
-            Please provide your personal details as they appear on your
-            identification documents
+            Please provide your personal details as they appear on your identification documents
           </CardDescription>
         </motion.div>
       </CardHeader>
@@ -222,7 +214,7 @@ const StepBasicInfo = ({
                 className="mt-1"
               />
               <Label htmlFor="marketing" className="text-xs leading-5">
-                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS, RCS Services.
+                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS Services.
               </Label>
             </div>
           </motion.div>
@@ -234,8 +226,7 @@ const StepBasicInfo = ({
           >
             <Shield className="h-5 w-5 text-navy" />
             <p>
-              Your information is secure and will only be used for passport
-              processing purposes.
+              Your information is secure and will only be used for passport processing purposes.
             </p>
           </motion.div>
         </div>

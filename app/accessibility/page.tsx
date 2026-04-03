@@ -210,7 +210,7 @@ export default function Accessibility() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="h-5 w-5 text-navy" />
-                        <span>7486046591 (Accessibility Helpline)</span>
+                        <span>1-800-123-4567 (Accessibility Helpline)</span>
                       </div>
                     </div>
                     <p>

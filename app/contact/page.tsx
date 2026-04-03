@@ -28,7 +28,9 @@ import {
   Send,
   MessageSquare,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
+import { Label } from "@/components/ui/label";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -39,6 +41,8 @@ export default function Contact() {
   const [inquiryType, setInquiryType] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(true); // ✅ default checked
+  const [marketingConsent, setMarketingConsent] = useState(true); // optional
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
@@ -239,10 +243,71 @@ export default function Contact() {
                             required
                           />
                         </div>
+                        <motion.div
+                          // variants={itemVariants}
+                          className="space-y-4"
+                        >
+                          {/* Terms & Privacy */}
+                          <div className="flex items-start gap-2">
+                            <input
+                              type="checkbox"
+                              id="terms"
+                              name="terms"
+                              checked={termsAccepted}
+                              onChange={(e) =>
+                                setTermsAccepted(e.target.checked)
+                              }
+                              required
+                              className="mt-1"
+                            />
+                            <Label
+                              htmlFor="terms"
+                              className="text-xs leading-5"
+                            >
+                              By submitting the form, you agree to the{" "}
+                              <a
+                                href="/terms"
+                                className="text-muted-foreground"
+                              >
+                                Terms of Use
+                              </a>{" "}
+                              and{" "}
+                              <a
+                                href="/privacy-policy"
+                                className="text-muted-foreground"
+                              >
+                                Privacy Policy
+                              </a>{" "}
+                              of PassportSuvidha.
+                            </Label>
+                          </div>
+
+                          {/* Marketing Consent */}
+                          <div className="flex items-start gap-2">
+                            <input
+                              type="checkbox"
+                              id="marketing"
+                              checked={marketingConsent}
+                              onChange={(e) =>
+                                setMarketingConsent(e.target.checked)
+                              }
+                              name="marketing"
+                              className="mt-1"
+                            />
+                            <Label
+                              htmlFor="marketing"
+                              className="text-xs leading-5"
+                            >
+                              I agree to receive promotional & informational
+                              communications from PassportSuvidha through
+                              Emails, calls or SMS, RCS Services.
+                            </Label>
+                          </div>
+                        </motion.div>
                         <Button
                           type="submit"
                           className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
-                          disabled={isSubmitting}
+                          disabled={ !termsAccepted || !marketingConsent ||isSubmitting}
                         >
                           {isSubmitting ? (
                             "Sending..."

@@ -222,7 +222,7 @@ const StepBasicInfo = ({
                 className="mt-1"
               />
               <Label htmlFor="marketing" className="text-xs leading-5">
-                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS Services.
+                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS, RCS Services.
               </Label>
             </div>
           </motion.div>

@@ -297,13 +297,11 @@ export default function SupportPage() {
                           <p className="text-sm text-muted-foreground mt-1">
                             Call us at{" "}
                             <a href="tel:+18005555555" className="text-navy hover:underline">
-                              1-800-555-5555
+                              7486046591
                             </a>
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">
-                            Monday - Friday: 8:00 AM - 8:00 PM EST
-                            <br />
-                            Saturday: 9:00 AM - 5:00 PM EST
+                            Monday - Saturday : 10:00 AM to 05:00 PM
                           </p>
                         </div>
                       </div>
@@ -335,12 +333,8 @@ export default function SupportPage() {
                   <CardContent className="p-6">
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="font-medium">Monday - Friday</span>
-                        <span>8:00 AM - 8:00 PM EST</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-medium">Saturday</span>
-                        <span>9:00 AM - 5:00 PM EST</span>
+                        <span className="font-medium">Monday - Saturday</span>
+                        <span> 10:00 AM to 05:00 PM</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="font-medium">Sunday</span>

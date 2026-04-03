@@ -30,6 +30,7 @@ import {
   Download,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import axiosServer from "@/lib/axiosServer";
 
 interface Document {
   id: number;
@@ -79,23 +80,35 @@ export default function DocumentsPage() {
   const fetchDocuments = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/required-documents');
+
+      const token = localStorage.getItem("authToken");
+
+      const response = await fetch("/api/required-documents", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await response.json();
-      
-      if (data.status === 'success') {
-        setDocuments(data.data.documents);
-      } else {
-        toast.error(data.message || 'Failed to fetch documents');
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch documents");
       }
-    } catch (error) {
-      toast.error('Failed to fetch documents');
-      console.error(error);
+
+      setDocuments(data.data.documents);
+    } catch (error: any) {
+      console.error("Fetch error:", error);
+      toast.error(error.message || "Failed to fetch documents");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, docId: number) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    docId: number,
+  ) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       setSelectedDocId(docId);
@@ -110,25 +123,30 @@ export default function DocumentsPage() {
 
     try {
       setIsLoading(true);
-      const formData = new FormData();
-      formData.append('document', selectedFile);
 
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}`, {
-        method: 'POST',
-        body: formData
-      });
+      const formData = new FormData();
+      formData.append("document", selectedFile);
+
+      // ✅ FIXED URL (query param instead of dynamic route)
+      const response = await fetch(
+        `/api/required-documents?document_type_id=${docId}`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include", // ✅ IMPORTANT (for cookies)
+        },
+      );
 
       const data = await response.json();
 
-      if (data.status === 'success') {
-        toast.success("Document uploaded successfully!");
-        fetchDocuments(); // Refresh the documents list
-      } else {
-        toast.error(data.message || 'Failed to upload document');
+      if (!response.ok) {
+        throw new Error(data.message || "Upload failed");
       }
-    } catch (error) {
-      toast.error("Failed to upload document");
-      console.error(error);
+
+      toast.success("Document uploaded successfully!");
+      fetchDocuments();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload document");
     } finally {
       setIsLoading(false);
       setSelectedFile(null);
@@ -139,21 +157,31 @@ export default function DocumentsPage() {
   const handleDelete = async (docId: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}`, {
-        method: 'DELETE'
-      });
+
+      // ✅ Call Next.js API (NOT Laravel)
+      const response = await fetch(
+        `/api/required-documents?document_type_id=${docId}`,
+        {
+          method: "DELETE",
+          credentials: "include", // ✅ VERY IMPORTANT (send cookie)
+        },
+      );
 
       const data = await response.json();
 
-      if (data.status === 'success') {
-        toast.success("Document deleted successfully!");
-        fetchDocuments(); // Refresh the documents list
-      } else {
-        toast.error(data.message || 'Failed to delete document');
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete document");
       }
-    } catch (error) {
-      toast.error("Failed to delete document");
+
+      if (data.status === "success") {
+        toast.success("Document deleted successfully!");
+        fetchDocuments(); // refresh list
+      } else {
+        toast.error(data.message || "Failed to delete document");
+      }
+    } catch (error: any) {
       console.error(error);
+      toast.error(error.message || "Failed to delete document");
     } finally {
       setIsLoading(false);
     }
@@ -162,24 +190,48 @@ export default function DocumentsPage() {
   const handleDownload = async (docId: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}&download=true`);
-      
+
+      // ✅ Call YOUR Next.js API (NOT Laravel directly)
+      const response = await fetch(
+        `/api/required-documents?document_type_id=${docId}&download=true`,
+        {
+          method: "GET",
+          credentials: "include", // ✅ VERY IMPORTANT (sends cookie)
+        },
+      );
+
       if (!response.ok) {
-        throw new Error('Download failed');
+        throw new Error("Download failed");
       }
 
       const blob = await response.blob();
+
+      // ✅ Extract filename
+      const contentDisposition = response.headers.get("content-disposition");
+      let filename = `document-${docId}.pdf`;
+
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+?)"?$/);
+        if (match?.[1]) {
+          filename = match[1];
+        }
+      }
+
+      // ✅ Download file
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
+
       a.href = url;
-      a.download = `document-${docId}.pdf`; // Default filename
+      a.download = filename;
+
       document.body.appendChild(a);
       a.click();
+
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      toast.error("Failed to download document");
       console.error(error);
+      toast.error("Failed to download document");
     } finally {
       setIsLoading(false);
     }
@@ -197,7 +249,9 @@ export default function DocumentsPage() {
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-navy">Documents</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-navy">
+            Documents
+          </h1>
           <p className="text-muted-foreground">
             Upload and manage your required documents for passport application
           </p>
@@ -209,7 +263,8 @@ export default function DocumentsPage() {
           <CardHeader className="bg-navy/5">
             <CardTitle>Required Documents</CardTitle>
             <CardDescription>
-              Please upload all the required documents in PDF, JPG, or PNG format
+              Please upload all the required documents in PDF, JPG, or PNG
+              format
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
@@ -248,7 +303,9 @@ export default function DocumentsPage() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {doc.file_details?.upload_date ? formatDate(doc.file_details.upload_date) : "-"}
+                      {doc.file_details?.upload_date
+                        ? formatDate(doc.file_details.upload_date)
+                        : "-"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -286,7 +343,11 @@ export default function DocumentsPage() {
                               size="sm"
                               onClick={() => handleUpload(doc.id)}
                               className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90"
-                              disabled={isLoading || !selectedFile || selectedDocId !== doc.id}
+                              disabled={
+                                isLoading ||
+                                !selectedFile ||
+                                selectedDocId !== doc.id
+                              }
                             >
                               <Upload className="h-4 w-4" />
                             </Button>
@@ -303,4 +364,4 @@ export default function DocumentsPage() {
       </motion.div>
     </motion.div>
   );
-} 
+}

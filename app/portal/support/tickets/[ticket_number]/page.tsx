@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -25,7 +24,6 @@ import {
   Clock,
   ArrowLeft,
 } from "lucide-react"; // Icons
-
 
 // Interface for a single remark
 interface Remark {
@@ -74,17 +72,7 @@ export default function TicketDetailsPage() {
       setError(null);
       setTicket(null); // Reset ticket on new fetch
       try {
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(
-          `/api/support/tickets/${ticket_number}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          },
-        );
+        const response = await fetch(`/api/support/tickets/${ticket_number}`);
 
         if (!response.ok) {
           let errorMessage = `Failed to fetch ticket (${response.status})`;
@@ -110,7 +98,7 @@ export default function TicketDetailsPage() {
         setTicket(result.data);
       } catch (e: any) {
         setError(
-          e.message || "An unknown error occurred while fetching ticket data.",
+          e.message || "An unknown error occurred while fetching ticket data."
         );
         console.error("Fetch error:", e);
       } finally {
@@ -229,7 +217,8 @@ export default function TicketDetailsPage() {
   };
 
   return (
-    <div className="space-y-8 p-4 md:p-6">
+    <div className="space-y-8 p-4 md:p-6">     
+
       {/* Page Header - Consistent with support page */}
       <div className="flex items-center justify-between mb-4">
         <div>

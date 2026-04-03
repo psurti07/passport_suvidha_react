@@ -575,7 +575,7 @@ export default function Services() {
       >
         {/* Pricing Section with Animation */}
         <motion.section
-          className="py-12 sm:py-16 md:py-24 relative overflow-hidden"
+          className="w-full py-12 md:py-16 relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -587,16 +587,12 @@ export default function Services() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <div className="space-y-2">
-  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-2 pb-2">
                 Passport Services & Pricing
               </h1>
               <p className="text-muted-foreground md:text-xl">
                 Choose the service that best fits your travel needs and timeline
               </p>
-
-              </div>
-            
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -668,7 +664,7 @@ export default function Services() {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <div className="space-y-3">
+                    <div className="space-y-3 mt-4">
                       <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
                           <Check className="h-3 w-3 text-navy" />
@@ -793,7 +789,7 @@ export default function Services() {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <div className="space-y-3">
+                    <div className="space-y-3 mt-4">
                       <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
                           <Check className="h-3 w-3 text-teal" />
@@ -847,12 +843,12 @@ export default function Services() {
         </motion.section>
 
         {/* Application Journey Section */}
-        <section className="w-full py-12 sm:py-16 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-12 md:py-16 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-navy/5 bg-[size:20px_20px] [mask-image:linear-gradient(to_bottom,white,transparent,white)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-teal/10 via-transparent to-navy/10 opacity-40"></div>
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-5xl mx-auto text-center mb-12">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text:4xl text-navy mb-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-navy mb-4">
                 The Passport Application Journey Your Path to Global Travel!
               </h1>
             </div>
@@ -963,7 +959,7 @@ export default function Services() {
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full py-12 sm:py-16 md:py-24 relative overflow-hidden">
+        <section className="w-full py-12 md:py-16 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-4xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">

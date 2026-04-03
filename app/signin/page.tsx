@@ -17,7 +17,6 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import axiosServer from "@/lib/axiosServer";
 
 // Add this type if you expect user data or a token back on successful sign-in
 interface SignInResponse {
@@ -68,22 +67,27 @@ export default function SignIn() {
     try {
       setIsLoading(true);
 
-      // ✅ Step 1: Verify mobile (Next.js API)
+      // Step 1: Mobile Number Verification
       const verifyResponse = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ mobile_number: mobile }),
+        body: JSON.stringify({
+          mobile_number: mobile,
+        }),
       });
 
       const verifyData = await verifyResponse.json();
 
       if (!verifyResponse.ok) {
-        throw new Error(verifyData.message || "Mobile verification failed");
+        throw new Error(
+          verifyData.message ||
+            "Failed to verify mobile number. Please try again."
+        );
       }
 
-      // ✅ Step 2: Send OTP (Next.js API)
+      // Step 2: Send OTP if mobile verification is successful
       const otpResponse = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: {
@@ -91,25 +95,27 @@ export default function SignIn() {
         },
         body: JSON.stringify({
           mobile_number: mobile,
-          purpose: "login",
         }),
       });
 
-      const otpData = await otpResponse.json();
+      const otpResponseData = await otpResponse.json();
 
       if (!otpResponse.ok) {
-        throw new Error(otpData.message || "Failed to send OTP");
+        throw new Error(
+          otpResponseData.message || "Failed to send OTP. Please try again."
+        );
       }
 
-      // ✅ Success
       setIsOtpSent(true);
       setCountdown(30);
-
-      toast.success(otpData.message || "OTP sent successfully!");
+      // Use message from API response if available
+      toast.success(otpResponseData.message || "OTP sent successfully!");
     } catch (error: any) {
-      console.error("OTP ERROR:", error);
+      const errorMessage =
+        error.message || "An unexpected error occurred while sending OTP.";
 
-      toast.error(error.message || "Failed to send OTP");
+      // Display the error message from the API or the thrown error
+      toast.error(errorMessage); // Use the extracted message
     } finally {
       setIsLoading(false);
     }
@@ -134,45 +140,43 @@ export default function SignIn() {
   const onSubmit = async (data: SignInFormData) => {
     try {
       setIsLoading(true);
-
+      // Call the endpoint for verifying OTP as per the flow
       const response = await fetch("/api/auth/verify-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        // Pass mobile and otp from the form data with the correct field names
         body: JSON.stringify({
           mobile_number: data.mobile,
           otp: data.otp,
-          purpose: "login",
         }),
       });
 
       const responseData = await response.json();
 
       if (!response.ok) {
+        // Use message from API response, or provide a default
         throw new Error(
           responseData.message ||
-            "Sign-in failed. Please check your OTP and try again.",
+            "Sign-in failed. Please check your OTP and try again."
         );
       }
 
-      if (!responseData.token) {
-        throw new Error("Token not received from server");
-      }
+      // Optional: Handle successful response data (user info)
+      // The token is now handled by the HttpOnly cookie
+      const typedResponseData: Omit<SignInResponse, "token"> = responseData;
+      // console.log("Sign-in successful:", typedResponseData);
 
-      // ✅ Save token + user
-      localStorage.setItem("authToken", responseData.token);
-      localStorage.setItem("user", JSON.stringify(responseData.customer));
-      document.cookie = `authToken=${responseData.token}; path=/`;
-      toast.success(responseData.message || "Signed in successfully!");
+      // Use message from API response if available
+      toast.success(typedResponseData.message || "Signed in successfully!");
 
-      console.log("Redirecting..."); // ✅ debug
-
-      // ✅ BEST redirect method
-      router.replace("/portal");
+      // Redirect user to /portal upon successful sign-in
+      router.push("/portal");
     } catch (error: any) {
+      // Display the error message from the API or the thrown error
       toast.error(
-        error.message || "An unexpected error occurred during sign-in.",
+        error.message || "An unexpected error occurred during sign-in."
       );
     } finally {
       setIsLoading(false);
@@ -213,12 +217,7 @@ export default function SignIn() {
                 Enter your mobile number to receive OTP
               </CardDescription>
             </CardHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault(); // ✅ STOP PAGE RELOAD
-                handleSubmit(onSubmit)(e);
-              }}
-            >
+            <form onSubmit={handleSubmit(onSubmit)}>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div className="space-y-2">

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { motion } from "framer-motion";
@@ -11,7 +10,6 @@ import ProgressBar from "./ProgressBar";
 import ConfettiOverlay from "./ConfettiOverlay";
 import { formatDate } from "@/lib/utils";
 import { clearToken } from "@/lib/auth";
-import axiosServer from "@/lib/axiosServer";
 
 // Type definitions
 interface FormData {
@@ -411,18 +409,18 @@ function ApplicationForm() {
 
       try {
         const response = await fetch(`/api/otp/verify`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            otp: formData.otp,
-            purpose: "registration",
-          }),
-        });
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              otp: formData.otp,
+              purpose: "registration",
+            }),
+          });
 
         const data = await response.json();
 
@@ -480,16 +478,19 @@ function ApplicationForm() {
 
       try {
         // ✅ STEP 1: Create Customer
-        const customerResponse = await fetch("/api/customers/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            mobile_number: formData.mobile,
-          }),
-        });
+        const customerResponse = await fetch(
+          "/api/customers/create",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+              email: formData.email,
+              mobile_number: formData.mobile,
+            }),
+          },
+        );
 
         const customerData = await customerResponse.json();
 
@@ -558,22 +559,25 @@ function ApplicationForm() {
         const formattedDob = formatDateForApi(formData.dateOfBirth);
 
         // Send additional information to API using the internal API route
-        const response = await fetch(`/api/customer/additional-info`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `/api/customer/additional-info`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              address: formData.address,
+              pin_code: formData.zipCode,
+              city: formData.city,
+              state: formData.state,
+              gender: formData.gender,
+              date_of_birth: formattedDob,
+              place_of_birth: formData.placeOfBirth,
+            }),
           },
-          body: JSON.stringify({
-            address: formData.address,
-            pin_code: formData.zipCode,
-            city: formData.city,
-            state: formData.state,
-            gender: formData.gender,
-            date_of_birth: formattedDob,
-            place_of_birth: formData.placeOfBirth,
-          }),
-        });
+        );
 
         const data = await response.json();
 
@@ -612,38 +616,21 @@ function ApplicationForm() {
     setStep(step - 1);
   };
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      // Prevent loading script multiple times
-      if (document.getElementById("razorpay-script")) {
-        resolve(true);
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.id = "razorpay-script";
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
   const completePayment = async () => {
-    if (typeof window === "undefined") return;
-
     setLoading(true);
     setErrorMessage("");
 
     try {
+      // Get the stored token from localStorage
       const token = localStorage.getItem("token");
-
       if (!token) {
-        setErrorMessage("Session expired. Please login again.");
+        console.error("Authentication token not found");
+        setErrorMessage("Session expired. Please start over.");
+        setLoading(false);
         return;
       }
 
-      // ✅ Service code
+      // Map the passport type and book size to the API's service codes
       let serviceCode;
       if (formData.passportType === "normal" && formData.bookSize === "36") {
         serviceCode = "NORMAL_36";
@@ -664,107 +651,60 @@ function ApplicationForm() {
         serviceCode = "TATKAL_60";
       }
 
-      // ✅ Price mapping
-      const priceMap: Record<string, number> = {
-        NORMAL_36: 268000,
-        NORMAL_60: 318000,
-        TATKAL_36: 468000,
-        TATKAL_60: 518000,
-      };
+      // Send service selection to API using internal API route
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/customer/select-service`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: JSON.stringify({ service_code: serviceCode }),
+      // });
 
-      // ✅ Get amount
-      const amount = priceMap[serviceCode];
-
-      if (!amount) {
-        setErrorMessage("Invalid service selection");
-        return;
-      }
-
-      // 🟡 Step 1: Create Order (Axios)
-      const orderRes = await axiosServer.post(
-        "/create-order",
-        { amount },
+      const response = await fetch("/api/customer/select-service",
         {
+          method: "POST",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({
+            service_code: serviceCode,
+            book_size: formData.bookSize,
+            passport_type: formData.passportType,
+            nationality: formData.nationality,
+          }),
         },
       );
 
-      const order = orderRes.data;
+      const data = await response.json();
 
-      // 🟡 Step 2: Load Razorpay
-      const loaded = await loadRazorpayScript();
-      if (!loaded) {
-        setErrorMessage("Razorpay SDK failed to load");
-        return;
+      if (!response.ok) {
+        throw { response: { data, status: response.status } };
       }
 
-      const Razorpay = window.Razorpay;
-      if (!Razorpay) {
-        setErrorMessage("Razorpay not available");
-        return;
-      }
+      // If we get here, the API call was successful
+      // Show confetti for successful submission
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000);
 
-      // 🟡 Step 3: Open Checkout
-      const rzp = new Razorpay({
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
-        amount: order.amount,
-        currency: "INR",
-        name: "Passport Service",
-        description: "Application Fee",
-        order_id: order.id,
+      // Clear saved form data on successful completion
+      clearSavedFormData();
+    } catch (error: any) {
+      console.error("Error completing payment:", error);
 
-        handler: async function (response) {
-          try {
-            // 🟢 Step 4: Verify Payment (Axios)
-            await axiosServer.post("/verify-payment", response, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            // 🟢 Step 5: Final API
-            await axiosServer.post(
-              "/customer/select-service",
-              {
-                service_code: serviceCode,
-                book_size: formData.bookSize,
-                passport_type: formData.passportType,
-                nationality: formData.nationality,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              },
-            );
-
-            setShowConfetti(true);
-            setTimeout(() => setShowConfetti(false), 5000);
-            clearSavedFormData();
-            window.location.href = "/payment-response?status=success";
-          } catch (err) {
-            console.error(err);
-            setErrorMessage("Payment verification failed");
-            window.location.href = "/payment-response?status=failed";
-          }
-        },
-      });
-
-      rzp.on("payment.failed", function () {
-        window.location.href = "/payment-response?status=failed";
-      });
-
-      rzp.open();
-    } catch (err) {
-      console.error(err);
-
-      // ✅ Better error handling
-      if (err.response) {
-        setErrorMessage(err.response.data.message || "API Error");
+      // Handle errors
+      if (error.response?.data?.errors) {
+        const firstError = Object.values(error.response.data.errors)[0];
+        if (Array.isArray(firstError) && firstError.length > 0) {
+          setErrorMessage(firstError[0]);
+        } else {
+          setErrorMessage("Invalid service selection. Please try again.");
+        }
       } else {
-        setErrorMessage("Payment failed");
+        setErrorMessage(
+          "Failed to complete your application. Please try again.",
+        );
       }
     } finally {
       setLoading(false);

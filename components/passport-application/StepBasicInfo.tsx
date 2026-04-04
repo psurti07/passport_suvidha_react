@@ -1,4 +1,10 @@
-import { CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -26,7 +32,7 @@ const StepBasicInfo = ({
   nextStep,
   itemVariants,
   errorMessage,
-  loading = false
+  loading = false,
 }: StepBasicInfoProps) => {
   const [touched, setTouched] = useState({
     firstName: false,
@@ -214,7 +220,7 @@ const StepBasicInfo = ({
                 className="mt-1"
               />
               <Label htmlFor="marketing" className="text-xs leading-5">
-                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS Services.
+                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS, RCS Services.
               </Label>
             </div>
           </motion.div>

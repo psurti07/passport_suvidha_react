@@ -34,7 +34,7 @@ export default function Disclaimer() {
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading pb-4">
                 Disclaimer
               </h1>
-              
+
               <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>Last Updated: March 21, 2026</span>
@@ -49,7 +49,6 @@ export default function Disclaimer() {
                     <Shield className="h-5 w-5 text-navy" />
                     <CardTitle>Disclaimer Overview</CardTitle>
                   </div>
-                  
                 </CardHeader>
                 <CardContent className="prose prose-slate max-w-none">
                   <p>
@@ -60,7 +59,7 @@ export default function Disclaimer() {
                     have read, understood, and agreed to be legally bound by the
                     terms of this Disclaimer.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     Passport Suvidha is a private, independent, non-governmental
                     consultancy and facilitation service provider. This Website
@@ -74,7 +73,7 @@ export default function Disclaimer() {
                     construed as constituting or implying any governmental
                     authority, representation, or official status.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     The services offered by Passport Suvidha are purely
                     informational, advisory, clerical, and facilitative in
@@ -93,7 +92,7 @@ export default function Disclaimer() {
                     approval, issuance, Tatkal acceptance, processing timelines,
                     or outcomes.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     All matters relating to passport application submission,
                     scrutiny, verification, police verification, approval,
@@ -105,7 +104,7 @@ export default function Disclaimer() {
                     portals and for compliance with all applicable laws, rules,
                     procedures, conditions, and governmental requirements.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     Any fees charged by Passport Suvidha constitute
                     consideration solely for professional consultancy and
@@ -120,7 +119,7 @@ export default function Disclaimer() {
                     withdrawal, or any change in governmental policy or
                     procedure.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     While reasonable efforts are undertaken to ensure that
                     information made available on this Website is accurate and
@@ -132,7 +131,7 @@ export default function Disclaimer() {
                     outdated information, or consequences arising from such
                     regulatory or procedural changes.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     To the fullest extent permitted under applicable law,
                     Passport Suvidha shall not be liable for any direct,
@@ -149,7 +148,7 @@ export default function Disclaimer() {
                     services is undertaken entirely at the user’s own risk and
                     discretion.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     This Website may contain links or references to third-party
                     or government websites for informational convenience only.
@@ -161,7 +160,7 @@ export default function Disclaimer() {
                     employment, fiduciary, or representative relationship
                     between Passport Suvidha and any user.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     Passport Suvidha shall not be held liable for any failure or
                     delay in the performance of its obligations arising from
@@ -170,7 +169,7 @@ export default function Disclaimer() {
                     actions, changes in law, technical failures, system outages,
                     or other force majeure events.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     If any provision of this Disclaimer is determined by a court
                     of competent jurisdiction to be invalid, unlawful, or
@@ -178,7 +177,7 @@ export default function Disclaimer() {
                     remaining provisions shall remain valid, binding, and
                     enforceable to the fullest extent permitted by law.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     Passport Suvidha reserves the right to modify, amend, or
                     update this Disclaimer at any time without prior notice.
@@ -186,7 +185,7 @@ export default function Disclaimer() {
                     modification shall constitute deemed acceptance of the
                     revised Disclaimer.
                   </p>
-                  <br/>
+                  <br />
                   <p>
                     By accessing, browsing, or using this Website, you expressly
                     confirm your informed consent to this Disclaimer and
@@ -197,10 +196,28 @@ export default function Disclaimer() {
                     be subject to the exclusive jurisdiction of the courts of
                     Surat.
                   </p>
-                  <br/>
+                  <br />
+                  <p>
+                    This Website is privately operated and not affiliated with
+                    any government entity. We do not represent or are affiliated
+                    with, endorsed by, or in any way connected to any government
+                    body or department. The form provided is not for official
+                    registration purpose; rather, it’s designed to gather
+                    information from our clients to help us batter understand
+                    their business needs. By continuing to use this website, you
+                    acknowledge that we are a private company. We offer
+                    assistance based on customer requests, and the fees
+                    collected on this website are charged as a platform fee. We
+                    reserve the right to outsource matters as deemed necessary.
+                    We are in the process of giving our brand a new name. stay
+                    tuned for updates. This platform does not offer legal
+                    services, nor does it provide legal advice or
+                    representation. Do you require legal assistance? We strongly
+                    recommend consulting with a qualified lawyer or firm.
+                  </p>
+                  <br />
                 </CardContent>
               </Card>
-
 
               <div className="mt-10 space-y-6">
                 <div className="bg-navy/5 rounded-xl p-6 border border-navy/10">

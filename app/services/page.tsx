@@ -89,12 +89,12 @@ export default function Services() {
     ),
     documents: (
       <div className="text-center space-y-6">
-        <img
+        {/* <img
           src="/document-upload.svg"
           alt="Document Upload"
           className="w-full max-w-md mx-auto mb-8"
         />
-        <h2 className="text-3xl font-bold text-teal">Document Upload</h2>
+        <h2 className="text-3xl font-bold text-teal">Document Upload</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
             <h3 className="font-semibold text-lg text-teal mb-2">
@@ -143,12 +143,12 @@ export default function Services() {
     ),
     payment: (
       <div className="text-center space-y-6">
-        <img
+        {/* <img
           src="/payment.svg"
           alt="Payment Process"
           className="w-full max-w-md mx-auto mb-8"
         />
-        <h2 className="text-3xl font-bold text-navy">Payment Process</h2>
+        <h2 className="text-3xl font-bold text-navy">Payment Process</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
             <h3 className="font-semibold text-lg text-navy mb-2">
@@ -197,12 +197,12 @@ export default function Services() {
     ),
     processing: (
       <div className="text-center space-y-6">
-        <img
+        {/* <img
           src="/processing.svg"
           alt="Application Processing"
           className="w-full max-w-md mx-auto mb-8"
         />
-        <h2 className="text-3xl font-bold text-teal">Application Processing</h2>
+        <h2 className="text-3xl font-bold text-teal">Application Processing</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
             <h3 className="font-semibold text-lg text-teal mb-2">
@@ -247,12 +247,12 @@ export default function Services() {
     ),
     verification: (
       <div className="text-center space-y-6">
-        <img
+        {/* <img
           src="/verification.svg"
           alt="Document Verification"
           className="w-full max-w-md mx-auto mb-8"
         />
-        <h2 className="text-3xl font-bold text-navy">Document Verification</h2>
+        <h2 className="text-3xl font-bold text-navy">Document Verification</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
             <h3 className="font-semibold text-lg text-navy mb-2">
@@ -301,12 +301,12 @@ export default function Services() {
     ),
     delivery: (
       <div className="text-center space-y-6">
-        <img
+        {/* <img
           src="/delivery.svg"
           alt="Passport Delivery"
           className="w-full max-w-md mx-auto mb-8"
         />
-        <h2 className="text-3xl font-bold text-teal">Passport Delivery</h2>
+        <h2 className="text-3xl font-bold text-teal">Passport Delivery</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
             <h3 className="font-semibold text-lg text-teal mb-2">
@@ -575,7 +575,7 @@ export default function Services() {
       >
         {/* Pricing Section with Animation */}
         <motion.section
-          className="w-full py-12 md:py-16 relative overflow-hidden"
+          className="py-12 sm:py-16 md:py-24 relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -587,12 +587,15 @@ export default function Services() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-2 pb-2">
-                Passport Services & Pricing
-              </h1>
-              <p className="text-muted-foreground md:text-xl">
-                Choose the service that best fits your travel needs and timeline
-              </p>
+              <div className="space-y-2">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+                  Passport Services & Pricing
+                </h1>
+                <p className="text-muted-foreground md:text-xl">
+                  Choose the service that best fits your travel needs and
+                  timeline
+                </p>
+              </div>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -664,7 +667,7 @@ export default function Services() {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <div className="space-y-3 mt-4">
+                    <div className="space-y-3">
                       <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
                           <Check className="h-3 w-3 text-navy" />
@@ -789,7 +792,7 @@ export default function Services() {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <div className="space-y-3 mt-4">
+                    <div className="space-y-3">
                       <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
                           <Check className="h-3 w-3 text-teal" />
@@ -843,12 +846,12 @@ export default function Services() {
         </motion.section>
 
         {/* Application Journey Section */}
-        <section className="w-full py-12 md:py-16 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-12 sm:py-16 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-navy/5 bg-[size:20px_20px] [mask-image:linear-gradient(to_bottom,white,transparent,white)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-teal/10 via-transparent to-navy/10 opacity-40"></div>
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-5xl mx-auto text-center mb-12">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-navy mb-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text:4xl text-navy mb-4">
                 The Passport Application Journey Your Path to Global Travel!
               </h1>
             </div>
@@ -959,7 +962,7 @@ export default function Services() {
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full py-12 md:py-16 relative overflow-hidden">
+        <section className="w-full py-12 sm:py-16 md:py-24 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-4xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">
@@ -1069,10 +1072,12 @@ export default function Services() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg text-navy">
-                    Passport Office Visit
+                      Passport Office Visit
                     </h3>
                     <p className="text-gray-600 mt-1">
-                    On your scheduled visit date, you'll need to go to the selected Passport Office with your application and the required documents.
+                      On your scheduled visit date, you'll need to go to the
+                      selected Passport Office with your application and the
+                      required documents.
                     </p>
                   </div>
                 </div>
@@ -1090,10 +1095,11 @@ export default function Services() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg text-teal">
-                    Passport Delivery  @ Your Home
+                      Passport Delivery @ Your Home
                     </h3>
                     <p className="text-gray-600 mt-1">
-                    Your passport will be delivered right to your home via courier!
+                      Your passport will be delivered right to your home via
+                      courier!
                     </p>
                   </div>
                 </div>

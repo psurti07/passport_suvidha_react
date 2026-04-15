@@ -8,7 +8,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   
   // List of paths where we don't want to show navbar and footer
-  const noNavbarPaths = ['/signin', '/apply-passport', '/test', '/test-apply-passport']
+  const noNavbarPaths = ['/signin', '/apply-passport', '/test', '/test-apply-passport','/cardoffer']
   
   // Check if path starts with /portal
   if (noNavbarPaths.includes(pathname) || pathname.startsWith('/portal')) {

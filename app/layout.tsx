@@ -4,6 +4,7 @@ import "./globals.css"
 import { Toaster as SonnerToaster } from "sonner"
 
 import ScrollProgress from "@/components/ui/top-scroll"
+import Script from "next/script";
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 
@@ -25,6 +26,10 @@ export default function RootLayout({
         <ScrollProgress />
         {children}
         <SonnerToaster richColors position="top-right" />
+        <Script
+          src="https://sdk.cashfree.com/js/v3/cashfree.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )

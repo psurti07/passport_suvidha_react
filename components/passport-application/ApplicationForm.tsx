@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { motion } from "framer-motion";
@@ -10,6 +11,7 @@ import ProgressBar from "./ProgressBar";
 import ConfettiOverlay from "./ConfettiOverlay";
 import { formatDate } from "@/lib/utils";
 import { clearToken } from "@/lib/auth";
+import axiosServer from "@/lib/axiosServer";
 
 // Type definitions
 interface FormData {
@@ -145,49 +147,49 @@ function ApplicationForm() {
   const windowSize = useWindowSize();
 
   // Load saved form data and step from localStorage on initial load
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedFormData = localStorage.getItem("passportFormData");
-      const savedStep = localStorage.getItem("passportFormStep");
-      const savedOtpVerified = localStorage.getItem("otpVerified");
-      const savedTimestamp = localStorage.getItem("passportFormTimestamp");
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const savedFormData = localStorage.getItem("passportFormData");
+  //     const savedStep = localStorage.getItem("passportFormStep");
+  //     const savedOtpVerified = localStorage.getItem("otpVerified");
+  //     const savedTimestamp = localStorage.getItem("passportFormTimestamp");
 
-      const currentTime = Date.now();
-      const threeHoursInMs = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+  //     const currentTime = Date.now();
+  //     const threeHoursInMs = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
 
-      // Check if data is older than 3 hours
-      if (
-        savedTimestamp &&
-        currentTime - parseInt(savedTimestamp) > threeHoursInMs
-      ) {
-        // Clear expired data
-        clearSavedFormData();
-        return;
-      }
+  //     // Check if data is older than 3 hours
+  //     if (
+  //       savedTimestamp &&
+  //       currentTime - parseInt(savedTimestamp) > threeHoursInMs
+  //     ) {
+  //       // Clear expired data
+  //       clearSavedFormData();
+  //       return;
+  //     }
 
-      if (savedFormData) {
-        setFormData(JSON.parse(savedFormData));
-      }
+  //     if (savedFormData) {
+  //       setFormData(JSON.parse(savedFormData));
+  //     }
 
-      if (savedStep) {
-        setStep(parseInt(savedStep));
-      }
+  //     if (savedStep) {
+  //       setStep(parseInt(savedStep));
+  //     }
 
-      if (savedOtpVerified === "true") {
-        setOtpVerified(true);
-      }
-    }
-  }, []);
+  //     if (savedOtpVerified === "true") {
+  //       setOtpVerified(true);
+  //     }
+  //   }
+  // }, []);
 
   // Save form data and current step to localStorage whenever they change
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("passportFormData", JSON.stringify(formData));
-      localStorage.setItem("passportFormStep", step.toString());
-      localStorage.setItem("otpVerified", otpVerified.toString());
-      localStorage.setItem("passportFormTimestamp", Date.now().toString());
-    }
-  }, [formData, step, otpVerified]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("passportFormData", JSON.stringify(formData));
+  //     localStorage.setItem("passportFormStep", step.toString());
+  //     localStorage.setItem("otpVerified", otpVerified.toString());
+  //     localStorage.setItem("passportFormTimestamp", Date.now().toString());
+  //   }
+  // }, [formData, step, otpVerified]);
 
   // Animation variants
   const containerVariants = {
@@ -239,17 +241,17 @@ function ApplicationForm() {
   };
 
   // Function to clear saved form data when needed
-  const clearSavedFormData = () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("passportFormData");
-      localStorage.removeItem("passportFormStep");
-      localStorage.removeItem("otpVerified");
-      localStorage.removeItem("passportFormTimestamp");
+  // const clearSavedFormData = () => {
+  //   if (typeof window !== "undefined") {
+  //     localStorage.removeItem("passportFormData");
+  //     localStorage.removeItem("passportFormStep");
+  //     localStorage.removeItem("otpVerified");
+  //     localStorage.removeItem("passportFormTimestamp");
 
-      // Also clear authentication tokens
-      clearToken();
-    }
-  };
+  //     // Also clear authentication tokens
+  //     clearToken();
+  //   }
+  // };
 
   // Update progress width based on current step
   useEffect(() => {
@@ -359,14 +361,13 @@ function ApplicationForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Resend OTP function for when users want to resend on verification page
   const sendOTP = async () => {
     setLoading(true);
     setOtpSent(false);
     setErrorMessage("");
 
     try {
-      // Use internal API route instead of direct external API call
+
       const otpResponse = await fetch("/api/otp/send", {
         method: "POST",
         headers: {
@@ -388,7 +389,6 @@ function ApplicationForm() {
     } catch (error: any) {
       console.error("Error sending OTP:", error);
 
-      // Set error message for OTP send errors
       if (error.response?.data?.errors?.mobile_number) {
         setErrorMessage(error.response.data.errors.mobile_number[0]);
       } else {
@@ -404,23 +404,23 @@ function ApplicationForm() {
     setErrorMessage("");
 
     try {
-      // Prevent default form submission behavior that might cause navigation
+
       e?.preventDefault?.();
 
       try {
         const response = await fetch(`/api/otp/verify`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Requested-With": "XMLHttpRequest",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              mobile_number: formData.mobile,
-              otp: formData.otp,
-              purpose: "registration",
-            }),
-          });
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            mobile_number: formData.mobile,
+            otp: formData.otp,
+            purpose: "registration",
+          }),
+        });
 
         const data = await response.json();
 
@@ -428,18 +428,33 @@ function ApplicationForm() {
           throw { response: { data, status: response.status } };
         }
 
-        // OTP verification successful
         setOtpVerified(true);
 
-        // Store the auth token if needed for future authenticated requests
         if (data?.token) {
           localStorage.setItem("token", data.token);
         }
 
-        // Automatically move to the next step after successful verification
+        const nextStepFromAPI = data?.next_step;
+        const stepMapping: any = {
+          otp_verification: 2,
+          additional_information: 3,
+          service_selection: 4,
+          payment: 4, // or 5 if you had
+        };
+
         setTimeout(() => {
-          setStep((prevStep) => prevStep + 1);
-        }, 1500); // Small delay to show the success message before moving on
+          if (!nextStepFromAPI) {
+            console.error("Invalid next_step from API");
+            return;
+          }
+
+          setStep(stepMapping[nextStepFromAPI] ?? 1);
+        }, 1500);
+
+        // Automatically move to the next step after successful verification
+        // setTimeout(() => {
+        //   setStep((prevStep) => prevStep + 1);
+        // }, 1500); // Small delay to show the success message before moving on
       } catch (apiError: any) {
         // Handle API error (invalid OTP)
         // console.log('OTP validation failed:', apiError.response?.status);
@@ -478,19 +493,16 @@ function ApplicationForm() {
 
       try {
         // ✅ STEP 1: Create Customer
-        const customerResponse = await fetch(
-          "/api/customers/create",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              email: formData.email,
-              mobile_number: formData.mobile,
-            }),
-          },
-        );
+        const customerResponse = await fetch("/api/customers/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            mobile_number: formData.mobile,
+          }),
+        });
 
         const customerData = await customerResponse.json();
 
@@ -559,25 +571,22 @@ function ApplicationForm() {
         const formattedDob = formatDateForApi(formData.dateOfBirth);
 
         // Send additional information to API using the internal API route
-        const response = await fetch(
-          `/api/customer/additional-info`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              address: formData.address,
-              pin_code: formData.zipCode,
-              city: formData.city,
-              state: formData.state,
-              gender: formData.gender,
-              date_of_birth: formattedDob,
-              place_of_birth: formData.placeOfBirth,
-            }),
+        const response = await fetch(`/api/customer/additional-info`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+          body: JSON.stringify({
+            address: formData.address,
+            pin_code: formData.zipCode,
+            city: formData.city,
+            state: formData.state,
+            gender: formData.gender,
+            date_of_birth: formattedDob,
+            place_of_birth: formData.placeOfBirth,
+          }),
+        });
 
         const data = await response.json();
 
@@ -616,96 +625,141 @@ function ApplicationForm() {
     setStep(step - 1);
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      // Prevent loading script multiple times
+      if (document.getElementById("razorpay-script")) {
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.id = "razorpay-script";
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const completePayment = async () => {
+    if (typeof window === "undefined") return;
+
     setLoading(true);
     setErrorMessage("");
 
     try {
-      // Get the stored token from localStorage
       const token = localStorage.getItem("token");
+
       if (!token) {
-        console.error("Authentication token not found");
-        setErrorMessage("Session expired. Please start over.");
-        setLoading(false);
+        setErrorMessage("Session expired. Please login again.");
         return;
       }
 
-      // Map the passport type and book size to the API's service codes
-      let serviceCode;
+      let serviceCode: string | undefined;
+
       if (formData.passportType === "normal" && formData.bookSize === "36") {
-        serviceCode = "NORMAL_36";
+        serviceCode = "NP36";
       } else if (
         formData.passportType === "normal" &&
         formData.bookSize === "60"
       ) {
-        serviceCode = "NORMAL_60";
+        serviceCode = "NP60";
       } else if (
         formData.passportType === "tatkal" &&
         formData.bookSize === "36"
       ) {
-        serviceCode = "TATKAL_36";
+        serviceCode = "TP36";
       } else if (
         formData.passportType === "tatkal" &&
         formData.bookSize === "60"
       ) {
-        serviceCode = "TATKAL_60";
+        serviceCode = "TP60";
       }
 
-      // Send service selection to API using internal API route
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/customer/select-service`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify({ service_code: serviceCode }),
-      // });
+      if (!serviceCode) {
+        setErrorMessage("Invalid service selection");
+        return;
+      }
 
-      const response = await fetch("/api/customer/select-service",
+      await axiosServer.post(
+        "/customer/select-service",
         {
-          method: "POST",
+          service_code: serviceCode,
+          book_size: String(formData.bookSize),
+          passport_type: formData.passportType,
+          nationality: formData.nationality,
+        },
+        {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            service_code: serviceCode,
-            book_size: formData.bookSize,
-            passport_type: formData.passportType,
-            nationality: formData.nationality,
-          }),
         },
       );
 
-      const data = await response.json();
+      const orderRes = await axiosServer.post(
+        "/create-order",
+        {
+          service_code: serviceCode,
+          mobile: formData.mobile,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-      if (!response.ok) {
-        throw { response: { data, status: response.status } };
+      const order = orderRes.data;
+
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        setErrorMessage("Razorpay SDK failed to load");
+        return;
       }
 
-      // If we get here, the API call was successful
-      // Show confetti for successful submission
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000);
+      const rzp = new window.Razorpay({
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: order.amount,
+        currency: "INR",
+        name: "Passport Service",
+        description: "Application Fee",
+        order_id: order.id,
 
-      // Clear saved form data on successful completion
-      clearSavedFormData();
-    } catch (error: any) {
-      console.error("Error completing payment:", error);
+        handler: async function (response: any) {
+          try {
+            await axiosServer.post(
+              "/verify-payment",
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              },
+            );
 
-      // Handle errors
-      if (error.response?.data?.errors) {
-        const firstError = Object.values(error.response.data.errors)[0];
-        if (Array.isArray(firstError) && firstError.length > 0) {
-          setErrorMessage(firstError[0]);
-        } else {
-          setErrorMessage("Invalid service selection. Please try again.");
-        }
-      } else {
-        setErrorMessage(
-          "Failed to complete your application. Please try again.",
-        );
-      }
+            window.location.href = "/payment-response?status=success";
+          } catch {
+            window.location.href = "/payment-response?status=failed";
+          }
+        },
+      });
+
+      rzp.on("payment.failed", function () {
+        window.location.href = "/payment-response?status=failed";
+      });
+
+      rzp.open();
+    } catch (err: any) {
+      console.error("MAIN ERROR:", err.response?.data || err);
+
+      setErrorMessage(
+        err.response?.data?.message || "Something went wrong during payment",
+      );
     } finally {
       setLoading(false);
     }

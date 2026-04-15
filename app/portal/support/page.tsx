@@ -296,14 +296,13 @@ export default function SupportPage() {
                           <h3 className="font-medium">Phone Support</h3>
                           <p className="text-sm text-muted-foreground mt-1">
                             Call us at{" "}
-                            <a href="tel:+18005555555" className="text-navy hover:underline">
-                              1-800-555-5555
+                            <a href="tel:7486046591" className="text-navy hover:underline">
+                              7486046591
                             </a>
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">
-                            Monday - Friday: 8:00 AM - 8:00 PM EST
+                            Monday - Saturday: 10:00 AM - 05:00 PM EST
                             <br />
-                            Saturday: 9:00 AM - 5:00 PM EST
                           </p>
                         </div>
                       </div>
@@ -316,8 +315,8 @@ export default function SupportPage() {
                           <h3 className="font-medium">Email Support</h3>
                           <p className="text-sm text-muted-foreground mt-1">
                             Send an email to{" "}
-                            <a href="mailto:support@PassportSuvidha.com" className="text-navy hover:underline">
-                              support@PassportSuvidha.com
+                            <a href="mailto:support@passportsuvidha.com" className="text-navy hover:underline">
+                              support@passportsuvidha.com
                             </a>
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">We typically respond within 24 hours</p>
@@ -335,12 +334,8 @@ export default function SupportPage() {
                   <CardContent className="p-6">
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="font-medium">Monday - Friday</span>
-                        <span>8:00 AM - 8:00 PM EST</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-medium">Saturday</span>
-                        <span>9:00 AM - 5:00 PM EST</span>
+                        <span className="font-medium"> Mon - Sat</span>
+                        <span>10AM - 05PM EST</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="font-medium">Sunday</span>

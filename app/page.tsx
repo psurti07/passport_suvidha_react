@@ -39,6 +39,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Image from "next/image";
+import axiosServer from "@/lib/axiosServer";
 
 export default function Home() {
   const [contactFirstName, setContactFirstName] = useState("");
@@ -53,48 +54,79 @@ export default function Home() {
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setIsContactSubmitting(true);
     setContactSubmitStatus("idle");
 
-    const name = `${contactFirstName} ${contactLastName}`;
+    const name = `${contactFirstName} ${contactLastName}`.trim();
+    const subject = contactSubject || "General Inquiry";
 
     try {
-      const response = await fetch("/api/support/tickets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      //  Get token (if logged in)
+      const token = localStorage.getItem("authToken");
+
+      const response = await axiosServer.post(
+        "/public/support/tickets",
+        {
           name,
           email: contactEmail,
-          subject: contactSubject,
+          subject,
           message: contactMessage,
-        }),
+        },
+        {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
+
+      const resData = response.data;
+
+      //  SUCCESS
+      setContactSubmitStatus("success");
+
+      toast.success("Message Sent!", {
+        description:
+          resData?.message ||
+          "We have received your message and will get back to you soon.",
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      setContactSubmitStatus("success");
+      //  Reset form
       setContactFirstName("");
       setContactLastName("");
       setContactEmail("");
       setContactSubject("");
       setContactMessage("");
-      toast.success("Message Sent!", {
-        description:
-          "We have received your message and will get back to you soon.",
-      });
-    } catch (error) {
-      console.error("Error submitting contact form:", error);
+    } catch (error: any) {
+      console.error("API Error:", error);
+
       setContactSubmitStatus("error");
-      toast.error("Failed to send message", {
-        description: "Please try again later.",
+
+      let errorMessage = "Something went wrong. Please try again.";
+
+      //  Laravel validation errors
+      if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const firstError = Object.values(errors)[0];
+        errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+      }
+
+      //  Laravel custom message
+      else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+
+      //  Network / Axios error
+      else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      //  ERROR TOAST (FIXED — no more success here)
+      toast.error("Error", {
+        description: errorMessage,
       });
     } finally {
       setIsContactSubmitting(false);
-      setTimeout(() => setContactSubmitStatus("idle"), 5000);
     }
   };
 
@@ -1093,7 +1125,7 @@ export default function Home() {
                           </h4>
                           <p className="text-muted-foreground">7486046591</p>
                           <p className="text-sm text-muted-foreground">
-                            Monday-Friday, 10am-5pm IST
+                            Monday-Saturday, 10am-5pm IST
                           </p>
                         </div>
                       </div>
@@ -1106,7 +1138,7 @@ export default function Home() {
                             Email Support
                           </h4>
                           <p className="text-muted-foreground">
-                            support@PassportSuvidha.com
+                            support@passportsuvidha.com
                           </p>
                           <p className="text-sm text-muted-foreground">
                             Responses within 24-48 hours

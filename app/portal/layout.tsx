@@ -20,110 +20,123 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { ApplicationProgress } from "@/app/types/application";
+import axiosServer from "@/lib/axiosServer";
 
-// Component to handle sidebar items visibility
-function SidebarNavigation({ 
+function SidebarNavigation({
   applicationProgress,
-  onSignOut 
-}: { 
+  onSignOut,
+}: {
   applicationProgress: ApplicationProgress | null;
   onSignOut: () => void;
 }) {
   const pathname = usePathname();
+
   const isActive = (path: string) => pathname === path;
 
-  // Helper function to find stage by title
+  // Safe helper function
   const findStage = (title: string): boolean => {
-    if (!applicationProgress?.stages) return false;
-    return applicationProgress.stages.some(
-      (stage) => stage.title.toLowerCase() === title.toLowerCase()
+    return (
+      applicationProgress?.stages?.some(
+        (stage) => stage.title?.toLowerCase() === title.toLowerCase(),
+      ) || false
     );
   };
 
-  // Determine if Application Review should be shown
+  //  Conditions
   const showApplicationReview = findStage("details_verification");
-
-  // Determine if Appointment Letter should be shown
   const showAppointmentLetter = findStage("appointment_scheduled");
 
   return (
     <nav className="space-y-1 p-4">
+      {/* Dashboard */}
       <Link
         href="/portal"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal")
+          pathname === "/portal"
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <Home className="h-5 w-5" />
         Dashboard
       </Link>
+
+      {/* Documents */}
       <Link
         href="/portal/documents"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/documents")
+          pathname.startsWith("/portal/documents")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <FileText className="h-5 w-5" />
         Documents
       </Link>
+
+      {/* Application Review */}
       {showApplicationReview && (
         <Link
           href="/portal/application-review"
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-            isActive("/portal/application-review")
+            pathname.startsWith("/portal/application-review")
               ? "bg-navy text-white"
-              : "text-navy hover:bg-navy/5"
+              : "text-navy hover:bg-navy/5",
           )}
         >
           <CheckCircle className="h-5 w-5" />
           Application Review
         </Link>
       )}
+
+      {/* Appointment Letter */}
       {showAppointmentLetter && (
         <Link
           href="/portal/appointment-letter"
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-            isActive("/portal/appointment-letter")
+            pathname.startsWith("/portal/appointment-letter")
               ? "bg-navy text-white"
-              : "text-navy hover:bg-navy/5"
+              : "text-navy hover:bg-navy/5",
           )}
         >
           <Clock className="h-5 w-5" />
           Appointment Letter
         </Link>
       )}
+
+      {/* Profile */}
       <Link
         href="/portal/profile"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/profile")
+          pathname.startsWith("/portal/profile")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <User className="h-5 w-5" />
         Personal Details
       </Link>
+
+      {/* Support */}
       <Link
         href="/portal/support"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          isActive("/portal/support")
+          pathname.startsWith("/portal/support")
             ? "bg-navy text-white"
-            : "text-navy hover:bg-navy/5"
+            : "text-navy hover:bg-navy/5",
         )}
       >
         <HelpCircle className="h-5 w-5" />
         Support
       </Link>
+
+      {/* Sign Out */}
       <div className="pt-4 mt-4 border-t">
         <button
           onClick={onSignOut}
@@ -144,8 +157,10 @@ export default function PortalLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [applicationProgress, setApplicationProgress] = useState<ApplicationProgress | null>(null);
+  const [applicationProgress, setApplicationProgress] =
+    useState<ApplicationProgress | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -153,37 +168,84 @@ export default function PortalLayout({
 
   const handleSignOut = async () => {
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
+      const token = localStorage.getItem("authToken");
 
-      if (!response.ok) {
-        throw new Error('Failed to sign out');
+      if (!token) {
+        router.replace("/signin");
+        return null;
       }
 
-      router.push('/signin');
-      toast.success('Signed out successfully');
-    } catch (error) {
-      console.error('Sign out error:', error);
-      toast.error('Failed to sign out. Please try again.');
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, //  VERY IMPORTANT
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to logout");
+      }
+
+      //  CLEAR STORAGE
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+
+      toast.success("Signed out successfully");
+
+      //  REDIRECT
+      router.replace("/signin");
+    } catch (error: any) {
+      console.error("Logout error:", error);
+
+      // still clear (failsafe)
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+
+      router.replace("/signin");
+
+      toast.error("Session expired. Please login again.");
     }
   };
 
   useEffect(() => {
-    const fetchApplicationProgress = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/application-progress");
-        if (!response.ok) throw new Error("Failed to fetch application progress");
-        const data = await response.json();
-        setApplicationProgress(data);
-      } catch (error) {
-        console.error("Error fetching application progress:", error);
+        setLoading(true);
+
+        const token = localStorage.getItem("authToken");
+
+        if (!token) {
+          router.replace("/signin");
+          return null;
+        }
+
+        //  Fetch both APIs together
+        const [progressRes, profileRes] = await Promise.all([
+          axiosServer.get("/application-progress", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axiosServer.get("/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setApplicationProgress(progressRes.data);
+        setProfile(profileRes.data);
+      } catch (error: any) {
+        console.error("Error:", error);
+
+        if (error.response?.status === 401) {
+          // localStorage.removeItem("authToken");
+          router.replace("/signin");
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchApplicationProgress();
+    fetchData();
   }, []);
 
   return (
@@ -209,10 +271,18 @@ export default function PortalLayout({
               </button>
               <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="p-3 border-b">
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-xs text-muted-foreground">
-                    john.doe@example.com
-                  </p>
+                  {profile ? (
+                    <>
+                      <p className="font-medium capitalize">
+                        {profile?.first_name} {profile?.last_name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {profile?.email}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Loading...</p>
+                  )}
                 </div>
                 <div className="p-2">
                   <Link
@@ -247,8 +317,8 @@ export default function PortalLayout({
               <div className="h-10 bg-gray-100 rounded animate-pulse" />
             </div>
           ) : (
-            <SidebarNavigation 
-              applicationProgress={applicationProgress} 
+            <SidebarNavigation
+              applicationProgress={applicationProgress}
               onSignOut={handleSignOut}
             />
           )}
@@ -266,69 +336,88 @@ export default function PortalLayout({
               href="/portal"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal" && "text-gold"
+                pathname === "/portal" && "text-gold",
               )}
             >
-              <Home className={cn(
-                "h-5 w-5",
-                pathname === "/portal" ? "text-gold" : "text-navy"
-              )} />
+              <Home
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Home</span>
             </Link>
             <Link
               href="/portal/documents"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/documents" && "text-gold"
+                pathname === "/portal/documents" && "text-gold",
               )}
             >
-              <FileText className={cn(
-                "h-5 w-5",
-                pathname === "/portal/documents" ? "text-gold" : "text-navy"
-              )} />
+              <FileText
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal/documents" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Docs</span>
             </Link>
-            {applicationProgress?.stages?.some(stage => stage.title.toLowerCase() === "details_verification") && (
+            {applicationProgress?.stages?.some(
+              (stage) => stage?.title?.toLowerCase() === "details_verification",
+            ) && (
               <Link
                 href="/portal/application-review"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/application-review" && "text-gold"
+                  pathname === "/portal/application-review" && "text-gold",
                 )}
               >
-                <CheckCircle className={cn(
-                  "h-5 w-5",
-                  pathname === "/portal/application-review" ? "text-gold" : "text-navy"
-                )} />
+                <CheckCircle
+                  className={cn(
+                    "h-5 w-5",
+                    pathname === "/portal/application-review"
+                      ? "text-gold"
+                      : "text-navy",
+                  )}
+                />
                 <span className="text-[10px] mt-0.5">Review</span>
               </Link>
             )}
-            {applicationProgress?.stages?.some(stage => stage.title.toLowerCase() === "appointment_scheduled") && (
+            {applicationProgress?.stages?.some(
+              (stage) =>
+                stage?.title?.toLowerCase() === "appointment_scheduled",
+            ) && (
               <Link
                 href="/portal/appointment-letter"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/appointment-letter" && "text-gold"
+                  pathname === "/portal/appointment-letter" && "text-gold",
                 )}
               >
-                <Clock className={cn(
-                  "h-5 w-5",
-                  pathname === "/portal/appointment-letter" ? "text-gold" : "text-navy"
-                )} />
+                <Clock
+                  className={cn(
+                    "h-5 w-5",
+                    pathname === "/portal/appointment-letter"
+                      ? "text-gold"
+                      : "text-navy",
+                  )}
+                />
                 <span className="text-[10px] mt-0.5">Appt</span>
               </Link>
-            )}            
+            )}
             <Link
               href="/portal/support"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/support" && "text-gold"
+                pathname === "/portal/support" && "text-gold",
               )}
             >
-              <HelpCircle className={cn(
-                "h-5 w-5",
-                pathname === "/portal/support" ? "text-gold" : "text-navy"
-              )} />
+              <HelpCircle
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal/support" ? "text-gold" : "text-navy",
+                )}
+              />
               <span className="text-[10px] mt-0.5">Help</span>
             </Link>
           </div>

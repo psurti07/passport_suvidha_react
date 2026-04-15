@@ -22,34 +22,40 @@ import {
 import { useEffect, useState } from "react";
 import { ApplicationProgress, ApplicationStage } from "@/app/types/application";
 import { handleApiAuthError } from "@/lib/clientAuthUtils";
+import axiosServer from "@/lib/axiosServer";
+import { useRouter } from "next/navigation";
 
 export default function PortalDashboard() {
+  const router = useRouter();
   const [applicationProgress, setApplicationProgress] =
     useState<ApplicationProgress | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isChecking, setIsChecking] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
 
   // Stage helper functions
   const findStage = (
     title: string,
-    fallbackIndex: number
+    fallbackIndex: number,
   ): ApplicationStage | null => {
     if (!applicationProgress?.stages) return null;
 
     // Convert the search title to snake_case for comparison
-    const searchTitle = title.toLowerCase().replace(/\s+/g, '_');
+    const searchTitle = title.toLowerCase().replace(/\s+/g, "_");
 
     // Try to find stage by exact title match or converted title
     const stage = applicationProgress.stages.find(
-      (s) => s.title.toLowerCase() === searchTitle
+      (s) => s?.title?.toLowerCase() === searchTitle,
     );
 
     // If found, return it
     if (stage) return stage;
 
-    // If not found by title, fall back to index if available
-    if (applicationProgress.stages[fallbackIndex]) {
-      return applicationProgress.stages[fallbackIndex];
+
+    if (applicationProgress.stages[fallbackIndex - 1]) {
+      return applicationProgress.stages[fallbackIndex - 1];
     }
 
     return null;
@@ -98,7 +104,7 @@ export default function PortalDashboard() {
     if (!applicationProgress?.stages) return false;
 
     const firstIncompleteIndex = applicationProgress.stages.findIndex(
-      (s) => !s.completed
+      (s) => !s.completed,
     );
     if (firstIncompleteIndex === -1) return false;
 
@@ -120,7 +126,7 @@ export default function PortalDashboard() {
 
   const getStageTextColorClass = (
     title: string,
-    fallbackIndex: number
+    fallbackIndex: number,
   ): string => {
     if (isStageCompleted(title, fallbackIndex)) {
       return "text-green-600";
@@ -134,7 +140,7 @@ export default function PortalDashboard() {
   const getStageDescription = (
     title: string,
     fallbackIndex: number,
-    defaultDesc: string
+    defaultDesc: string,
   ): string => {
     const stage = findStage(title, fallbackIndex);
     return stage?.description || defaultDesc;
@@ -182,41 +188,127 @@ export default function PortalDashboard() {
     },
   };
 
+  const handleDownloadInvoice = async () => {
+    if (!data?.invoice?.id || !data?.customer?.id) return;
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("You are not authenticated!");
+      router.replace("/signin");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const response = await axiosServer.get(`/invoice/${data.customer.id}`, {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!(response.data instanceof Blob)) {
+        throw new Error("Invalid file response");
+      }
+
+      const url = window.URL.createObjectURL(response.data);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `INV_${data.invoice.id}.pdf`);
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error("Download error:", err);
+
+      if (err.response?.data) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          console.log("Server error:", reader.result);
+        };
+        reader.readAsText(err.response.data);
+      }
+
+      alert("Download failed");
+    }
+  };
+
   useEffect(() => {
-    const fetchApplicationProgress = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/application-progress");
+        setLoading(true);
+        setIsChecking(true);
 
-        if (!response.ok) {
-          // Parse the error response
-          const errorData = await response.json();
+        const token = localStorage.getItem("authToken");
 
-          // Check if it's an authentication error and handle logout
-          if (await handleApiAuthError(errorData)) {
-            // Don't need to do anything else here, as handleApiAuthError will handle the redirect
-            return;
-          }
-
-          throw new Error(
-            errorData.message || "Failed to fetch application progress"
-          );
+        if (!token) {
+          router.replace("/signin");
+          return;
         }
 
-        const data = await response.json();
-        setApplicationProgress(data);
-      } catch (error) {
-        console.error("Error fetching application progress:", error);
-        setError(
-          "Failed to load application progress. Please try again later."
-        );
+        const res = await fetch("/api/application-details", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          throw new Error(result.error || "Failed to load application");
+        }
+
+        setData(result);
+
+        const [progressRes, profileRes] = await Promise.all([
+          fetch("/api/application-progress", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then(async (res) => {
+            if (!res.ok) throw new Error("Progress fetch failed");
+            return res.json();
+          }),
+
+          fetch("/api/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then(async (res) => {
+            if (!res.ok) throw new Error("Profile fetch failed");
+            return res.json();
+          }),
+        ]);
+
+        setApplicationProgress(progressRes);
+        setProfile(profileRes?.data || profileRes);
+      } catch (err: any) {
+        console.error("ERROR : ", err);
+
+        if (
+          err.message?.includes("401") ||
+          err.message?.toLowerCase().includes("unauthorized")
+        ) {
+          localStorage.removeItem("authToken");
+          router.replace("/signin");
+        } else {
+          setError(err.message || "Something went wrong");
+        }
       } finally {
         setLoading(false);
+        setIsChecking(false);
       }
     };
 
-    fetchApplicationProgress();
+    fetchData();
   }, []);
-
   return (
     <motion.div
       variants={containerVariants}
@@ -231,12 +323,17 @@ export default function PortalDashboard() {
       >
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-navy">
-            Welcome, John
+            Welcome,{" "}
+            {profile
+              ? profile.first_name
+                ? `${profile.first_name} ${profile.last_name ?? ""}`
+                : profile.name || "User"
+              : "User"}
           </h1>
           <p className="text-sm md:text-base text-muted-foreground">
             Here's an overview of your passport applications and account
           </p>
-        </div>       
+        </div>
       </motion.div>
 
       {/* Application status */}
@@ -246,22 +343,39 @@ export default function PortalDashboard() {
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
               <CardTitle className="text-lg md:text-xl">
                 <span className="hidden md:inline">
-                  Passport Application - #PD-2023-7845
+                  Passport Application - #{data?.invoice?.inv_no ?? "N/A"}
                 </span>
                 <span className="md:hidden">Passport Application</span>
-                <span className="self-end md:self-auto px-3 py-1 bg-teal/20 text-teal rounded-full text-sm font-medium ml-2">
-                  In Process
+                <span className="self-end px-3 py-1 bg-teal/20 text-teal rounded-full text-sm font-medium ml-2">
+                  {data?.progress?.current_stage
+                    ? `${data.progress.current_stage.label}`
+                    : "pending"}
                 </span>
               </CardTitle>
               <div className="flex flex-row md:hidden gap-2 items-start">
-                <span className="text-muted-foreground">#PD-2023-7845</span>
+                <span className="text-muted-foreground">
+                  #{data?.invoice?.inv_no ?? "N/A"}
+                </span>
               </div>
             </div>
-            <CardDescription>Submitted on March 30, 2025</CardDescription>
+            <CardDescription>
+              Submitted on{" "}
+              {data?.invoice?.created_at
+                ? new Date(data.invoice.created_at).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    },
+                  )
+                : "N/A"}
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <div className="p-4 md:p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+                {/* Application Details */}
                 <div className="bg-white rounded-lg p-4 border">
                   <h3 className="text-sm font-medium text-muted-foreground mb-3">
                     Application Details
@@ -269,27 +383,40 @@ export default function PortalDashboard() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Type:</span>
-                      <span className="font-medium">Normal Processing</span>
+                      <span className="font-medium">
+                        {data?.service?.service_name ?? "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Book Size:</span>
-                      <span className="font-medium">60 Pages</span>
+                      <span className="font-medium">
+                        {data?.service?.service_name?.includes("36 pages")
+                          ? "36 Pages"
+                          : "60 Pages"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Applicant:</span>
-                      <span className="font-medium">John Doe</span>
+                      <span className="font-medium">
+                        {data?.customer
+                          ? `${data.customer.first_name} ${data.customer.last_name}`
+                          : "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">
                         Current Stage:
                       </span>
                       <span className="font-medium text-teal">
-                        Document Verification
+                        {data?.progress?.current_stage
+                          ? `${data.progress.current_stage.label}`
+                          : "pending"}
                       </span>
                     </div>
                   </div>
                 </div>
 
+                {/* Payment Information */}
                 <div className="bg-white rounded-lg p-4 border">
                   <h3 className="text-sm font-medium text-muted-foreground mb-3">
                     Payment Information
@@ -299,28 +426,34 @@ export default function PortalDashboard() {
                       <span className="text-muted-foreground">
                         Amount Paid:
                       </span>
-                      <span className="font-medium">Rs 2500.00</span>
+                      <span className="font-medium">
+                        Rs {data?.invoice?.total_amount ?? "0.00"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">
                         Payment Method:
                       </span>
-                      <span className="font-medium">Credit Card (4242)</span>
+                      <span className="font-medium">
+                        {data?.invoice?.card_id ? "Credit Card" : "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">
                         Transaction ID:
                       </span>
-                      <span className="font-medium">TXN-78945612</span>
+                      <span className="font-medium">
+                        {data?.invoice?.id ?? "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Receipt:</span>
-                      <Link
-                        href="#"
+                      <button
+                        onClick={handleDownloadInvoice}
                         className="text-navy hover:underline flex items-center"
                       >
                         <Download className="h-3 w-3 mr-1" /> Download
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -391,20 +524,23 @@ export default function PortalDashboard() {
                           </div>
                         </div>
                         <div className="flex-1 pt-2">
-                          <h4
-                            className={`font-medium text-base`}
-                          >
+                          <h4 className={`font-medium text-base`}>
                             Application Submitted
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
-                            Your application was successfully submitted and payment was processed.
+                            Your application was successfully submitted and
+                            payment was processed.
                           </p>
                           <p className="text-sm mt-1 text-green-600">
-                            {applicationProgress?.created_at ? new Date(applicationProgress.created_at).toLocaleDateString("en-US", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                            }) : ""}
+                            {applicationProgress?.created_at
+                              ? new Date(
+                                  applicationProgress.created_at,
+                                ).toLocaleDateString("en-US", {
+                                  month: "long",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })
+                              : ""}
                           </p>
                         </div>
                       </div>
@@ -415,7 +551,7 @@ export default function PortalDashboard() {
                           <div
                             className={`rounded-full ${findStageStatus(
                               "in_process",
-                              1
+                              1,
                             )} p-3 border-4`}
                           >
                             {isStageCompleted("in_process", 1) ? (
@@ -431,7 +567,7 @@ export default function PortalDashboard() {
                           <h4
                             className={`font-medium text-base ${getStageTextClass(
                               "in_process",
-                              1
+                              1,
                             )}`}
                           >
                             In Process
@@ -442,7 +578,7 @@ export default function PortalDashboard() {
                           <p
                             className={`text-sm mt-1 ${getStageTextColorClass(
                               "in_process",
-                              1
+                              1,
                             )}`}
                           >
                             {getStageDate("in_process", 1) || "Pending"}
@@ -456,7 +592,7 @@ export default function PortalDashboard() {
                           <div
                             className={`rounded-full ${findStageStatus(
                               "documents_submitted",
-                              2
+                              2,
                             )} p-3 border-4`}
                           >
                             {isStageCompleted("documents_submitted", 2) ? (
@@ -472,21 +608,23 @@ export default function PortalDashboard() {
                           <h4
                             className={`font-medium text-base ${getStageTextClass(
                               "documents_submitted",
-                              2
+                              2,
                             )}`}
                           >
                             Document Submitted
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
-                            Your documents have been successfully submitted for verification.
+                            Your documents have been successfully submitted for
+                            verification.
                           </p>
                           <p
                             className={`text-sm mt-1 ${getStageTextColorClass(
                               "documents_submitted",
-                              2
+                              2,
                             )}`}
                           >
-                            {getStageDate("documents_submitted", 2) || "Pending"}
+                            {getStageDate("documents_submitted", 2) ||
+                              "Pending"}
                           </p>
                         </div>
                       </div>
@@ -497,7 +635,7 @@ export default function PortalDashboard() {
                           <div
                             className={`rounded-full ${findStageStatus(
                               "details_verification",
-                              3
+                              3,
                             )} p-3 border-4`}
                           >
                             {isStageCompleted("details_verification", 3) ? (
@@ -513,7 +651,7 @@ export default function PortalDashboard() {
                           <h4
                             className={`font-medium text-base ${getStageTextClass(
                               "details_verification",
-                              3
+                              3,
                             )}`}
                           >
                             Details verification
@@ -524,10 +662,11 @@ export default function PortalDashboard() {
                           <p
                             className={`text-sm mt-1 ${getStageTextColorClass(
                               "details_verification",
-                              3
+                              3,
                             )}`}
                           >
-                            {getStageDate("details_verification", 3) || "Pending"}
+                            {getStageDate("details_verification", 3) ||
+                              "Pending"}
                           </p>
                         </div>
                       </div>
@@ -538,7 +677,7 @@ export default function PortalDashboard() {
                           <div
                             className={`rounded-full ${findStageStatus(
                               "appointment_scheduled",
-                              4
+                              4,
                             )} p-3 border-4`}
                           >
                             {isStageCompleted("appointment_scheduled", 4) ? (
@@ -554,21 +693,23 @@ export default function PortalDashboard() {
                           <h4
                             className={`font-medium text-base ${getStageTextClass(
                               "appointment_scheduled",
-                              4
+                              4,
                             )}`}
                           >
                             Appointment scheduled
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
-                            Your appointment has been scheduled for document verification and biometric data collection.
+                            Your appointment has been scheduled for document
+                            verification and biometric data collection.
                           </p>
                           <p
                             className={`text-sm mt-1 ${getStageTextColorClass(
                               "appointment_scheduled",
-                              4
+                              4,
                             )}`}
                           >
-                            {getStageDate("appointment_scheduled", 4) || "Pending"}
+                            {getStageDate("appointment_scheduled", 4) ||
+                              "Pending"}
                           </p>
                         </div>
                       </div>
@@ -580,31 +721,46 @@ export default function PortalDashboard() {
                             className={`rounded-full ${(() => {
                               const stage = applicationProgress?.stages?.[4];
                               if (!stage) return "bg-gray-100 border-gray-50";
-                              
+
                               if (stage.title === "pov_success") {
                                 return "bg-green-100 border-green-50";
                               } else if (stage.title === "pov_failed") {
                                 return "bg-red-100 border-red-50";
-                              } else if (stage.title === "pov_insufficient_documents") {
+                              } else if (
+                                stage.title === "pov_insufficient_documents"
+                              ) {
                                 return "bg-yellow-100 border-yellow-50";
                               }
-                              
+
                               return "bg-gray-100 border-gray-50";
                             })()} p-3 border-4`}
                           >
                             {(() => {
                               const stage = applicationProgress?.stages?.[4];
-                              if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
+                              if (!stage)
+                                return (
+                                  <Clock className="h-5 w-5 text-gray-400" />
+                                );
 
                               if (stage.title === "pov_success") {
-                                return <CheckCircle className="h-5 w-5 text-green-600" />;
+                                return (
+                                  <CheckCircle className="h-5 w-5 text-green-600" />
+                                );
                               } else if (stage.title === "pov_failed") {
-                                return <XCircle className="h-5 w-5 text-red-600" />;
-                              } else if (stage.title === "pov_insufficient_documents") {
-                                return <AlertCircle className="h-5 w-5 text-yellow-600" />;
+                                return (
+                                  <XCircle className="h-5 w-5 text-red-600" />
+                                );
+                              } else if (
+                                stage.title === "pov_insufficient_documents"
+                              ) {
+                                return (
+                                  <AlertCircle className="h-5 w-5 text-yellow-600" />
+                                );
                               }
 
-                              return <Clock className="h-5 w-5 text-gray-400" />;
+                              return (
+                                <Clock className="h-5 w-5 text-gray-400" />
+                              );
                             })()}
                           </div>
                         </div>
@@ -628,30 +784,37 @@ export default function PortalDashboard() {
                           </h4>
                           {(() => {
                             const stage = applicationProgress?.stages?.[4];
-                            if (!stage) return (
-                              <p className="text-gray-600 text-sm mt-1">
-                                Please visit the passport office with all required documents for verification and biometric data collection.
-                              </p>
-                            );
+                            if (!stage)
+                              return (
+                                <p className="text-gray-600 text-sm mt-1">
+                                  Please visit the passport office with all
+                                  required documents for verification and
+                                  biometric data collection.
+                                </p>
+                              );
 
                             let message;
                             let colorClass;
 
                             switch (stage.title) {
                               case "pov_success":
-                                message = "Your passport office visit was completed successfully. Your application is being processed further.";
+                                message =
+                                  "Your passport office visit was completed successfully. Your application is being processed further.";
                                 colorClass = "text-green-600";
                                 break;
                               case "pov_failed":
-                                message = "Your passport office visit was unsuccessful. Please contact support for assistance and next steps.";
+                                message =
+                                  "Your passport office visit was unsuccessful. Please contact support for assistance and next steps.";
                                 colorClass = "text-red-600";
                                 break;
                               case "pov_insufficient_documents":
-                                message = "Your visit was marked incomplete due to missing required documents. Please review the document checklist and schedule another visit.";
+                                message =
+                                  "Your visit was marked incomplete due to missing required documents. Please review the document checklist and schedule another visit.";
                                 colorClass = "text-yellow-600";
                                 break;
                               default:
-                                message = "Please visit the passport office with all required documents for verification and biometric data collection.";
+                                message =
+                                  "Please visit the passport office with all required documents for verification and biometric data collection.";
                                 colorClass = "text-gray-600";
                             }
 
@@ -672,7 +835,10 @@ export default function PortalDashboard() {
                       {/* Show Appointment Reschedule and Second POV if first POV failed or had insufficient documents */}
                       {(() => {
                         const povStage = applicationProgress?.stages?.[4];
-                        if (povStage?.title === "pov_failed" || povStage?.title === "pov_insufficient_documents") {
+                        if (
+                          povStage?.title === "pov_failed" ||
+                          povStage?.title === "pov_insufficient_documents"
+                        ) {
                           return (
                             <>
                               {/* First Appointment Rescheduled */}
@@ -680,17 +846,27 @@ export default function PortalDashboard() {
                                 <div className="relative z-10">
                                   <div
                                     className={`rounded-full ${(() => {
-                                      const stage = applicationProgress?.stages?.[5];
-                                      if (!stage) return "bg-gray-100 border-gray-50";
-                                      return stage.completed ? "bg-green-100 border-green-50" : "bg-blue-100 border-blue-50";
+                                      const stage =
+                                        applicationProgress?.stages?.[5];
+                                      if (!stage)
+                                        return "bg-gray-100 border-gray-50";
+                                      return stage.completed
+                                        ? "bg-green-100 border-green-50"
+                                        : "bg-blue-100 border-blue-50";
                                     })()} p-3 border-4`}
                                   >
                                     {(() => {
-                                      const stage = applicationProgress?.stages?.[5];
-                                      if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
-                                      return stage.completed ? 
-                                        <CheckCircle className="h-5 w-5 text-green-600" /> :
-                                        <Clock className="h-5 w-5 text-blue-600" />;
+                                      const stage =
+                                        applicationProgress?.stages?.[5];
+                                      if (!stage)
+                                        return (
+                                          <Clock className="h-5 w-5 text-gray-400" />
+                                        );
+                                      return stage.completed ? (
+                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                      ) : (
+                                        <Clock className="h-5 w-5 text-blue-600" />
+                                      );
                                     })()}
                                   </div>
                                 </div>
@@ -699,13 +875,20 @@ export default function PortalDashboard() {
                                     Appointment Rescheduled 1
                                   </h4>
                                   <p className="text-gray-600 text-sm mt-1">
-                                    Your appointment has been rescheduled for another passport office visit.
+                                    Your appointment has been rescheduled for
+                                    another passport office visit.
                                   </p>
-                                  <p className={`text-sm mt-1 ${(() => {
-                                    const stage = applicationProgress?.stages?.[5];
-                                    return stage?.completed ? "text-green-600" : "text-blue-600";
-                                  })()}`}>
-                                    {applicationProgress?.stages?.[5]?.date || "Pending"}
+                                  <p
+                                    className={`text-sm mt-1 ${(() => {
+                                      const stage =
+                                        applicationProgress?.stages?.[5];
+                                      return stage?.completed
+                                        ? "text-green-600"
+                                        : "text-blue-600";
+                                    })()}`}
+                                  >
+                                    {applicationProgress?.stages?.[5]?.date ||
+                                      "Pending"}
                                   </p>
                                 </div>
                               </div>
@@ -715,41 +898,63 @@ export default function PortalDashboard() {
                                 <div className="relative z-10">
                                   <div
                                     className={`rounded-full ${(() => {
-                                      const stage = applicationProgress?.stages?.[6];
-                                      if (!stage) return "bg-gray-100 border-gray-50";
-                                      
+                                      const stage =
+                                        applicationProgress?.stages?.[6];
+                                      if (!stage)
+                                        return "bg-gray-100 border-gray-50";
+
                                       if (stage.title === "pov_success") {
                                         return "bg-green-100 border-green-50";
                                       } else if (stage.title === "pov_failed") {
                                         return "bg-red-100 border-red-50";
-                                      } else if (stage.title === "pov_insufficient_documents") {
+                                      } else if (
+                                        stage.title ===
+                                        "pov_insufficient_documents"
+                                      ) {
                                         return "bg-yellow-100 border-yellow-50";
                                       }
-                                      
+
                                       return "bg-gray-100 border-gray-50";
                                     })()} p-3 border-4`}
                                   >
                                     {(() => {
-                                      const stage = applicationProgress?.stages?.[6];
-                                      if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
+                                      const stage =
+                                        applicationProgress?.stages?.[6];
+                                      if (!stage)
+                                        return (
+                                          <Clock className="h-5 w-5 text-gray-400" />
+                                        );
 
                                       if (stage.title === "pov_success") {
-                                        return <CheckCircle className="h-5 w-5 text-green-600" />;
+                                        return (
+                                          <CheckCircle className="h-5 w-5 text-green-600" />
+                                        );
                                       } else if (stage.title === "pov_failed") {
-                                        return <XCircle className="h-5 w-5 text-red-600" />;
-                                      } else if (stage.title === "pov_insufficient_documents") {
-                                        return <AlertCircle className="h-5 w-5 text-yellow-600" />;
+                                        return (
+                                          <XCircle className="h-5 w-5 text-red-600" />
+                                        );
+                                      } else if (
+                                        stage.title ===
+                                        "pov_insufficient_documents"
+                                      ) {
+                                        return (
+                                          <AlertCircle className="h-5 w-5 text-yellow-600" />
+                                        );
                                       }
 
-                                      return <Clock className="h-5 w-5 text-gray-400" />;
+                                      return (
+                                        <Clock className="h-5 w-5 text-gray-400" />
+                                      );
                                     })()}
                                   </div>
                                 </div>
                                 <div className="flex-1 pt-2">
                                   <h4 className="font-medium text-base">
                                     {(() => {
-                                      const stage = applicationProgress?.stages?.[6];
-                                      if (!stage) return "Second Passport Office Visit";
+                                      const stage =
+                                        applicationProgress?.stages?.[6];
+                                      if (!stage)
+                                        return "Second Passport Office Visit";
 
                                       switch (stage.title) {
                                         case "pov_success":
@@ -764,31 +969,38 @@ export default function PortalDashboard() {
                                     })()}
                                   </h4>
                                   {(() => {
-                                    const stage = applicationProgress?.stages?.[6];
-                                    if (!stage) return (
-                                      <p className="text-gray-600 text-sm mt-1">
-                                        Please visit the passport office again with all required documents.
-                                      </p>
-                                    );
+                                    const stage =
+                                      applicationProgress?.stages?.[6];
+                                    if (!stage)
+                                      return (
+                                        <p className="text-gray-600 text-sm mt-1">
+                                          Please visit the passport office again
+                                          with all required documents.
+                                        </p>
+                                      );
 
                                     let message;
                                     let colorClass;
 
                                     switch (stage.title) {
                                       case "pov_success":
-                                        message = "Your second passport office visit was completed successfully. Your application is being processed further.";
+                                        message =
+                                          "Your second passport office visit was completed successfully. Your application is being processed further.";
                                         colorClass = "text-green-600";
                                         break;
                                       case "pov_failed":
-                                        message = "Your second passport office visit was unsuccessful. Please contact support for further assistance.";
+                                        message =
+                                          "Your second passport office visit was unsuccessful. Please contact support for further assistance.";
                                         colorClass = "text-red-600";
                                         break;
                                       case "pov_insufficient_documents":
-                                        message = "Your second visit was marked incomplete due to missing required documents. Please schedule another appointment.";
+                                        message =
+                                          "Your second visit was marked incomplete due to missing required documents. Please schedule another appointment.";
                                         colorClass = "text-yellow-600";
                                         break;
                                       default:
-                                        message = "Please visit the passport office again with all required documents.";
+                                        message =
+                                          "Please visit the passport office again with all required documents.";
                                         colorClass = "text-gray-600";
                                     }
 
@@ -797,7 +1009,9 @@ export default function PortalDashboard() {
                                         <p className="text-gray-600 text-sm mt-1">
                                           {message}
                                         </p>
-                                        <p className={`text-sm mt-1 ${colorClass}`}>
+                                        <p
+                                          className={`text-sm mt-1 ${colorClass}`}
+                                        >
                                           {stage.date || "Pending"}
                                         </p>
                                       </>
@@ -808,8 +1022,13 @@ export default function PortalDashboard() {
 
                               {/* Check if second POV failed or had insufficient documents */}
                               {(() => {
-                                const secondPovStage = applicationProgress?.stages?.[6];
-                                if (secondPovStage?.title === "pov_failed" || secondPovStage?.title === "pov_insufficient_documents") {
+                                const secondPovStage =
+                                  applicationProgress?.stages?.[6];
+                                if (
+                                  secondPovStage?.title === "pov_failed" ||
+                                  secondPovStage?.title ===
+                                    "pov_insufficient_documents"
+                                ) {
                                   return (
                                     <>
                                       {/* Second Appointment Rescheduled */}
@@ -817,17 +1036,29 @@ export default function PortalDashboard() {
                                         <div className="relative z-10">
                                           <div
                                             className={`rounded-full ${(() => {
-                                              const stage = applicationProgress?.stages?.[7];
-                                              if (!stage) return "bg-gray-100 border-gray-50";
-                                              return stage.completed ? "bg-green-100 border-green-50" : "bg-blue-100 border-blue-50";
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[7];
+                                              if (!stage)
+                                                return "bg-gray-100 border-gray-50";
+                                              return stage.completed
+                                                ? "bg-green-100 border-green-50"
+                                                : "bg-blue-100 border-blue-50";
                                             })()} p-3 border-4`}
                                           >
                                             {(() => {
-                                              const stage = applicationProgress?.stages?.[7];
-                                              if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
-                                              return stage.completed ? 
-                                                <CheckCircle className="h-5 w-5 text-green-600" /> :
-                                                <Clock className="h-5 w-5 text-blue-600" />;
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[7];
+                                              if (!stage)
+                                                return (
+                                                  <Clock className="h-5 w-5 text-gray-400" />
+                                                );
+                                              return stage.completed ? (
+                                                <CheckCircle className="h-5 w-5 text-green-600" />
+                                              ) : (
+                                                <Clock className="h-5 w-5 text-blue-600" />
+                                              );
                                             })()}
                                           </div>
                                         </div>
@@ -836,13 +1067,22 @@ export default function PortalDashboard() {
                                             Appointment Rescheduled 2
                                           </h4>
                                           <p className="text-gray-600 text-sm mt-1">
-                                            Your appointment has been rescheduled for another passport office visit.
+                                            Your appointment has been
+                                            rescheduled for another passport
+                                            office visit.
                                           </p>
-                                          <p className={`text-sm mt-1 ${(() => {
-                                            const stage = applicationProgress?.stages?.[7];
-                                            return stage?.completed ? "text-green-600" : "text-blue-600";
-                                          })()}`}>
-                                            {applicationProgress?.stages?.[7]?.date || "Pending"}
+                                          <p
+                                            className={`text-sm mt-1 ${(() => {
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[7];
+                                              return stage?.completed
+                                                ? "text-green-600"
+                                                : "text-blue-600";
+                                            })()}`}
+                                          >
+                                            {applicationProgress?.stages?.[7]
+                                              ?.date || "Pending"}
                                           </p>
                                         </div>
                                       </div>
@@ -852,41 +1092,74 @@ export default function PortalDashboard() {
                                         <div className="relative z-10">
                                           <div
                                             className={`rounded-full ${(() => {
-                                              const stage = applicationProgress?.stages?.[8];
-                                              if (!stage) return "bg-gray-100 border-gray-50";
-                                              
-                                              if (stage.title === "pov_success") {
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[8];
+                                              if (!stage)
+                                                return "bg-gray-100 border-gray-50";
+
+                                              if (
+                                                stage.title === "pov_success"
+                                              ) {
                                                 return "bg-green-100 border-green-50";
-                                              } else if (stage.title === "pov_failed") {
+                                              } else if (
+                                                stage.title === "pov_failed"
+                                              ) {
                                                 return "bg-red-100 border-red-50";
-                                              } else if (stage.title === "pov_insufficient_documents") {
+                                              } else if (
+                                                stage.title ===
+                                                "pov_insufficient_documents"
+                                              ) {
                                                 return "bg-yellow-100 border-yellow-50";
                                               }
-                                              
+
                                               return "bg-gray-100 border-gray-50";
                                             })()} p-3 border-4`}
                                           >
                                             {(() => {
-                                              const stage = applicationProgress?.stages?.[8];
-                                              if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[8];
+                                              if (!stage)
+                                                return (
+                                                  <Clock className="h-5 w-5 text-gray-400" />
+                                                );
 
-                                              if (stage.title === "pov_success") {
-                                                return <CheckCircle className="h-5 w-5 text-green-600" />;
-                                              } else if (stage.title === "pov_failed") {
-                                                return <XCircle className="h-5 w-5 text-red-600" />;
-                                              } else if (stage.title === "pov_insufficient_documents") {
-                                                return <AlertCircle className="h-5 w-5 text-yellow-600" />;
+                                              if (
+                                                stage.title === "pov_success"
+                                              ) {
+                                                return (
+                                                  <CheckCircle className="h-5 w-5 text-green-600" />
+                                                );
+                                              } else if (
+                                                stage.title === "pov_failed"
+                                              ) {
+                                                return (
+                                                  <XCircle className="h-5 w-5 text-red-600" />
+                                                );
+                                              } else if (
+                                                stage.title ===
+                                                "pov_insufficient_documents"
+                                              ) {
+                                                return (
+                                                  <AlertCircle className="h-5 w-5 text-yellow-600" />
+                                                );
                                               }
 
-                                              return <Clock className="h-5 w-5 text-gray-400" />;
+                                              return (
+                                                <Clock className="h-5 w-5 text-gray-400" />
+                                              );
                                             })()}
                                           </div>
                                         </div>
                                         <div className="flex-1 pt-2">
                                           <h4 className="font-medium text-base">
                                             {(() => {
-                                              const stage = applicationProgress?.stages?.[8];
-                                              if (!stage) return "Third Passport Office Visit";
+                                              const stage =
+                                                applicationProgress
+                                                  ?.stages?.[8];
+                                              if (!stage)
+                                                return "Third Passport Office Visit";
 
                                               switch (stage.title) {
                                                 case "pov_success":
@@ -901,31 +1174,39 @@ export default function PortalDashboard() {
                                             })()}
                                           </h4>
                                           {(() => {
-                                            const stage = applicationProgress?.stages?.[8];
-                                            if (!stage) return (
-                                              <p className="text-gray-600 text-sm mt-1">
-                                                Please visit the passport office again with all required documents.
-                                              </p>
-                                            );
+                                            const stage =
+                                              applicationProgress?.stages?.[8];
+                                            if (!stage)
+                                              return (
+                                                <p className="text-gray-600 text-sm mt-1">
+                                                  Please visit the passport
+                                                  office again with all required
+                                                  documents.
+                                                </p>
+                                              );
 
                                             let message;
                                             let colorClass;
 
                                             switch (stage.title) {
                                               case "pov_success":
-                                                message = "Your third passport office visit was completed successfully. Your application is being processed further.";
+                                                message =
+                                                  "Your third passport office visit was completed successfully. Your application is being processed further.";
                                                 colorClass = "text-green-600";
                                                 break;
                                               case "pov_failed":
-                                                message = "Your third passport office visit was unsuccessful. Please contact support for further assistance.";
+                                                message =
+                                                  "Your third passport office visit was unsuccessful. Please contact support for further assistance.";
                                                 colorClass = "text-red-600";
                                                 break;
                                               case "pov_insufficient_documents":
-                                                message = "Your third visit was marked incomplete due to missing required documents. Please schedule another appointment.";
+                                                message =
+                                                  "Your third visit was marked incomplete due to missing required documents. Please schedule another appointment.";
                                                 colorClass = "text-yellow-600";
                                                 break;
                                               default:
-                                                message = "Please visit the passport office again with all required documents.";
+                                                message =
+                                                  "Please visit the passport office again with all required documents.";
                                                 colorClass = "text-gray-600";
                                             }
 
@@ -934,7 +1215,9 @@ export default function PortalDashboard() {
                                                 <p className="text-gray-600 text-sm mt-1">
                                                   {message}
                                                 </p>
-                                                <p className={`text-sm mt-1 ${colorClass}`}>
+                                                <p
+                                                  className={`text-sm mt-1 ${colorClass}`}
+                                                >
                                                   {stage.date || "Pending"}
                                                 </p>
                                               </>
@@ -945,8 +1228,14 @@ export default function PortalDashboard() {
 
                                       {/* Check if third POV failed or had insufficient documents */}
                                       {(() => {
-                                        const thirdPovStage = applicationProgress?.stages?.[8];
-                                        if (thirdPovStage?.title === "pov_failed" || thirdPovStage?.title === "pov_insufficient_documents") {
+                                        const thirdPovStage =
+                                          applicationProgress?.stages?.[8];
+                                        if (
+                                          thirdPovStage?.title ===
+                                            "pov_failed" ||
+                                          thirdPovStage?.title ===
+                                            "pov_insufficient_documents"
+                                        ) {
                                           return (
                                             <>
                                               {/* Third Appointment Rescheduled */}
@@ -954,17 +1243,29 @@ export default function PortalDashboard() {
                                                 <div className="relative z-10">
                                                   <div
                                                     className={`rounded-full ${(() => {
-                                                      const stage = applicationProgress?.stages?.[9];
-                                                      if (!stage) return "bg-gray-100 border-gray-50";
-                                                      return stage.completed ? "bg-green-100 border-green-50" : "bg-blue-100 border-blue-50";
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[9];
+                                                      if (!stage)
+                                                        return "bg-gray-100 border-gray-50";
+                                                      return stage.completed
+                                                        ? "bg-green-100 border-green-50"
+                                                        : "bg-blue-100 border-blue-50";
                                                     })()} p-3 border-4`}
                                                   >
                                                     {(() => {
-                                                      const stage = applicationProgress?.stages?.[9];
-                                                      if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
-                                                      return stage.completed ? 
-                                                        <CheckCircle className="h-5 w-5 text-green-600" /> :
-                                                        <Clock className="h-5 w-5 text-blue-600" />;
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[9];
+                                                      if (!stage)
+                                                        return (
+                                                          <Clock className="h-5 w-5 text-gray-400" />
+                                                        );
+                                                      return stage.completed ? (
+                                                        <CheckCircle className="h-5 w-5 text-green-600" />
+                                                      ) : (
+                                                        <Clock className="h-5 w-5 text-blue-600" />
+                                                      );
                                                     })()}
                                                   </div>
                                                 </div>
@@ -973,13 +1274,23 @@ export default function PortalDashboard() {
                                                     Appointment Rescheduled 3
                                                   </h4>
                                                   <p className="text-gray-600 text-sm mt-1">
-                                                    Your appointment has been rescheduled for a final passport office visit.
+                                                    Your appointment has been
+                                                    rescheduled for a final
+                                                    passport office visit.
                                                   </p>
-                                                  <p className={`text-sm mt-1 ${(() => {
-                                                    const stage = applicationProgress?.stages?.[9];
-                                                    return stage?.completed ? "text-green-600" : "text-blue-600";
-                                                  })()}`}>
-                                                    {applicationProgress?.stages?.[9]?.date || "Pending"}
+                                                  <p
+                                                    className={`text-sm mt-1 ${(() => {
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[9];
+                                                      return stage?.completed
+                                                        ? "text-green-600"
+                                                        : "text-blue-600";
+                                                    })()}`}
+                                                  >
+                                                    {applicationProgress
+                                                      ?.stages?.[9]?.date ||
+                                                      "Pending"}
                                                   </p>
                                                 </div>
                                               </div>
@@ -989,41 +1300,78 @@ export default function PortalDashboard() {
                                                 <div className="relative z-10">
                                                   <div
                                                     className={`rounded-full ${(() => {
-                                                      const stage = applicationProgress?.stages?.[10];
-                                                      if (!stage) return "bg-gray-100 border-gray-50";
-                                                      
-                                                      if (stage.title === "pov_success") {
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[10];
+                                                      if (!stage)
+                                                        return "bg-gray-100 border-gray-50";
+
+                                                      if (
+                                                        stage.title ===
+                                                        "pov_success"
+                                                      ) {
                                                         return "bg-green-100 border-green-50";
-                                                      } else if (stage.title === "pov_failed") {
+                                                      } else if (
+                                                        stage.title ===
+                                                        "pov_failed"
+                                                      ) {
                                                         return "bg-red-100 border-red-50";
-                                                      } else if (stage.title === "pov_insufficient_documents") {
+                                                      } else if (
+                                                        stage.title ===
+                                                        "pov_insufficient_documents"
+                                                      ) {
                                                         return "bg-yellow-100 border-yellow-50";
                                                       }
-                                                      
+
                                                       return "bg-gray-100 border-gray-50";
                                                     })()} p-3 border-4`}
                                                   >
                                                     {(() => {
-                                                      const stage = applicationProgress?.stages?.[10];
-                                                      if (!stage) return <Clock className="h-5 w-5 text-gray-400" />;
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[10];
+                                                      if (!stage)
+                                                        return (
+                                                          <Clock className="h-5 w-5 text-gray-400" />
+                                                        );
 
-                                                      if (stage.title === "pov_success") {
-                                                        return <CheckCircle className="h-5 w-5 text-green-600" />;
-                                                      } else if (stage.title === "pov_failed") {
-                                                        return <XCircle className="h-5 w-5 text-red-600" />;
-                                                      } else if (stage.title === "pov_insufficient_documents") {
-                                                        return <AlertCircle className="h-5 w-5 text-yellow-600" />;
+                                                      if (
+                                                        stage.title ===
+                                                        "pov_success"
+                                                      ) {
+                                                        return (
+                                                          <CheckCircle className="h-5 w-5 text-green-600" />
+                                                        );
+                                                      } else if (
+                                                        stage.title ===
+                                                        "pov_failed"
+                                                      ) {
+                                                        return (
+                                                          <XCircle className="h-5 w-5 text-red-600" />
+                                                        );
+                                                      } else if (
+                                                        stage.title ===
+                                                        "pov_insufficient_documents"
+                                                      ) {
+                                                        return (
+                                                          <AlertCircle className="h-5 w-5 text-yellow-600" />
+                                                        );
                                                       }
 
-                                                      return <Clock className="h-5 w-5 text-gray-400" />;
+                                                      return (
+                                                        <Clock className="h-5 w-5 text-gray-400" />
+                                                      );
                                                     })()}
                                                   </div>
                                                 </div>
                                                 <div className="flex-1 pt-2">
                                                   <h4 className="font-medium text-base">
                                                     {(() => {
-                                                      const stage = applicationProgress?.stages?.[10];
-                                                      if (!stage) return "Final Passport Office Visit";
+                                                      const stage =
+                                                        applicationProgress
+                                                          ?.stages?.[10];
+                                                      if (!stage)
+                                                        return "Final Passport Office Visit";
 
                                                       switch (stage.title) {
                                                         case "pov_success":
@@ -1038,32 +1386,47 @@ export default function PortalDashboard() {
                                                     })()}
                                                   </h4>
                                                   {(() => {
-                                                    const stage = applicationProgress?.stages?.[10];
-                                                    if (!stage) return (
-                                                      <p className="text-gray-600 text-sm mt-1">
-                                                        Please visit the passport office for your final scheduled appointment with all required documents.
-                                                      </p>
-                                                    );
+                                                    const stage =
+                                                      applicationProgress
+                                                        ?.stages?.[10];
+                                                    if (!stage)
+                                                      return (
+                                                        <p className="text-gray-600 text-sm mt-1">
+                                                          Please visit the
+                                                          passport office for
+                                                          your final scheduled
+                                                          appointment with all
+                                                          required documents.
+                                                        </p>
+                                                      );
 
                                                     let message;
                                                     let colorClass;
 
                                                     switch (stage.title) {
                                                       case "pov_success":
-                                                        message = "Your final passport office visit was completed successfully. Your application is being processed further.";
-                                                        colorClass = "text-green-600";
+                                                        message =
+                                                          "Your final passport office visit was completed successfully. Your application is being processed further.";
+                                                        colorClass =
+                                                          "text-green-600";
                                                         break;
                                                       case "pov_failed":
-                                                        message = "Your final passport office visit was unsuccessful. Your application may be rejected. Please contact support immediately.";
-                                                        colorClass = "text-red-600";
+                                                        message =
+                                                          "Your final passport office visit was unsuccessful. Your application may be rejected. Please contact support immediately.";
+                                                        colorClass =
+                                                          "text-red-600";
                                                         break;
                                                       case "pov_insufficient_documents":
-                                                        message = "Your final visit was marked incomplete due to missing required documents. Your application may be on hold. Please contact support immediately.";
-                                                        colorClass = "text-yellow-600";
+                                                        message =
+                                                          "Your final visit was marked incomplete due to missing required documents. Your application may be on hold. Please contact support immediately.";
+                                                        colorClass =
+                                                          "text-yellow-600";
                                                         break;
                                                       default:
-                                                        message = "Please visit the passport office for your final appointment with all required documents.";
-                                                        colorClass = "text-gray-600";
+                                                        message =
+                                                          "Please visit the passport office for your final appointment with all required documents.";
+                                                        colorClass =
+                                                          "text-gray-600";
                                                     }
 
                                                     return (
@@ -1071,8 +1434,11 @@ export default function PortalDashboard() {
                                                         <p className="text-gray-600 text-sm mt-1">
                                                           {message}
                                                         </p>
-                                                        <p className={`text-sm mt-1 ${colorClass}`}>
-                                                          {stage.date || "Pending"}
+                                                        <p
+                                                          className={`text-sm mt-1 ${colorClass}`}
+                                                        >
+                                                          {stage.date ||
+                                                            "Pending"}
                                                         </p>
                                                       </>
                                                     );
@@ -1099,9 +1465,9 @@ export default function PortalDashboard() {
                 </div>
               </div>
             </div>
-          </CardContent>         
+          </CardContent>
         </Card>
-      </motion.div>   
+      </motion.div>
 
       {/* Help and support */}
       <motion.div variants={itemVariants}>
@@ -1121,7 +1487,7 @@ export default function PortalDashboard() {
                   className="w-full md:w-auto rounded-xl border-navy/20 hover:bg-navy/5"
                   asChild
                 >
-                  <Link href="/portal/faq">
+                  <Link href="/portal/support">
                     <HelpCircle className="h-4 w-4 mr-2 hidden sm:block" />
                     View FAQs
                   </Link>

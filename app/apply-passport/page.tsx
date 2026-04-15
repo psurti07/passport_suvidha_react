@@ -51,13 +51,13 @@ export default function ApplyPassport() {
               <span className="font-medium text-navy">PassportSuvidha</span>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <Link href="#" className="hover:text-navy transition-colors">
+              <Link href="/privacy-policy" className="hover:text-navy transition-colors">
                 Privacy
               </Link>
-              <Link href="#" className="hover:text-navy transition-colors">
+              <Link href="/terms" className="hover:text-navy transition-colors">
                 Terms
               </Link>
-              <Link href="#" className="hover:text-navy transition-colors">
+              <Link href="/contact" className="hover:text-navy transition-colors">
                 Contact
               </Link>
             </div>

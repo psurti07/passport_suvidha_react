@@ -703,13 +703,13 @@ export default function AboutUs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <p className="font-medium">1-800-123-4567</p>
+                    <p className="font-medium">7486046591</p>
                     <p className="text-sm text-muted-foreground">
-                      Monday-Friday, 8am-8pm EST
+                      Monday-Saturday, 10AM - 05PM
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    {/* <p className="text-sm text-muted-foreground">
                       Saturday, 9am-5pm EST
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -732,7 +732,7 @@ export default function AboutUs() {
                     <CardDescription>Send us your questions</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <p className="font-medium">support@PassportSuvidha.gov</p>
+                    <p className="font-medium">support@passportsuvidha.com</p>
                     <p className="text-sm text-muted-foreground">
                       For general inquiries
                     </p>
@@ -764,15 +764,9 @@ export default function AboutUs() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="flex justify-between">
-                      <p className="font-medium">Monday - Friday</p>
+                      <p className="font-medium">Monday - Saturday</p>
                       <p className="text-sm text-muted-foreground">
-                        8:00 AM - 5:00 PM
-                      </p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="font-medium">Saturday</p>
-                      <p className="text-sm text-muted-foreground">
-                        9:00 AM - 1:00 PM
+                        10:00 AM - 05:00 PM
                       </p>
                     </div>
                     <div className="flex justify-between">

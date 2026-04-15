@@ -29,11 +29,12 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import axiosServer from "@/lib/axiosServer";
 
 export default function Contact() {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,50 +50,81 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    const name = `${firstName} ${lastName}`;
-    const subject = inquiryType ? `Inquiry: ${inquiryType}` : "General Inquiry";
+    const name = `${firstName} ${lastName}`.trim();
+    const subject = inquiryType || "General Inquiry";
 
     try {
-      const response = await fetch("/api/support/tickets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      //  Get token (if logged in)
+      const token = localStorage.getItem("authToken");
+
+      const response = await axiosServer.post(
+        "/public/support/tickets",
+        {
           name,
           email,
           subject,
           message,
-        }),
+          mobile_number: phone,
+        },
+        {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
+
+      const resData = response.data;
+
+      //  SUCCESS
+      setSubmitStatus("success");
+
+      toast.success("Message Sent!", {
+        description:
+          resData?.message ||
+          "We have received your message and will get back to you soon.",
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      setSubmitStatus("success");
+      //  Reset form
       setFirstName("");
       setLastName("");
       setEmail("");
       setPhone("");
       setInquiryType("");
       setMessage("");
-      // console.log("Attempting to show success toast...");
-      toast({
-        title: "Message Sent!",
-        description:
-          "We have received your message and will get back to you soon.",
-        variant: "default",
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      console.error("API Error:", error);
+
       setSubmitStatus("error");
+
+      let errorMessage = "Something went wrong. Please try again.";
+
+      //  Laravel validation errors
+      if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const firstError = Object.values(errors)[0];
+        errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+      }
+
+      //  Laravel custom message
+      else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+
+      //  Network / Axios error
+      else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      //  ERROR TOAST
+      toast.error("Error", {
+        description: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus("idle"), 5000);
     }
   };
 
@@ -208,19 +240,19 @@ export default function Contact() {
                               <SelectValue placeholder="Select inquiry type" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="application">
+                              <SelectItem value="Application Help">
                                 Application Help
                               </SelectItem>
-                              <SelectItem value="status">
+                              <SelectItem value="Application Status">
                                 Application Status
                               </SelectItem>
-                              <SelectItem value="requirements">
+                              <SelectItem value="Document Requirements">
                                 Document Requirements
                               </SelectItem>
-                              <SelectItem value="fees">
+                              <SelectItem value="Fees & Payment">
                                 Fees & Payment
                               </SelectItem>
-                              <SelectItem value="locations">
+                              <SelectItem value="Office Locations">
                                 Office Locations
                               </SelectItem>
                               <SelectItem value="other">Other</SelectItem>
@@ -307,7 +339,9 @@ export default function Contact() {
                         <Button
                           type="submit"
                           className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
-                          disabled={ !termsAccepted || !marketingConsent ||isSubmitting}
+                          disabled={
+                            !termsAccepted || !marketingConsent || isSubmitting
+                          }
                         >
                           {isSubmitting ? (
                             "Sending..."
@@ -354,7 +388,7 @@ export default function Contact() {
                           </h4>
                           <p className="text-muted-foreground">7486046591</p>
                           <p className="text-sm text-muted-foreground">
-                            Monday-Friday, 10:00 AM to 05:00 PM
+                            Monday-Saturday, 10:00 AM to 05:00 PM
                           </p>
                         </div>
                       </div>

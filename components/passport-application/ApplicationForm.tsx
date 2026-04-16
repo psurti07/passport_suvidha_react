@@ -367,7 +367,6 @@ function ApplicationForm() {
     setErrorMessage("");
 
     try {
-
       const otpResponse = await fetch("/api/otp/send", {
         method: "POST",
         headers: {
@@ -404,7 +403,6 @@ function ApplicationForm() {
     setErrorMessage("");
 
     try {
-
       e?.preventDefault?.();
 
       try {
@@ -746,6 +744,14 @@ function ApplicationForm() {
           } catch {
             window.location.href = "/payment-response?status=failed";
           }
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log("Payment popup closed by user");
+
+            window.location.href = "/payment-response?status=failed";
+          },
         },
       });
 

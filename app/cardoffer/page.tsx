@@ -93,7 +93,7 @@ const CardOfferPage = () => {
 
         if (res.data.status === "FAILED") {
           clearInterval(interval);
-          // window.location.href = "/cardoffer-response?status=failed";
+          window.location.href = "/cardoffer-response?status=failed";
         }
       } catch (err) {
         console.error(err);
@@ -101,7 +101,7 @@ const CardOfferPage = () => {
 
       if (attempts > 10) {
         clearInterval(interval);
-        // window.location.href = "/cardoffer-response?status=failed";
+        window.location.href = "/cardoffer-response?status=failed";
       }
     }, 3000); 
   };

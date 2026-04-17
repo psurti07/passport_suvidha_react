@@ -53,7 +53,6 @@ export default function PortalDashboard() {
     // If found, return it
     if (stage) return stage;
 
-
     if (applicationProgress.stages[fallbackIndex - 1]) {
       return applicationProgress.stages[fallbackIndex - 1];
     }
@@ -235,6 +234,21 @@ export default function PortalDashboard() {
       }
 
       alert("Download failed");
+    }
+  };
+
+  const formatPaymentMethod = (method: string) => {
+    switch (method) {
+      case "upi":
+        return "UPI";
+      case "card":
+        return "Credit/Debit Card";
+      case "netbanking":
+        return "Net Banking";
+      case "wallet":
+        return "Wallet";
+      default:
+        return method;
     }
   };
 
@@ -435,7 +449,9 @@ export default function PortalDashboard() {
                         Payment Method:
                       </span>
                       <span className="font-medium">
-                        {data?.invoice?.card_id ? "Credit Card" : "N/A"}
+                        {data?.payment?.payment_mode
+                          ? formatPaymentMethod(data.payment.payment_mode)
+                          : "N/A"}
                       </span>
                     </div>
                     <div className="flex justify-between">

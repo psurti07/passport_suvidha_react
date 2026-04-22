@@ -41,7 +41,7 @@ import Head from "next/head";
 import axiosServer from "@/lib/axiosServer";
 import Script from "next/script";
 
-const CardOfferPage = () => {
+const StarOfferPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -58,20 +58,6 @@ const CardOfferPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if ((window as any).Cashfree) {
-        console.log("Cashfree detected manually");
-        setSdkLoaded(true);
-        clearInterval(interval);
-      }
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -79,7 +65,6 @@ const CardOfferPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [sdkLoaded, setSdkLoaded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleChange = (e: any) => {
@@ -88,57 +73,12 @@ const CardOfferPage = () => {
   };
 
   const isValid =
-    formData.fullName && formData.email && formData.mobile.length === 10;
-
-  const checkPaymentStatus = (order_id: string) => {
-    let attempts = 0;
-
-    const interval = setInterval(async () => {
-      attempts++;
-
-      try {
-      
-        // console.log("Sending order_id:", order_id);
-        const res = await axiosServer.get("/check-payment-status", {
-          params: {
-            order_id: order_id,
-          },
-        });
-
-        const status = res.data.status;
-
-        if (status === "success") {
-          clearInterval(interval);
-
-          window.location.href = `/cardoffer-response?order_id=${order_id}&status=success`;
-          return;
-        }
-
-        if (status === "failed") {
-          clearInterval(interval);
-
-          window.location.href = `/cardoffer-response?order_id=${order_id}&status=failed`;
-          return;
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
-      if (attempts > 15) {
-        clearInterval(interval);
-
-        window.location.href = `/cardoffer-response?order_id=${order_id}&status=failed`;
-      }
-    }, 2000);
-  };
+    formData.fullName.trim().length > 0 &&
+    /^\S+@\S+\.\S+$/.test(formData.email) &&
+    /^[6-9]\d{9}$/.test(formData.mobile);
 
   const handleSubmit = async () => {
-    if (!isValid) return;
-
-    if (!sdkLoaded) {
-      alert("Payment system loading... please wait");
-      return;
-    }
+    if (!isValid || loading) return;
 
     setLoading(true);
 
@@ -147,57 +87,64 @@ const CardOfferPage = () => {
         fullName: formData.fullName,
         email: formData.email,
         mobile: formData.mobile,
-        offer_type: "card_offer",
+        offer_type: "star_offer",
       });
 
+      console.log("Zaakpay response:", data);
+
       if (!data.success) {
-        alert(data.message);
+        alert(data.message || "Payment init failed");
         return;
       }
 
-      const cashfree = (window as any).Cashfree({
-        mode: process.env.CASHFREE_MODE || "sandbox",
-      });
+      const { payment_url, encRequest, merchantIdentifier,checksum  } = data;
 
-      cashfree.checkout({
-        paymentSessionId: data.payment_session_id,
-        redirectTarget: "_modal",
+      if (!payment_url || !encRequest || !merchantIdentifier || !checksum) {
+        alert("Invalid payment data from server");
+        return;
+      }
 
-        onSuccess: () => {
-          // console.log("SUCCESS CALLBACK (optional)");
-        },
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = payment_url;
 
-        onFailure: () => {
-          // console.log("Payment failed");
-          window.location.href = "/cardoffer-response?status=failed";
-        },
+      const encInput = document.createElement("input");
+      encInput.type = "hidden";
+      encInput.name = "encRequest";
+      encInput.value = encRequest;
 
-        onClose: () => {
-          // console.log("Payment closed by user");
-          window.location.href = "/cardoffer-response?status=cancelled";
-        },
-      });
+      const midInput = document.createElement("input");
+      midInput.type = "hidden";
+      midInput.name = "merchantIdentifier";
+      midInput.value = merchantIdentifier;
 
-      // console.log("Checkout opened, starting polling...");
-      checkPaymentStatus(data.order_id);
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+      const checksumInput = document.createElement("input");
+      checksumInput.type = "hidden";
+      checksumInput.name = "checksum";
+      checksumInput.value = checksum;
+
+      // append all
+      form.appendChild(encInput);
+      form.appendChild(midInput);
+      form.appendChild(checksumInput);
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (error: any) {
+      console.error("FULL ERROR:", error);
+
+      if (error.response) {
+        alert(error.response.data?.message || "Backend error");
+      } else {
+        alert("Network error or server not reachable");
+      }
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
     <>
-      <Script
-        src="https://sdk.cashfree.com/js/v3/cashfree.js"
-        strategy="lazyOnload"
-        onLoad={() => {
-          // console.log("Cashfree SDK Loaded");
-          setSdkLoaded(true);
-        }}
-      />
       <div className="relative min-h-screen flex flex-col bg-white">
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-white" />
@@ -448,4 +395,4 @@ const CardOfferPage = () => {
   );
 };
 
-export default CardOfferPage;
+export default StarOfferPage;

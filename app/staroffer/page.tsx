@@ -44,6 +44,7 @@ import Script from "next/script";
 const StarOfferPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Handle navbar background on scroll
   useEffect(() => {
@@ -81,6 +82,7 @@ const StarOfferPage = () => {
     if (!isValid || loading) return;
 
     setLoading(true);
+    setErrorMessage(null);
 
     try {
       const { data } = await axiosServer.post("/create-payment", {
@@ -93,11 +95,12 @@ const StarOfferPage = () => {
       console.log("Zaakpay response:", data);
 
       if (!data.success) {
-        alert(data.message || "Payment init failed");
+        setErrorMessage(data.message || "Payment failed");
+        setLoading(false);
         return;
       }
 
-      const { payment_url, encRequest, merchantIdentifier,checksum  } = data;
+      const { payment_url, encRequest, merchantIdentifier, checksum } = data;
 
       if (!payment_url || !encRequest || !merchantIdentifier || !checksum) {
         alert("Invalid payment data from server");
@@ -131,13 +134,13 @@ const StarOfferPage = () => {
       document.body.appendChild(form);
       form.submit();
     } catch (error: any) {
-      console.error("FULL ERROR:", error);
+      console.error(error);
 
-      if (error.response) {
-        alert(error.response.data?.message || "Backend error");
-      } else {
-        alert("Network error or server not reachable");
-      }
+      const msg =
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      setErrorMessage(msg);
     } finally {
       setLoading(false);
     }
@@ -328,6 +331,11 @@ const StarOfferPage = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-5 p-0">
+                  {errorMessage && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm text-red-600">{errorMessage}</p>
+                    </div>
+                  )}
                   <div className="space-y-2">
                     <Label>Full Name</Label>
                     <Input

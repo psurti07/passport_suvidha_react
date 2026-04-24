@@ -747,15 +747,48 @@ function ApplicationForm() {
         },
 
         modal: {
-          ondismiss: function () {
+          ondismiss: async function () {
             console.log("Payment popup closed by user");
+
+            try {
+              await axiosServer.post(
+                "/payment-failed",
+                {
+                  razorpay_order_id: order.id,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+            } catch (err) {
+              console.error("Dismiss update failed:", err);
+            }
 
             window.location.href = "/payment-response?status=failed";
           },
         },
       });
 
-      rzp.on("payment.failed", function () {
+      rzp.on("payment.failed", async function (response) {
+        try {
+          await axiosServer.post(
+            "/payment-failed",
+            {
+              razorpay_order_id: response.error.metadata.order_id,
+              razorpay_payment_id: response.error.metadata.payment_id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+        } catch (err) {
+          console.error("Failed to update payment failure:", err);
+        }
+
         window.location.href = "/payment-response?status=failed";
       });
 

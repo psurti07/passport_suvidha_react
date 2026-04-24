@@ -81,6 +81,7 @@ const CardOfferPage = () => {
   const [loading, setLoading] = useState(false);
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -97,7 +98,6 @@ const CardOfferPage = () => {
       attempts++;
 
       try {
-      
         // console.log("Sending order_id:", order_id);
         const res = await axiosServer.get("/check-payment-status", {
           params: {
@@ -141,6 +141,7 @@ const CardOfferPage = () => {
     }
 
     setLoading(true);
+    setErrorMessage(null);
 
     try {
       const { data } = await axiosServer.post("/create-payment", {
@@ -148,10 +149,12 @@ const CardOfferPage = () => {
         email: formData.email,
         mobile: formData.mobile,
         offer_type: "card_offer",
+        type:"offer",
       });
 
       if (!data.success) {
-        alert(data.message);
+        setErrorMessage(data.message || "Payment failed");
+        setLoading(false);
         return;
       }
 
@@ -163,26 +166,24 @@ const CardOfferPage = () => {
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_modal",
 
-        onSuccess: () => {
-          // console.log("SUCCESS CALLBACK (optional)");
-        },
-
         onFailure: () => {
-          // console.log("Payment failed");
           window.location.href = "/cardoffer-response?status=failed";
         },
 
         onClose: () => {
-          // console.log("Payment closed by user");
           window.location.href = "/cardoffer-response?status=cancelled";
         },
       });
 
-      // console.log("Checkout opened, starting polling...");
       checkPaymentStatus(data.order_id);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Something went wrong");
+
+      const msg =
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      setErrorMessage(msg);
     }
 
     setLoading(false);
@@ -194,7 +195,6 @@ const CardOfferPage = () => {
         src="https://sdk.cashfree.com/js/v3/cashfree.js"
         strategy="lazyOnload"
         onLoad={() => {
-          // console.log("Cashfree SDK Loaded");
           setSdkLoaded(true);
         }}
       />
@@ -381,6 +381,11 @@ const CardOfferPage = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-5 p-0">
+                  {errorMessage && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm text-red-600">{errorMessage}</p>
+                    </div>
+                  )}
                   <div className="space-y-2">
                     <Label>Full Name</Label>
                     <Input

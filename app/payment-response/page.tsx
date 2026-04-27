@@ -4,7 +4,13 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, XCircle } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export default function PaymentResponsePage() {
@@ -15,14 +21,11 @@ export default function PaymentResponsePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-white to-slate-200 p-6">
-      
       <Card className="w-full max-w-md rounded-2xl shadow-2xl border-0 relative overflow-hidden">
-        
         {/* Glow Effect */}
         <div className="absolute -inset-1 bg-gradient-to-r from-green-200/40 to-blue-200/40 blur-2xl opacity-50"></div>
 
         <CardHeader className="text-center pb-2 relative z-10">
-          
           {/* ICON */}
           <div
             className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full ${
@@ -54,23 +57,28 @@ export default function PaymentResponsePage() {
         </CardHeader>
 
         <CardContent className="text-center space-y-4 relative z-10">
-          
           {/* EXTRA TEXT */}
           {isSuccess ? (
             <p className="text-sm text-gray-600">
-              Our team will contact you shortly. Please check your email for further instructions.
+              Our team will contact you shortly. Please check your email for
+              further instructions.
             </p>
           ) : (
             <p className="text-sm text-gray-600">
-              If the amount was deducted, it will be refunded automatically within 5-7 working days.
+              If the amount was deducted, it will be refunded automatically
+              within 5-7 working days.
             </p>
           )}
 
           {/* BUTTONS */}
-          <div className="flex flex-col gap-3 pt-4">
-            
-            <Link href="/">
-              <Button variant="outline" className="w-full rounded-xl">
+          <div className="flex justify-between mt-auto gap-2">
+            <Link href="/signin" className="w-full rounded-xl">
+              <Button variant="outline" className="w-full rounded-xl modern-button">
+                Login Now
+              </Button>
+            </Link>
+            <Link href="/" className="w-full rounded-xl">
+               <Button variant="outline" className="w-full rounded-xl modern-button">
                 Go to Home
               </Button>
             </Link>

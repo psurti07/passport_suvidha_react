@@ -469,7 +469,7 @@ export default function SignIn() {
               />
               <span className="font-medium text-navy">PassportSuvidha</span>
             </div>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <Link href="#" className="hover:text-navy transition-colors">
                 Privacy
               </Link>
@@ -482,9 +482,9 @@ export default function SignIn() {
               <Link href="#" className="hover:text-navy transition-colors">
                 Contact
               </Link>
-            </div>
+            </div> */}
             <div>
-              © {new Date().getFullYear()} PassportSuvidha. All rights reserved.
+              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
             </div>
           </div>
         </div>

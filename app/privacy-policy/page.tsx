@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
                     <div className="prose prose-slate max-w-none">
                       <h4 className="text-lg font-medium text-navy">Personal Information</h4>
                       <p>We may collect the following types of personal information:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Contact information (name, email address, phone number, mailing address)</li>
                         <li>Government-issued identification (passport details, driver's license, etc.)</li>
                         <li>Demographic information (date of birth, gender, nationality)</li>
@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
 
                       <h4 className="text-lg font-medium text-navy">Automatically Collected Information</h4>
                       <p>When you visit our website or use our applications, we may automatically collect:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Device information (IP address, browser type, operating system)</li>
                         <li>Usage data (pages visited, time spent on pages, links clicked)</li>
                         <li>Location data (with your permission)</li>
@@ -97,7 +97,7 @@ export default function PrivacyPolicy() {
                   <AccordionContent className="px-6 pb-4 pt-0">
                     <div className="prose prose-slate max-w-none">
                       <p>We use your personal information for the following purposes:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Processing passport applications and renewals</li>
                         <li>Verifying your identity</li>
                         <li>Communicating with you about your application status</li>
@@ -110,7 +110,7 @@ export default function PrivacyPolicy() {
 
                       <h4 className="text-lg font-medium text-navy">Legal Basis for Processing</h4>
                       <p>We process your personal information based on one or more of the following legal grounds:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Performance of a contract when we provide you with services</li>
                         <li>Your consent, where you have given us permission</li>
                         <li>Compliance with legal obligations</li>
@@ -130,7 +130,7 @@ export default function PrivacyPolicy() {
                   <AccordionContent className="px-6 pb-4 pt-0">
                     <div className="prose prose-slate max-w-none">
                       <p>We may share your personal information with:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Government agencies responsible for passport issuance</li>
                         <li>Service providers who assist us in processing applications</li>
                         <li>Payment processors to complete transactions</li>
@@ -159,7 +159,7 @@ export default function PrivacyPolicy() {
                       <p>
                         We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, accidental loss, alteration, or destruction. These measures include:
                       </p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Encryption of sensitive data</li>
                         <li>Secure socket layer (SSL) technology</li>
                         <li>Access controls and authentication procedures</li>
@@ -189,7 +189,7 @@ export default function PrivacyPolicy() {
                       <p>
                         For passport applications, we typically retain your information for:
                       </p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Completed applications: 7 years from the date of passport issuance</li>
                         <li>Incomplete applications: 1 year from the last activity</li>
                         <li>Account information: As long as your account is active, plus a reasonable period thereafter</li>
@@ -211,7 +211,7 @@ export default function PrivacyPolicy() {
                   <AccordionContent className="px-6 pb-4 pt-0">
                     <div className="prose prose-slate max-w-none">
                       <p>Depending on your location, you may have the following rights regarding your personal information:</p>
-                      <ul>
+                      <ul className="space-y-2 pl-7 list-disc">
                         <li>Right to access and receive a copy of your personal information</li>
                         <li>Right to correct inaccurate or incomplete information</li>
                         <li>Right to delete your personal information in certain circumstances</li>

@@ -23,7 +23,7 @@ export default function FAQ() {
               </p>
             </div>
 
-            <div className="relative max-w-3xl mx-auto mb-16">
+            {/* <div className="relative max-w-3xl mx-auto mb-16">
               <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
               <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
                 <CardHeader>
@@ -44,7 +44,7 @@ export default function FAQ() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
               <div className="md:col-span-1">
@@ -72,7 +72,7 @@ export default function FAQ() {
                       <Clock className="h-4 w-4" />
                       Timing & Processing
                     </a>
-                    <a
+                    {/* <a
                       href="#fees"
                       className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-navy/5 transition-colors"
                     >
@@ -92,7 +92,7 @@ export default function FAQ() {
                     >
                       <Globe className="h-4 w-4" />
                       Travel Requirements
-                    </a>
+                    </a> */}
                   </nav>
                   <div className="rounded-xl bg-navy/5 p-4 mt-6">
                     <h4 className="font-medium text-navy mb-2">Need more help?</h4>
@@ -322,11 +322,11 @@ export default function FAQ() {
                   </Card>
                 </div>
 
-                <div className="flex justify-center mt-8">
+                {/* <div className="flex justify-center mt-8">
                   <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button">
                     Load More FAQs
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

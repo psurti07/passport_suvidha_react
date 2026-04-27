@@ -147,49 +147,50 @@ function ApplicationForm() {
   const windowSize = useWindowSize();
 
   // Load saved form data and step from localStorage on initial load
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const savedFormData = localStorage.getItem("passportFormData");
-  //     const savedStep = localStorage.getItem("passportFormStep");
-  //     const savedOtpVerified = localStorage.getItem("otpVerified");
-  //     const savedTimestamp = localStorage.getItem("passportFormTimestamp");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedFormData = localStorage.getItem("passportFormData");
+      const savedStep = localStorage.getItem("passportFormStep");
+      const savedOtpVerified = localStorage.getItem("otpVerified");
+      const savedTimestamp = localStorage.getItem("passportFormTimestamp");
 
-  //     const currentTime = Date.now();
-  //     const threeHoursInMs = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+      const currentTime = Date.now();
+      // const threeHoursInMs = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+      const threeHoursInMs = 5 * 60 * 1000;
 
-  //     // Check if data is older than 3 hours
-  //     if (
-  //       savedTimestamp &&
-  //       currentTime - parseInt(savedTimestamp) > threeHoursInMs
-  //     ) {
-  //       // Clear expired data
-  //       clearSavedFormData();
-  //       return;
-  //     }
+      // Check if data is older than 3 hours
+      if (
+        savedTimestamp &&
+        currentTime - parseInt(savedTimestamp) > threeHoursInMs
+      ) {
+        // Clear expired data
+        clearSavedFormData();
+        return;
+      }
 
-  //     if (savedFormData) {
-  //       setFormData(JSON.parse(savedFormData));
-  //     }
+      if (savedFormData) {
+        setFormData(JSON.parse(savedFormData));
+      }
 
-  //     if (savedStep) {
-  //       setStep(parseInt(savedStep));
-  //     }
+      if (savedStep) {
+        setStep(parseInt(savedStep));
+      }
 
-  //     if (savedOtpVerified === "true") {
-  //       setOtpVerified(true);
-  //     }
-  //   }
-  // }, []);
+      if (savedOtpVerified === "true") {
+        setOtpVerified(true);
+      }
+    }
+  }, []);
 
   // Save form data and current step to localStorage whenever they change
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("passportFormData", JSON.stringify(formData));
-  //     localStorage.setItem("passportFormStep", step.toString());
-  //     localStorage.setItem("otpVerified", otpVerified.toString());
-  //     localStorage.setItem("passportFormTimestamp", Date.now().toString());
-  //   }
-  // }, [formData, step, otpVerified]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("passportFormData", JSON.stringify(formData));
+      localStorage.setItem("passportFormStep", step.toString());
+      localStorage.setItem("otpVerified", otpVerified.toString());
+      localStorage.setItem("passportFormTimestamp", Date.now().toString());
+    }
+  }, [formData, step, otpVerified]);
 
   // Animation variants
   const containerVariants = {
@@ -241,17 +242,17 @@ function ApplicationForm() {
   };
 
   // Function to clear saved form data when needed
-  // const clearSavedFormData = () => {
-  //   if (typeof window !== "undefined") {
-  //     localStorage.removeItem("passportFormData");
-  //     localStorage.removeItem("passportFormStep");
-  //     localStorage.removeItem("otpVerified");
-  //     localStorage.removeItem("passportFormTimestamp");
+  const clearSavedFormData = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("passportFormData");
+      localStorage.removeItem("passportFormStep");
+      localStorage.removeItem("otpVerified");
+      localStorage.removeItem("passportFormTimestamp");
 
-  //     // Also clear authentication tokens
-  //     clearToken();
-  //   }
-  // };
+      // Also clear authentication tokens
+      clearToken();
+    }
+  };
 
   // Update progress width based on current step
   useEffect(() => {
@@ -291,12 +292,10 @@ function ApplicationForm() {
           data[0].PostOffice.length > 0
         ) {
           const postOffice = data[0].PostOffice[0];
-          const stateCode =
-            stateNameToCode[postOffice.State] || postOffice.State;
           setFormData((prev) => ({
             ...prev,
             city: postOffice.District,
-            state: stateCode,
+            state: postOffice.State,
           }));
         }
       } catch (error) {
@@ -307,24 +306,50 @@ function ApplicationForm() {
     }
   };
 
+  // const handleOTPChange = (index: number, value: string) => {
+  //   // Only allow numbers
+  //   if (value && !/^\d+$/.test(value)) return;
+
+  //   // Update the OTP digits array
+  //   const newOtpDigits = [...otpDigits];
+  //   newOtpDigits[index] = value;
+  //   setOtpDigits(newOtpDigits);
+
+  //   // Update the main form data with combined OTP
+  //   setFormData((prev) => ({ ...prev, otp: newOtpDigits.join("") }));
+
+  //   // Auto-focus next input if value is entered
+  //   if (value && index < 3) {
+  //     const nextInput = document.querySelector(
+  //       `input[name=otp-${index + 1}]`,
+  //     ) as HTMLInputElement;
+  //     if (nextInput) nextInput.focus();
+  //   }
+  // };
+
   const handleOTPChange = (index: number, value: string) => {
     // Only allow numbers
-    if (value && !/^\d+$/.test(value)) return;
+    if (value && !/^\d$/.test(value)) return;
 
-    // Update the OTP digits array
     const newOtpDigits = [...otpDigits];
     newOtpDigits[index] = value;
     setOtpDigits(newOtpDigits);
 
-    // Update the main form data with combined OTP
-    setFormData((prev) => ({ ...prev, otp: newOtpDigits.join("") }));
+    const fullOtp = newOtpDigits.join("");
 
-    // Auto-focus next input if value is entered
+    setFormData((prev) => ({ ...prev, otp: fullOtp }));
+
+    // Move focus
     if (value && index < 3) {
       const nextInput = document.querySelector(
         `input[name=otp-${index + 1}]`,
       ) as HTMLInputElement;
+
       if (nextInput) nextInput.focus();
+    }
+
+    if (fullOtp.length === 4 && !newOtpDigits.includes("") && !loading) {
+      verifyOTP(fullOtp); 
     }
   };
 
@@ -398,86 +423,77 @@ function ApplicationForm() {
     }
   };
 
-  const verifyOTP = async (e?: React.FormEvent) => {
+  const verifyOTP = async (otpValue?: string, e?: React.FormEvent) => {
+    e?.preventDefault?.();
+
+    const finalOtp = otpValue ?? formData.otp;
+
+    if (!finalOtp || finalOtp.length !== 4) {
+      setErrorMessage("The otp must be 4 digits");
+      return;
+    }
+
     setLoading(true);
     setErrorMessage("");
 
     try {
-      e?.preventDefault?.();
+      const response = await fetch(`/api/otp/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          mobile_number: formData.mobile,
+          otp: finalOtp,
+          purpose: "registration",
+        }),
+      });
 
-      try {
-        const response = await fetch(`/api/otp/verify`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            otp: formData.otp,
-            purpose: "registration",
-          }),
-        });
+      const data = await response.json();
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw { response: { data, status: response.status } };
-        }
-
-        setOtpVerified(true);
-
-        if (data?.token) {
-          localStorage.setItem("token", data.token);
-        }
-
-        const nextStepFromAPI = data?.next_step;
-        const stepMapping: any = {
-          otp_verification: 2,
-          additional_information: 3,
-          service_selection: 4,
-          payment: 4, // or 5 if you had
-        };
-
-        setTimeout(() => {
-          if (!nextStepFromAPI) {
-            console.error("Invalid next_step from API");
-            return;
-          }
-
-          setStep(stepMapping[nextStepFromAPI] ?? 1);
-        }, 1500);
-
-        // Automatically move to the next step after successful verification
-        // setTimeout(() => {
-        //   setStep((prevStep) => prevStep + 1);
-        // }, 1500); // Small delay to show the success message before moving on
-      } catch (apiError: any) {
-        // Handle API error (invalid OTP)
-        // console.log('OTP validation failed:', apiError.response?.status);
-
-        // Reset OTP digits
-        setOtpDigits(["", "", "", ""]);
-        setFormData((prev) => ({ ...prev, otp: "" }));
-
-        // Set appropriate error message based on response
-        if (apiError.response?.status === 401) {
-          setErrorMessage("Invalid or expired OTP. Please request a new one.");
-        } else if (apiError.response?.data?.errors?.otp) {
-          setErrorMessage(apiError.response.data.errors.otp[0]);
-        } else {
-          setErrorMessage("Invalid OTP. Please try again.");
-        }
+      if (!response.ok) {
+        throw { response: { data, status: response.status } };
       }
-    } catch (error) {
-      // Handle any other unexpected errors
-      console.error("Unexpected error during OTP verification:", error);
-      setErrorMessage("An unexpected error occurred. Please try again.");
 
-      // Reset OTP digits
+      setOtpVerified(true);
+
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      const nextStepFromAPI = data?.next_step;
+
+      const stepMapping: any = {
+        otp_verification: 2,
+        additional_information: 3,
+        service_selection: 4,
+        payment: 4,
+      };
+
+      setTimeout(() => {
+        if (!nextStepFromAPI) {
+          console.error("Invalid next_step from API");
+          return;
+        }
+
+        setStep(stepMapping[nextStepFromAPI] ?? 1);
+      }, 1500);
+    } catch (error: any) {
+      // 🔥 Handle BOTH API + unexpected errors here
+
       setOtpDigits(["", "", "", ""]);
       setFormData((prev) => ({ ...prev, otp: "" }));
+
+      if (error?.response?.status === 401) {
+        setErrorMessage("Invalid or expired OTP. Please request a new one.");
+      } else if (error?.response?.data?.errors?.otp) {
+        setErrorMessage(error.response.data.errors.otp[0]);
+      } else {
+        console.error("Unexpected error:", error);
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -490,7 +506,6 @@ function ApplicationForm() {
       setErrorMessage("");
 
       try {
-        // ✅ STEP 1: Create Customer
         const customerResponse = await fetch("/api/customers/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -504,42 +519,55 @@ function ApplicationForm() {
 
         const customerData = await customerResponse.json();
 
-        if (!customerResponse.ok) {
-          if (customerData.errors) {
-            const firstError = Object.values(customerData.errors)[0];
+        if (!customerResponse.ok && customerResponse.status !== 200) {
+          const firstError = Object.values(customerData.errors || {})[0];
+          setErrorMessage(
+            Array.isArray(firstError) ? firstError[0] : "Validation error",
+          );
+          return;
+        }
+
+        if (customerResponse.status === 200) {
+          const nextStepFromAPI = customerData?.next_step;
+          const registrationStep = customerData?.registration_step;
+
+          const stepMapping: any = {
+            otp_verification: 2,
+            additional_information: 3,
+            service_selection: 4,
+            payment: 4,
+          };
+
+          if (registrationStep >= 2) {
+            setOtpVerified(true);
+          }
+
+          setStep(stepMapping[nextStepFromAPI] || 1);
+          return;
+        }
+
+        if (customerResponse.status === 201) {
+          const otpResponse = await fetch("/api/otp/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              purpose: "registration",
+            }),
+          });
+
+          const otpData = await otpResponse.json();
+
+          if (!otpResponse.ok) {
             setErrorMessage(
-              Array.isArray(firstError) ? firstError[0] : "Validation error",
+              otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
             );
-          } else {
-            setErrorMessage("Failed to save customer information.");
+            return;
           }
-          return;
+
+          setOtpSent(true);
+          setStep(2);
         }
-
-        // ✅ STEP 2: Send OTP
-        const otpResponse = await fetch("/api/otp/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            purpose: "registration",
-          }),
-        });
-
-        const otpData = await otpResponse.json();
-
-        if (!otpResponse.ok) {
-          if (otpData.errors?.mobile_number) {
-            setErrorMessage(otpData.errors.mobile_number[0]);
-          } else {
-            setErrorMessage("Failed to send OTP.");
-          }
-          return;
-        }
-
-        // ✅ SUCCESS
-        setOtpSent(true);
-        setStep((prev) => prev + 1);
       } catch (error) {
         console.error("Unexpected Error:", error);
         setErrorMessage("Something went wrong. Please try again.");
@@ -566,7 +594,7 @@ function ApplicationForm() {
         }
 
         // Format date for API
-        const formattedDob = formatDateForApi(formData.dateOfBirth);
+        // const formattedDob = formatDateForApi(formData.dateOfBirth);
 
         // Send additional information to API using the internal API route
         const response = await fetch(`/api/customer/additional-info`, {
@@ -581,7 +609,8 @@ function ApplicationForm() {
             city: formData.city,
             state: formData.state,
             gender: formData.gender,
-            date_of_birth: formattedDob,
+            // date_of_birth: formattedDob,
+            date_of_birth: formData.dateOfBirth,
             place_of_birth: formData.placeOfBirth,
           }),
         });
@@ -742,7 +771,7 @@ function ApplicationForm() {
 
             window.location.href = "/payment-response?status=success";
           } catch {
-            window.location.href = "/payment-response?status=failed";
+            setErrorMessage("Payment verification failed. Please try again.");
           }
         },
 
@@ -766,7 +795,7 @@ function ApplicationForm() {
               console.error("Dismiss update failed:", err);
             }
 
-            window.location.href = "/payment-response?status=failed";
+            setErrorMessage("Payment was cancelled.");
           },
         },
       });
@@ -789,7 +818,9 @@ function ApplicationForm() {
           console.error("Failed to update payment failure:", err);
         }
 
-        window.location.href = "/payment-response?status=failed";
+        setErrorMessage(
+          response.error.description || "Payment failed. Please try again.",
+        );
       });
 
       rzp.open();

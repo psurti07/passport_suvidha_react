@@ -1,7 +1,19 @@
-import { CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Shield, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
@@ -41,20 +53,23 @@ const StepAddressDetails = ({
     if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) return false;
     const [d, m, y] = date.split("/").map(Number);
     const dt = new Date(y, m - 1, d);
-    return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+    return (
+      dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d
+    );
   }
 
   function getDateOfBirthError(date: string) {
     if (!date.trim()) return "Date of birth is required";
-    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) return "Enter date as DD/MM/YYYY";
-    if (!isValidDate(date)) return "Enter a valid date";
-    const [d, m, y] = date.split("/").map(Number);
-    const dob = new Date(y, m - 1, d);
+
+    const dob = new Date(date);
+    if (isNaN(dob.getTime())) return "Enter a valid date";
+
     const now = new Date();
-    if (y < 1900 || y > now.getFullYear()) return `Year must be between 1900 and ${now.getFullYear()}`;
+
     if (dob > now) return "Date of birth cannot be in the future";
-    const age = now.getFullYear() - dob.getFullYear() - (now < new Date(now.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0);
-    if (age < 18) return "You must be at least 18 years old";
+
+    if (dob.getFullYear() < 1900) return `Year must be after 1900`;
+
     return "";
   }
 
@@ -63,17 +78,17 @@ const StepAddressDetails = ({
     zipCode: !formData.zipCode.trim()
       ? "ZIP code is required"
       : !/^\d{6}$/.test(formData.zipCode)
-      ? "Enter a valid 6-digit ZIP code"
-      : "",
+        ? "Enter a valid 6-digit ZIP code"
+        : "",
     city: !formData.city.trim() ? "City is required" : "",
     state: !formData.state.trim() ? "State is required" : "",
     gender: !formData.gender.trim() ? "Gender is required" : "",
     dateOfBirth: getDateOfBirthError(formData.dateOfBirth),
-    placeOfBirth: !formData.placeOfBirth.trim() 
-      ? "Place of birth is required" 
+    placeOfBirth: !formData.placeOfBirth.trim()
+      ? "Place of birth is required"
       : /\d/.test(formData.placeOfBirth)
-      ? "Place of birth should not contain digits"
-      : "",
+        ? "Place of birth should not contain digits"
+        : "",
   };
 
   const isValid =
@@ -129,7 +144,9 @@ const StepAddressDetails = ({
                       name="zipCode"
                       value={formData.zipCode}
                       onChange={handleChange}
-                      onBlur={() => setTouched((t) => ({ ...t, zipCode: true }))}
+                      onBlur={() =>
+                        setTouched((t) => ({ ...t, zipCode: true }))
+                      }
                       placeholder="Enter ZIP code"
                       className="modern-input focus-animation"
                       maxLength={6}
@@ -149,7 +166,9 @@ const StepAddressDetails = ({
                     )}
                   </div>
                   {touched.zipCode && errors.zipCode && (
-                    <p className="text-xs text-red-600 mt-1">{errors.zipCode}</p>
+                    <p className="text-xs text-red-600 mt-1">
+                      {errors.zipCode}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -173,7 +192,8 @@ const StepAddressDetails = ({
                     value={formData.state}
                     onValueChange={(value) => {
                       handleSelectChange("state", value);
-                      if (!touched.state) setTouched((t) => ({ ...t, state: true }));
+                      if (!touched.state)
+                        setTouched((t) => ({ ...t, state: true }));
                     }}
                     defaultValue={formData.state}
                   >
@@ -181,39 +201,53 @@ const StepAddressDetails = ({
                       <SelectValue placeholder="Select state" />
                     </SelectTrigger>
                     <SelectContent className="max-h-[200px] overflow-y-auto">
-                      <SelectItem value="AN">Andaman and Nicobar Islands</SelectItem>
-                      <SelectItem value="AP">Andhra Pradesh</SelectItem>
-                      <SelectItem value="AR">Arunachal Pradesh</SelectItem>
-                      <SelectItem value="AS">Assam</SelectItem>
-                      <SelectItem value="BR">Bihar</SelectItem>
-                      <SelectItem value="CH">Chandigarh</SelectItem>
-                      <SelectItem value="CT">Chhattisgarh</SelectItem>
-                      <SelectItem value="DL">Delhi</SelectItem>
-                      <SelectItem value="GA">Goa</SelectItem>
-                      <SelectItem value="GJ">Gujarat</SelectItem>
-                      <SelectItem value="HR">Haryana</SelectItem>
-                      <SelectItem value="HP">Himachal Pradesh</SelectItem>
-                      <SelectItem value="JK">Jammu and Kashmir</SelectItem>
-                      <SelectItem value="JH">Jharkhand</SelectItem>
-                      <SelectItem value="KA">Karnataka</SelectItem>
-                      <SelectItem value="KL">Kerala</SelectItem>
-                      <SelectItem value="MP">Madhya Pradesh</SelectItem>
-                      <SelectItem value="MH">Maharashtra</SelectItem>
-                      <SelectItem value="MN">Manipur</SelectItem>
-                      <SelectItem value="ML">Meghalaya</SelectItem>
-                      <SelectItem value="MZ">Mizoram</SelectItem>
-                      <SelectItem value="NL">Nagaland</SelectItem>
-                      <SelectItem value="OR">Odisha</SelectItem>
-                      <SelectItem value="PY">Puducherry</SelectItem>
-                      <SelectItem value="PB">Punjab</SelectItem>
-                      <SelectItem value="RJ">Rajasthan</SelectItem>
-                      <SelectItem value="SK">Sikkim</SelectItem>
-                      <SelectItem value="TN">Tamil Nadu</SelectItem>
-                      <SelectItem value="TG">Telangana</SelectItem>
-                      <SelectItem value="TR">Tripura</SelectItem>
-                      <SelectItem value="UP">Uttar Pradesh</SelectItem>
-                      <SelectItem value="UT">Uttarakhand</SelectItem>
-                      <SelectItem value="WB">West Bengal</SelectItem>
+                      <SelectItem value="Andaman and Nicobar Islands">
+                        Andaman and Nicobar Islands
+                      </SelectItem>
+                      <SelectItem value="Andhra Pradesh">
+                        Andhra Pradesh
+                      </SelectItem>
+                      <SelectItem value="Arunachal Pradesh">
+                        Arunachal Pradesh
+                      </SelectItem>
+                      <SelectItem value="Assam">Assam</SelectItem>
+                      <SelectItem value="Bihar">Bihar</SelectItem>
+                      <SelectItem value="Chandigarh">Chandigarh</SelectItem>
+                      <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+                      <SelectItem value="Delhi">Delhi</SelectItem>
+                      <SelectItem value="Goa">Goa</SelectItem>
+                      <SelectItem value="Gujarat">Gujarat</SelectItem>
+                      <SelectItem value="Haryana">Haryana</SelectItem>
+                      <SelectItem value="Himachal Pradesh">
+                        Himachal Pradesh
+                      </SelectItem>
+                      <SelectItem value="Jammu and Kashmir">
+                        Jammu and Kashmir
+                      </SelectItem>
+                      <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+                      <SelectItem value="Karnataka">Karnataka</SelectItem>
+                      <SelectItem value="Kerala">Kerala</SelectItem>
+                      <SelectItem value="Madhya Pradesh">
+                        Madhya Pradesh
+                      </SelectItem>
+                      <SelectItem value="Maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="Manipur">Manipur</SelectItem>
+                      <SelectItem value="Meghalaya">Meghalaya</SelectItem>
+                      <SelectItem value="Mizoram">Mizoram</SelectItem>
+                      <SelectItem value="Nagaland">Nagaland</SelectItem>
+                      <SelectItem value="Odisha">Odisha</SelectItem>
+                      <SelectItem value="Puducherry">Puducherry</SelectItem>
+                      <SelectItem value="Punjab">Punjab</SelectItem>
+                      <SelectItem value="Rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="Sikkim">Sikkim</SelectItem>
+                      <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="Telangana">Telangana</SelectItem>
+                      <SelectItem value="Tripura">Tripura</SelectItem>
+                      <SelectItem value="Uttar Pradesh">
+                        Uttar Pradesh
+                      </SelectItem>
+                      <SelectItem value="Uttarakhand">Uttarakhand</SelectItem>
+                      <SelectItem value="West Bengal">West Bengal</SelectItem>
                     </SelectContent>
                   </Select>
                   {touched.state && errors.state && (
@@ -233,7 +267,8 @@ const StepAddressDetails = ({
                   value={formData.gender}
                   onValueChange={(value) => {
                     handleSelectChange("gender", value);
-                    if (!touched.gender) setTouched((t) => ({ ...t, gender: true }));
+                    if (!touched.gender)
+                      setTouched((t) => ({ ...t, gender: true }));
                   }}
                 >
                   <SelectTrigger className="modern-input focus-animation">
@@ -251,36 +286,24 @@ const StepAddressDetails = ({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="dateOfBirth">Date of Birth</Label>
+
                 <Input
                   id="dateOfBirth"
                   name="dateOfBirth"
-                  type="text"
-                  placeholder="DD/MM/YYYY"
+                  type="date"
                   value={formData.dateOfBirth}
-                  onChange={(e) => {
-                    const cursorPosition = e.target.selectionStart || 0;
-                    const digits = e.target.value.replace(/[^\d]/g, "").slice(0, 8);
-                    let value = "";
-                    if (digits.length > 0) {
-                      value = digits.slice(0, 2);
-                      if (digits.length > 2) value += "/" + digits.slice(2, 4);
-                      if (digits.length > 4) value += "/" + digits.slice(4);
-                    }
-                    e.target.value = value;
-                    handleChange(e);
-                    requestAnimationFrame(() => {
-                      const slashesBeforeCursor = value.slice(0, cursorPosition).split("/").length - 1;
-                      const newPosition = Math.min(cursorPosition + slashesBeforeCursor, value.length);
-                      e.target.selectionStart = e.target.selectionEnd = newPosition;
-                    });
-                  }}
-                  onBlur={() => setTouched((t) => ({ ...t, dateOfBirth: true }))}
+                  onChange={handleChange}
+                  onBlur={() =>
+                    setTouched((t) => ({ ...t, dateOfBirth: true }))
+                  }
                   className="modern-input focus-animation"
-                  maxLength={10}
-                  pattern="\d{2}/\d{2}/\d{4}"
+                  max={new Date().toISOString().split("T")[0]}
                 />
+
                 {touched.dateOfBirth && errors.dateOfBirth && (
-                  <p className="text-xs text-red-600 mt-1">{errors.dateOfBirth}</p>
+                  <p className="text-xs text-red-600 mt-1">
+                    {errors.dateOfBirth}
+                  </p>
                 )}
               </div>
               <div className="space-y-2">
@@ -291,23 +314,27 @@ const StepAddressDetails = ({
                   value={formData.placeOfBirth}
                   onChange={(e) => {
                     // Filter out digits from input
-                    const value = e.target.value.replace(/[0-9]/g, '');
+                    const value = e.target.value.replace(/[0-9]/g, "");
                     const customEvent = {
                       ...e,
                       target: {
                         ...e.target,
-                        name: 'placeOfBirth',
-                        value
-                      }
+                        name: "placeOfBirth",
+                        value,
+                      },
                     };
                     handleChange(customEvent);
                   }}
-                  onBlur={() => setTouched((t) => ({ ...t, placeOfBirth: true }))}
+                  onBlur={() =>
+                    setTouched((t) => ({ ...t, placeOfBirth: true }))
+                  }
                   placeholder="City, State, Country"
                   className="modern-input focus-animation"
                 />
                 {touched.placeOfBirth && errors.placeOfBirth && (
-                  <p className="text-xs text-red-600 mt-1">{errors.placeOfBirth}</p>
+                  <p className="text-xs text-red-600 mt-1">
+                    {errors.placeOfBirth}
+                  </p>
                 )}
               </div>
             </div>
@@ -320,12 +347,13 @@ const StepAddressDetails = ({
           >
             <Shield className="h-5 w-5 text-navy" />
             <p>
-              Please ensure all information matches your identification documents exactly.
+              Please ensure all information matches your identification
+              documents exactly.
             </p>
           </motion.div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end border-t pt-6">        
+      <CardFooter className="flex justify-end border-t pt-6">
         <motion.div
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
@@ -345,4 +373,4 @@ const StepAddressDetails = ({
   );
 };
 
-export default StepAddressDetails; 
+export default StepAddressDetails;

@@ -82,6 +82,27 @@ const CardOfferPage = () => {
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [services, setServices] = useState<any[]>([]);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axiosServer.get("/services/passport");
+        setServices(res.data.data);
+      } catch (err) {
+        console.error("Failed to load services", err);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  useEffect(() => {
+    if (services.length > 0) {
+      setSelectedService(services[0].service_code);
+    }
+  }, [services]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -89,7 +110,10 @@ const CardOfferPage = () => {
   };
 
   const isValid =
-    formData.fullName && formData.email && formData.mobile.length === 10;
+    formData.fullName &&
+    formData.email &&
+    formData.mobile.length === 10 &&
+    selectedService;
 
   const checkPaymentStatus = (order_id: string) => {
     let attempts = 0;
@@ -98,18 +122,14 @@ const CardOfferPage = () => {
       attempts++;
 
       try {
-        // console.log("Sending order_id:", order_id);
         const res = await axiosServer.get("/check-payment-status", {
-          params: {
-            order_id: order_id,
-          },
+          params: { order_id },
         });
 
         const status = res.data.status;
 
         if (status === "success") {
           clearInterval(interval);
-
           window.location.href = `/cardoffer-response?order_id=${order_id}&status=success`;
           return;
         }
@@ -117,7 +137,9 @@ const CardOfferPage = () => {
         if (status === "failed") {
           clearInterval(interval);
 
-          window.location.href = `/cardoffer-response?order_id=${order_id}&status=failed`;
+          // ✅ Force close modal (WORKING TRICK)
+          window.location.href = window.location.href;
+
           return;
         }
       } catch (err) {
@@ -127,10 +149,14 @@ const CardOfferPage = () => {
       if (attempts > 15) {
         clearInterval(interval);
 
-        window.location.href = `/cardoffer-response?order_id=${order_id}&status=failed`;
+        window.location.href = window.location.href;
       }
     }, 2000);
   };
+
+  const selectedServiceData = services.find(
+    (s) => s.service_code === selectedService,
+  );
 
   const handleSubmit = async () => {
     if (!isValid) return;
@@ -148,8 +174,10 @@ const CardOfferPage = () => {
         fullName: formData.fullName,
         email: formData.email,
         mobile: formData.mobile,
+        service_code: selectedServiceData.service_code,
+        amount: selectedServiceData.service_total_amount,
         offer_type: "card_offer",
-        type:"offer",
+        type: "offer",
       });
 
       if (!data.success) {
@@ -166,12 +194,9 @@ const CardOfferPage = () => {
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_modal",
 
-        onFailure: () => {
-          window.location.href = "/cardoffer-response?status=failed";
-        },
-
         onClose: () => {
-          window.location.href = "/cardoffer-response?status=cancelled";
+          setErrorMessage("Payment was cancelled.");
+          setLoading(false);
         },
       });
 
@@ -333,7 +358,7 @@ const CardOfferPage = () => {
                 <div className="space-y-6">
                   <CardHeader className="p-0 mb-6">
                     <CardTitle className="text-xl flex items-center gap-2">
-                      <Gift className="h-5 w-5 text-navy" />
+                      <Gift className="h-5 w-5 text-white" />
                       Why Choose Passport Suvidha?
                     </CardTitle>
                   </CardHeader>
@@ -369,65 +394,126 @@ const CardOfferPage = () => {
               </div>
 
               {/* RIGHT FORM */}
-              <div className="p-8 bg-white">
-                <CardHeader className="p-0 mb-6">
-                  <CardTitle className="text-xl flex items-center gap-2">
-                    <Gift className="h-5 w-5 text-navy" />
-                    Unlock Your Offer
+              <div className="p-8 bg-white space-y-8">
+                {/* TITLE */}
+                <div className="space-y-2">
+                  <CardTitle className="text-xl flex items-center gap-2 text-gray-900">
+                    <Gift className="h-5 w-5 text-teal" />
+                    Choose Your Passport Plan
                   </CardTitle>
-                  <CardDescription>
-                    Fill your details to proceed
-                  </CardDescription>
-                </CardHeader>
+                  <p className="text-sm text-gray-500">
+                    Select a service that suits your requirement
+                  </p>
+                </div>
 
-                <CardContent className="space-y-5 p-0">
+                {/* SERVICES GRID */}
+                <div className="grid grid-cols-2 gap-4">
+                  {services.map((service) => {
+                    const isSelected = selectedService === service.service_code;
+
+                    return (
+                      <div
+                        key={service.id}
+                        onClick={() => setSelectedService(service.service_code)}
+                        className={`
+    relative cursor-pointer rounded-2xl border p-4 pr-10 transition-all duration-200
+    ${
+      isSelected
+        ? "border-teal ring-2 ring-teal/20 shadow-md"
+        : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+    }
+  `}
+                      >
+                        {/* RADIO */}
+                        <div className="absolute top-4 right-4">
+                          <div
+                            className={`
+      h-4 w-4 rounded-full border-2 flex items-center justify-center
+      ${isSelected ? "border-teal" : "border-gray-300"}
+    `}
+                          >
+                            {isSelected && (
+                              <div className="h-2 w-2 bg-teal rounded-full"></div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* TITLE + PRICE */}
+                        <div className="flex justify-between items-start gap-2">
+                          <h3 className="text-sm font-medium text-gray-800 leading-snug pr-2">
+                            {service.service_name}
+                          </h3>
+
+                          <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
+                            ₹{service.service_total_amount}
+                          </span>
+                        </div>
+
+                        {/* SUB TEXT */}
+                        <p className="text-[10px] text-gray-500 mt-2">
+                          Govt ₹{service.service_gov_amount} + Charges ₹
+                          {service.service_charges}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* DIVIDER */}
+                <div className="border-t border-gray-200 pt-6 space-y-5">
                   {errorMessage && (
                     <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                       <p className="text-sm text-red-600">{errorMessage}</p>
                     </div>
                   )}
-                  <div className="space-y-2">
-                    <Label>Full Name</Label>
-                    <Input
-                      name="fullName"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      placeholder="Enter your full name"
-                    />
+
+                  {/* INPUTS */}
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm text-gray-700">Full Name</Label>
+                      <Input
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
+                        className="mt-1 h-11 rounded-lg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-sm text-gray-700">Email</Label>
+                      <Input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Enter your email"
+                        className="mt-1 h-11 rounded-lg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-sm text-gray-700">Mobile</Label>
+                      <Input
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d]/g, "");
+                          e.target.value = value;
+                          handleChange(e);
+                        }}
+                        maxLength={10}
+                        placeholder="Enter mobile number"
+                        className="mt-1 h-11 rounded-lg"
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label>Email</Label>
-                    <Input
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Mobile</Label>
-                    <Input
-                      name="mobile"
-                      value={formData.mobile}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^\d]/g, "");
-                        e.target.value = value;
-                        handleChange(e);
-                      }}
-                      maxLength={10}
-                      placeholder="Enter mobile number"
-                    />
-                  </div>
-                </CardContent>
-
-                <CardFooter className="p-0 mt-6">
+                  {/* BUTTON */}
                   <Button
                     onClick={handleSubmit}
                     disabled={!isValid || loading}
-                    className="w-full bg-gradient-to-r from-navy to-teal text-white rounded-xl"
+                    className="w-full h-12 bg-gradient-to-r from-navy to-teal text-white rounded-xl shadow-md hover:shadow-lg transition"
                   >
                     {loading ? (
                       <>
@@ -441,7 +527,7 @@ const CardOfferPage = () => {
                       </>
                     )}
                   </Button>
-                </CardFooter>
+                </div>
               </div>
             </Card>
           </motion.div>

@@ -14,6 +14,7 @@ import {
   Home,
   Settings,
   CheckCircle,
+  ListChecks
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -74,6 +75,20 @@ function SidebarNavigation({
       >
         <FileText className="h-5 w-5" />
         Documents
+      </Link>
+
+      {/* Application Status */}
+      <Link
+        href="/portal/application-status"
+        className={cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+          pathname.startsWith("/portal/application-status")
+            ? "bg-navy text-white"
+            : "text-navy hover:bg-navy/5",
+        )}
+      >
+        <ListChecks className="h-5 w-5" />
+        Application Status
       </Link>
 
       {/* Application Review */}
@@ -432,7 +447,7 @@ export default function PortalLayout({
               <FileText className="h-5 w-5 text-navy" />
               <span className="font-medium text-navy">PassportSuvidha</span>
             </div>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <Link
                 href="/privacy-policy"
                 className="hover:text-navy transition-colors"
@@ -451,8 +466,8 @@ export default function PortalLayout({
               >
                 Contact
               </Link>
-            </div>
-            <div>© 2024 PassportSuvidha. All rights reserved.</div>
+            </div> */}
+            <div> © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.</div>
           </div>
         </div>
       </footer>

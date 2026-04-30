@@ -24,6 +24,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format, isValid, parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import axios from "axios";
+import axiosServer from "@/lib/axiosServer";
 
 interface RequiredDocument {
   id: number;
@@ -125,7 +127,7 @@ export default function AppointmentLetterPage() {
       // Fallback: return as is
       return timeString;
     }
-  };  
+  };
 
   // Fetch required documents on component mount
   useEffect(() => {
@@ -156,74 +158,55 @@ export default function AppointmentLetterPage() {
     const fetchAppointmentLetters = async () => {
       try {
         setLettersLoading(true);
-        const response = await fetch("/appointment-letters");
 
-        // Log the response for debugging
-        // console.log("API Response status:", response.status);
+        const token = localStorage.getItem("authToken");
 
-        // Handle non-OK responses
-        if (!response.ok) {
-          // Try to get the error message from the response
-          const errorData = await response.json().catch(() => ({}));
-          console.error("Error response:", errorData);
-          throw new Error(
-            errorData.message || "Failed to fetch appointment letters"
-          );
+        const response = await axiosServer.get("/appointment-letters", {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        });
+
+        // ✅ Axios already gives parsed JSON
+        const result = response.data;
+
+        let lettersArray: any[] = [];
+
+        // ✅ Handle different possible response formats safely
+        if (
+          result?.data?.appointment_letters &&
+          Array.isArray(result.data.appointment_letters)
+        ) {
+          lettersArray = result.data.appointment_letters;
+        } else if (Array.isArray(result?.data)) {
+          lettersArray = result.data;
+        } else if (Array.isArray(result)) {
+          lettersArray = result;
+        } else if (Array.isArray(result?.appointment_letters)) {
+          lettersArray = result.appointment_letters;
         }
 
-        const result = await response.json();
-        // console.log("API Response data:", result);
+        // ✅ Sort by latest date
+        const sortedLetters = lettersArray.sort((a, b) => {
+          const dateA = a?.created_at ? new Date(a.created_at).getTime() : 0;
+          const dateB = b?.created_at ? new Date(b.created_at).getTime() : 0;
+          return dateB - dateA;
+        });
 
-        // Check if the expected data structure exists
-        if (!result.data || !Array.isArray(result.data.appointment_letters)) {
-          console.error("Unexpected API response format:", result);
-
-          // Try to handle different response formats
-          let lettersArray = [];
-
-          if (Array.isArray(result.data)) {
-            lettersArray = result.data;
-          } else if (Array.isArray(result)) {
-            lettersArray = result;
-          } else if (
-            result.appointment_letters &&
-            Array.isArray(result.appointment_letters)
-          ) {
-            lettersArray = result.appointment_letters;
-          } else {
-            // If we can't find an array, use an empty one
-            lettersArray = [];
-          }
-
-          // Sort whatever we found
-          const sortedLetters = lettersArray.sort(
-            (a: { created_at: string }, b: { created_at: string }) => {
-              const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-              const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-              return dateB - dateA;
-            }
-          );
-          setAppointmentLetters(sortedLetters);
-        } else {
-          // Normal path - response format is as expected
-          const sortedLetters = result.data.appointment_letters.sort(
-            (a: { created_at: string }, b: { created_at: string }) => {
-              const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-              const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-              return dateB - dateA;
-            }
-          );
-          setAppointmentLetters(sortedLetters);
-        }
+        setAppointmentLetters(sortedLetters);
       } catch (error: any) {
         console.error("Error fetching appointment letters:", error);
+
         toast({
           title: "Error",
-          description: error.message || "Failed to fetch appointment letters",
+          description:
+            error?.response?.data?.message ||
+            error.message ||
+            "Failed to fetch appointment letters",
           variant: "destructive",
         });
-        // Initialize with empty array to avoid undefined errors
-        setAppointmentLetters([]);
+
+        setAppointmentLetters([]); // ✅ always safe fallback
       } finally {
         setLettersLoading(false);
       }
@@ -243,13 +226,13 @@ export default function AppointmentLetterPage() {
           headers: {
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(
-          errorData.message || "Failed to download appointment letter"
+          errorData.message || "Failed to download appointment letter",
         );
       }
 
@@ -344,7 +327,7 @@ export default function AppointmentLetterPage() {
                         <div>
                           <div className="flex items-center gap-1.5">
                             <p className="font-medium">
-                            Appointment: {formatDate(letter.appointment_date)}
+                              Appointment: {formatDate(letter.appointment_date)}
                             </p>
                             {index === 0 && (
                               <Badge

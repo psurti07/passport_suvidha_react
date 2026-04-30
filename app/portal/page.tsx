@@ -19,7 +19,7 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ApplicationProgress, ApplicationStage } from "@/app/types/application";
 import { handleApiAuthError } from "@/lib/clientAuthUtils";
 import axiosServer from "@/lib/axiosServer";
@@ -34,135 +34,156 @@ export default function PortalDashboard() {
   const [isChecking, setIsChecking] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const [data, setData] = useState<any>(null);
+  const [progressData, setProgressData] = useState([]);
 
-  // Stage helper functions
-  const findStage = (
-    title: string,
-    fallbackIndex: number,
-  ): ApplicationStage | null => {
-    if (!applicationProgress?.stages) return null;
+  useEffect(() => {
+    fetchProgress();
+  }, []);
 
-    // Convert the search title to snake_case for comparison
-    const searchTitle = title.toLowerCase().replace(/\s+/g, "_");
+  const fetchProgress = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
 
-    // Try to find stage by exact title match or converted title
-    const stage = applicationProgress.stages.find(
-      (s) => s?.title?.toLowerCase() === searchTitle,
-    );
+      const res = await axiosServer.get("/application-progress/status", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    // If found, return it
-    if (stage) return stage;
-
-    if (applicationProgress.stages[fallbackIndex - 1]) {
-      return applicationProgress.stages[fallbackIndex - 1];
+      if (res.data.status) {
+        setProgressData(res.data.data || []);
+      }
+    } catch (error) {
+      console.error(error);
     }
-
-    return null;
   };
 
-  const findStageStatus = (title: string, fallbackIndex: number): string => {
-    const stage = findStage(title, fallbackIndex);
+  const remarkMap = React.useMemo(() => {
+    const map: Record<string, any> = {};
+
+    progressData?.forEach((item: any) => {
+      if (item?.slug) {
+        map[item.slug] = item;
+      }
+    });
+
+    return map;
+  }, [progressData]);
+
+  const getRemarkBySlug = (slug: string) => {
+    return remarkMap?.[slug]?.remark || ""; // ✅ no fallback text
+  };
+
+  const renderRemark = (slug: string) => {
+    const item = remarkMap?.[slug];
+
+    if (!item?.remark && !item?.file_url) return null;
+
+    return (
+      <div className="text-gray-600 text-sm mt-1 flex items-center gap-2">
+        {/* Remark text */}
+        {item?.remark && (
+          <span>
+            {item.remark.length > 50 ? (
+              <>
+                {item.remark.substring(0, 50)}...
+                <a
+                  href="/portal/application-status"
+                  className="text-blue-600 ml-1"
+                >
+                  Read Remark
+                </a>
+              </>
+            ) : (
+              item.remark
+            )}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  // Stage helper functions
+
+  const findStage = (title: string): ApplicationStage | null => {
+    if (!applicationProgress?.stages) return null;
+
+    const searchTitle = title.toLowerCase();
+
+    return (
+      applicationProgress.stages.find(
+        (s) => s?.title?.toLowerCase() === searchTitle,
+      ) || null
+    );
+  };
+
+  const findStageStatus = (title: string): string => {
+    const stage = findStage(title);
 
     if (!stage) return "bg-gray-100 border-gray-50";
-
-    // Always show Application Submitted as completed
-    if (title.toLowerCase() === "application submitted") {
-      return "bg-green-100 border-green-50";
-    }
 
     if (stage.completed) {
       return "bg-green-100 border-green-50";
     }
 
-    // Check if this is the current stage (first incomplete stage)
-    const firstIncompleteIndex =
-      applicationProgress?.stages.findIndex((s) => !s.completed) ?? -1;
-    const currentStageTitle =
-      firstIncompleteIndex >= 0
-        ? applicationProgress?.stages[firstIncompleteIndex].title
-        : "";
+    const currentStage = applicationProgress?.stages.find((s) => !s.completed);
 
-    if (stage.title === currentStageTitle) {
+    if (stage.title === currentStage?.title) {
       return "bg-blue-100 border-blue-50";
     }
 
     return "bg-gray-100 border-gray-50";
   };
 
-  const isStageCompleted = (title: string, fallbackIndex: number): boolean => {
-    // Always show Application Submitted as completed
-    if (title.toLowerCase() === "application submitted") {
-      return true;
-    }
-
-    const stage = findStage(title, fallbackIndex);
-    return stage?.completed || false;
+  const isStageCompleted = (title: string): boolean => {
+    return findStage(title)?.completed || false;
   };
 
-  const isCurrentStage = (title: string, fallbackIndex: number): boolean => {
-    if (!applicationProgress?.stages) return false;
-
-    const firstIncompleteIndex = applicationProgress.stages.findIndex(
-      (s) => !s.completed,
-    );
-    if (firstIncompleteIndex === -1) return false;
-
-    const currentStage = applicationProgress.stages[firstIncompleteIndex];
-    const stage = findStage(title, fallbackIndex);
-
-    return stage?.title === currentStage.title;
+  const isCurrentStage = (title: string): boolean => {
+    const currentStage = applicationProgress?.stages.find((s) => !s.completed);
+    return currentStage?.title === title;
   };
 
-  const getStageTextClass = (title: string, fallbackIndex: number): string => {
-    if (
-      isStageCompleted(title, fallbackIndex) ||
-      isCurrentStage(title, fallbackIndex)
-    ) {
+  const getStageTextClass = (title: string): string => {
+    if (!applicationProgress?.stages) return "text-gray-600";
+
+    // completed OR current → normal text
+    if (isStageCompleted(title) || isCurrentStage(title)) {
       return "";
     }
+
+    // not reached yet → faded text
     return "text-gray-600";
   };
 
-  const getStageTextColorClass = (
-    title: string,
-    fallbackIndex: number,
-  ): string => {
-    if (isStageCompleted(title, fallbackIndex)) {
-      return "text-green-600";
-    }
-    if (isCurrentStage(title, fallbackIndex)) {
-      return "text-blue-600";
-    }
+  const getStageTextColorClass = (title: string): string => {
+    if (isStageCompleted(title)) return "text-green-600";
+    if (isCurrentStage(title)) return "text-blue-600";
     return "text-gray-400";
   };
 
-  const getStageDescription = (
-    title: string,
-    fallbackIndex: number,
-    defaultDesc: string,
-  ): string => {
-    const stage = findStage(title, fallbackIndex);
-    return stage?.description || defaultDesc;
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+
+    // Fix Laravel formats
+    let cleaned = dateString.replace(" ", "T");
+    cleaned = cleaned.split(".")[0];
+
+    const date = new Date(cleaned);
+
+    if (isNaN(date.getTime())) return "";
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
 
-  const getStageDate = (title: string, fallbackIndex: number): string => {
-    const stage = findStage(title, fallbackIndex);
-
-    // For Application Submitted, show the creation date
-    if (title.toLowerCase() === "application submitted") {
-      const date = applicationProgress?.created_at;
-      if (!date) return "";
-
-      // Format the date as "Month Day, Year"
-      const formattedDate = new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
-      return formattedDate;
-    }
-
-    return stage?.date || "";
+  const getStageDate = (title: string): string => {
+    const stage = findStage(title);
+    if (!stage?.date) return "";
+    return formatDate(stage.date);
   };
 
   // Animation variants
@@ -252,6 +273,65 @@ export default function PortalDashboard() {
     }
   };
 
+  const getProgressPercentage = () => {
+    // ✅ If no data → still show 10% (Application Submitted)
+    if (!applicationProgress?.stages?.length) return 10;
+
+    const stages = applicationProgress.stages;
+
+    // ✅ Case 1: success → 100%
+    const hasSuccess = stages.some((s) => s?.title === "pov_success");
+    if (hasSuccess) return 100;
+
+    // ✅ Case 2: final attempt reached
+    const finalStage = stages[10];
+    if (
+      finalStage &&
+      finalStage.date &&
+      ["pov_failed", "pov_insufficient_documents"].includes(finalStage.title)
+    ) {
+      return 100;
+    }
+
+    // ✅ Count completed stages
+    const completedCount = stages.filter((s) => s?.date).length;
+
+    // ✅ Always minimum 10%
+    const progressMap = [10, 30, 50, 70, 85, 95];
+
+    return progressMap[Math.min(completedCount, progressMap.length - 1)] || 10;
+  };
+
+  const getEstimatedCompletionDate = () => {
+    const estimated = applicationProgress?.estimated_completion;
+
+    // ❗ ignore invalid backend values
+    if (
+      estimated &&
+      estimated.toLowerCase() !== "unknown" &&
+      estimated.toLowerCase() !== "n/a"
+    ) {
+      return estimated;
+    }
+
+    // fallback → +8 days from created_at
+    const createdAt = applicationProgress?.created_at;
+
+    if (!createdAt) return "N/A";
+
+    const date = new Date(createdAt);
+    date.setDate(date.getDate() + 8);
+
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const estimatedDate = getEstimatedCompletionDate();
+  const progress = getProgressPercentage();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -323,6 +403,7 @@ export default function PortalDashboard() {
 
     fetchData();
   }, []);
+
   return (
     <motion.div
       variants={containerVariants}
@@ -479,38 +560,31 @@ export default function PortalDashboard() {
                 <h3 className="text-sm font-medium text-muted-foreground mb-2">
                   Application Progress
                 </h3>
+
                 <div className="relative pt-1">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
                     <div>
                       <span className="text-xs font-semibold inline-block text-navy">
-                        {loading
-                          ? "Loading..."
-                          : `${
-                              applicationProgress?.progress_percentage || 0
-                            }% Complete`}
+                        {loading ? "Loading..." : `${progress}% Complete`}
                       </span>
                     </div>
+
                     <div className="text-right">
                       <span className="text-xs font-semibold inline-block text-navy">
                         {loading
                           ? "Loading..."
-                          : `Estimated completion: ${
-                              applicationProgress?.estimated_completion || "N/A"
-                            }`}
+                          : `Estimated completion: ${estimatedDate}`}
                       </span>
                     </div>
                   </div>
+
                   <div className="overflow-hidden h-2 text-xs flex rounded-full bg-navy/10">
                     <motion.div
                       initial={{ width: 0 }}
-                      animate={{
-                        width: `${
-                          applicationProgress?.progress_percentage || 0
-                        }%`,
-                      }}
+                      animate={{ width: `${progress}%` }}
                       transition={{ duration: 1, delay: 0.5 }}
                       className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-navy to-teal"
-                    ></motion.div>
+                    />
                   </div>
                 </div>
               </div>
@@ -551,9 +625,9 @@ export default function PortalDashboard() {
                             {applicationProgress?.created_at
                               ? new Date(
                                   applicationProgress.created_at,
-                                ).toLocaleDateString("en-US", {
-                                  month: "long",
-                                  day: "numeric",
+                                ).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
                                   year: "numeric",
                                 })
                               : ""}
@@ -565,14 +639,11 @@ export default function PortalDashboard() {
                       <div className="flex gap-4">
                         <div className="relative z-10">
                           <div
-                            className={`rounded-full ${findStageStatus(
-                              "in_process",
-                              1,
-                            )} p-3 border-4`}
+                            className={`rounded-full ${findStageStatus("in_process")} p-3 border-4`}
                           >
-                            {isStageCompleted("in_process", 1) ? (
+                            {isStageCompleted("in_process") ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
-                            ) : isCurrentStage("in_process", 1) ? (
+                            ) : isCurrentStage("in_process") ? (
                               <Clock className="h-5 w-5 text-blue-600" />
                             ) : (
                               <Clock className="h-5 w-5 text-gray-400" />
@@ -581,23 +652,18 @@ export default function PortalDashboard() {
                         </div>
                         <div className="flex-1 pt-2">
                           <h4
-                            className={`font-medium text-base ${getStageTextClass(
-                              "in_process",
-                              1,
-                            )}`}
+                            className={`font-medium text-base ${getStageTextClass("in_process")}`}
                           >
                             In Process
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
                             Your application is currently being processed.
                           </p>
+                          {renderRemark("in_process")}
                           <p
-                            className={`text-sm mt-1 ${getStageTextColorClass(
-                              "in_process",
-                              1,
-                            )}`}
+                            className={`text-sm mt-1 ${getStageTextColorClass("in_process")}`}
                           >
-                            {getStageDate("in_process", 1) || "Pending"}
+                            {getStageDate("in_process") || "Pending"}
                           </p>
                         </div>
                       </div>
@@ -606,14 +672,11 @@ export default function PortalDashboard() {
                       <div className="flex gap-4">
                         <div className="relative z-10">
                           <div
-                            className={`rounded-full ${findStageStatus(
-                              "documents_submitted",
-                              2,
-                            )} p-3 border-4`}
+                            className={`rounded-full ${findStageStatus("documents_submitted")} p-3 border-4`}
                           >
-                            {isStageCompleted("documents_submitted", 2) ? (
+                            {isStageCompleted("documents_submitted") ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
-                            ) : isCurrentStage("documents_submitted", 2) ? (
+                            ) : isCurrentStage("documents_submitted") ? (
                               <Clock className="h-5 w-5 text-blue-600" />
                             ) : (
                               <Clock className="h-5 w-5 text-gray-400" />
@@ -624,7 +687,6 @@ export default function PortalDashboard() {
                           <h4
                             className={`font-medium text-base ${getStageTextClass(
                               "documents_submitted",
-                              2,
                             )}`}
                           >
                             Document Submitted
@@ -633,14 +695,11 @@ export default function PortalDashboard() {
                             Your documents have been successfully submitted for
                             verification.
                           </p>
+                          {renderRemark("documents_submitted")}
                           <p
-                            className={`text-sm mt-1 ${getStageTextColorClass(
-                              "documents_submitted",
-                              2,
-                            )}`}
+                            className={`text-sm mt-1 ${getStageTextColorClass("documents_submitted")}`}
                           >
-                            {getStageDate("documents_submitted", 2) ||
-                              "Pending"}
+                            {getStageDate("documents_submitted") || "Pending"}
                           </p>
                         </div>
                       </div>
@@ -649,14 +708,11 @@ export default function PortalDashboard() {
                       <div className="flex gap-4">
                         <div className="relative z-10">
                           <div
-                            className={`rounded-full ${findStageStatus(
-                              "details_verification",
-                              3,
-                            )} p-3 border-4`}
+                            className={`rounded-full ${findStageStatus("details_verification")} p-3 border-4`}
                           >
-                            {isStageCompleted("details_verification", 3) ? (
+                            {isStageCompleted("details_verification") ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
-                            ) : isCurrentStage("details_verification", 3) ? (
+                            ) : isCurrentStage("details_verification") ? (
                               <Clock className="h-5 w-5 text-blue-600" />
                             ) : (
                               <Clock className="h-5 w-5 text-gray-400" />
@@ -664,25 +720,51 @@ export default function PortalDashboard() {
                           </div>
                         </div>
                         <div className="flex-1 pt-2">
-                          <h4
-                            className={`font-medium text-base ${getStageTextClass(
-                              "details_verification",
-                              3,
-                            )}`}
+                          {/* <h4
+                            className={`font-medium text-base ${getStageTextClass("details_verification")}`}
                           >
                             Details verification
+                          </h4> */}
+                          <h4
+                            className={`font-medium text-base flex items-center gap-2 ${getStageTextClass(
+                              "details_verification",
+                            )}`}
+                          >
+                            Details Verification
+                            {remarkMap?.["details_verification"]?.file_url && (
+                              <a
+                                href={
+                                  remarkMap["details_verification"].file_url
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="View File"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                  />
+                                </svg>
+                              </a>
+                            )}
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
                             Your application details are being verified.
                           </p>
+                          {renderRemark("details_verification")}
                           <p
-                            className={`text-sm mt-1 ${getStageTextColorClass(
-                              "details_verification",
-                              3,
-                            )}`}
+                            className={`text-sm mt-1 ${getStageTextColorClass("details_verification")}`}
                           >
-                            {getStageDate("details_verification", 3) ||
-                              "Pending"}
+                            {getStageDate("details_verification") || "Pending"}
                           </p>
                         </div>
                       </div>
@@ -691,14 +773,11 @@ export default function PortalDashboard() {
                       <div className="flex gap-4">
                         <div className="relative z-10">
                           <div
-                            className={`rounded-full ${findStageStatus(
-                              "appointment_scheduled",
-                              4,
-                            )} p-3 border-4`}
+                            className={`rounded-full ${findStageStatus("appointment_scheduled")} p-3 border-4`}
                           >
-                            {isStageCompleted("appointment_scheduled", 4) ? (
+                            {isStageCompleted("appointment_scheduled") ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
-                            ) : isCurrentStage("appointment_scheduled", 4) ? (
+                            ) : isCurrentStage("appointment_scheduled") ? (
                               <Clock className="h-5 w-5 text-blue-600" />
                             ) : (
                               <Clock className="h-5 w-5 text-gray-400" />
@@ -707,25 +786,46 @@ export default function PortalDashboard() {
                         </div>
                         <div className="flex-1 pt-2">
                           <h4
-                            className={`font-medium text-base ${getStageTextClass(
+                            className={`font-medium text-base flex items-center gap-2 ${getStageTextClass(
                               "appointment_scheduled",
-                              4,
                             )}`}
                           >
-                            Appointment scheduled
+                            Appointment Scheduled
+                            {remarkMap?.["appointment_scheduled"]?.file_url && (
+                              <a
+                                href={
+                                  remarkMap["appointment_scheduled"].file_url
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="View File"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                  />
+                                </svg>
+                              </a>
+                            )}
                           </h4>
                           <p className="text-gray-600 text-sm mt-1">
                             Your appointment has been scheduled for document
                             verification and biometric data collection.
                           </p>
+                          {renderRemark("appointment_scheduled")}
                           <p
-                            className={`text-sm mt-1 ${getStageTextColorClass(
-                              "appointment_scheduled",
-                              4,
-                            )}`}
+                            className={`text-sm mt-1 ${getStageTextColorClass("appointment_scheduled")}`}
                           >
-                            {getStageDate("appointment_scheduled", 4) ||
-                              "Pending"}
+                            {getStageDate("appointment_scheduled") || "Pending"}
                           </p>
                         </div>
                       </div>
@@ -781,7 +881,9 @@ export default function PortalDashboard() {
                           </div>
                         </div>
                         <div className="flex-1 pt-2">
-                          <h4 className="font-medium text-base">
+                          <h4
+                            className={`font-medium text-base ${getStageTextClass("appointment_scheduled")}`}
+                          >
                             {(() => {
                               const stage = applicationProgress?.stages?.[4];
                               if (!stage) return "Passport Office Visit";
@@ -839,8 +941,29 @@ export default function PortalDashboard() {
                                 <p className="text-gray-600 text-sm mt-1">
                                   {message}
                                 </p>
+                                {(() => {
+                                  let slug = "";
+
+                                  switch (stage.title) {
+                                    case "pov_success":
+                                      slug = "pov_success";
+                                      break;
+                                    case "pov_failed":
+                                      slug = "pov_failed";
+                                      break;
+                                    case "pov_insufficient_documents":
+                                      slug = "pov_insufficient_documents";
+                                      break;
+                                    default:
+                                      slug = "pov";
+                                  }
+
+                                  return renderRemark(slug);
+                                })()}
+
+                                {/* ✅ Existing date */}
                                 <p className={`text-sm mt-1 ${colorClass}`}>
-                                  {stage.date || "Pending"}
+                                  {getStageDate(stage.title) || "Pending"}
                                 </p>
                               </>
                             );
@@ -887,13 +1010,48 @@ export default function PortalDashboard() {
                                   </div>
                                 </div>
                                 <div className="flex-1 pt-2">
-                                  <h4 className="font-medium text-base">
+                                  <h4
+                                    className={`font-medium text-base ${getStageTextClass("appointment_rescheduled1")}`}
+                                  ></h4>
+                                  <h4
+                                    className={`font-medium text-base flex items-center gap-2 ${getStageTextClass(
+                                      "appointment_rescheduled1",
+                                    )}`}
+                                  >
                                     Appointment Rescheduled 1
+                                    {remarkMap?.["appointment_rescheduled1"]
+                                      ?.file_url && (
+                                      <a
+                                        href={
+                                          remarkMap["appointment_rescheduled1"]
+                                            .file_url
+                                        }
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="View File"
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                          strokeWidth={2}
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                          />
+                                        </svg>
+                                      </a>
+                                    )}
                                   </h4>
                                   <p className="text-gray-600 text-sm mt-1">
                                     Your appointment has been rescheduled for
                                     another passport office visit.
                                   </p>
+                                  {renderRemark("appointment_rescheduled1")}
                                   <p
                                     className={`text-sm mt-1 ${(() => {
                                       const stage =
@@ -903,7 +1061,7 @@ export default function PortalDashboard() {
                                         : "text-blue-600";
                                     })()}`}
                                   >
-                                    {applicationProgress?.stages?.[5]?.date ||
+                                    {getStageDate("appointment_rescheduled1") ||
                                       "Pending"}
                                   </p>
                                 </div>
@@ -965,7 +1123,9 @@ export default function PortalDashboard() {
                                   </div>
                                 </div>
                                 <div className="flex-1 pt-2">
-                                  <h4 className="font-medium text-base">
+                                  <h4
+                                    className={`font-medium text-base ${getStageTextClass("appointment_scheduled")}`}
+                                  >
                                     {(() => {
                                       const stage =
                                         applicationProgress?.stages?.[6];
@@ -1025,10 +1185,34 @@ export default function PortalDashboard() {
                                         <p className="text-gray-600 text-sm mt-1">
                                           {message}
                                         </p>
+
+                                        {(() => {
+                                          let slug = "";
+
+                                          switch (stage.title) {
+                                            case "pov_success":
+                                              slug = "pov_success";
+                                              break;
+                                            case "pov_failed":
+                                              slug = "pov_failed";
+                                              break;
+                                            case "pov_insufficient_documents":
+                                              slug =
+                                                "pov_insufficient_documents";
+                                              break;
+                                            default:
+                                              slug = "pov";
+                                          }
+
+                                          return renderRemark(slug);
+                                        })()}
+
+                                        {/* ✅ Existing date */}
                                         <p
                                           className={`text-sm mt-1 ${colorClass}`}
                                         >
-                                          {stage.date || "Pending"}
+                                          {getStageDate(stage.title) ||
+                                            "Pending"}
                                         </p>
                                       </>
                                     );
@@ -1079,14 +1263,50 @@ export default function PortalDashboard() {
                                           </div>
                                         </div>
                                         <div className="flex-1 pt-2">
-                                          <h4 className="font-medium text-base">
+                                          <h4
+                                            className={`font-medium text-base flex items-center gap-2 ${getStageTextClass(
+                                              "appointment_rescheduled2",
+                                            )}`}
+                                          >
                                             Appointment Rescheduled 2
+                                            {remarkMap?.[
+                                              "appointment_rescheduled2"
+                                            ]?.file_url && (
+                                              <a
+                                                href={
+                                                  remarkMap[
+                                                    "appointment_rescheduled2"
+                                                  ].file_url
+                                                }
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                title="View File"
+                                              >
+                                                <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                                  fill="none"
+                                                  viewBox="0 0 24 24"
+                                                  stroke="currentColor"
+                                                  strokeWidth={2}
+                                                >
+                                                  <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                                  />
+                                                </svg>
+                                              </a>
+                                            )}
                                           </h4>
                                           <p className="text-gray-600 text-sm mt-1">
                                             Your appointment has been
                                             rescheduled for another passport
                                             office visit.
                                           </p>
+                                          {renderRemark(
+                                            "appointment_rescheduled2",
+                                          )}
                                           <p
                                             className={`text-sm mt-1 ${(() => {
                                               const stage =
@@ -1096,9 +1316,13 @@ export default function PortalDashboard() {
                                                 ? "text-green-600"
                                                 : "text-blue-600";
                                             })()}`}
+                                          ></p>
+                                          <p
+                                            className={`text-sm mt-1 ${getStageTextColorClass("appointment_rescheduled2")}`}
                                           >
-                                            {applicationProgress?.stages?.[7]
-                                              ?.date || "Pending"}
+                                            {getStageDate(
+                                              "appointment_rescheduled2",
+                                            ) || "Pending"}
                                           </p>
                                         </div>
                                       </div>
@@ -1169,7 +1393,9 @@ export default function PortalDashboard() {
                                           </div>
                                         </div>
                                         <div className="flex-1 pt-2">
-                                          <h4 className="font-medium text-base">
+                                          <h4
+                                            className={`font-medium text-base ${getStageTextClass("appointment_scheduled")}`}
+                                          >
                                             {(() => {
                                               const stage =
                                                 applicationProgress
@@ -1231,10 +1457,34 @@ export default function PortalDashboard() {
                                                 <p className="text-gray-600 text-sm mt-1">
                                                   {message}
                                                 </p>
+
+                                                {(() => {
+                                                  let slug = "";
+
+                                                  switch (stage.title) {
+                                                    case "pov_success":
+                                                      slug = "pov_success";
+                                                      break;
+                                                    case "pov_failed":
+                                                      slug = "pov_failed";
+                                                      break;
+                                                    case "pov_insufficient_documents":
+                                                      slug =
+                                                        "pov_insufficient_documents";
+                                                      break;
+                                                    default:
+                                                      slug = "pov";
+                                                  }
+
+                                                  return renderRemark(slug);
+                                                })()}
+
+                                                {/* ✅ Existing date */}
                                                 <p
                                                   className={`text-sm mt-1 ${colorClass}`}
                                                 >
-                                                  {stage.date || "Pending"}
+                                                  {getStageDate(stage.title) ||
+                                                    "Pending"}
                                                 </p>
                                               </>
                                             );
@@ -1286,14 +1536,50 @@ export default function PortalDashboard() {
                                                   </div>
                                                 </div>
                                                 <div className="flex-1 pt-2">
-                                                  <h4 className="font-medium text-base">
+                                                  <h4
+                                                    className={`font-medium text-base flex items-center gap-2 ${getStageTextClass(
+                                                      "appointment_rescheduled3",
+                                                    )}`}
+                                                  >
                                                     Appointment Rescheduled 3
+                                                    {remarkMap?.[
+                                                      "appointment_rescheduled3"
+                                                    ]?.file_url && (
+                                                      <a
+                                                        href={
+                                                          remarkMap[
+                                                            "appointment_rescheduled3"
+                                                          ].file_url
+                                                        }
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        title="View File"
+                                                      >
+                                                        <svg
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                          className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                                          fill="none"
+                                                          viewBox="0 0 24 24"
+                                                          stroke="currentColor"
+                                                          strokeWidth={2}
+                                                        >
+                                                          <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                                          />
+                                                        </svg>
+                                                      </a>
+                                                    )}
                                                   </h4>
                                                   <p className="text-gray-600 text-sm mt-1">
                                                     Your appointment has been
                                                     rescheduled for a final
                                                     passport office visit.
                                                   </p>
+                                                  {renderRemark(
+                                                    "appointment_rescheduled3",
+                                                  )}
                                                   <p
                                                     className={`text-sm mt-1 ${(() => {
                                                       const stage =
@@ -1304,9 +1590,9 @@ export default function PortalDashboard() {
                                                         : "text-blue-600";
                                                     })()}`}
                                                   >
-                                                    {applicationProgress
-                                                      ?.stages?.[9]?.date ||
-                                                      "Pending"}
+                                                    {getStageDate(
+                                                      "appointment_rescheduled3",
+                                                    ) || "Pending"}
                                                   </p>
                                                 </div>
                                               </div>
@@ -1381,7 +1667,9 @@ export default function PortalDashboard() {
                                                   </div>
                                                 </div>
                                                 <div className="flex-1 pt-2">
-                                                  <h4 className="font-medium text-base">
+                                                  <h4
+                                                    className={`font-medium text-base ${getStageTextClass("appointment_scheduled")}`}
+                                                  >
                                                     {(() => {
                                                       const stage =
                                                         applicationProgress
@@ -1453,8 +1741,9 @@ export default function PortalDashboard() {
                                                         <p
                                                           className={`text-sm mt-1 ${colorClass}`}
                                                         >
-                                                          {stage.date ||
-                                                            "Pending"}
+                                                          {getStageDate(
+                                                            stage.title,
+                                                          ) || "Pending"}
                                                         </p>
                                                       </>
                                                     );

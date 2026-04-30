@@ -12,7 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Phone, ArrowLeft, Shield, Lock, CheckCircle } from "lucide-react";
+import {
+  Phone,
+  ArrowLeft,
+  Shield,
+  Lock,
+  CheckCircle,
+  KeyRoundIcon,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,6 +43,7 @@ export default function SignIn() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(30);
+  const [otpDigits, setOtpDigits] = useState(["", "", "", ""]);
 
   const {
     register,
@@ -43,6 +51,7 @@ export default function SignIn() {
     formState: { errors },
     watch,
     setFocus,
+    setValue,
   } = useForm<SignInFormData>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -89,6 +98,14 @@ export default function SignIn() {
       setFocus("otp");
     }
   }, [isOtpSent, setFocus]);
+
+  useEffect(() => {
+    if (isOtpSent) {
+      setTimeout(() => {
+        document.getElementsByName("otp-0")[0]?.focus();
+      }, 100);
+    }
+  }, [isOtpSent]);
 
   const onSendOtp = async (mobile: string) => {
     try {
@@ -180,15 +197,18 @@ export default function SignIn() {
         );
       }
 
+      // ✅ USE TOKEN FROM RESPONSE (IMPORTANT)
+      if (responseData.token) {
+        const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
+
+        localStorage.setItem("authToken", responseData.token);
+        localStorage.setItem("authTokenExpiry", expiry.toString());
+      }
 
       if (responseData.customer) {
         localStorage.setItem("user", JSON.stringify(responseData.customer));
       }
-      if (responseData.token) {
-        localStorage.setItem("authToken", responseData.token);
-      }
 
-      // document.cookie = `authToken=${responseData.token}; path=/`;
       toast.success(responseData.message || "Signed in successfully!");
 
       router.replace("/portal");
@@ -198,6 +218,61 @@ export default function SignIn() {
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleOTPChange = (index: number, value: string) => {
+    if (!/^[0-9]?$/.test(value)) return;
+
+    const newOtp = [...otpDigits];
+    newOtp[index] = value;
+    setOtpDigits(newOtp);
+
+    const otpValue = newOtp.join("");
+    setValue("otp", otpValue);
+
+    // Move forward
+    if (value && index < 3) {
+      document.getElementsByName(`otp-${index + 1}`)[0]?.focus();
+    }
+
+    if (otpValue.length === 4 && !newOtp.includes("")) {
+      handleSubmit(onSubmit)();
+    }
+  };
+
+  const handleOTPKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Backspace") {
+      if (otpDigits[index]) {
+        const newOtp = [...otpDigits];
+        newOtp[index] = "";
+        setOtpDigits(newOtp);
+        setValue("otp", newOtp.join(""));
+      } else if (index > 0) {
+        document.getElementsByName(`otp-${index - 1}`)[0]?.focus();
+      }
+    }
+  };
+
+  const handleOTPPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData("text").slice(0, 4);
+
+    if (!/^[0-9]+$/.test(pasteData)) return;
+
+    const newOtp = pasteData.split("");
+    setOtpDigits(newOtp);
+
+    const otpValue = newOtp.join("");
+    setValue("otp", otpValue);
+
+    // focus last
+    document.getElementsByName(`otp-${newOtp.length - 1}`)[0]?.focus();
+
+    if (otpValue.length === 4) {
+      handleSubmit(onSubmit)();
     }
   };
 
@@ -328,7 +403,11 @@ export default function SignIn() {
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <label htmlFor="otp" className="text-sm font-medium">
+                          <label
+                            htmlFor="otp"
+                            className="text-sm font-medium flex items-center gap-2"
+                          >
+                            <KeyRoundIcon className="h-4 w-4 text-muted-foreground" />
                             Enter OTP
                           </label>
                           <button
@@ -339,7 +418,27 @@ export default function SignIn() {
                             Change Number
                           </button>
                         </div>
-                        <Input
+                        <div className="flex justify-center gap-4 mt-2">
+                          {otpDigits.map((digit, index) => (
+                            <Input
+                              key={index}
+                              name={`otp-${index}`}
+                              value={digit}
+                              onChange={(e) =>
+                                handleOTPChange(index, e.target.value)
+                              }
+                              onKeyDown={(e) => handleOTPKeyDown(index, e)}
+                              onPaste={handleOTPPaste}
+                              maxLength={1}
+                              inputMode="numeric"
+                              autoComplete="one-time-code"
+                              className={`modern-input w-10 h-10 text-center text-xl font-semibold ${
+                                errors.otp ? "border-red-500" : ""
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {/* <Input
                           {...register("otp", {
                             required: "OTP is required",
                             pattern: {
@@ -385,7 +484,7 @@ export default function SignIn() {
                               e.preventDefault();
                             }
                           }}
-                        />
+                        /> */}
                         {errors.otp && (
                           <p className="text-red-500 text-sm mt-1">
                             {errors.otp.message}
@@ -484,7 +583,8 @@ export default function SignIn() {
               </Link>
             </div> */}
             <div>
-              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
+              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All
+              rights reserved.
             </div>
           </div>
         </div>

@@ -62,7 +62,7 @@ export default function ApplyPassport() {
               </Link>
             </div>
             <div>
-              © {new Date().getFullYear()} PassportSuvidha. All rights reserved.
+              © {new Date().getFullYear()}  BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
             </div>
           </div>
         </div>

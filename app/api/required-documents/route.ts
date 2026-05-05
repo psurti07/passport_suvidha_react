@@ -26,26 +26,41 @@ export async function GET(request: NextRequest) {
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            Accept: "application/json",
+            // Accept: "application/json",
           },
           responseType: "arraybuffer", //  FIXED
         },
       );
 
-      // Get filename from Content-Disposition header or generate one
+      const contentType =
+        response.headers["content-type"] || "application/octet-stream";
       const contentDisposition = response.headers["content-disposition"];
-      const filename = contentDisposition
-        ? contentDisposition.split("filename=")[1].replace(/"/g, "")
-        : `document-${documentTypeId}.pdf`;
+      let filename = `document-${documentTypeId}`;
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+?)"?$/);
+        if (match) filename = match[1];
+      }
+      // Get filename from Content-Disposition header or generate one
+      // const contentDisposition = response.headers["content-disposition"];
+      // const filename = contentDisposition
+      //   ? contentDisposition.split("filename=")[1].replace(/"/g, "")
+      //   : `document-${documentTypeId}.pdf`;
 
       // Create response with file
+      
       return new NextResponse(response.data, {
         headers: {
+          "Content-Type": contentType,
           "Content-Disposition": `attachment; filename="${filename}"`,
-          "Content-Type":
-            response.headers["content-type"] || "application/octet-stream",
         },
       });
+      // return new NextResponse(response.data, {
+      //   headers: {
+      //     "Content-Disposition": `attachment; filename="${filename}"`,
+      //     "Content-Type":
+      //       response.headers["content-type"] || "application/octet-stream",
+      //   },
+      // });
     }
 
     // Handle list documents request

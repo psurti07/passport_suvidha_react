@@ -340,7 +340,7 @@ export default function Contact() {
                           type="submit"
                           className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
                           disabled={
-                            !termsAccepted || !marketingConsent || isSubmitting
+                            !termsAccepted || !marketingConsent || isSubmitting || !firstName || !lastName || !email || !message
                           }
                         >
                           {isSubmitting ? (

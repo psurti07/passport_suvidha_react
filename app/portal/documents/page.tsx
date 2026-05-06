@@ -79,23 +79,26 @@ export default function DocumentsPage() {
   const fetchDocuments = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/required-documents');
+      const response = await fetch("/api/required-documents");
       const data = await response.json();
-      
-      if (data.status === 'success') {
+
+      if (data.status === "success") {
         setDocuments(data.data.documents);
       } else {
-        toast.error(data.message || 'Failed to fetch documents');
+        toast.error(data.message || "Failed to fetch documents");
       }
     } catch (error) {
-      toast.error('Failed to fetch documents');
+      toast.error("Failed to fetch documents");
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, docId: number) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    docId: number,
+  ) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       setSelectedDocId(docId);
@@ -110,25 +113,45 @@ export default function DocumentsPage() {
 
     try {
       setIsLoading(true);
-      const formData = new FormData();
-      formData.append('document', selectedFile);
 
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}`, {
-        method: 'POST',
-        body: formData
-      });
+      const formData = new FormData();
+      formData.append("document", selectedFile);
+
+      const token = localStorage.getItem("authToken");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/required-documents/upload/${docId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: formData,
+        },
+      );
 
       const data = await response.json();
 
-      if (data.status === 'success') {
+      if (response.ok && data.status === "success") {
         toast.success("Document uploaded successfully!");
-        fetchDocuments(); // Refresh the documents list
+        fetchDocuments();
       } else {
-        toast.error(data.message || 'Failed to upload document');
+        toast.error(data.message || "Upload failed");
       }
-    } catch (error) {
-      toast.error("Failed to upload document");
+    } catch (error: any) {
       console.error(error);
+
+      if (
+        error.message?.includes("timeout") ||
+        error.message?.includes("Network Error")
+      ) {
+        toast.success("Upload processing... please wait");
+        setTimeout(fetchDocuments, 5000);
+        return;
+      }
+
+      toast.error("Failed to upload document");
     } finally {
       setIsLoading(false);
       setSelectedFile(null);
@@ -139,17 +162,20 @@ export default function DocumentsPage() {
   const handleDelete = async (docId: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `/api/required-documents?document_type_id=${docId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       const data = await response.json();
 
-      if (data.status === 'success') {
+      if (data.status === "success") {
         toast.success("Document deleted successfully!");
         fetchDocuments(); // Refresh the documents list
       } else {
-        toast.error(data.message || 'Failed to delete document');
+        toast.error(data.message || "Failed to delete document");
       }
     } catch (error) {
       toast.error("Failed to delete document");
@@ -162,25 +188,27 @@ export default function DocumentsPage() {
   const handleDownload = async (docId: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/required-documents?document_type_id=${docId}&download=true`);
-      
+      const response = await fetch(
+        `/api/required-documents?document_type_id=${docId}&download=true`,
+      );
+
       if (!response.ok) {
-        throw new Error('Download failed');
+        throw new Error("Download failed");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       const contentDisposition = response.headers.get("content-disposition");
- 
+
       let filename = `document-${docId}`;
- 
+
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="?(.+?)"?$/);
         if (match) filename = match[1];
       }
- 
+
       a.download = filename;
       // a.download = `document-${docId}.pdf`; // Default filename
       document.body.appendChild(a);
@@ -207,7 +235,9 @@ export default function DocumentsPage() {
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-navy">Documents</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-navy">
+            Documents
+          </h1>
           <p className="text-muted-foreground">
             Upload and manage your required documents for passport application
           </p>
@@ -219,7 +249,8 @@ export default function DocumentsPage() {
           <CardHeader className="bg-navy/5">
             <CardTitle>Required Documents</CardTitle>
             <CardDescription>
-              Please upload all the required documents in PDF, JPG, or PNG format
+              Please upload all the required documents in PDF, JPG, or PNG
+              format
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
@@ -258,7 +289,9 @@ export default function DocumentsPage() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {doc.file_details?.upload_date ? formatDate(doc.file_details.upload_date) : "-"}
+                      {doc.file_details?.upload_date
+                        ? formatDate(doc.file_details.upload_date)
+                        : "-"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -296,7 +329,11 @@ export default function DocumentsPage() {
                               size="sm"
                               onClick={() => handleUpload(doc.id)}
                               className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90"
-                              disabled={isLoading || !selectedFile || selectedDocId !== doc.id}
+                              disabled={
+                                isLoading ||
+                                !selectedFile ||
+                                selectedDocId !== doc.id
+                              }
                             >
                               <Upload className="h-4 w-4" />
                             </Button>
@@ -313,4 +350,4 @@ export default function DocumentsPage() {
       </motion.div>
     </motion.div>
   );
-} 
+}

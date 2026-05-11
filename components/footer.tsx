@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="w-full py-8 md:py-12 bg-navy text-white relative overflow-hidden">
       <div className="container px-4 md:px-6 relative">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
           <div className="space-y-4">
             <Link
               href="/"
@@ -28,7 +28,7 @@ export function Footer() {
               Passport services for Indian citizens. Fast, secure, and efficient
               passport processing throughout India.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-2 md:space-x-4">
               <a
                 href="https://www.facebook.com/profile.php?id=61576865822872"
                 target="_blank"
@@ -193,7 +193,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/status"
+                  href="/check-application-status"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
                   Check Status

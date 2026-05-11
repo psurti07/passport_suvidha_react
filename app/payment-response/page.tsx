@@ -25,7 +25,7 @@ export default function PaymentResponsePage() {
         {/* Glow Effect */}
         <div className="absolute -inset-1 bg-gradient-to-r from-green-200/40 to-blue-200/40 blur-2xl opacity-50"></div>
 
-        <CardHeader className="text-center pb-2 relative z-10">
+        <CardHeader className="text-center relative z-10">
           {/* ICON */}
           <div
             className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full ${
@@ -50,35 +50,45 @@ export default function PaymentResponsePage() {
 
           {/* DESCRIPTION */}
           <CardDescription className="text-gray-500 mt-2">
-            {isSuccess
-              ? "Your passport application has been successfully submitted."
-              : "Your payment was unsuccessful. Please try again."}
+            <p className="text-sm text-gray-600">
+              {isSuccess
+                ? "Your passport application has been successfully submitted."
+                : "Your payment was unsuccessful. Please try again."}
+            </p>
           </CardDescription>
         </CardHeader>
 
         <CardContent className="text-center space-y-4 relative z-10">
-          {/* EXTRA TEXT */}
-          {isSuccess ? (
-            <p className="text-sm text-gray-600">
-              Our team will contact you shortly. Please check your email for
-              further instructions.
-            </p>
-          ) : (
-            <p className="text-sm text-gray-600">
-              If the amount was deducted, it will be refunded automatically
-              within 5-7 working days.
-            </p>
-          )}
+          <CardDescription className="text-gray-500">
+            {/* EXTRA TEXT */}
+            {isSuccess ? (
+              <p className="text-sm text-gray-600">
+                Our team will contact you shortly. Please check your email for
+                further instructions.
+              </p>
+            ) : (
+              <p className="text-sm text-gray-600">
+                If the amount was deducted, it will be refunded automatically
+                within 5-7 working days.
+              </p>
+            )}
+          </CardDescription>
 
           {/* BUTTONS */}
           <div className="flex justify-between mt-auto gap-2">
             <Link href="/signin" className="w-full rounded-xl">
-              <Button variant="outline" className="w-full rounded-xl modern-button">
+              <Button
+                variant="outline"
+                className="w-full rounded-xl modern-button"
+              >
                 Login Now
               </Button>
             </Link>
             <Link href="/" className="w-full rounded-xl">
-               <Button variant="outline" className="w-full rounded-xl modern-button">
+              <Button
+                variant="outline"
+                className="w-full rounded-xl modern-button"
+              >
                 Go to Home
               </Button>
             </Link>

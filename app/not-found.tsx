@@ -52,7 +52,7 @@ export default function NotFound() {
                   </div>
                 </Link>
 
-                <Link href="/status" className="group">
+                <Link href="/check-application-status" className="group">
                   <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">
                     <div className="bg-blue-100 p-2 rounded-full mr-3 group-hover:bg-blue-200 transition-all">
                       <FileQuestion className="h-5 w-5 text-blue-700" />

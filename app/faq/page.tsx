@@ -1,9 +1,29 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { FileText, Search, HelpCircle, Clock, CreditCard, User, Globe, Mail } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  FileText,
+  Search,
+  HelpCircle,
+  Clock,
+  CreditCard,
+  User,
+  Globe,
+  Mail,
+} from "lucide-react";
 
 export default function FAQ() {
   return (
@@ -95,17 +115,23 @@ export default function FAQ() {
                     </a> */}
                   </nav>
                   <div className="rounded-xl bg-navy/5 p-4 mt-6">
-                    <h4 className="font-medium text-navy mb-2">Need more help?</h4>
+                    <h4 className="font-medium text-navy mb-2">
+                      Need more help?
+                    </h4>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Can't find the answer you're looking for? Contact our support team.
+                      Can't find the answer you're looking for? Contact our
+                      support team.
                     </p>
                     <Button
                       className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
                       asChild
                     >
-                      <Link href="/contact">
-                        <Mail className="mr-2 h-4 w-4" />
-                        Contact Support
+                      <Link
+                        href="/contact"
+                        className="flex items-center justify-center gap-2 px-3 py-2 text-sm md:text-xs text-center whitespace-normal break-words"
+                      >
+                        <Mail className="h-4 w-4 md:h-3 md:w-3 shrink-0" />
+                        <span>Contact Support</span>
                       </Link>
                     </Button>
                   </div>
@@ -121,62 +147,91 @@ export default function FAQ() {
                   <Card className="rounded-xl border-0 shadow-lg overflow-hidden">
                     <CardContent className="p-6">
                       <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="item-1" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-1"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             How long is my passport valid?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              For adults (18 and older), passports are valid for 10 years from the date of issue. For
-                              minors under 18, passports are valid for 5 years from the date of issue.
+                              For adults (18 and older), passports are valid for
+                              10 years from the date of issue. For minors under
+                              18, passports are valid for 5 years from the date
+                              of issue.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
-                            What's the difference between normal and Tatkal passport?
+                        <AccordionItem
+                          value="item-2"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
+                            What's the difference between normal and Tatkal
+                            passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p className="mb-2">
-                              <strong>Normal Passport:</strong> Standard processing time of around 30-45 days. This is the regular passport application process.
+                              <strong>Normal Passport:</strong> Standard
+                              processing time of around 30-45 days. This is the
+                              regular passport application process.
                             </p>
                             <p>
-                              <strong>Tatkal Passport:</strong> Expedited processing within 1-3 working days for urgent requirements. Additional documentation and higher fees apply.
+                              <strong>Tatkal Passport:</strong> Expedited
+                              processing within 1-3 working days for urgent
+                              requirements. Additional documentation and higher
+                              fees apply.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-3" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-3"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             What documents do I need for a first-time passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              For a first-time passport, you'll need proof of identity (Aadhaar/PAN/Voter ID), proof of address, 
-                              proof of date of birth (Birth Certificate/Aadhaar), recent passport size photographs, and the completed 
-                              application form. Additional documents may be required based on your category.
+                              For a first-time passport, you'll need proof of
+                              identity (Aadhaar/PAN/Voter ID), proof of address,
+                              proof of date of birth (Birth
+                              Certificate/Aadhaar), recent passport size
+                              photographs, and the completed application form.
+                              Additional documents may be required based on your
+                              category.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-4" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-4"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             Do I need a passport for domestic travel in India?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              No, passports are not required for domestic travel within India. You can use other valid government-issued 
-                              ID proofs like Aadhaar Card, Voter ID, or Driving License for domestic flights.
+                              No, passports are not required for domestic travel
+                              within India. You can use other valid
+                              government-issued ID proofs like Aadhaar Card,
+                              Voter ID, or Driving License for domestic flights.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-5">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             What should I do if my passport is lost or stolen?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              File an FIR at your local police station immediately. Then apply for a re-issue of passport with 
-                              the FIR copy, affidavit explaining loss/theft, and other required documents. You may need to visit 
-                              the Passport Seva Kendra for police verification.
+                              File an FIR at your local police station
+                              immediately. Then apply for a re-issue of passport
+                              with the FIR copy, affidavit explaining
+                              loss/theft, and other required documents. You may
+                              need to visit the Passport Seva Kendra for police
+                              verification.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
@@ -193,66 +248,91 @@ export default function FAQ() {
                   <Card className="rounded-xl border-0 shadow-lg overflow-hidden">
                     <CardContent className="p-6">
                       <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="item-1" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-1"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             Can I renew my passport online?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              Yes, you can renew your passport online if you meet certain eligibility requirements. Your
-                              most recent passport must be in your possession, undamaged, issued when you were 16 or
-                              older, issued within the last 15 years, and issued in your current name (or you can
-                              document your name change).
+                              Yes, you can renew your passport online if you
+                              meet certain eligibility requirements. Your most
+                              recent passport must be in your possession,
+                              undamaged, issued when you were 16 or older,
+                              issued within the last 15 years, and issued in
+                              your current name (or you can document your name
+                              change).
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-2"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             What documents do I need for a first-time passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              For a first-time passport, you'll need to submit Form DS-11, proof of U.S. citizenship
-                              (such as a birth certificate), a government-issued photo ID, a photocopy of your ID, one
-                              passport photo, and the application fee. You must apply in person at a passport acceptance
-                              facility.
+                              For a first-time passport, you'll need to submit
+                              Form DS-11, proof of U.S. citizenship (such as a
+                              birth certificate), a government-issued photo ID,
+                              a photocopy of your ID, one passport photo, and
+                              the application fee. You must apply in person at a
+                              passport acceptance facility.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-3" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-3"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             How do I change my name on my passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              If your passport was issued less than a year ago, you can request a name change at no
-                              additional cost. If it's been more than a year, you'll need to follow the renewal process
-                              and pay the applicable fees. In both cases, you'll need to provide documentation of your
-                              name change, such as a marriage certificate or court order.
+                              If your passport was issued less than a year ago,
+                              you can request a name change at no additional
+                              cost. If it's been more than a year, you'll need
+                              to follow the renewal process and pay the
+                              applicable fees. In both cases, you'll need to
+                              provide documentation of your name change, such as
+                              a marriage certificate or court order.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-4" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-4"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             Where can I apply for a passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              You can apply for a passport at passport acceptance facilities, which include many post
-                              offices, libraries, county clerk offices, and other government offices. For expedited
-                              service in urgent situations, you can make an appointment at a passport agency.
+                              You can apply for a passport at passport
+                              acceptance facilities, which include many post
+                              offices, libraries, county clerk offices, and
+                              other government offices. For expedited service in
+                              urgent situations, you can make an appointment at
+                              a passport agency.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-5">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             Can I track my passport application status?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              Yes, you can check your application status online at the Department of State website or by
-                              calling the National Passport Information Center. You'll need your last name, date of
-                              birth, and the last four digits of your Social Security number.
+                              Yes, you can check your application status online
+                              at the Department of State website or by calling
+                              the National Passport Information Center. You'll
+                              need your last name, date of birth, and the last
+                              four digits of your Social Security number.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
@@ -269,51 +349,71 @@ export default function FAQ() {
                   <Card className="rounded-xl border-0 shadow-lg overflow-hidden">
                     <CardContent className="p-6">
                       <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="item-1" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-1"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             How long does it take to get a passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              Normal passport processing takes approximately 30-45 days from the date of application. 
-                              Tatkal service provides expedited processing within 1-3 working days. Processing time may 
-                              vary based on police verification requirements and document verification.
+                              Normal passport processing takes approximately
+                              30-45 days from the date of application. Tatkal
+                              service provides expedited processing within 1-3
+                              working days. Processing time may vary based on
+                              police verification requirements and document
+                              verification.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-2"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             What if I need a passport urgently?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              You can apply under the Tatkal scheme for urgent passport requirements. You'll need to provide 
-                              additional documentation and pay higher fees. Tatkal applications are processed on priority 
-                              and passports are typically issued within 1-3 working days.
+                              You can apply under the Tatkal scheme for urgent
+                              passport requirements. You'll need to provide
+                              additional documentation and pay higher fees.
+                              Tatkal applications are processed on priority and
+                              passports are typically issued within 1-3 working
+                              days.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-3" className="border-b border-border">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                        <AccordionItem
+                          value="item-3"
+                          className="border-b border-border"
+                        >
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             When should I renew my passport?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              It's recommended to renew your passport at least 9 months before it expires. Many countries 
-                              require that your passport be valid for at least 6 months beyond your planned stay. You can 
-                              apply for renewal up to 1 year before the expiry date.
+                              It's recommended to renew your passport at least 9
+                              months before it expires. Many countries require
+                              that your passport be valid for at least 6 months
+                              beyond your planned stay. You can apply for
+                              renewal up to 1 year before the expiry date.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-4">
-                          <AccordionTrigger className="text-base font-medium py-4">
+                          <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                             Can I expedite my passport renewal?
                           </AccordionTrigger>
                           <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                             <p>
-                              Yes, you can request expedited service for a passport renewal for an additional fee of
-                              $60. This reduces the processing time to approximately 5-7 weeks. For even faster service,
-                              you can add 1-2 day delivery for the return of your passport for an additional fee.
+                              Yes, you can request expedited service for a
+                              passport renewal for an additional fee of $60.
+                              This reduces the processing time to approximately
+                              5-7 weeks. For even faster service, you can add
+                              1-2 day delivery for the return of your passport
+                              for an additional fee.
                             </p>
                           </AccordionContent>
                         </AccordionItem>
@@ -332,8 +432,6 @@ export default function FAQ() {
           </div>
         </section>
       </main>
-           
     </div>
-  )
+  );
 }
-

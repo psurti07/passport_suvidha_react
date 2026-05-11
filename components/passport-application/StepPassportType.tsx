@@ -300,7 +300,7 @@ const StepPassportType = ({
             {/* Passport Type Selection Cards */}
             <motion.div
               variants={itemVariants}
-              className="grid grid-cols-1 md:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
               {services.map((service) => {
                 let type = "";
@@ -410,7 +410,7 @@ const StepPassportType = ({
             <motion.div variants={itemVariants} className="w-full sm:w-auto">
               <Button
                 variant="outline"
-                className="w-full sm:w-auto rounded-xl border-navy/20 hover:bg-navy/5 text-base font-medium"
+                className="w-full sm:w-auto rounded-xl border-navy/20 hover:bg-navy/5 hover:text-navy text-base font-medium modern-button"
                 onClick={prevStep}
                 disabled={loading}
               >

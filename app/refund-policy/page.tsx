@@ -19,6 +19,7 @@ import {
   RefreshCcw,
   CheckCircle2,
   HelpCircle,
+  RotateCcw,
   Mail,
   Phone,
 } from "lucide-react";
@@ -179,7 +180,7 @@ export default function RefundPolicy() {
                 >
                   <AccordionTrigger className="px-6 py-4 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 text-left">
-                      <RefreshCcw className="h-5 w-5 text-teal flex-shrink-0" />
+                      <RotateCcw className="h-5 w-5 text-teal flex-shrink-0" />
                       <span className="font-medium">
                         Charge Back Disclaimer
                       </span>

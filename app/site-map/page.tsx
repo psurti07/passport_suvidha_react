@@ -138,7 +138,7 @@ export default function SiteMap() {
                       </li>
                       <li>
                         <Link
-                          href="/status"
+                          href="/check-application-status"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
                         >
                           <Search className="h-4 w-4" />
@@ -297,7 +297,7 @@ export default function SiteMap() {
                       </li>
                       <li>
                         <Link
-                          href="/status"
+                          href="/check-application-status"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
                         >
                           <Search className="h-4 w-4" />

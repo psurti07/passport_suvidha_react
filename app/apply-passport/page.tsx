@@ -50,7 +50,7 @@ export default function ApplyPassport() {
               <FileText className="h-5 w-5 text-navy" />
               <span className="font-medium text-navy">PassportSuvidha</span>
             </div>
-            <div className="flex items-center justify-center gap-4">
+            {/* <div className="flex items-center justify-center gap-4">
               <Link href="/privacy-policy" className="hover:text-navy transition-colors">
                 Privacy
               </Link>
@@ -60,7 +60,7 @@ export default function ApplyPassport() {
               <Link href="/contact" className="hover:text-navy transition-colors">
                 Contact
               </Link>
-            </div>
+            </div> */}
             <div>
               © {new Date().getFullYear()}  BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
             </div>

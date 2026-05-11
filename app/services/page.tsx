@@ -618,7 +618,7 @@ export default function Services() {
                       </div>
                     </div>
                     <div className="mt-6">
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
                           <div className="text-sm font-medium text-navy/70">
                             36 pages
@@ -743,7 +743,7 @@ export default function Services() {
                       </div>
                     </div>
                     <div className="mt-6">
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="p-4 rounded-xl bg-teal/5 hover:bg-teal/10 transition-colors">
                           <div className="text-sm font-medium text-teal/70">
                             36 pages

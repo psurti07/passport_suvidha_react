@@ -349,7 +349,7 @@ function ApplicationForm() {
     }
 
     if (fullOtp.length === 4 && !newOtpDigits.includes("") && !loading) {
-      verifyOTP(fullOtp); 
+      verifyOTP(fullOtp);
     }
   };
 
@@ -527,29 +527,60 @@ function ApplicationForm() {
           return;
         }
 
-        if (customerResponse.status === 200) {
-          const nextStepFromAPI = customerData?.next_step;
-          const registrationStep = customerData?.registration_step;
+        // if (customerResponse.status === 200) {
+        //   const nextStepFromAPI = customerData?.next_step;
+        //   const registrationStep = customerData?.registration_step;
 
-          const stepMapping: any = {
-            otp_verification: 2,
-            additional_information: 3,
-            service_selection: 4,
-            payment: 4,
-          };
+        //   const stepMapping: any = {
+        //     otp_verification: 2,
+        //     additional_information: 3,
+        //     service_selection: 4,
+        //     payment: 4,
+        //   };
 
-          if (registrationStep >= 2) {
-            setOtpVerified(true);
-          }
+        //   if (registrationStep >= 2) {
+        //     setOtpVerified(true);
+        //   }
 
-          setStep(stepMapping[nextStepFromAPI] || 1);
-          return;
-        }
+        //   setStep(stepMapping[nextStepFromAPI] || 1);
+        //   return;
+        // }
 
-        if (customerResponse.status === 201) {
+        // if (customerResponse.status === 201) {
+        //   console.log("Customer created successfully, sending OTP...");
+        //   const otpResponse = await fetch("/api/otp/send", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //       mobile_number: formData.mobile,
+        //       purpose: "registration",
+        //     }),
+        //   });
+
+        //   const otpData = await otpResponse.json();
+
+        //   if (!otpResponse.ok) {
+        //     setErrorMessage(
+        //       otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
+        //     );
+        //     return;
+        //   }
+
+        //   setOtpSent(true);
+        //   setStep(2);
+        // }
+        if (
+          customerResponse.status === 200 ||
+          customerResponse.status === 201
+        ) {
+          console.log("Customer saved/updated successfully");
+
+          // ALWAYS SEND OTP
           const otpResponse = await fetch("/api/otp/send", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify({
               mobile_number: formData.mobile,
               purpose: "registration",
@@ -562,11 +593,17 @@ function ApplicationForm() {
             setErrorMessage(
               otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
             );
+
             return;
           }
 
+          // OTP SENT SUCCESSFULLY
           setOtpSent(true);
+
+          // ALWAYS GO TO OTP STEP
           setStep(2);
+
+          return;
         }
       } catch (error) {
         console.error("Unexpected Error:", error);

@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,9 +19,52 @@ import {
   Calendar,
   ArrowRight,
   Search,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
+import axiosServer from "@/lib/axiosServer";
 
 export default function Locations() {
+  const [city, setCity] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [locations, setLocations] = useState([]);
+
+  const handleSearch = async (value: string) => {
+    if (!value.trim()) return;
+
+    try {
+      setIsSearching(true);
+
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("authToken")
+          : null;
+
+      const response = await axiosServer.get(
+        `/locations?search=${value}`, 
+        {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
+
+      const data = response.data;
+
+      if (data?.status === "success") {
+        setLocations(data.data); // store results
+      } else {
+        toast.error(data.message || "No locations found");
+      }
+    } catch (error: any) {
+      console.error("Search Error:", error);
+
+      toast.error(error.response?.data?.message || "Failed to fetch locations");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
@@ -54,17 +99,37 @@ export default function Locations() {
                         placeholder="Enter PIN code or city"
                         className="modern-input h-12"
                         required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
                       />
                     </div>
-                    <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12">
-                      Search Locations
+                    <Button
+                      className="bg-gradient-to-r from-navy to-teal text-white 
+                      hover:opacity-90 
+                      disabled:opacity-50 disabled:cursor-not-allowed 
+                      rounded-xl modern-button h-12 px-6 flex items-center gap-2 text-base font-medium"
+                      aria-label="Search locations"
+                      disabled={!city?.trim() || isSearching}
+                      onClick={() => handleSearch(city)}
+                    >
+                      {isSearching ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Searching...
+                        </>
+                      ) : (
+                        <>
+                          <MapPin className="h-5 w-5" />
+                          Search Locations
+                        </>
+                      )}
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 gap-8 max-w-6xl mx-auto">
               {/* Using grid-rows-1 to ensure same height and h-full on cards */}
               <div className="group relative grid-rows-1">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
@@ -98,7 +163,7 @@ export default function Locations() {
                   <CardFooter className="flex justify-between mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-navy/20 hover:bg-navy/5"
+                      className="rounded-xl border-navy/20 hover:text-navy hover:bg-navy/5"
                     >
                       Get Directions
                     </Button>
@@ -142,7 +207,7 @@ export default function Locations() {
                   <CardFooter className="flex justify-between mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-bg-teal/5 hover:bg-teal/5"
+                      className="rounded-xl border-bg-teal/5 hover:bg-teal/5 hover:text-teal"
                     >
                       Get Directions
                     </Button>
@@ -186,7 +251,7 @@ export default function Locations() {
                   <CardFooter className="flex justify-between mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-burgundy/20 hover:bg-burgundy/5"
+                      className="rounded-xl border-burgundy/20 hover:text-burgundy hover:bg-burgundy/5"
                     >
                       Get Directions
                     </Button>
@@ -227,10 +292,10 @@ export default function Locations() {
                       New applications, photos available
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between mt-auto gap-2">
+                  <CardFooter className="flex justify-between lg:flex-cols mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-gold/20 hover:bg-gold/5"
+                      className="rounded-xl border-gold/20 hover:text-gold hover:bg-gold/5"
                     >
                       Get Directions
                     </Button>
@@ -274,7 +339,7 @@ export default function Locations() {
                   <CardFooter className="flex justify-between mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-navy/20 hover:bg-navy/5"
+                      className="rounded-xl border-navy/20 hover:text-navy hover:bg-navy/5"
                     >
                       Get Directions
                     </Button>
@@ -318,7 +383,7 @@ export default function Locations() {
                   <CardFooter className="flex justify-between mt-auto gap-2">
                     <Button
                       variant="outline"
-                      className="rounded-xl border-teal/20 hover:bg-teal/5"
+                      className="rounded-xl border-teal/20 hover:text-teal hover:bg-teal/5"
                     >
                       Get Directions
                     </Button>

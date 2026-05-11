@@ -24,7 +24,7 @@ export default function NavigationWrapper({ children }: NavigationWrapperProps) 
     '/signin',
     '/signup',
     '/apply-passport',
-    '/status',
+    '/check-application-status',
     '/faq',
     '/site-map'
   ]

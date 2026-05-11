@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,6 +34,7 @@ import {
   Target,
   Users,
   Eye,
+  Loader2,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,10 +48,32 @@ export default function Home() {
   const [contactEmail, setContactEmail] = useState("");
   const [contactSubject, setContactSubject] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [city, setCity] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [locations, setLocations] = useState([]);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [contactSubmitStatus, setContactSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+   const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchWelcomeMessage = async () => {
+      try {
+        const res = await axiosServer.get("/welcome-message");
+
+        if (res.data?.message) {
+          setWelcomeMessage(res.data.message);
+          setIsWelcomeOpen(true);
+        }
+      } catch (error) {
+        console.error("Welcome API error:", error);
+      }
+    };
+
+    fetchWelcomeMessage();
+  }, []);
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,8 +153,64 @@ export default function Home() {
     }
   };
 
+  const handleSearch = async (value: string) => {
+    if (!value.trim()) return;
+
+    try {
+      setIsSearching(true);
+
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("authToken")
+          : null;
+
+      const response = await axiosServer.get(
+        `/locations?search=${value}`, // 👈 change API if needed
+        {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
+
+      const data = response.data;
+
+      if (data?.status === "success") {
+        setLocations(data.data); // store results
+      } else {
+        toast.error(data.message || "No locations found");
+      }
+    } catch (error: any) {
+      console.error("Search Error:", error);
+
+      toast.error(error.response?.data?.message || "Failed to fetch locations");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
+	{isWelcomeOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md shadow-lg">
+            {/* <h2 className="text-lg sm:text-xl font-semibold mb-3">
+        Welcome 👋
+      </h2> */}
+
+            <p className="text-sm sm:text-base text-gray-600 mb-4 break-words">
+              {welcomeMessage}
+            </p>
+
+            <button
+              onClick={() => setIsWelcomeOpen(false)}
+              className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded-lg text-sm sm:text-base hover:bg-gray-800 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <main className="flex-1">
         <section className="w-full py-12 sm:py-16 md:py-20 lg:py-28 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
           <div className="blob-shape bg-teal/20 w-[300px] sm:w-[400px] md:w-[500px] h-[300px] sm:h-[400px] md:h-[500px] -left-32 sm:-left-48 md:-left-64 top-0"></div>
@@ -726,7 +805,7 @@ export default function Home() {
                           acceptance facilities near you.
                         </p>
                       </div>
-                      <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex flex-col lg:flex-row gap-4">
                         <div className="relative flex-1">
                           <Input
                             id="cityInput"
@@ -734,14 +813,29 @@ export default function Home() {
                             type="text"
                             placeholder="Enter city name (e.g. Mumbai)"
                             aria-label="City name input"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
                           />
                         </div>
                         <Button
                           className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 px-6 flex items-center gap-2 text-base font-medium"
                           aria-label="Search locations"
+                          disabled={!city.trim() || isSearching}
+                          onClick={async () => {
+                            handleSearch(city);
+                          }}
                         >
-                          <MapPin className="h-5 w-5" />
-                          Search Locations
+                          {isSearching ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Searching...
+                            </>
+                          ) : (
+                            <>
+                              <MapPin className="h-5 w-5" />
+                              Search Locations
+                            </>
+                          )}
                         </Button>
                       </div>
                       <div className="space-y-4" id="locationsList">
@@ -871,8 +965,7 @@ export default function Home() {
                       value="item-1"
                       className="border-b border-border"
                     >
-                      <AccordionTrigger className="text-base font-medium py-4">
-                        How long does it take to get a passport?
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">How long does it take to get a passport?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                         <p>
@@ -890,7 +983,7 @@ export default function Home() {
                       value="item-2"
                       className="border-b border-border"
                     >
-                      <AccordionTrigger className="text-base font-medium py-4">
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                         How long is my passport valid?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
@@ -907,7 +1000,7 @@ export default function Home() {
                       value="item-3"
                       className="border-b border-border"
                     >
-                      <AccordionTrigger className="text-base font-medium py-4">
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                         Can I renew my passport online?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
@@ -926,7 +1019,7 @@ export default function Home() {
                       value="item-4"
                       className="border-b border-border"
                     >
-                      <AccordionTrigger className="text-base font-medium py-4">
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                         What if I need a passport urgently?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
@@ -942,7 +1035,7 @@ export default function Home() {
                     </AccordionItem>
 
                     <AccordionItem value="item-5">
-                      <AccordionTrigger className="text-base font-medium py-4">
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
                         Do children need passports?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
@@ -1090,10 +1183,24 @@ export default function Home() {
                       </div>
                       <Button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
-                        disabled={isContactSubmitting}
+                        className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={
+                          isContactSubmitting ||
+                          !contactFirstName ||
+                          !contactLastName ||
+                          !contactEmail ||
+                          !contactMessage ||
+                          !contactSubject
+                        }
                       >
-                        {isContactSubmitting ? "Sending..." : "Send Message"}
+                        {isContactSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          "Send Message"
+                        )}
                       </Button>
                       {contactSubmitStatus === "error" && (
                         <p className="text-red-600 text-sm text-center">

@@ -31,11 +31,16 @@ export async function POST(request: NextRequest) {
       const responseData = axiosError.response?.data as any;
 
       let message = "An error occurred during login.";
-      if (
-        responseData?.errors?.mobile_number &&
-        Array.isArray(responseData.errors.mobile_number)
-      ) {
-        message = responseData.errors.mobile_number[0];
+
+      if (responseData?.errors) {
+        const firstErrorKey = Object.keys(responseData.errors)[0];
+
+        if (
+          firstErrorKey &&
+          Array.isArray(responseData.errors[firstErrorKey])
+        ) {
+          message = responseData.errors[firstErrorKey][0];
+        }
       } else if (responseData?.message) {
         message = responseData.message;
       }

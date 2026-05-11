@@ -137,7 +137,6 @@ const CardOfferPage = () => {
         if (status === "failed") {
           clearInterval(interval);
 
-          // ✅ Force close modal (WORKING TRICK)
           window.location.href = window.location.href;
 
           return;
@@ -180,27 +179,31 @@ const CardOfferPage = () => {
         type: "offer",
       });
 
+      // console.log("PAYMENT RESPONSE", data);
+
       if (!data.success) {
         setErrorMessage(data.message || "Payment failed");
         setLoading(false);
         return;
       }
 
-      const cashfree = (window as any).Cashfree({
-        mode: process.env.CASHFREE_MODE || "sandbox",
+      const cashfree = new (window as any).Cashfree({
+        mode: process.env.NEXT_PUBLIC_CASHFREE_MODE || "sandbox",
       });
 
-      cashfree.checkout({
-        paymentSessionId: data.payment_session_id,
+      await cashfree.checkout({
+        paymentSessionId: String(data.payment_session_id).trim(),
+
         redirectTarget: "_modal",
 
         onClose: () => {
-          setErrorMessage("Payment was cancelled.");
+          // console.log("Cashfree modal closed");
+        setErrorMessage("Payment was cancelled.");
+          checkPaymentStatus(data.order_id);
+
           setLoading(false);
         },
       });
-
-      checkPaymentStatus(data.order_id);
     } catch (error: any) {
       console.error(error);
 

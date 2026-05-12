@@ -177,19 +177,19 @@ export default function ApplicationReviewPage() {
             <CardHeader>
               <div className="flex items-center gap-3">                
                 <div>
-                  <CardTitle>Application Summary</CardTitle>
+                  <CardTitle className="mb-2">Application Summary</CardTitle>
                   <CardDescription>Review your application details before proceeding</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 rounded-lg border border-border bg-muted/50">
-                  <div className="flex items-center gap-4 mb-4 sm:mb-0">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 rounded-lg border border-border bg-muted/50 flex-wrap">
+                  <div className="flex items-center gap-4 mb-4 sm:mb-0 flex-wrap">
                     <div className="rounded-full bg-navy/10 p-3">
                       <FileText className="h-6 w-6 text-navy" />
                     </div>
-                    <div>
+                    <div className="mb-3">
                       <h3 className="text-lg font-medium text-navy">
                         {summary?.file_name || 'Application_Summary.pdf'}
                       </h3>
@@ -202,7 +202,7 @@ export default function ApplicationReviewPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 sm:flex-initial border-navy/20 hover:bg-navy/5"
+                      className="flex-1 sm:flex-initial border-navy/20 hover:bg-navy/5 hover:text-navy"
                       onClick={handlePreview}
                       disabled={isLoading}
                     >
@@ -216,7 +216,7 @@ export default function ApplicationReviewPage() {
                     <Button
                       variant="outline"
                       size="sm" 
-                      className="flex-1 sm:flex-initial border-navy/20 hover:bg-navy/5"
+                      className="flex-1 sm:flex-initial border-navy/20 hover:bg-navy/5  hover:text-navy"
                       onClick={handleDownload}
                       disabled={isLoading}
                     >
@@ -331,12 +331,12 @@ export default function ApplicationReviewPage() {
 
                   <div className="flex justify-end gap-4 pt-4">                  
                     <Button 
-                      className="rounded-xl bg-gradient-to-r from-navy to-teal text-white hover:opacity-90"
+                      className="w-full md:w-auto bg-gradient-to-r from-navy to-teal text-white bg-primary hover:bg-primary/90 hover:opacity-90 rounded-xl modern-button"
                       disabled={!termsAccepted || isVerified || isLoading || !hasViewedApplication}
                       onClick={handleVerify}
                     >
                       {isLoading ? (
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <Loader2 className="h-4 w-4 mr-2 hidden sm:block" />
                       ) : null}
                       Verify
                     </Button>

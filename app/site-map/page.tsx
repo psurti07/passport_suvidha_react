@@ -23,11 +23,11 @@ export default function SiteMap() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
-            <div className="max-w-3xl mx-auto text-center mb-10">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                 Site Map
               </h1>
-              <p className="text-muted-foreground md:text-xl">
+              <p className="text-muted-foreground md:text-xl mt-2">
                 A complete overview of all pages on the PassportSuvidha website
               </p>
             </div>
@@ -401,7 +401,7 @@ export default function SiteMap() {
                       Contact Support
                     </Link>
                   </Button>
-                  <Button variant="outline" className="rounded-xl border-teal/20 hover:bg-teal/5" asChild>
+                  <Button variant="outline" className="rounded-xl border-teal/20 hover:text-teal  hover:bg-teal/5" asChild>
                     <Link href="/faq">
                       <HelpCircle className="mr-2 h-4 w-4" />
                       View FAQ

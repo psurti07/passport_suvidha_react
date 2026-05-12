@@ -1074,7 +1074,7 @@ export default function Home() {
         {/* Contact Section */}
         <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
                 <span>Get In Touch</span>
               </div>
@@ -1087,7 +1087,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 mt-16">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
               <div className="floating-card">
                 <Card className="rounded-2xl border-0 shadow-lg overflow-hidden">
                   <div className="h-2 w-full bg-gradient-to-r from-navy to-teal"></div>

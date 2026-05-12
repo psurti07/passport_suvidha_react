@@ -228,7 +228,7 @@ const CardOfferPage = () => {
         }}
       />
       <div className="relative min-h-screen flex flex-col bg-white">
-        <div className="absolute inset-0 -z-10">
+        {/* <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-white" />
 
           <div className="absolute inset-0 bg-gradient-to-b from-blue-50/40 via-white to-white" />
@@ -236,7 +236,7 @@ const CardOfferPage = () => {
           <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-100 opacity-30 rounded-full blur-3xl" />
           <div className="absolute top-[30%] right-0 w-[500px] h-[500px] bg-teal-100 opacity-20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-[30%] w-[400px] h-[400px] bg-blue-50 opacity-30 rounded-full blur-2xl" />
-        </div>
+        </div> */}
 
         <header
           className={cn(
@@ -337,17 +337,16 @@ const CardOfferPage = () => {
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto text-center mt-10 px-4">
-          <p className="mt-4 text-lg text-gray-600">
-            Quickly Process Your Passport Application!
-          </p>
-
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+        <div className="max-w-4xl mx-auto text-center mt-10 px-4 mb-12">
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
             Apply for Your Passport Easily & Get Fast Approval Assistance
           </h1>
+          <p className="mt-2 text-lg text-gray-600">
+            Quickly Process Your Passport Application!
+          </p>
         </div>
 
-        <div className="flex-grow flex items-center justify-center px-4 py-10">
+        <div className="flex-grow flex items-center justify-center pb-10">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -357,12 +356,14 @@ const CardOfferPage = () => {
             className="w-full max-w-5xl"
           >
             <Card className="grid md:grid-cols-2 rounded-2xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-br from-navy to-teal text-white p-8 flex flex-col justify-between h-full min-h-[520px] rounded-3xl">
+              <div className="bg-gradient-to-br from-navy to-teal text-white p-8 flex flex-col justify-between h-full min-h-[520px] rounded-3xl order-2 md:order-1">
                 {/* TOP */}
                 <div className="space-y-6">
                   <CardHeader className="p-0 mb-6">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <Gift className="h-5 w-5 text-white" />
+                    <CardTitle className="text-xl flex items-start gap-2">
+                      <div>
+                        <Gift className="h-5 w-5 text-white" />
+                      </div>
                       Why Choose Passport Suvidha?
                     </CardTitle>
                   </CardHeader>
@@ -378,7 +379,9 @@ const CardOfferPage = () => {
                         "Dedicated on-call support for all your queries",
                       ].map((item, index) => (
                         <li key={index} className="flex items-start gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-300 mt-1" />
+                          <div>
+                            <CheckCircle className="h-4 w-4 text-green-300 mt-1" />
+                          </div>
                           <span className="leading-relaxed">{item}</span>
                         </li>
                       ))}
@@ -398,11 +401,13 @@ const CardOfferPage = () => {
               </div>
 
               {/* RIGHT FORM */}
-              <div className="p-8 bg-white space-y-8">
+              <div className="p-8 bg-white space-y-8 order-1 md:order-2">
                 {/* TITLE */}
                 <div className="space-y-2">
-                  <CardTitle className="text-xl flex items-center gap-2 text-gray-900">
-                    <Gift className="h-5 w-5 text-teal" />
+                  <CardTitle className="text-xl flex items-start gap-2 text-gray-900">
+                    <div>
+                      <Gift className="h-5 w-5 text-teal" />
+                    </div>
                     Choose Your Passport Plan
                   </CardTitle>
                   <p className="text-sm text-gray-500">
@@ -420,21 +425,26 @@ const CardOfferPage = () => {
                         key={service.id}
                         onClick={() => setSelectedService(service.service_code)}
                         className={`
-    relative cursor-pointer rounded-2xl border p-4 pr-10 transition-all duration-200
-    ${
-      isSelected
-        ? "border-teal ring-2 ring-teal/20 shadow-md"
-        : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
-    }
-  `}
+                            relative cursor-pointer rounded-2xl border p-4 transition-all duration-200
+                            ${
+                              isSelected
+                                ? "border-teal ring-2 ring-teal/20 shadow-md"
+                                : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                            }
+                          `}
                       >
                         {/* RADIO */}
-                        <div className="absolute top-4 right-4">
+                        <div className="flex justify-between mb-3">
+                          <div className="flex justify-between items-start gap-2">
+                            <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
+                              ₹{service.service_total_amount}
+                            </span>
+                          </div>
                           <div
                             className={`
-      h-4 w-4 rounded-full border-2 flex items-center justify-center
-      ${isSelected ? "border-teal" : "border-gray-300"}
-    `}
+                              h-4 w-4 rounded-full border-2 flex items-center justify-center
+                              ${isSelected ? "border-teal" : "border-gray-300"}
+                            `}
                           >
                             {isSelected && (
                               <div className="h-2 w-2 bg-teal rounded-full"></div>
@@ -443,17 +453,11 @@ const CardOfferPage = () => {
                         </div>
 
                         {/* TITLE + PRICE */}
-                        <div className="flex justify-between items-start gap-2">
-                          <h3 className="text-sm font-medium text-gray-800 leading-snug pr-2">
-                            {service.service_name}
-                          </h3>
-
-                          <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
-                            ₹{service.service_total_amount}
-                          </span>
-                        </div>
 
                         {/* SUB TEXT */}
+                        <h3 className="text-sm font-medium text-gray-800 leading-snug pr-2">
+                          {service.service_name}
+                        </h3>
                         <p className="text-[10px] text-gray-500 mt-2">
                           Govt ₹{service.service_gov_amount} + Charges ₹
                           {service.service_charges}

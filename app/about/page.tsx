@@ -153,7 +153,7 @@ export default function AboutUs() {
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                 We Go Beyond Ordinary, Always!
                 </h2>
-                <p className="mt-4 text-muted-foreground md:text-xl">
+                <p className="mt-2 text-muted-foreground md:text-xl">
                 Defining unparalleled digital passport services with commitment and dedication, Passport Suvidha is remarkably becoming the first choice for efficient passport application.
                 </p>
               </motion.div>
@@ -318,7 +318,7 @@ export default function AboutUs() {
           </div>
         </section> */}
 
-        <section className="w-full py-20 md:py-20 bg-white">
+        <section className="w-full pt-0 pb-20 md:pt-0 md:pb-20 bg-white">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw]">
             <div className="mx-auto max-w-3xl text-center mb-12">
               <motion.div
@@ -333,7 +333,7 @@ export default function AboutUs() {
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Our Achievements
                 </h2>
-                <p className="mt-4 text-muted-foreground md:text-xl">
+                <p className="mt-2 text-muted-foreground md:text-xl">
                   We take pride in our track record of excellence and customer
                   satisfaction.
                 </p>
@@ -676,7 +676,7 @@ export default function AboutUs() {
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                   Contact Our Team
                 </h2>
-                <p className="mt-4 text-muted-foreground md:text-xl">
+                <p className="mt-2 text-muted-foreground md:text-xl">
                   Have questions about our services? Our team is here to help.
                 </p>
               </motion.div>

@@ -34,14 +34,14 @@ export default function TermsCondition() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
-            <div className="max-w-3xl mx-auto text-center mb-10">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading pb-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                 Terms and Conditions
               </h1>
               {/* <p className="text-muted-foreground md:text-xl">
                 How we collect, use, and protect your personal information
               </p> */}
-              <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <div className="mt-2 flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>Last Updated: March 21, 2026</span>
               </div>

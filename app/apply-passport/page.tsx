@@ -23,11 +23,11 @@ export default function ApplyPassport() {
       >
         <div className="container px-2 md:px-6">
           <div className="mx-auto">
-            <div className="mb-6 md:mb-8 text-center">
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl gradient-heading mb-2 md:mb-3">
+            <div className="mb-12 md:mb-8 text-center">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl gradient-heading">
                 Passport Application
               </h1>
-              <p className="text-muted-foreground text-sm md:text-xl">
+              <p className="text-muted-foreground text-sm md:text-xl mt-2">
                 Complete your application in a few simple steps
               </p>
             </div>

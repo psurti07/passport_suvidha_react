@@ -219,7 +219,7 @@ export default function SupportPage() {
           </TabsList>
 
           <TabsContent value="contact" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="md:col-span-2">
                 <CardHeader>
                   <CardTitle>Contact Support</CardTitle>
@@ -273,7 +273,7 @@ export default function SupportPage() {
                   </form>
                 </CardContent>
                 <CardFooter className="border-t p-6">
-                  <Button type="submit" form="support-form" className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl" disabled={isLoading}>
+                  <Button type="submit" form="support-form" className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl bg-navy  hover:bg-gradient-to-r/80  rounded-xl modern-button" disabled={isLoading}>
                     <MessageSquare className="h-4 w-4 mr-2" />
                     {isLoading ? "Submitting..." : "Submit Support Request"}
                   </Button>

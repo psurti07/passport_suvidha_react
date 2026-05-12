@@ -177,9 +177,9 @@ export default function ProfilePage() {
       {/* Personal Information Card */}
       <motion.div variants={itemVariants}>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Personal Information</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between flex-wrap">
+            <div className="mb-3">
+              <CardTitle className="mb-2">Personal Information</CardTitle>
               <CardDescription>
                 Your personal details used for passport applications
               </CardDescription>
@@ -219,11 +219,11 @@ export default function ProfilePage() {
                 Loading profile...
               </div>
             ) : profile ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-8">
                 {/* LEFT SIDE */}
                 <div className="space-y-6">
                   {/* NAME */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-6">
                     {/* First Name */}
                     <div className="space-y-2">
                       {isEditing && <Label>First Name</Label>}
@@ -270,6 +270,7 @@ export default function ProfilePage() {
                   </div>
 
                   {/* EMAIL */}
+                  
                   <div className="space-y-2">
                     {isEditing && <Label>Email</Label>}
                     {isEditing ? (
@@ -402,7 +403,7 @@ export default function ProfilePage() {
                         name="gender"
                         value={formData.gender || ""}
                         onChange={handleChange}
-                        className="modern-input w-full"
+                        className="modern-input rounded-md w-full hover:bg-muted/60 transition px-3 py-2 rounded-xl border shadow-sm md:text-sm"
                       >
                         <option value="">Select</option>
                         <option value="male">Male</option>

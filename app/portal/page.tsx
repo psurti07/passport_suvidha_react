@@ -1789,7 +1789,7 @@ export default function PortalDashboard() {
               <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3">
                 <Button
                   variant="outline"
-                  className="w-full md:w-auto rounded-xl border-navy/20 hover:bg-navy/5"
+                  className="w-full md:w-auto rounded-xl border-navy/20 hover:bg-navy/5 hover:text-navy"
                   asChild
                 >
                   <Link href="/portal/support">
@@ -1798,7 +1798,7 @@ export default function PortalDashboard() {
                   </Link>
                 </Button>
                 <Button
-                  className="w-full md:w-auto bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl"
+                  className="w-full md:w-auto bg-gradient-to-r from-navy to-teal text-white bg-primary hover:bg-primary/90 hover:opacity-90 rounded-xl modern-button"
                   asChild
                 >
                   <Link href="/portal/support">

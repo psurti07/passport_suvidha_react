@@ -137,6 +137,7 @@ const CardOfferPage = () => {
         if (status === "failed") {
           clearInterval(interval);
 
+          // ✅ Force close modal (WORKING TRICK)
           window.location.href = window.location.href;
 
           return;
@@ -198,7 +199,7 @@ const CardOfferPage = () => {
 
         onClose: () => {
           // console.log("Cashfree modal closed");
-        setErrorMessage("Payment was cancelled.");
+          setErrorMessage("Payment was cancelled.");
           checkPaymentStatus(data.order_id);
 
           setLoading(false);

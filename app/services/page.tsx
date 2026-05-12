@@ -604,7 +604,7 @@ export default function Services() {
                 <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
                   <div className="h-2 w-full bg-navy rounded-t-3xl"></div>
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 mb-4">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
                         <Clock className="h-7 w-7" />
                       </div>
@@ -729,7 +729,7 @@ export default function Services() {
                   </div>
                   <div className="h-2 w-full bg-gradient-to-r from-teal to-navy rounded-t-3xl"></div>
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 mb-4">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-teal/10 text-teal">
                         <Zap className="h-7 w-7" />
                       </div>
@@ -965,7 +965,7 @@ export default function Services() {
         <section className="w-full py-12 sm:py-16 md:py-24 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-4xl mx-auto text-center mb-12">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl gradient-heading mb-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading mb-4">
                 Quick Route To Your Passport How It Works?
               </h1>
             </div>

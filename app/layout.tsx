@@ -7,13 +7,18 @@ import ScrollProgress from "@/components/ui/top-scroll"
 import Script from "next/script";
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { buildSeo } from "@/lib/buildSeo";
+
+export async function generateMetadata() {
+  return buildSeo("home");
+}
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = {
-  title: "PassportSuvidha - Passport Application Services",
-  description: "Streamline your passport application process with PassportSuvidha. Fast, reliable, and professional passport services.",
-}
+// export const metadata: Metadata = {
+//   title: "Passport Assistance Services in India | New, Renewal & Tatkal Passport | PassportSuvidha",
+//   description: "Streamline your passport application process with PassportSuvidha. Fast, reliable, and professional passport services.",
+// }
 
 export default function RootLayout({
   children,
@@ -34,6 +39,5 @@ export default function RootLayout({
     </html>
   )
 }
-
 
 import './globals.css'

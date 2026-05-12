@@ -41,6 +41,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Image from "next/image";
 import axiosServer from "@/lib/axiosServer";
+// import { buildSeo } from "@/lib/buildSeo";
+
+// export async function generateMetadata() {
+//   return buildSeo("home");
+// }
 
 export default function Home() {
   const [contactFirstName, setContactFirstName] = useState("");
@@ -55,7 +60,7 @@ export default function Home() {
   const [contactSubmitStatus, setContactSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-   const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState("");
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
 
   useEffect(() => {
@@ -191,7 +196,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
-	{isWelcomeOpen && (
+      {isWelcomeOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md shadow-lg">
             {/* <h2 className="text-lg sm:text-xl font-semibold mb-3">
@@ -965,7 +970,8 @@ export default function Home() {
                       value="item-1"
                       className="border-b border-border"
                     >
-                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">How long does it take to get a passport?
+                      <AccordionTrigger className="text-left justify-between gap-4 text-sm sm:text-base font-medium py-4">
+                        How long does it take to get a passport?
                       </AccordionTrigger>
                       <AccordionContent className="pb-4 pt-1 text-muted-foreground">
                         <p>
@@ -1068,7 +1074,7 @@ export default function Home() {
         {/* Contact Section */}
         <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
                 <span>Get In Touch</span>
               </div>
@@ -1081,7 +1087,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 mt-16">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
               <div className="floating-card">
                 <Card className="rounded-2xl border-0 shadow-lg overflow-hidden">
                   <div className="h-2 w-full bg-gradient-to-r from-navy to-teal"></div>

@@ -267,12 +267,16 @@ export default function DocumentsPage() {
                 {documents.map((doc) => (
                   <TableRow key={doc.id}>
                     <TableCell className="font-medium">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-navy" />
-                        {doc.name}
-                        {doc.is_mandatory && (
-                          <span className="text-red-500 text-sm">*</span>
-                        )}
+                      <div className="flex items-start gap-2">
+                        <div>
+                          <FileText className="h-4 w-4 text-navy" />
+                        </div>
+                        <div>
+                          {doc.name}
+                          {doc.is_mandatory && (
+                            <span className="text-red-500 text-sm">*</span>
+                          )}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>

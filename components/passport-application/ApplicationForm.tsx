@@ -839,9 +839,8 @@ function ApplicationForm() {
           console.error("Failed to update payment failure:", err);
         }
 
-        setErrorMessage(
-          response.error.description || "Payment failed. Please try again.",
-        );
+        // reload current page
+        window.location.reload();
       });
 
       rzp.open();

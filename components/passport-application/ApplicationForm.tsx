@@ -816,7 +816,25 @@ function ApplicationForm() {
           ondismiss: async function () {
             console.log("Payment popup closed by user");
 
-            window.location.href = "/payment-response?status=failed";
+            try {
+              await axiosServer.post(
+                "/payment-failed",
+                {
+                  razorpay_order_id: order.id,
+                  reason: "User closed payment popup",
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+            } catch (err) {
+              console.error("Failed to update dismiss status:", err);
+            }
+
+            // refresh current page
+            window.location.reload();
           },
         },
       });

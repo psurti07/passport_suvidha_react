@@ -821,6 +821,7 @@ function ApplicationForm() {
                 "/payment-failed",
                 {
                   razorpay_order_id: order.id,
+                  reason: "User closed payment popup",
                 },
                 {
                   headers: {
@@ -829,10 +830,11 @@ function ApplicationForm() {
                 },
               );
             } catch (err) {
-              console.error("Dismiss update failed:", err);
+              console.error("Failed to update dismiss status:", err);
             }
 
-            setErrorMessage("Payment was cancelled.");
+            // refresh current page
+            window.location.reload();
           },
         },
       });

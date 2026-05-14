@@ -28,7 +28,7 @@ interface StepVerificationProps {
   handleOTPChange: (index: number, value: string) => void;
   handleOTPKeyDown: (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => void;
   handleOTPPaste: (e: React.ClipboardEvent<HTMLInputElement>) => void;
   verifyOTP: () => void;
@@ -163,17 +163,13 @@ const StepVerification = ({
                 key={index}
                 name={`otp-${index}`}
                 value={digit}
-                onChange={(e) =>
-                  handleOTPChange(index, e.target.value)
-                }
-                onKeyDown={(e) =>
-                  handleOTPKeyDown(index, e)
-                }
+                onChange={(e) => handleOTPChange(index, e.target.value)}
+                onKeyDown={(e) => handleOTPKeyDown(index, e)}
                 onPaste={handleOTPPaste}
                 maxLength={1}
                 inputMode="numeric"
                 autoComplete="one-time-code"
-                className="modern-input w-14 h-14 text-center text-xl font-medium"
+                className="modern-input lg:w-14 sm:w-9 sm:h-9 lg:h-14 text-center text-xl font-medium"
               />
             ))}
           </div>
@@ -198,9 +194,7 @@ const StepVerification = ({
             {isResendDisabled ? (
               <span>Resend in {formatTime(timeRemaining)}</span>
             ) : (
-              <button onClick={handleResendOTP}>
-                Resend OTP
-              </button>
+              <button onClick={handleResendOTP}>Resend OTP</button>
             )}
           </div>
         </motion.div>

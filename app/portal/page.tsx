@@ -1778,7 +1778,7 @@ export default function PortalDashboard() {
       <motion.div variants={itemVariants}>
         <Card className="bg-navy/5 border-0">
           <CardContent className="p-4 md:p-6">
-            <div className="flex flex-col text-center md:text-left md:flex-row gap-6 items-center">
+            <div className="flex flex-col text-center md:text-left md:flex-column gap-6 items-start flex-wrap">
               <div className="flex-1 w-full">
                 <h3 className="text-xl font-semibold text-navy">Need Help?</h3>
                 <p className="text-muted-foreground mt-2">

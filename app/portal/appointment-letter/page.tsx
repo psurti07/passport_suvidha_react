@@ -287,9 +287,12 @@ export default function AppointmentLetterPage() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-6">
         {/* Appointment Letters Section */}
-        <motion.div variants={itemVariants} className="md:col-span-4">
+        <motion.div
+          variants={itemVariants}
+          className="col-12  md:col-span-12 lg:col-span-5"
+        >
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">
@@ -323,10 +326,10 @@ export default function AppointmentLetterPage() {
                           : "border-border"
                       }`}
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      <div className="flex justify-between items-start mb-3 flex-wrap">
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <p className="font-medium">
+                            <p className="font-medium mb-2">
                               Appointment: {formatDate(letter.appointment_date)}
                             </p>
                             {index === 0 && (
@@ -380,7 +383,10 @@ export default function AppointmentLetterPage() {
         </motion.div>
 
         {/* Required Documents Section */}
-        <motion.div variants={itemVariants} className="md:col-span-8">
+        <motion.div
+          variants={itemVariants}
+          className="col-12 md:col-span-12 lg:col-span-7"
+        >
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">

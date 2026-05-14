@@ -66,7 +66,8 @@ const StepBasicInfo = ({
           : "",
   };
 
-  const isValid = !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
+  const isValid =
+    !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
   const [termsAccepted, setTermsAccepted] = useState(true); // ✅ default checked
   const [marketingConsent, setMarketingConsent] = useState(true); // optional
   return (
@@ -80,7 +81,8 @@ const StepBasicInfo = ({
         </motion.div>
         <motion.div variants={itemVariants}>
           <CardDescription>
-            Please provide your personal details as they appear on your identification documents
+            Please provide your personal details as they appear on your
+            identification documents
           </CardDescription>
         </motion.div>
       </CardHeader>
@@ -220,7 +222,8 @@ const StepBasicInfo = ({
                 className="mt-1"
               />
               <Label htmlFor="marketing" className="text-xs leading-5">
-                I agree to receive promotional & informational communications from PassportSuvidha through Emails, calls or SMS, RCS Services.
+                I agree to receive promotional & informational communications
+                from PassportSuvidha through Emails, calls or SMS, RCS Services.
               </Label>
             </div>
           </motion.div>
@@ -230,9 +233,12 @@ const StepBasicInfo = ({
             className="flex items-center gap-2 p-3 bg-navy/5 rounded-lg text-sm text-muted-foreground"
             whileHover={{ backgroundColor: "rgba(0, 51, 102, 0.1)" }}
           >
-            <Shield className="h-5 w-5 text-navy" />
+            <div>
+              <Shield className="h-5 w-5 text-navy" />
+            </div>
             <p>
-              Your information is secure and will only be used for passport processing purposes.
+              Your information is secure and will only be used for passport
+              processing purposes.
             </p>
           </motion.div>
         </div>
@@ -246,7 +252,9 @@ const StepBasicInfo = ({
           <Button
             className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
             onClick={nextStep}
-            disabled={!isValid || loading || !termsAccepted || !marketingConsent}
+            disabled={
+              !isValid || loading || !termsAccepted || !marketingConsent
+            }
           >
             {loading ? (
               <>

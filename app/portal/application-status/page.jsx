@@ -114,7 +114,7 @@ export default function ApplicationStatus() {
       <motion.div variants={itemVariants}>
         <Card>
           <CardHeader className="bg-navy/5">
-            <CardTitle>Application Progress</CardTitle>
+            <CardTitle className="mb-2">Application Progress</CardTitle>
             <CardDescription>
               Please check status updates and admin remarks at each stage
             </CardDescription>

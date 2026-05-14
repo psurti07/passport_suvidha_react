@@ -12,7 +12,10 @@ export default function ApplyPassport() {
       {/* SEO Meta Tags */}
       <Head>
         <title>Passport Application | Passport Suvidha</title>
-        <meta name="description" content="Apply for your Indian passport online in a few simple steps. Fast, secure, and hassle-free application process with Passport Suvidha." />
+        <meta
+          name="description"
+          content="Apply for your Indian passport online in a few simple steps. Fast, secure, and hassle-free application process with Passport Suvidha."
+        />
       </Head>
       {/* Main Content with Animation */}
       <motion.main
@@ -43,7 +46,7 @@ export default function ApplyPassport() {
           </div>
         </div>
       </motion.main>
-      <footer className="w-full py-6">
+      <footer className="w-full py-4">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -61,8 +64,9 @@ export default function ApplyPassport() {
                 Contact
               </Link>
             </div> */}
-            <div>
-              © {new Date().getFullYear()}  BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
+            <div className="text-center">
+              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All
+              rights reserved.
             </div>
           </div>
         </div>

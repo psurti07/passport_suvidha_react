@@ -345,7 +345,9 @@ const StepAddressDetails = ({
             className="flex items-center gap-2 p-3 bg-navy/5 rounded-lg text-sm text-muted-foreground"
             whileHover={{ backgroundColor: "rgba(0, 51, 102, 0.1)" }}
           >
-            <Shield className="h-5 w-5 text-navy" />
+            <div>
+              <Shield className="h-5 w-5 text-navy" />
+            </div>
             <p>
               Please ensure all information matches your identification
               documents exactly.

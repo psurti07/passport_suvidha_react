@@ -28,6 +28,7 @@ import {
   CheckCircle,
   AlertCircle,
   Download,
+  Loader2,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -48,6 +49,7 @@ export default function DocumentsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedDocId, setSelectedDocId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadingDocId, setUploadingDocId] = useState<number | null>(null);
 
   // Animation variants
   const containerVariants = {
@@ -112,7 +114,8 @@ export default function DocumentsPage() {
     }
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
+      setUploadingDocId(docId);
 
       const formData = new FormData();
       formData.append("document", selectedFile);
@@ -153,7 +156,8 @@ export default function DocumentsPage() {
 
       toast.error("Failed to upload document");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
+      setUploadingDocId(null);
       setSelectedFile(null);
       setSelectedDocId(null);
     }
@@ -334,12 +338,17 @@ export default function DocumentsPage() {
                               onClick={() => handleUpload(doc.id)}
                               className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90"
                               disabled={
-                                isLoading ||
+                                // isLoading ||
                                 !selectedFile ||
-                                selectedDocId !== doc.id
+                                selectedDocId !== doc.id ||
+                                uploadingDocId === doc.id
                               }
                             >
-                              <Upload className="h-4 w-4" />
+                              {uploadingDocId === doc.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Upload className="h-4 w-4" />
+                              )}
                             </Button>
                           </>
                         )}

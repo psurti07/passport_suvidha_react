@@ -128,28 +128,38 @@ const CardOfferPage = () => {
 
         const status = res.data.status;
 
+        // console.log("PAYMENT STATUS =>", status);
+
         if (status === "success") {
           clearInterval(interval);
+
           window.location.href = `/cardoffer-response?order_id=${order_id}&status=success`;
+
           return;
         }
 
         if (status === "failed") {
           clearInterval(interval);
 
-          // ✅ Force close modal (WORKING TRICK)
-          window.location.href = window.location.href;
+          window.location.reload();
+
+          // window.location.href = `/cardoffer-response?order_id=${order_id}&status=failed`;
 
           return;
         }
+
+        if (status === "pending") {
+          setErrorMessage("Waiting for payment confirmation...");
+          window.location.reload();
+        }
       } catch (err) {
-        console.error(err);
+        console.error("STATUS CHECK ERROR", err);
       }
 
-      if (attempts > 15) {
+      if (attempts >= 30) {
         clearInterval(interval);
-
-        window.location.href = window.location.href;
+        window.location.reload();
+        // window.location.href = `/cardoffer-response?order_id=${order_id}&status=timeout`;
       }
     }, 2000);
   };
@@ -180,8 +190,6 @@ const CardOfferPage = () => {
         type: "offer",
       });
 
-      // console.log("PAYMENT RESPONSE", data);
-
       if (!data.success) {
         setErrorMessage(data.message || "Payment failed");
         setLoading(false);
@@ -192,30 +200,30 @@ const CardOfferPage = () => {
         mode: process.env.NEXT_PUBLIC_CASHFREE_MODE || "sandbox",
       });
 
-      await cashfree.checkout({
+      const checkoutOptions = {
         paymentSessionId: String(data.payment_session_id).trim(),
-
         redirectTarget: "_modal",
+      };
 
-        onClose: () => {
-          // console.log("Cashfree modal closed");
-          setErrorMessage("Payment was cancelled.");
-          checkPaymentStatus(data.order_id);
+      const result = await cashfree.checkout(checkoutOptions);
 
-          setLoading(false);
-        },
-      });
+      console.log("CASHFREE RESULT", result);
+
+      setErrorMessage("Checking payment status...");
+
+      checkPaymentStatus(data.order_id);
     } catch (error: any) {
-      console.error(error);
+      // console.error("PAYMENT ERROR", error);
 
       const msg =
         error?.response?.data?.message ||
+        error?.message ||
         "Something went wrong. Please try again.";
 
       setErrorMessage(msg);
-    }
 
-    setLoading(false);
+      setLoading(false);
+    }
   };
 
   return (

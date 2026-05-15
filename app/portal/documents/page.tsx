@@ -258,106 +258,117 @@ export default function DocumentsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Document Type</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Upload Date</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {documents.map((doc) => (
-                  <TableRow key={doc.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-start gap-2">
-                        <div>
-                          <FileText className="h-4 w-4 text-navy" />
+            <div className="overflow-x-auto">
+              <Table className="min-w-[750px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Document Type</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Upload Date</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {documents.map((doc) => (
+                    <TableRow key={doc.id}>
+                      <TableCell className="font-medium min-w-[220px]">
+                        <div className="flex items-start gap-2">
+                          <div className="shrink-0">
+                            <FileText className="h-4 w-4 text-navy" />
+                          </div>
+
+                          <div>
+                            {doc.name}
+
+                            {doc.is_mandatory && (
+                              <span className="text-red-500 text-sm">*</span>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          {doc.name}
-                          {doc.is_mandatory && (
-                            <span className="text-red-500 text-sm">*</span>
+                      </TableCell>
+
+                      <TableCell className="min-w-[120px]">
+                        {doc.status === "Uploaded" ? (
+                          <span className="flex items-center gap-1 text-green-600">
+                            <CheckCircle className="h-4 w-4" />
+                            Uploaded
+                          </span>
+                        ) : doc.status === "Rejected" ? (
+                          <span className="flex items-center gap-1 text-red-600">
+                            <AlertCircle className="h-4 w-4" />
+                            Rejected
+                          </span>
+                        ) : (
+                          <span className="text-yellow-600">Pending</span>
+                        )}
+                      </TableCell>
+
+                      <TableCell className="min-w-[120px]">
+                        {doc.file_details?.upload_date
+                          ? formatDate(doc.file_details.upload_date)
+                          : "-"}
+                      </TableCell>
+
+                      <TableCell className="min-w-[280px]">
+                        <div className="flex items-center gap-2">
+                          {doc.status === "Uploaded" ? (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleDownload(doc.id)}
+                                disabled={isLoading}
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => handleDelete(doc.id)}
+                                disabled={isLoading}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <div>
+                                <Input
+                                  type="file"
+                                  onChange={(e) => handleFileChange(e, doc.id)}
+                                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                  disabled={isLoading}
+                                  className="w-full  text-sm  file:mr-2  file:rounded-md  file:border-0  file:px-3"
+                                />
+                              </div>
+
+                              <Button
+                                size="sm"
+                                onClick={() => handleUpload(doc.id)}
+                                className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 shrink-0"
+                                disabled={
+                                  !selectedFile ||
+                                  selectedDocId !== doc.id ||
+                                  uploadingDocId === doc.id
+                                }
+                              >
+                                {uploadingDocId === doc.id ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Upload className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </>
                           )}
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {doc.status === "Uploaded" ? (
-                        <span className="flex items-center gap-1 text-green-600">
-                          <CheckCircle className="h-4 w-4" /> Uploaded
-                        </span>
-                      ) : doc.status === "Rejected" ? (
-                        <span className="flex items-center gap-1 text-red-600">
-                          <AlertCircle className="h-4 w-4" /> Rejected
-                        </span>
-                      ) : (
-                        <span className="text-yellow-600">Pending</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {doc.file_details?.upload_date
-                        ? formatDate(doc.file_details.upload_date)
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {doc.status === "Uploaded" ? (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleDownload(doc.id)}
-                              disabled={isLoading}
-                            >
-                              <Download className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDelete(doc.id)}
-                              disabled={isLoading}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="grid w-full max-w-sm items-center gap-1.5">
-                              <Input
-                                type="file"
-                                onChange={(e) => handleFileChange(e, doc.id)}
-                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                                className="w-full"
-                                disabled={isLoading}
-                              />
-                            </div>
-                            <Button
-                              size="sm"
-                              onClick={() => handleUpload(doc.id)}
-                              className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90"
-                              disabled={
-                                // isLoading ||
-                                !selectedFile ||
-                                selectedDocId !== doc.id ||
-                                uploadingDocId === doc.id
-                              }
-                            >
-                              {uploadingDocId === doc.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <Upload className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </motion.div>

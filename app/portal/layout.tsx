@@ -14,7 +14,7 @@ import {
   Home,
   Settings,
   CheckCircle,
-  ListChecks
+  ListChecks,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -230,30 +230,45 @@ export default function PortalLayout({
         setLoading(true);
 
         const token = localStorage.getItem("authToken");
+        const tokenExpiry = localStorage.getItem("authTokenExpiry");
 
-        if (!token) {
-          router.replace("/signin");
-          return null;
+        // NO TOKEN
+        if (!token || !tokenExpiry) {
+          handleSignOut();
+          return;
         }
 
-        //  Fetch both APIs together
+        // TOKEN EXPIRED
+        const now = Date.now();
+
+        if (now > Number(tokenExpiry)) {
+          handleSignOut();
+          return;
+        }
+
+        // VALID TOKEN → CALL APIs
         const [progressRes, profileRes] = await Promise.all([
           axiosServer.get("/application-progress", {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }),
+
           axiosServer.get("/profile", {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }),
         ]);
 
         setApplicationProgress(progressRes.data);
         setProfile(profileRes.data);
       } catch (error: any) {
-        console.error("Error:", error);
+        console.error("API Error:", error);
 
-        if (error.response?.status === 401) {
-          // localStorage.removeItem("authToken");
-          router.replace("/signin");
+        // TOKEN INVALID / EXPIRED
+        if (error?.response?.status === 401) {
+          handleSignOut();
         }
       } finally {
         setLoading(false);
@@ -467,7 +482,11 @@ export default function PortalLayout({
                 Contact
               </Link>
             </div> */}
-            <div> © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.</div>
+            <div>
+              {" "}
+              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All
+              rights reserved.
+            </div>
           </div>
         </div>
       </footer>

@@ -361,7 +361,7 @@ export default function AppointmentLetterPage() {
                             size="sm"
                             onClick={() => handleDownload(letter.id)}
                             disabled={downloading === letter.id}
-                            className="bg-teal-100 border-teal-200 hover:bg-teal-200"
+                            className="bg-teal-100 border-teal-200 hover:bg-navy/5 hover:text-navy"
                           >
                             {downloading === letter.id ? (
                               <Loader2 className="mr-2 h-3 w-3 animate-spin" />

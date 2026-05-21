@@ -1,18 +1,27 @@
-'use client'
+"use client";
 
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { usePathname } from 'next/navigation'
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { usePathname } from "next/navigation";
 
 export default function Template({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  
+  const pathname = usePathname();
+
   // List of paths where we don't want to show navbar and footer
-  const noNavbarPaths = ['/signin', '/apply-passport', '/test', '/test-apply-passport','/cardoffer','/staroffer']
-  
+  const noNavbarPaths = [
+    "/signin",
+    "/apply-passport",
+    "/test",
+    "/test-apply-passport",
+    "/cardoffer",
+    "/staroffer",
+    "/schedule-slot",
+    "/schedule-success",
+  ];
+
   // Check if path starts with /portal
-  if (noNavbarPaths.includes(pathname) || pathname.startsWith('/portal')) {
-    return <>{children}</>
+  if (noNavbarPaths.includes(pathname) || pathname.startsWith("/portal")) {
+    return <>{children}</>;
   }
 
   return (
@@ -21,5 +30,5 @@ export default function Template({ children }: { children: React.ReactNode }) {
       {children}
       <Footer />
     </>
-  )
-} 
+  );
+}

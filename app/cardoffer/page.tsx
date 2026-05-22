@@ -346,15 +346,15 @@ const CardOfferPage = () => {
         </header>
 
         <div className="max-w-4xl mx-auto text-center mt-10 px-4 mb-12">
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
-            Apply for Your Passport Easily & Get Fast Approval Assistance
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+            Passport Made Easy!
           </h1>
-          <p className="mt-2 text-lg text-gray-600">
-            Quickly Process Your Passport Application!
+          <p className="mt-2 text-sm md:text-lg text-gray-600">
+            No queues. No confusion. Just smooth processing.
           </p>
         </div>
 
-        <div className="flex-grow flex items-center justify-center pb-10">
+        <div className="flex-grow flex items-center justify-center pb-10 mx-2 md:mx-5 lg:mx-8">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -368,9 +368,9 @@ const CardOfferPage = () => {
                 {/* TOP */}
                 <div className="space-y-6">
                   <CardHeader className="p-0 mb-6">
-                    <CardTitle className="text-xl flex items-start gap-2">
+                    <CardTitle className="text-lg lg:text-xl flex items-start gap-2">
                       <div>
-                        <Gift className="h-5 w-5 text-white" />
+                        <Gift className="h-5 w-5 mt-1 text-white" />
                       </div>
                       Why Choose Passport Suvidha?
                     </CardTitle>
@@ -379,12 +379,10 @@ const CardOfferPage = () => {
                   <CardContent className="space-y-5 p-0">
                     <ul className="space-y-4 text-sm">
                       {[
-                        "Apply for passport from the comfort of your home",
-                        "Expert assistance throughout the entire process",
-                        "Fast & hassle-free documentation support",
-                        "Track your application anytime, anywhere",
-                        "Our team handles verification & processing support",
-                        "Dedicated on-call support for all your queries",
+                        "Apply Online",
+                        "Get Expert Help",
+                        "Track Status Anytime",
+                        "Affordable Consultancy",
                       ].map((item, index) => (
                         <li key={index} className="flex items-start gap-3">
                           <div>
@@ -402,19 +400,21 @@ const CardOfferPage = () => {
                   <div className="mt-8">
                     <div className="flex items-center gap-3 text-sm bg-white/10 px-4 py-3 rounded-xl w-fit backdrop-blur">
                       <Shield className="h-5 w-5 text-green-300" />
-                      <span>100% Secure & Trusted</span>
+                      <span>
+                        Travel dreams start here — let’s make it happen!
+                      </span>
                     </div>
                   </div>
                 </CardFooter>
               </div>
 
               {/* RIGHT FORM */}
-              <div className="p-8 bg-white space-y-8 order-1 md:order-2">
+              <div className="p-8 bg-white space-y-5 order-1 md:order-2">
                 {/* TITLE */}
                 <div className="space-y-2">
-                  <CardTitle className="text-xl flex items-start gap-2 text-gray-900">
+                  <CardTitle className="text-lg lg:text-xl flex items-start gap-2 text-gray-900">
                     <div>
-                      <Gift className="h-5 w-5 text-teal" />
+                      <Gift className="h-5 w-5 mt-1 text-teal" />
                     </div>
                     Choose Your Passport Plan
                   </CardTitle>
@@ -538,7 +538,7 @@ const CardOfferPage = () => {
                       </>
                     ) : (
                       <>
-                        Get Instant Offer
+                        Apply Now
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </>
                     )}

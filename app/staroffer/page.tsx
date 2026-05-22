@@ -287,93 +287,96 @@ const StarOfferPage = () => {
         </header>
 
         <div className="max-w-4xl mx-auto text-center mt-10 px-4 mb-12">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
-            Apply for Your Passport Easily & Get Fast Approval Assistance
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+            Passport Made Easy!
           </h1>
           <p className="text-lg text-gray-600 mt-2">
-            Quickly Process Your Passport Application!
+            No queues. No confusion. Just smooth processing.
           </p>
-
-        
         </div>
+        <div className="flex-grow flex items-center justify-center pb-10 mx-2 md:mx-5 lg:mx-8">
+          <div className="flex-grow flex items-center justify-center pb-10">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { transition: { staggerChildren: 0.1 } },
+              }}
+              className="w-full max-w-5xl"
+            >
+              <Card className="grid md:grid-cols-2 rounded-2xl shadow-xl overflow-hidden">
+                <div className="bg-gradient-to-br from-navy to-teal text-white p-8 flex flex-col justify-between h-full min-h-[520px] rounded-3xl order-2 md:order-1">
+                  {/* TOP */}
+                  <div className="space-y-6">
+                    <CardHeader className="p-0 mb-6">
+                      <CardTitle className="text-lg lg:text-xl flex items-center gap-2">
+                        <div>
+                          <Gift className="h-5 w-5 text-white" />
+                        </div>
+                        Why Choose Passport Suvidha?
+                      </CardTitle>
+                    </CardHeader>
 
-        <div className="flex-grow flex items-center justify-center pb-10">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.1 } },
-            }}
-            className="w-full max-w-5xl"
-          >
-            <Card className="grid md:grid-cols-2 rounded-2xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-br from-navy to-teal text-white p-8 flex flex-col justify-between h-full min-h-[520px] rounded-3xl order-2 md:order-1">
-                {/* TOP */}
-                <div className="space-y-6">
-                  <CardHeader className="p-0 mb-6">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                   <div>
-                       <Gift className="h-5 w-5 text-white" />
-                   </div>
-                      Why Choose Passport Suvidha?
-                    </CardTitle>
-                  </CardHeader>
-
-                  <CardContent className="space-y-5 p-0">
-                    <ul className="space-y-4 text-sm">
-                      {[
-                        "Apply for passport from the comfort of your home",
-                        "Expert assistance throughout the entire process",
-                        "Fast & hassle-free documentation support",
-                        "Track your application anytime, anywhere",
-                        "Our team handles verification & processing support",
-                        "Dedicated on-call support for all your queries",
-                      ].map((item, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <div>
-                            <CheckCircle className="h-4 w-4 text-green-300 mt-1" />
+                    <CardContent className="space-y-5 p-0">
+                      <ul className="space-y-4 text-sm">
+                        {[
+                          "Apply Online",
+                          "Get Expert Help",
+                          "Track Status Anytime",
+                          "Affordable Consultancy",
+                        ].map((item, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <div>
+                              <CheckCircle className="h-4 w-4 text-green-300 mt-1" />
                             </div>
-                          <span className="leading-relaxed">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </div>
-
-                <CardFooter className="p-0 mt-6">
-                  {/* BOTTOM BADGE */}
-                  <div className="mt-8">
-                    <div className="flex items-center gap-3 text-sm bg-white/10 px-4 py-3 rounded-xl w-fit backdrop-blur">
-                      <Shield className="h-5 w-5 text-green-300" />
-                      <span>100% Secure & Trusted</span>
-                    </div>
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
                   </div>
-                </CardFooter>
-              </div>
 
-              {/* RIGHT FORM */}
-              <div className="p-8 bg-white space-y-8 order-1 md:order-2">
-                {/* TITLE */}
-                <div className="space-y-2">
-                  <CardTitle className="text-xl flex items-start gap-2 text-gray-900">
-                    <Gift className="h-5 w-5 text-teal" />
-                    Choose Your Passport Plan
-                  </CardTitle>
-                  <p className="text-sm text-gray-500">
-                    Select a service that suits your requirement
-                  </p>
+                  <CardFooter className="p-0 mt-6">
+                    {/* BOTTOM BADGE */}
+                    <div className="mt-8">
+                      <div className="flex items-center gap-3 text-sm bg-white/10 px-4 py-3 rounded-xl w-fit backdrop-blur">
+                        <Shield className="h-5 w-5 text-green-300" />
+                        <span>
+                          Travel dreams start here — let’s make it happen!
+                        </span>
+                      </div>
+                    </div>
+                  </CardFooter>
                 </div>
 
-                {/* SERVICES GRID */}
-                <div className="grid grid-cols-2 gap-4">
-                  {services.map((service) => {
-                    const isSelected = selectedService === service.service_code;
+                {/* RIGHT FORM */}
+                <div className="p-8 bg-white space-y-8 order-1 md:order-2">
+                  {/* TITLE */}
+                  <div className="space-y-2">
+                    <CardTitle className="text-lg lg:text-xl flex items-start gap-2 text-gray-900">
+                      <div>
+                        <Gift className="h-5 w-5 mt-1 text-teal" />
+                      </div>
+                      Choose Your Passport Plan
+                    </CardTitle>
+                    <p className="text-sm text-gray-500">
+                      Select a service that suits your requirement
+                    </p>
+                  </div>
 
-                    return (
-                      <div
-                        key={service.id}
-                        onClick={() => setSelectedService(service.service_code)}
-                        className={`
+                  {/* SERVICES GRID */}
+                  <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+                    {services.map((service) => {
+                      const isSelected =
+                        selectedService === service.service_code;
+
+                      return (
+                        <div
+                          key={service.id}
+                          onClick={() =>
+                            setSelectedService(service.service_code)
+                          }
+                          className={`
     relative cursor-pointer rounded-2xl border p-4 transition-all duration-200
     ${
       isSelected
@@ -381,116 +384,116 @@ const StarOfferPage = () => {
         : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
     }
   `}
-                      >
-                        {/* RADIO */}
-                      
+                        >
+                          {/* RADIO */}
 
-                        {/* TITLE + PRICE */}
-                        <div className="flex justify-between items-start gap-2 mb-3">
-                        
-
-                          <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
-                            ₹{service.service_total_amount}
-                          </span>
+                          {/* TITLE + PRICE */}
+                          <div className="flex justify-between items-start gap-2 mb-3">
+                            <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
+                              ₹{service.service_total_amount}
+                            </span>
                             <div className="">
-                          <div
-                            className={`
+                              <div
+                                className={`
       h-4 w-4 rounded-full border-2 flex items-center justify-center
       ${isSelected ? "border-teal" : "border-gray-300"}
     `}
-                          >
-                            {isSelected && (
-                              <div className="h-2 w-2 bg-teal rounded-full"></div>
-                            )}
+                              >
+                                {isSelected && (
+                                  <div className="h-2 w-2 bg-teal rounded-full"></div>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        </div>
 
-                        {/* SUB TEXT */}
+                          {/* SUB TEXT */}
                           <h3 className="text-sm font-medium text-gray-800 leading-snug pr-2">
                             {service.service_name}
                           </h3>
-                        <p className="text-[10px] text-gray-500 mt-2">
-                          Govt ₹{service.service_gov_amount} + Charges ₹
-                          {service.service_charges}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* DIVIDER */}
-                <div className="border-t border-gray-200 pt-6 space-y-5">
-                  {errorMessage && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-sm text-red-600">{errorMessage}</p>
-                    </div>
-                  )}
-
-                  {/* INPUTS */}
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm text-gray-700">Full Name</Label>
-                      <Input
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        placeholder="Enter your full name"
-                        className="mt-1 h-11 rounded-lg"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-sm text-gray-700">Email</Label>
-                      <Input
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Enter your email"
-                        className="mt-1 h-11 rounded-lg"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-sm text-gray-700">Mobile</Label>
-                      <Input
-                        name="mobile"
-                        value={formData.mobile}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^\d]/g, "");
-                          e.target.value = value;
-                          handleChange(e);
-                        }}
-                        maxLength={10}
-                        placeholder="Enter mobile number"
-                        className="mt-1 h-11 rounded-lg"
-                      />
-                    </div>
+                          <p className="text-[10px] text-gray-500 mt-2">
+                            Govt ₹{service.service_gov_amount} + Charges ₹
+                            {service.service_charges}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  {/* BUTTON */}
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={!isValid || loading}
-                    className="w-full h-12 bg-gradient-to-r from-navy to-teal text-white rounded-xl shadow-md hover:shadow-lg transition"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        Get Instant Offer
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
+                  {/* DIVIDER */}
+                  <div className="border-t border-gray-200 pt-6 space-y-5">
+                    {errorMessage && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-600">{errorMessage}</p>
+                      </div>
                     )}
-                  </Button>
+
+                    {/* INPUTS */}
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-sm text-gray-700">
+                          Full Name
+                        </Label>
+                        <Input
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          placeholder="Enter your full name"
+                          className="mt-1 h-11 rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-sm text-gray-700">Email</Label>
+                        <Input
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="Enter your email"
+                          className="mt-1 h-11 rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-sm text-gray-700">Mobile</Label>
+                        <Input
+                          name="mobile"
+                          value={formData.mobile}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^\d]/g, "");
+                            e.target.value = value;
+                            handleChange(e);
+                          }}
+                          maxLength={10}
+                          placeholder="Enter mobile number"
+                          className="mt-1 h-11 rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* BUTTON */}
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!isValid || loading}
+                      className="w-full h-12 bg-gradient-to-r from-navy to-teal text-white rounded-xl shadow-md hover:shadow-lg transition"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          Apply Now
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </motion.div>
+              </Card>
+            </motion.div>
+          </div>
         </div>
 
         <Footer />

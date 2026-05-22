@@ -24,8 +24,8 @@ export async function buildSeo(slug: string): Promise<Metadata> {
     keywords,
 
     robots: {
-      index: false,
-      follow: false,
+      index: true,
+      follow: true,
     },
 
     alternates: {

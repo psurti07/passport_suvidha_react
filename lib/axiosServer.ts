@@ -16,7 +16,7 @@ axiosServer.interceptors.response.use(
         // Clear auth state if needed
         localStorage.removeItem("user");
 
-        window.location.href = "/login";
+        window.location.href = "/signin";
       }
     }
 

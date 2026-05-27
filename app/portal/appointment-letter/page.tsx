@@ -18,8 +18,10 @@ import {
   Loader2,
   Calendar,
   Clock,
+  Eye,
 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+// import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format, isValid, parseISO } from "date-fns";
@@ -62,14 +64,16 @@ interface AppointmentLettersResponse {
 
 export default function AppointmentLetterPage() {
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [previewing, setPreviewing] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [lettersLoading, setLettersLoading] = useState(true);
   const [documents, setDocuments] = useState<RequiredDocument[]>([]);
+  const [hasViewedApplication, setHasViewedApplication] = useState(false);
   const [appointmentLetters, setAppointmentLetters] = useState<
     AppointmentLetter[]
   >([]);
   const [importantNote, setImportantNote] = useState("");
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const router = useRouter();
 
   // Animation variants
@@ -145,11 +149,7 @@ export default function AppointmentLetterPage() {
         setImportantNote(result.data.important_note);
       } catch (error) {
         console.error("Error fetching required documents:", error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch required documents",
-          variant: "destructive",
-        });
+        toast.error("Failed to fetch required documents");
       } finally {
         setLoading(false);
       }
@@ -167,12 +167,10 @@ export default function AppointmentLetterPage() {
           },
         });
 
-        // ✅ Axios already gives parsed JSON
         const result = response.data;
 
         let lettersArray: any[] = [];
 
-        // ✅ Handle different possible response formats safely
         if (
           result?.data?.appointment_letters &&
           Array.isArray(result.data.appointment_letters)
@@ -186,7 +184,6 @@ export default function AppointmentLetterPage() {
           lettersArray = result.appointment_letters;
         }
 
-        // ✅ Sort by latest date
         const sortedLetters = lettersArray.sort((a, b) => {
           const dateA = a?.created_at ? new Date(a.created_at).getTime() : 0;
           const dateB = b?.created_at ? new Date(b.created_at).getTime() : 0;
@@ -197,16 +194,9 @@ export default function AppointmentLetterPage() {
       } catch (error: any) {
         console.error("Error fetching appointment letters:", error);
 
-        toast({
-          title: "Error",
-          description:
-            error?.response?.data?.message ||
-            error.message ||
-            "Failed to fetch appointment letters",
-          variant: "destructive",
-        });
+        toast.error("Failed to fetch appointment letters");
 
-        setAppointmentLetters([]); // ✅ always safe fallback
+        setAppointmentLetters([]);
       } finally {
         setLettersLoading(false);
       }
@@ -252,19 +242,46 @@ export default function AppointmentLetterPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(link);
 
-      toast({
-        title: "Success",
-        description: "Appointment letter downloaded successfully",
-      });
+      toast.success("Appointment letter downloaded successfully");
+      setHasViewedApplication(true);
     } catch (error: any) {
       console.error("Error downloading appointment letter:", error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to download appointment letter",
-        variant: "destructive",
-      });
+      toast.error("Failed to download appointment letter");
     } finally {
       setDownloading(null);
+    }
+  };
+
+  const handlePreview = async (letterId: string) => {
+    try {
+      setPreviewing(letterId);
+
+      const authToken = localStorage.getItem("authToken");
+
+      const response = await axiosServer.get(`/appointment-letters/preview`, {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          Accept: "application/pdf",
+        },
+      });
+
+      const contentType = response.headers["content-type"];
+
+      const blob = new Blob([response.data], {
+        type: contentType,
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      window.open(url, "_blank");
+
+      // toast.success("Appointment letter preview");
+    } catch (error: any) {
+      console.error("Error previewing appointment letter:", error);
+      toast.error("Failed to preview appointment letter");
+    } finally {
+      setPreviewing(null);
     }
   };
 
@@ -350,29 +367,50 @@ export default function AppointmentLetterPage() {
                           {formatDate(letter.created_at)}
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs flex items-center gap-1 text-muted-foreground">
+                      <div className="flex flex-col md:flex-column xl:flex-row gap-2 items-center justify-between">
+                        <span className="text-xs flex items-start gap-1 text-muted-foreground">
                           <Clock className="h-3 w-3" />{" "}
                           {formatTime(letter.appointment_time)}
                         </span>
-                        {index === 0 && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDownload(letter.id)}
-                            disabled={downloading === letter.id}
-                            className="bg-teal-100 border-teal-200 hover:bg-navy/5 hover:text-navy"
-                          >
-                            {downloading === letter.id ? (
-                              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                            ) : (
-                              <Download className="mr-2 h-3 w-3" />
-                            )}
-                            {downloading === letter.id
-                              ? "Downloading..."
-                              : "Download"}
-                          </Button>
-                        )}
+                        <div className="flex items-center gap-1">
+                          {index === 0 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handlePreview(letter.id)}
+                              disabled={previewing === letter.id}
+                              className="bg-teal-100 border-teal-200 hover:bg-navy/5 hover:text-navy"
+                            >
+                              {previewing === letter.id ? (
+                                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                              ) : (
+                                <Eye className=" h-3 w-3" />
+                              )}
+
+                              {previewing === letter.id
+                                ? "Viewing..."
+                                : "Preview"}
+                            </Button>
+                          )}
+                          {index === 0 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDownload(letter.id)}
+                              disabled={downloading === letter.id}
+                              className="bg-teal-100 border-teal-200 hover:bg-navy/5 hover:text-navy"
+                            >
+                              {downloading === letter.id ? (
+                                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                              ) : (
+                                <Download className=" h-3 w-3" />
+                              )}
+                              {downloading === letter.id
+                                ? "Downloading..."
+                                : "Download"}
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}

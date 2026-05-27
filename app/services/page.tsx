@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -26,6 +26,7 @@ import {
   Award,
   ArrowRight,
 } from "lucide-react";
+import axiosServer from "@/lib/axiosServer";
 
 type StageKey =
   | "form"
@@ -37,6 +38,25 @@ type StageKey =
 
 export default function Services() {
   const [selectedStage, setSelectedStage] = useState<StageKey>("form");
+  const [services, setServices] = useState([]);
+
+  const fetchServices = async () => {
+    const response = await axiosServer.get("/services/passport");
+    setServices(response.data.data);
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const normal36 = services?.find((item) => item.service_code === "NP36");
+  const normal60 = services?.find((item) => item.service_code === "NP60");
+  const tatkal36 = services?.find((item) => item.service_code === "TP36");
+  const tatkal60 = services?.find((item) => item.service_code === "TP60");
+
+  const gstCalculation = (service_charges: number) => {
+    return Math.round(service_charges * 0.18);
+  };
 
   const stageContent: Record<StageKey, React.ReactElement> = {
     form: (
@@ -624,20 +644,22 @@ export default function Services() {
                             36 pages
                           </div>
                           <div className="text-2xl font-bold text-navy mt-1">
-                            ₹2,680
+                            ₹{normal36?.service_total_amount}
                           </div>
                           <div className="text-sm text-navy/70 mt-1 space-y-1">
                             <div className="flex justify-between">
                               <span>Gov. Fees:</span>
-                              <span>₹1,500</span>
+                              <span>₹{normal36?.service_gov_amount}</span>
                             </div>
                             <div className="flex justify-between">
                               <span>Service Charge:</span>
-                              <span>₹1,000</span>
+                              <span>₹{normal36?.service_charges}</span>
                             </div>
                             <div className="flex justify-between">
                               <span>GST (18%):</span>
-                              <span>₹180</span>
+                              <span>
+                                ₹{gstCalculation(normal36?.service_charges)}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -646,20 +668,22 @@ export default function Services() {
                             60 pages
                           </div>
                           <div className="text-2xl font-bold text-navy mt-1">
-                            ₹3,180
+                            ₹{normal60?.service_total_amount}
                           </div>
                           <div className="text-sm text-navy/70 mt-1 space-y-1">
                             <div className="flex justify-between">
                               <span>Gov. Fees:</span>
-                              <span>₹2,000</span>
+                              <span>₹{normal60?.service_gov_amount}</span>
                             </div>
                             <div className="flex justify-between">
                               <span>Service Charge:</span>
-                              <span>₹1,000</span>
+                              <span>₹{normal60?.service_charges}</span>
                             </div>
                             <div className="flex justify-between">
                               <span>GST (18%):</span>
-                              <span>₹180</span>
+                              <span>
+                                ₹{gstCalculation(normal60?.service_charges)}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -749,20 +773,22 @@ export default function Services() {
                             36 pages
                           </div>
                           <div className="text-2xl font-bold text-teal mt-1">
-                            ₹4,680
+                            ₹{tatkal36?.service_total_amount}
                           </div>
                           <div className="space-y-1 mt-2">
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
-                              <span>₹3,500</span>
+                              <span>₹{tatkal36?.service_gov_amount}</span>
                             </div>
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Service Charge</span>
-                              <span>₹1,000</span>
+                              <span>₹{tatkal36?.service_charges}</span>
                             </div>
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>GST (18%)</span>
-                              <span>₹180</span>
+                              <span>
+                                ₹{gstCalculation(tatkal36?.service_charges)}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -771,20 +797,22 @@ export default function Services() {
                             60 pages
                           </div>
                           <div className="text-2xl font-bold text-teal mt-1">
-                            ₹5,180
+                            ₹{tatkal60?.service_total_amount}
                           </div>
                           <div className="space-y-1 mt-2">
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
-                              <span>₹4,000</span>
+                              <span>₹{tatkal60?.service_gov_amount}</span>
                             </div>
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Service Charge</span>
-                              <span>₹1,000</span>
+                              <span>₹{tatkal60?.service_charges}</span>
                             </div>
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>GST (18%)</span>
-                              <span>₹180</span>
+                              <span>
+                                ₹{gstCalculation(tatkal60?.service_charges)}
+                              </span>
                             </div>
                           </div>
                         </div>

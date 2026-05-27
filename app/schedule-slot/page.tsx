@@ -1,97 +1,50 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Phone, Calendar, Clock, Languages } from "lucide-react";
+import Image from "next/image";
 
 import { Card, CardContent } from "@/components/ui/card";
-
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+
 import axiosServer from "@/lib/axiosServer";
-import { useRouter } from "next/navigation";
 
 const languages = ["English", "Hindi", "Gujarati"];
 
-const generateDates = () => {
-  const dates = [];
-
-  const today = new Date();
-
-  let count = 0;
-  let i = 0;
-
-  while (count < 4) {
-    const currentDate = new Date();
-
-    currentDate.setDate(today.getDate() + i);
-
-    const day = currentDate.getDay();
-
-    // Skip Saturday (6) & Sunday (0)
-    if (day !== 0 && day !== 6) {
-      let label = "";
-
-      if (count === 0) {
-        label = "Today";
-      } else if (count === 1) {
-        label = "Tomorrow";
-      } else {
-        label = currentDate.toLocaleDateString("en-US", {
-          weekday: "short",
-        });
-      }
-
-      dates.push({
-        day: label,
-
-        date: currentDate.toLocaleDateString("en-US", {
-          day: "2-digit",
-          month: "short",
-        }),
-
-        fullDate: currentDate.toISOString().split("T")[0],
-      });
-
-      count++;
-    }
-
-    i++;
-  }
-
-  return dates;
-};
-
-const dates = generateDates();
-
-const slots = [
-  "11:00 AM",
-  "11:30 AM",
-  "12:00 PM",
-  "12:30 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "2:30 PM",
-  "3:00 PM",
-  "3:30 PM",
-  "4:00 PM",
+// ------------------ FIXED SLOTS ------------------
+const fixedSlots = [
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
 ];
 
 export default function ScheduleSlotPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // encrypted customer id from url
   const encryptedId = searchParams.get("id");
 
+  const [dates, setDates] = useState<any[]>([]);
+  const [slots, setSlots] = useState<any[]>([]);
+
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-  const [selectedDate, setSelectedDate] = useState(dates[0]);
-  const [selectedSlot, setSelectedSlot] = useState("4:00 PM");
+
+  const [selectedDate, setSelectedDate] = useState<any>(null);
+
+  const [selectedSlot, setSelectedSlot] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [customer, setCustomer] = useState(null);
-  const [alreadySchedule, setalreadySchedule] = useState(false);
-  const [scheduleId, setScheduleId] = useState("");
-  const router = useRouter();
+
+  const [customer, setCustomer] = useState<any>(null);
 
   const customerId = useMemo(() => {
     if (!encryptedId) return "";
@@ -103,6 +56,118 @@ export default function ScheduleSlotPage() {
     }
   }, [encryptedId]);
 
+  // ------------------ CHECK TODAY ------------------
+  const isToday = (dateString: string) => {
+    const today = new Date();
+
+    const compareDate = new Date(dateString);
+
+    return today.toDateString() === compareDate.toDateString();
+  };
+
+  // ------------------ GENERATE DATES ------------------
+  const generateDates = () => {
+    const tempDates = [];
+
+    const today = new Date();
+
+    let count = 0;
+    let i = 0;
+
+    while (count < 4) {
+      const currentDate = new Date();
+
+      currentDate.setDate(today.getDate() + i);
+
+      const day = currentDate.getDay();
+
+      // Skip Sunday (0) & Saturday (6)
+      if (day !== 0 && day !== 6) {
+        let label = "";
+
+        const diffDays = Math.floor(
+          (currentDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+        );
+
+        if (diffDays === 0) {
+          label = "Today";
+        } else if (diffDays === 1) {
+          label = "Tomorrow";
+        } else {
+          label = currentDate.toLocaleDateString("en-US", {
+            weekday: "short",
+          });
+        }
+
+        tempDates.push({
+          day: label,
+
+          date: currentDate.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+          }),
+
+          fullDate: currentDate.toISOString().split("T")[0],
+        });
+
+        count++;
+      }
+
+      i++;
+    }
+
+    setDates(tempDates);
+
+    // Auto select first date
+    if (tempDates.length > 0) {
+      setSelectedDate(tempDates[0]);
+    }
+  };
+
+  // ------------------ GENERATE SLOTS ------------------
+  const generateSlots = (dateObj: any) => {
+    if (!dateObj) return;
+
+    const now = new Date();
+
+    const availableSlots: any[] = [];
+
+    fixedSlots.forEach((time) => {
+      const [h, m] = time.split(":").map(Number);
+
+      const slotDate = new Date(dateObj.fullDate);
+
+      slotDate.setHours(h, m, 0, 0);
+
+      // Skip past slots for today
+      if (isToday(dateObj.fullDate) && slotDate <= now) {
+        return;
+      }
+
+      // Convert to 12-hour
+      const hour12 = h % 12 || 12;
+
+      const ampm = h < 12 ? "AM" : "PM";
+
+      const formatted = `${hour12}:${String(m).padStart(2, "0")} ${ampm}`;
+
+      availableSlots.push({
+        label: formatted,
+        value: time,
+      });
+    });
+
+    setSlots(availableSlots);
+
+    // Auto select first available slot
+    if (availableSlots.length > 0) {
+      setSelectedSlot(availableSlots[0].label);
+    } else {
+      setSelectedSlot("");
+    }
+  };
+
+  // ------------------ GET CUSTOMER ------------------
   const getScheduleDetails = async () => {
     try {
       setLoading(true);
@@ -113,6 +178,8 @@ export default function ScheduleSlotPage() {
 
       if (response.data.already_scheduled === true) {
         router.push(`/schedule-success?id=${response.data.schedule_id}`);
+
+        return;
       }
 
       setCustomer(response.data.customer);
@@ -123,13 +190,27 @@ export default function ScheduleSlotPage() {
     }
   };
 
+  // ------------------ INIT ------------------
+  useEffect(() => {
+    generateDates();
+  }, []);
+
+  // ------------------ DATE CHANGE ------------------
+  useEffect(() => {
+    if (selectedDate) {
+      generateSlots(selectedDate);
+    }
+  }, [selectedDate]);
+
+  // ------------------ GET CUSTOMER DETAILS ------------------
   useEffect(() => {
     if (encryptedId) {
       getScheduleDetails();
     }
   }, [encryptedId]);
 
-  const convert24Hour = (time12h) => {
+  // ------------------ CONVERT TIME ------------------
+  const convert24Hour = (time12h: string) => {
     const [time, modifier] = time12h.split(" ");
 
     let [hours, minutes] = time.split(":");
@@ -139,14 +220,21 @@ export default function ScheduleSlotPage() {
     }
 
     if (modifier === "PM") {
-      hours = parseInt(hours, 10) + 12;
+      hours = (parseInt(hours, 10) + 12).toString();
     }
 
-    return `${hours.toString().padStart(2, "0")}:${minutes}:00`;
+    return `${hours.padStart(2, "0")}:${minutes}:00`;
   };
 
+  // ------------------ SUBMIT ------------------
   const handleSubmit = async () => {
     try {
+      if (!selectedLanguage || !selectedDate || !selectedSlot) {
+        alert("Please select language, date and slot");
+
+        return;
+      }
+
       const data = {
         customerId,
         language: selectedLanguage,
@@ -155,6 +243,7 @@ export default function ScheduleSlotPage() {
       };
 
       setLoading(true);
+
       const response = await axiosServer.post("/schedule-slot", data);
 
       if (response.data.success === true) {
@@ -170,7 +259,6 @@ export default function ScheduleSlotPage() {
   return (
     <div className="min-h-screen bg-muted/30 py-10 px-4">
       <div className="max-w-md mx-auto">
-        {/* TOP CARD */}
         <Card className="rounded-3xl border-0 shadow-xl overflow-hidden">
           <div className="h-1 w-full bg-gradient-to-r from-navy to-teal" />
 
@@ -189,11 +277,12 @@ export default function ScheduleSlotPage() {
 
               <div className="flex items-center md:justify-end gap-2 text-sm font-medium py-1 md:mt-6">
                 <Phone className="h-4 w-4 text-teal" />
+
                 <span>{customer?.mobile_number}</span>
               </div>
             </div>
 
-            {/* HERO BANNER */}
+            {/* HERO */}
             <div className="rounded-2xl bg-muted/60 p-4 flex items-center justify-between mb-6">
               <div className="max-w-[60%]">
                 <div className="inline-flex items-center rounded-lg bg-green-700 text-white text-xs px-3 py-1 font-medium mb-3">
@@ -204,10 +293,11 @@ export default function ScheduleSlotPage() {
                   Take the First Step to a Healthier, Happier You
                 </h3>
               </div>
+
               <div className="h-24 w-24 rounded-xl bg-white shadow-sm overflow-hidden">
                 <Image
                   src="/4.jpg"
-                  alt="Passport Application Process"
+                  alt="Passport"
                   width={96}
                   height={96}
                   className="h-full w-full object-cover"
@@ -220,7 +310,7 @@ export default function ScheduleSlotPage() {
               <div className="flex items-center gap-2 mb-2">
                 <Languages className="h-5 w-5 text-teal" />
 
-                <h3 className="font-semibold text-based md:text-lg">
+                <h3 className="font-semibold text-base md:text-lg">
                   Choose Preferred Language
                 </h3>
               </div>
@@ -235,11 +325,11 @@ export default function ScheduleSlotPage() {
                     key={language}
                     onClick={() => setSelectedLanguage(language)}
                     className={`h-10 rounded-xl border text-sm font-medium transition-all modern-button
-                      ${
-                        selectedLanguage === language
-                          ? "bg-teal/15 border-teal/20 text-teal"
-                          : "bg-background hover:bg-teal/5 hover:text-teal"
-                      }`}
+                    ${
+                      selectedLanguage === language
+                        ? "bg-teal/15 border-teal/20 text-teal"
+                        : "bg-background hover:bg-teal/5 hover:text-teal"
+                    }`}
                   >
                     {language}
                   </button>
@@ -252,7 +342,7 @@ export default function ScheduleSlotPage() {
               <div className="flex items-center gap-2 mb-4">
                 <Calendar className="h-5 w-5 text-navy" />
 
-                <h3 className="font-semibold text-based md:text-lg">
+                <h3 className="font-semibold text-base md:text-lg">
                   Choose Date
                 </h3>
               </div>
@@ -260,7 +350,7 @@ export default function ScheduleSlotPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {dates.map((item) => (
                   <button
-                    key={item.day}
+                    key={item.fullDate}
                     onClick={() => setSelectedDate(item)}
                     className={`rounded-2xl border py-4 transition-all modern-button
                     ${
@@ -277,35 +367,41 @@ export default function ScheduleSlotPage() {
               </div>
             </div>
 
-            {/* TIME SLOT */}
+            {/* SLOTS */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="h-5 w-5 text-burgundy" />
 
-                <h3 className="font-semibold text-based md:text-lg">
+                <h3 className="font-semibold text-base md:text-lg">
                   Choose Time Slot
                 </h3>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-3 grid-cols-2">
-                {slots.map((slot) => (
-                  <button
-                    key={slot}
-                    onClick={() => setSelectedSlot(slot)}
-                    className={`h-10 rounded-xl border text-sm font-medium transition-all modern-button
-                    ${
-                      selectedSlot === slot
-                        ? "bg-teal/15 border-teal/20 text-teal"
-                        : "bg-background hover:bg-teal/5 hover:text-teal"
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
+              {slots.length > 0 ? (
+                <div className="grid md:grid-cols-3 grid-cols-2 gap-3">
+                  {slots.map((slot) => (
+                    <button
+                      key={slot.value}
+                      onClick={() => setSelectedSlot(slot.label)}
+                      className={`h-10 rounded-xl border text-sm font-medium transition-all modern-button
+                      ${
+                        selectedSlot === slot.label
+                          ? "bg-teal/15 border-teal/20 text-teal"
+                          : "bg-background hover:bg-teal/5 hover:text-teal"
+                      }`}
+                    >
+                      {slot.label}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-red-500">
+                  No slots available for selected date
+                </div>
+              )}
             </div>
 
-            {/* SOCIAL PROOF */}
+            {/* SOCIAL */}
             <div className="rounded-2xl bg-muted/50 p-5 grid grid-cols-1 md:grid-cols-2 items-center gap-3 mb-6">
               <div className="flex -space-x-3">
                 <div className="h-12 w-12 rounded-full border-2 border-white overflow-hidden">
@@ -351,10 +447,10 @@ export default function ScheduleSlotPage() {
             {/* BUTTON */}
             <Button
               onClick={handleSubmit}
-              //   className="w-full h-14 rounded-2xl text-lg font-semibold bg-green-900 hover:bg-green-800"
-              className="w-full h-14 bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 px-6 flex items-center gap-2 text-base md:text-md "
+              disabled={loading}
+              className="w-full h-14 bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl text-base"
             >
-              {loading ? "Schedule..." : <>CLAIM YOUR SPOT</>}
+              {loading ? "Schedule..." : "CLAIM YOUR SPOT"}
             </Button>
           </CardContent>
         </Card>

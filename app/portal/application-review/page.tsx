@@ -18,7 +18,10 @@ import {
   Eye,
   Check,
   Loader2,
+  Phone,
+  AlertTriangle,
 } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -54,6 +57,7 @@ export default function ApplicationReviewPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [summary, setSummary] = useState<ApplicationSummary | null>(null);
   const [hasViewedApplication, setHasViewedApplication] = useState(false);
+  const [invalidDetails, setInvalidDetails] = useState(false);
 
   const router = useRouter();
 
@@ -337,84 +341,222 @@ export default function ApplicationReviewPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <Checkbox
-                      id="terms"
-                      checked={termsAccepted}
-                      onCheckedChange={(checked) => {
-                        if (checked && !hasViewedApplication) {
-                          toast.error(
-                            "Please preview or download the application before verifying",
-                          );
-                          return;
-                        }
-                        setTermsAccepted(checked as boolean);
-                      }}
-                      className="mt-1 border-navy/20 data-[state=checked]:bg-teal data-[state=checked]:border-teal"
-                    />
-                    <div className="space-y-1">
-                      <label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-navy"
-                      >
-                        I confirm that I have reviewed the application summary
-                        and all information is correct
-                      </label>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="link"
-                            className="p-0 h-auto text-teal hover:text-teal/90"
-                          >
-                            View Full Declaration
-                            <ExternalLink className="h-3 w-3 ml-1" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-white border-gray-200">
-                          <DialogHeader>
-                            <DialogTitle className="text-navy">
-                              Verification Declaration
-                            </DialogTitle>
-                          </DialogHeader>
-                          <div className="max-h-[60vh] overflow-y-auto space-y-4">
-                            <p className="text-sm text-muted-foreground">
-                              By proceeding with the verification, I confirm
-                              that:
-                            </p>
-                            <ul className="list-disc pl-6 space-y-2 text-sm text-muted-foreground">
-                              <li>
-                                I have thoroughly reviewed the application
-                                summary PDF
-                              </li>
-                              <li>
-                                All personal details in the application are
-                                accurate and match my documents
-                              </li>
-                              <li>
-                                I understand that this verification is final and
-                                cannot be changed after submission
-                              </li>
-                              <li>
-                                I am aware that any false information may result
-                                in application rejection
-                              </li>
-                              <li>
-                                I am submitting this verification of my own free
-                                will
-                              </li>
-                            </ul>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                <div className="space-y-4 sm:space-y-5">
+                  {/* MAIN VERIFICATION OPTION */}
+                  <div className="rounded-2xl border border-teal/20 bg-teal/5 p-4 sm:p-5">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="terms"
+                        checked={termsAccepted}
+                        onCheckedChange={(checked) => {
+                          if (checked && !hasViewedApplication) {
+                            toast.error(
+                              "Please preview or download the application before verifying",
+                            );
+                            return;
+                          }
+
+                          if (checked) {
+                            setInvalidDetails(false);
+                          }
+
+                          setTermsAccepted(checked as boolean);
+                        }}
+                        className="mt-1 border-navy/20 data-[state=checked]:bg-teal data-[state=checked]:border-teal"
+                      />
+
+                      <div className="space-y-2 flex-1">
+                        <label
+                          htmlFor="terms"
+                          className="text-sm sm:text-[15px] font-medium leading-relaxed text-navy cursor-pointer block"
+                        >
+                          I confirm that I have reviewed the application summary
+                          and all information provided is correct and matches my
+                          official documents.
+                        </label>
+
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="link"
+                              className="p-0 h-auto text-teal hover:text-teal/90 text-sm"
+                            >
+                              View Full Declaration
+                              <ExternalLink className="h-3.5 w-3.5 ml-1" />
+                            </Button>
+                          </DialogTrigger>
+
+                          <DialogContent className="bg-white border-gray-200 max-w-lg">
+                            <DialogHeader>
+                              <DialogTitle className="text-navy">
+                                Verification Declaration
+                              </DialogTitle>
+                            </DialogHeader>
+
+                            <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-1">
+                              <p className="text-sm text-muted-foreground">
+                                By proceeding with the verification, I confirm
+                                that:
+                              </p>
+
+                              <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
+                                <li>
+                                  I have thoroughly reviewed the application
+                                  summary PDF
+                                </li>
+
+                                <li>
+                                  All personal details in the application are
+                                  accurate and match my documents
+                                </li>
+
+                                <li>
+                                  I understand that this verification is final
+                                  and cannot be changed after submission
+                                </li>
+
+                                <li>
+                                  I am aware that any false information may
+                                  result in application rejection
+                                </li>
+
+                                <li>
+                                  I am submitting this verification of my own
+                                  free will
+                                </li>
+                              </ul>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-4 pt-4">
+                  {/* INVALID DETAILS OPTION */}
+                  <div className="rounded-2xl border border-navy/10 bg-gradient-to-br from-navy/5 via-white to-teal/5 p-4 sm:p-5 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="invalid-details"
+                        checked={invalidDetails}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setTermsAccepted(false);
+                          }
+
+                          setInvalidDetails(checked as boolean);
+                        }}
+                        className="mt-1 border-navy/30 data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-navy data-[state=checked]:to-teal data-[state=checked]:border-teal"
+                      />
+
+                      <div className="space-y-3 flex-1">
+                        <label
+                          htmlFor="invalid-details"
+                          className="text-sm sm:text-[15px] font-semibold leading-relaxed text-navy cursor-pointer block"
+                        >
+                          I found incorrect or missing information in my
+                          application
+                        </label>
+
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          If your application details are incorrect, incomplete,
+                          or do not match your official documents, please
+                          contact our support team before final verification.
+                        </p>
+
+                        {invalidDetails && (
+                          <div className="relative overflow-hidden rounded-2xl border border-teal/10 bg-white shadow-md">
+                            {/* TOP BAR */}
+                            <div className="h-1.5 w-full bg-gradient-to-r from-navy via-teal to-navy" />
+
+                            <div className="p-4 sm:p-5">
+                              <div className="flex flex-col sm:flex-row items-start gap-4">
+                                {/* ICON */}
+                                <div className="h-12 w-12 sm:h-10 sm:w-10 rounded-2xl bg-gradient-to-br from-navy/10 to-teal/10 flex items-center justify-center shadow-sm flex-shrink-0">
+                                  <Phone className="h-2 w-2 sm:h-4 sm:w-4 text-teal" />
+                                </div>
+
+                                {/* CONTENT */}
+                                <div className="flex-1 space-y-4 w-full">
+                                  <div>
+                                    <h4 className="text-base sm:text-lg font-bold text-navy">
+                                      Need Help With Corrections?
+                                    </h4>
+
+                                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                                      Our Passport Suvidha support team will
+                                      help you review and correct your
+                                      application details before verification.
+                                    </p>
+                                  </div>
+
+                                  {/* SUPPORT BOX */}
+                                  <div className="rounded-xl border border-teal/10 bg-gradient-to-r from-navy/5 to-teal/5 p-4">
+                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                      <div>
+                                        <p className="text-[11px] sm:text-xs uppercase tracking-wide text-muted-foreground">
+                                          Customer Support
+                                        </p>
+
+                                        <h5 className="text-lg sm:text-xl font-bold text-navy mt-1 break-all">
+                                          +91 7486046591
+                                        </h5>
+
+                                        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                                          Monday to Saturday • 10:00 AM to 5:00
+                                          PM
+                                        </p>
+                                      </div>
+
+                                      <a
+                                        href="/contact"
+                                        className="w-full lg:w-auto"
+                                      >
+                                        <Button
+                                          type="button"
+                                          className="w-full lg:w-auto bg-gradient-to-r from-navy to-teal hover:opacity-90 text-white rounded-xl modern-button px-5"
+                                        >
+                                          <Phone className="h-4 w-4 mr-2" />
+                                          Contact Support
+                                        </Button>
+                                      </a>
+                                    </div>
+                                  </div>
+
+                                  {/* INFO NOTE */}
+                                  <div className="flex items-start gap-3 rounded-xl bg-amber-50 border border-amber-100 p-3">
+                                    <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                                    </div>
+
+                                    <div>
+                                      <p className="text-sm font-medium text-amber-700">
+                                        Important Notice
+                                      </p>
+
+                                      <p className="text-xs sm:text-sm text-amber-700/80 mt-1 leading-relaxed">
+                                        Please do not proceed with verification
+                                        until all details are corrected. Once
+                                        verified, application changes may not be
+                                        possible.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ACTION BUTTON */}
+                  <div className="pt-2">
                     <Button
-                      className="w-full md:w-auto bg-gradient-to-r from-navy to-teal text-white bg-primary hover:bg-primary/90 hover:opacity-90 rounded-xl modern-button"
+                      className="w-full sm:w-auto sm:min-w-[220px] h-11 sm:h-12 bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
                       disabled={
                         !termsAccepted ||
+                        invalidDetails ||
                         isVerified ||
                         isLoading ||
                         !hasViewedApplication
@@ -422,9 +564,12 @@ export default function ApplicationReviewPage() {
                       onClick={handleVerify}
                     >
                       {isLoading ? (
-                        <Loader2 className="h-4 w-4 mr-2 hidden sm:block" />
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : null}
-                      Verify
+
+                      <span className="truncate">
+                        {isLoading ? "Verifying..." : "Verify Application"}
+                      </span>
                     </Button>
                   </div>
                 </div>

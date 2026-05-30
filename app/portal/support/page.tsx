@@ -379,10 +379,10 @@ export default function SupportPage() {
                           <p className="text-sm text-muted-foreground mt-1">
                             Call us at{" "}
                             <a
-                              href="tel:7486046591"
+                              href="tel:+91-7486046591"
                               className="text-navy hover:underline"
                             >
-                              7486046591
+                              +91-7486046591
                             </a>
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">

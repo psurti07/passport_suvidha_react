@@ -288,7 +288,7 @@ export default function RefundPolicy() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-5 w-5 text-navy" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                   </div>
                 </div>

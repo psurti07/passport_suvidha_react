@@ -265,7 +265,7 @@ export function Footer() {
                 <Phone className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                 <div>
                   <p className="text-white/90 font-medium">Phone Support</p>
-                  <p className="text-white/70">7486046591</p>
+                  <p className="text-white/70">+91-7486046591</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -282,7 +282,8 @@ export function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-center items-center border-t border-white/10 mt-8 py-4">
           <p className="text-sm text-white/60 text-center">
-            © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All rights reserved.
+            © {new Date().getFullYear()} Boundless Passport Suvidha LLP. All
+            rights reserved.
           </p>
         </div>
       </div>

@@ -340,7 +340,13 @@ export default function Contact() {
                           type="submit"
                           className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base"
                           disabled={
-                            !termsAccepted || !marketingConsent || isSubmitting || !firstName || !lastName || !email || !message
+                            !termsAccepted ||
+                            !marketingConsent ||
+                            isSubmitting ||
+                            !firstName ||
+                            !lastName ||
+                            !email ||
+                            !message
                           }
                         >
                           {isSubmitting ? (
@@ -386,7 +392,9 @@ export default function Contact() {
                           <h4 className="font-medium text-teal">
                             Phone Support
                           </h4>
-                          <p className="text-muted-foreground">7486046591</p>
+                          <p className="text-muted-foreground">
+                            +91-7486046591
+                          </p>
                           <p className="text-sm text-muted-foreground">
                             Monday-Saturday, 10:00 AM to 05:00 PM
                           </p>

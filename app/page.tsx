@@ -712,29 +712,29 @@ export default function Home() {
                     {
                       quote:
                         "PassportSuvidha made getting my first passport incredibly easy. Their step-by-step guidance saved me hours of research and stress.",
-                      author: "Emily R.",
-                      location: "Chicago, IL",
+                      author: "Priya Sharma",
+                      location: "Ahmedabad, Gujarat",
                       rating: 5,
                     },
                     {
                       quote:
                         "When I needed an expedited passport for an unexpected business trip, PassportSuvidha delivered in just 3 days. Absolutely worth every penny!",
-                      author: "Marcus T.",
-                      location: "Atlanta, GA",
-                      rating: 5,
+                      author: "Rahul Patel",
+                      location: "Surat, Gujarat",
+                      rating: 4,
                     },
                     {
                       quote:
                         "The customer service team went above and beyond to help with my complicated name change situation. I couldn't be more grateful.",
-                      author: "Sophia L.",
-                      location: "San Francisco, CA",
-                      rating: 5,
+                      author: "Kavya Reddy",
+                      location: "Hyderabad, Telangana",
+                      rating: 4,
                     },
                     {
                       quote:
                         "As someone who travels frequently for work, I appreciate the efficiency and reliability of PassportSuvidha. They've handled my renewals for years.",
-                      author: "James K.",
-                      location: "Boston, MA",
+                      author: "Rohan Nair",
+                      location: "Bengaluru, Karnataka",
                       rating: 5,
                     },
                   ].map((testimonial, index) => (
@@ -962,8 +962,8 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto max-w-3xl space-y-6">
-              <Card className="rounded-xl border-0 shadow-lg overflow-hidden">
+            <div className="mx-auto max-w-4xl space-y-6">
+              <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
                 <CardContent className="p-6">
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem
@@ -1236,7 +1236,9 @@ export default function Home() {
                           <h4 className="font-medium text-teal">
                             Phone Support
                           </h4>
-                          <p className="text-muted-foreground">7486046591</p>
+                          <p className="text-muted-foreground">
+                            +91-7486046591
+                          </p>
                           <p className="text-sm text-muted-foreground">
                             Monday-Saturday, 10am-5pm IST
                           </p>

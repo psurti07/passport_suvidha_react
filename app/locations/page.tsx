@@ -40,14 +40,11 @@ export default function Locations() {
           ? localStorage.getItem("authToken")
           : null;
 
-      const response = await axiosServer.get(
-        `/locations?search=${value}`, 
-        {
-          headers: {
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
+      const response = await axiosServer.get(`/locations?search=${value}`, {
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
-      );
+      });
 
       const data = response.data;
 
@@ -149,7 +146,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -193,7 +190,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -237,7 +234,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -281,7 +278,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -325,7 +322,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -369,7 +366,7 @@ export default function Locations() {
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
-                      <span>7486046591</span>
+                      <span>+91-7486046591</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />

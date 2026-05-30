@@ -57,7 +57,10 @@ export default function AboutUs() {
                   <span className="text-gold">India</span>
                 </h1>
                 <p className="max-w-[600px] text-white/90 md:text-lg leading-relaxed">
-                Passport Suvidha tops the chart by providing every Indian with a digitally equipped platform to relish a top-notch, transparent and timely passport application process – at the comfort of home!
+                  Passport Suvidha tops the chart by providing every Indian with
+                  a digitally equipped platform to relish a top-notch,
+                  transparent and timely passport application process – at the
+                  comfort of home!
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                   <Button
@@ -82,7 +85,7 @@ export default function AboutUs() {
                       <Clock className="h-4 w-4 text-gold" />
                     </div>
                     <span className="text-sm text-white/90">
-                    Quick Processing
+                      Quick Processing
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -90,14 +93,16 @@ export default function AboutUs() {
                       <Shield className="h-4 w-4 text-gold" />
                     </div>
                     <span className="text-sm text-white/90">
-                    100% Safe & Secure
+                      100% Safe & Secure
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="rounded-full bg-gold/20 p-1">
                       <Star className="h-4 w-4 text-gold" />
                     </div>
-                    <span className="text-sm text-white/90">Expert Assistance</span>
+                    <span className="text-sm text-white/90">
+                      Expert Assistance
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -151,10 +156,12 @@ export default function AboutUs() {
                   <span>Our Story</span>
                 </div>
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
-                We Go Beyond Ordinary, Always!
+                  We Go Beyond Ordinary, Always!
                 </h2>
                 <p className="mt-2 text-muted-foreground md:text-xl">
-                Defining unparalleled digital passport services with commitment and dedication, Passport Suvidha is remarkably becoming the first choice for efficient passport application.
+                  Defining unparalleled digital passport services with
+                  commitment and dedication, Passport Suvidha is remarkably
+                  becoming the first choice for efficient passport application.
                 </p>
               </motion.div>
             </div>
@@ -179,8 +186,14 @@ export default function AboutUs() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p>
-                    Making the passport application process really simple, easy and accessible – is what we have excelled with Passport Suvidha. Over time, backed by our team of experts' customer-oriented approach, we have been able to successfully help out our customers in fulfilling their passport needs with a process that's just too easy and convenient.
-                    </p>                    
+                      Making the passport application process really simple,
+                      easy and accessible – is what we have excelled with
+                      Passport Suvidha. Over time, backed by our team of
+                      experts' customer-oriented approach, we have been able to
+                      successfully help out our customers in fulfilling their
+                      passport needs with a process that's just too easy and
+                      convenient.
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -206,8 +219,11 @@ export default function AboutUs() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p>
-                    We envision every Indian making the most of our digital services for their passport pursuits so that any confusion or apprehension could be avoided, making way for our customers towards a smooth passport journey!
-                    </p>                    
+                      We envision every Indian making the most of our digital
+                      services for their passport pursuits so that any confusion
+                      or apprehension could be avoided, making way for our
+                      customers towards a smooth passport journey!
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -231,8 +247,13 @@ export default function AboutUs() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p>
-                    While making the passport application process simple, we always ensure that transparency stays intact in terms of our services, application processes, and our service prices. We believe in being a part of the customer's happiness by fulfilling their global experiences through our passport services.
-                    </p>                    
+                      While making the passport application process simple, we
+                      always ensure that transparency stays intact in terms of
+                      our services, application processes, and our service
+                      prices. We believe in being a part of the customer's
+                      happiness by fulfilling their global experiences through
+                      our passport services.
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -703,7 +724,7 @@ export default function AboutUs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <p className="font-medium">7486046591</p>
+                    <p className="font-medium">+91-7486046591</p>
                     <p className="text-sm text-muted-foreground">
                       Monday-Saturday, 10AM - 05PM
                     </p>

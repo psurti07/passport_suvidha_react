@@ -290,7 +290,7 @@ const CardOfferPage = () => {
                     {/* PHONE */}
                     <div className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-teal flex-shrink-0" />
-                      <span className="whitespace-nowrap">+91 7486046591</span>
+                      <span className="whitespace-nowrap"> +91-7486046591</span>
                     </div>
 
                     {/* EMAIL */}
@@ -329,7 +329,7 @@ const CardOfferPage = () => {
                   <div className="bg-white text-black rounded-2xl shadow-xl p-6 w-full max-w-sm space-y-4">
                     <div className="flex items-center gap-3 justify-center">
                       <Phone className="h-5 w-5 text-teal" />
-                      <span className="font-medium">+91 7486046591</span>
+                      <span className="font-medium"> +91-7486046591</span>
                     </div>
 
                     <div className="flex items-center gap-3 justify-center">

@@ -583,7 +583,7 @@ export default function SignIn() {
               </Link>
             </div> */}
             <div className="text-center">
-              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All
+              © {new Date().getFullYear()} Boundless Passport Suvidha LLP. All
               rights reserved.
             </div>
           </div>

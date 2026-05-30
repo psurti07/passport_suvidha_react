@@ -236,7 +236,7 @@ export default function Disclaimer() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-5 w-5 text-navy" />
-                      <span>7486046591 (Privacy Office)</span>
+                      <span>+91-7486046591 (Privacy Office)</span>
                     </div>
                     <div className="flex items-start gap-2">
                       <MapPin className="h-5 w-5 text-navy mt-0.5" />

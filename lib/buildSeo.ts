@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { getseo } from "./seo";
+import axiosServer from "@/lib/axiosServer";
 
 export async function buildSeo(slug: string): Promise<Metadata> {
+  const { data } = await axiosServer.get("/fb-pixel");
+
+  // console.log("Facebook Pixel and Domain Verification Data:", data);
+
+  const domainVerification = data?.document_verification;
+
   const seo = await getseo(slug);
 
   const title =
@@ -22,6 +29,12 @@ export async function buildSeo(slug: string): Promise<Metadata> {
     title,
     description,
     keywords,
+
+    verification: {
+      other: {
+        "facebook-domain-verification": domainVerification || "",
+      },
+    },
 
     robots: {
       index: true,

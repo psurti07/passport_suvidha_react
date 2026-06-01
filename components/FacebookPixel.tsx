@@ -8,17 +8,17 @@ export default async function FacebookPixel() {
     // console.log("Facebook Pixel and Domain Verification Data:", data);
 
     const pixelId = data?.fb_pixel_key;
-    const domainVerification = data?.document_verification;
+    // const domainVerification = data?.document_verification;
 
     return (
       <>
         {/* Facebook Domain Verification */}
-        {domainVerification && (
+        {/* {domainVerification && (
           <meta
             name="facebook-domain-verification"
             content={domainVerification}
           />
-        )}
+        )} */}
 
         {/* Facebook Pixel */}
         {pixelId && (

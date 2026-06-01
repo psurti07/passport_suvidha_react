@@ -3,13 +3,22 @@ import { getseo } from "./seo";
 import axiosServer from "@/lib/axiosServer";
 
 export async function buildSeo(slug: string): Promise<Metadata> {
-  const { data } = await axiosServer.get("/fb-pixel");
+  let domainVerification = "";
+  try {
+    const { data } = await axiosServer.get("/fb-pixel");
+    domainVerification = data?.document_verification || "";
+    // console.log("Facebook Pixel and Domain Verification Data:", data);
+  } catch (error) {
+    console.error("Facebook settings error:", error);
+  }
 
-  // console.log("Facebook Pixel and Domain Verification Data:", data);
+  let seo = null;
 
-  const domainVerification = data?.document_verification;
-
-  const seo = await getseo(slug);
+  try {
+    seo = await getseo(slug);
+  } catch (error) {
+    console.error("SEO API error:", error);
+  }
 
   const title =
     seo?.title || "Passport Assistance Services in India | PassportSuvidha";

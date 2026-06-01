@@ -7,6 +7,8 @@ import ScrollProgress from "@/components/ui/top-scroll";
 import Script from "next/script";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import FacebookPixel from "@/components/FacebookPixel";
+
 import { buildSeo } from "@/lib/buildSeo";
 
 export async function generateMetadata() {
@@ -28,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <FacebookPixel />
         <ScrollProgress />
         {children}
         <SonnerToaster richColors position="top-right" />
@@ -58,5 +61,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-import "./globals.css";

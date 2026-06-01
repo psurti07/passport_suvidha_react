@@ -4,21 +4,21 @@ import axiosServer from "@/lib/axiosServer";
 
 export async function buildSeo(slug: string): Promise<Metadata> {
   let domainVerification = "";
+
   try {
     const { data } = await axiosServer.get("/fb-pixel");
-    domainVerification = data?.document_verification || "";
-    // console.log("Facebook Pixel and Domain Verification Data:", data);
+
+    domainVerification = data?.domain_verification || "";
+
+    // console.log(
+    //   "Facebook Pixel and Domain Verification Data:",
+    //   domainVerification,
+    // );
   } catch (error) {
-    console.error("Facebook settings error:", error);
+    console.error("Error fetching Facebook Pixel data:", error);
   }
 
-  let seo = null;
-
-  try {
-    seo = await getseo(slug);
-  } catch (error) {
-    console.error("SEO API error:", error);
-  }
+  const seo = await getseo(slug);
 
   const title =
     seo?.title || "Passport Assistance Services in India | PassportSuvidha";
@@ -41,7 +41,7 @@ export async function buildSeo(slug: string): Promise<Metadata> {
 
     verification: {
       other: {
-        "facebook-domain-verification": domainVerification || "",
+        "facebook-domain-verification": domainVerification,
       },
     },
 

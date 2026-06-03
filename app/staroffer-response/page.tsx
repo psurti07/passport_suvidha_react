@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import axiosServer from "@/lib/axiosServer";
+
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
 import {
@@ -16,52 +18,113 @@ import {
 import { Button } from "@/components/ui/button";
 
 export default function StarOfferResponsePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const statusParam = searchParams.get("status");
+
   const [status, setStatus] = useState<"loading" | "success" | "failed">(
     "loading",
   );
 
+  const orderId =
+    searchParams.get("order_id") || localStorage.getItem("phonepe_order_id");
+
+  // const [status, setStatus] = useState<"loading" | "success" | "failed">(
+  //   "loading",
+  // );
+
   useEffect(() => {
-    verifyPayment();
-  }, []);
-
-  const verifyPayment = async () => {
-    try {
-      const orderId = localStorage.getItem("phonepe_order_id");
-
-      if (!orderId) {
-        setStatus("failed");
-        return;
-      }
-
-      const { data } = await axiosServer.post("/check-phonepe-status", {
-        order_id: orderId,
-      });
-
-      console.log("PHONEPE STATUS:", data);
-
-      /*
-       Adjust according to actual response.
-       Common values:
-       SUCCESS
-       COMPLETED
-       FAILED
-       PAYMENT_ERROR
-      */
-
-      const paymentStatus = data?.state || data?.status || data?.paymentState;
-
-      if (paymentStatus === "SUCCESS" || paymentStatus === "COMPLETED") {
-        setStatus("success");
-
-        localStorage.removeItem("phonepe_order_id");
-      } else {
-        setStatus("failed");
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus("failed");
+    if (statusParam === "success") {
+      setStatus("success");
+      return;
     }
-  };
+
+    if (statusParam === "failed") {
+      setStatus("failed");
+      return;
+    }
+
+    if (!orderId) {
+      setStatus("failed");
+      return;
+    }
+
+    let attempts = 0;
+
+    const interval = setInterval(async () => {
+      try {
+        attempts++;
+
+        const { data } = await axiosServer.post("/check-phonepe-status", {
+          order_id: orderId,
+        });
+
+        if (data.status === "success") {
+          clearInterval(interval);
+
+          localStorage.removeItem("phonepe_order_id");
+
+          setStatus("success");
+
+          router.replace("/staroffer-response?status=success");
+
+          return;
+        }
+
+        if (data.status === "failed") {
+          clearInterval(interval);
+
+          localStorage.removeItem("phonepe_order_id");
+
+          setStatus("failed");
+
+          router.replace("/staroffer-response?status=failed");
+
+          return;
+        }
+
+        if (attempts >= 40) {
+          clearInterval(interval);
+          setStatus("failed");
+        }
+      } catch (error) {
+        console.error(error);
+
+        clearInterval(interval);
+
+        setStatus("failed");
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [statusParam, orderId, router]);
+
+  useEffect(() => {
+    if (!statusParam) return;
+
+    if (statusParam === "success") {
+      setStatus("success");
+      localStorage.removeItem("phonepe_order_id");
+      return;
+    }
+
+    if (statusParam === "failed") {
+      setStatus("failed");
+      localStorage.removeItem("phonepe_order_id");
+      return;
+    }
+  }, [statusParam]);
+
+  useEffect(() => {
+    if (statusParam) return;
+
+    if (!orderId) {
+      setStatus("failed");
+      return;
+    }
+
+    // polling logic here
+  }, [statusParam, orderId]);
 
   if (status === "loading") {
     return (

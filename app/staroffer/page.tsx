@@ -111,7 +111,7 @@ const StarOfferPage = () => {
     setErrorMessage(null);
 
     try {
-      const { data } = await axiosServer.post("/create-payment", {
+      const response = await axiosServer.post("/create-payment", {
         fullName: formData.fullName,
         email: formData.email,
         mobile: formData.mobile,
@@ -120,55 +120,25 @@ const StarOfferPage = () => {
         offer_type: "star_offer",
       });
 
-      console.log("Zaakpay response:", data);
+      const data = response.data;
 
       if (!data.success) {
-        setErrorMessage(data.message || "Payment failed");
-        setLoading(false);
+        setErrorMessage(data.message || "Payment creation failed");
         return;
       }
 
-      const { payment_url, encRequest, merchantIdentifier, checksum } = data;
-
-      if (!payment_url || !encRequest || !merchantIdentifier || !checksum) {
-        alert("Invalid payment data from server");
+      if (!data.payment_url) {
+        setErrorMessage("PhonePe payment URL not received");
         return;
       }
 
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = payment_url;
+      localStorage.setItem("phonepe_order_id", data.order_id);
 
-      const encInput = document.createElement("input");
-      encInput.type = "hidden";
-      encInput.name = "encRequest";
-      encInput.value = encRequest;
-
-      const midInput = document.createElement("input");
-      midInput.type = "hidden";
-      midInput.name = "merchantIdentifier";
-      midInput.value = merchantIdentifier;
-
-      const checksumInput = document.createElement("input");
-      checksumInput.type = "hidden";
-      checksumInput.name = "checksum";
-      checksumInput.value = checksum;
-
-      // append all
-      form.appendChild(encInput);
-      form.appendChild(midInput);
-      form.appendChild(checksumInput);
-
-      document.body.appendChild(form);
-      form.submit();
+      window.location.href = data.payment_url;
     } catch (error: any) {
-      console.error(error);
-
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
-
-      setErrorMessage(msg);
+      setErrorMessage(
+        error?.response?.data?.message ?? "Unable to initiate payment",
+      );
     } finally {
       setLoading(false);
     }

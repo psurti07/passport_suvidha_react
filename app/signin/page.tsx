@@ -555,7 +555,7 @@ export default function SignIn() {
         </div>
       </main>
 
-      <footer className="w-full py-2">
+      <footer className="w-full py-2 border-t">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">

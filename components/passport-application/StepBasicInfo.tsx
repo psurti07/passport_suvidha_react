@@ -8,10 +8,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Shield, User, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Shield,
+  User,
+  ArrowRight,
+  Loader2,
+  ShieldCheck,
+  MapPin,
+  FileText,
+  AlertTriangle,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+const steps = [
+  {
+    title: "Basic Information",
+    description:
+      "Provide your personal details including name, email address and mobile number to begin your passport application.",
+    icon: User,
+  },
+  {
+    title: "Mobile Verification",
+    description:
+      "Verify your registered mobile number through OTP authentication for secure application processing.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Address Details",
+    description:
+      "Enter your current residential address and supporting information required for passport verification.",
+    icon: MapPin,
+  },
+  {
+    title: "Passport Service",
+    description:
+      "Choose the passport service that best suits your requirements and proceed with the application.",
+    icon: FileText,
+  },
+];
 interface StepBasicInfoProps {
   formData: {
     firstName: string;
@@ -270,6 +305,91 @@ const StepBasicInfo = ({
           </Button>
         </motion.div>
       </CardFooter>
+
+      <section className="py-6 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-navy mb-3">
+              Apply Passport in 4 Easy Steps
+            </h2>
+
+            <p className="text-muted-foreground max-w-3xl mx-auto">
+              Our experts guide you throughout the passport application process,
+              making it simple, secure and hassle-free.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-8 mx-[150px]">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+
+              return (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
+                >
+                  <div className="h-1.5 bg-gradient-to-r from-navy to-teal" />
+
+                  <div className="p-4">
+                    {/* Icon + Step */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-navy" />
+                      </div>
+
+                      <span className="bg-navy text-white text-xs font-medium px-3 py-1 rounded-full">
+                        Step {index + 1}
+                      </span>
+                    </div>
+
+                    <h3 className="font-semibold text-navy text-lg mb-2">
+                      {step.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-600 leading-6">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-10 mx-[150px] bg-amber-50 border border-amber-200 rounded-3xl shadow-sm overflow-hidden">
+            <div className="h-2 bg-amber-400" />
+
+            <div className="p-3">
+              <div className="flex gap-4">
+                <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle className="w-7 h-7 text-amber-600" />
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-bold text-amber-900 mb-3">
+                    Important Disclaimer
+                  </h3>
+
+                  <p className="text-sm text-amber-900 leading-7">
+                    Passport Suvidha is a private consultancy service provider
+                    assisting applicants with passport-related services. We are
+                    not affiliated with or endorsed by the Government of India,
+                    Ministry of External Affairs, or Passport Seva. Government
+                    fees, appointments, police verification and final approvals
+                    are solely handled by the respective government authorities.
+                  </p>
+
+                  <a
+                    href="/disclaimer"
+                    className="inline-block mt-4 font-medium text-navy hover:underline"
+                  >
+                    Read Full Disclaimer →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

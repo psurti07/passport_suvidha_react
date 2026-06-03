@@ -455,7 +455,7 @@ export default function PortalLayout({
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t py-4 px-4 md:px-8">
+      <footer className="bg-white border-t py-4 px-4 md:px-8 border-t">
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">

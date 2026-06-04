@@ -439,7 +439,7 @@ const CardOfferPage = () => {
                 {/* IMAGE */}
                 <div className="relative z-10 flex justify-center mt-5">
                   <Image
-                    src="/offer_img/offer_img3.png"
+                    src="/offer_img/offer_img1.png"
                     alt="Passport Holder"
                     width={250}
                     height={300}

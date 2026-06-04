@@ -117,43 +117,43 @@ export default function Services() {
         <h2 className="text-3xl font-bold text-teal">Document Upload</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-            <h3 className="font-semibold text-lg text-teal mb-2">
+            <h3 className="font-semibold text-lg text-navy mb-2">
               Required Documents
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 Proof of Identity (Aadhar/PAN/Voter ID)
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 Proof of Address
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 Recent passport size photographs
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 Birth certificate/Age proof
               </li>
             </ul>
           </div>
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-            <h3 className="font-semibold text-lg text-teal mb-2">
+            <h3 className="font-semibold text-lg text-navy mb-2">
               Document Guidelines
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 Clear, colored scans
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 File size under 2MB
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-navy" />
+                <Check className="h-5 w-5 text-teal" />
                 JPG/PDF format only
               </li>
             </ul>
@@ -171,43 +171,43 @@ export default function Services() {
         <h2 className="text-3xl font-bold text-navy">Payment Process</h2> */}
         <div className="space-y-4 text-left max-w-2xl mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-            <h3 className="font-semibold text-lg text-navy mb-2">
+            <h3 className="font-semibold text-lg text-teal mb-2">
               Payment Options
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 Credit/Debit Cards
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 Net Banking
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 UPI
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 Digital Wallets
               </li>
             </ul>
           </div>
           <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl">
-            <h3 className="font-semibold text-lg text-navy mb-2">
+            <h3 className="font-semibold text-lg text-teal mb-2">
               Secure Transaction
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 256-bit encryption
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 PCI DSS compliant
               </li>
               <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-teal" />
+                <Check className="h-5 w-5 text-navy" />
                 Instant payment confirmation
               </li>
             </ul>
@@ -899,14 +899,12 @@ export default function Services() {
                   </div>
 
                   <h3 className="text-xl font-semibold text-center mb-3">
-                    Easy Registration
+                    Start Journey
                   </h3>
 
                   <p className="text-gray-600 text-center">
-                    The first and foremost step is to fill in your personal
-                    details and complete the registration process. If you are
-                    already registered, then simply log in with your
-                    credentials.
+                    Choose the passport service that best fits your travel plans
+                    and requirements.
                   </p>
                 </div>
               </div>
@@ -925,13 +923,12 @@ export default function Services() {
                   </div>
 
                   <h3 className="text-xl font-semibold text-center mb-3">
-                    Document Verification
+                    Submit Information
                   </h3>
 
                   <p className="text-gray-600 text-center">
-                    Submit your identity proof, address proof, and other
-                    required documents. Our system will verify the authenticity
-                    and completeness of your documentation.
+                    Fill in your details accurately and provide the necessary
+                    supporting documents.
                   </p>
                 </div>
               </div>
@@ -950,13 +947,12 @@ export default function Services() {
                   </div>
 
                   <h3 className="text-xl font-semibold text-center mb-3">
-                    Fee Payment
+                    Verification
                   </h3>
 
                   <p className="text-gray-600 text-center">
-                    Make a secure online payment for your passport fees. Choose
-                    between Normal or Tatkal service and any additional services
-                    you require.
+                    Our team reviews your application and assists with the
+                    verification and appointment process.
                   </p>
                 </div>
               </div>
@@ -975,13 +971,12 @@ export default function Services() {
                   </div>
 
                   <h3 className="text-xl font-semibold text-center mb-3">
-                    Passport Delivery
+                    Ready to Travel
                   </h3>
 
                   <p className="text-gray-600 text-center">
-                    After successful verification and processing, receive your
-                    passport securely at your doorstep through our express
-                    delivery service.
+                    Receive your passport and get one step closer to your
+                    international travel goals.
                   </p>
                 </div>
               </div>
@@ -1023,17 +1018,38 @@ export default function Services() {
 
                 <div
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
+                    selectedStage === "payment"
+                      ? "bg-teal/10"
+                      : "hover:bg-gray-50"
+                  }`}
+                  onClick={() => setSelectedStage("payment")}
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-teal/10 text-teal">
+                    <CreditCard className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-teal">
+                      Pay Service Fee
+                    </h3>
+                    <p className="text-gray-600 mt-1">
+                      Pay the passport service fee with secure and digitally
+                      simple modes of payment.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
                     selectedStage === "documents"
                       ? "bg-teal/10"
                       : "hover:bg-gray-50"
                   }`}
                   onClick={() => setSelectedStage("documents")}
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-teal/10 text-teal">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy/10 text-navy">
                     <FileText className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-teal">
+                    <h3 className="font-semibold text-lg text-navy">
                       Upload Documents
                     </h3>
                     <p className="text-gray-600 mt-1">
@@ -1045,30 +1061,8 @@ export default function Services() {
 
                 <div
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
-                    selectedStage === "payment"
-                      ? "bg-navy/10"
-                      : "hover:bg-gray-50"
-                  }`}
-                  onClick={() => setSelectedStage("payment")}
-                >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy/10 text-navy">
-                    <CreditCard className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg text-navy">
-                      Pay Service Fee
-                    </h3>
-                    <p className="text-gray-600 mt-1">
-                      Pay the passport service fee with secure and digitally
-                      simple modes of payment.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
                     selectedStage === "processing"
-                      ? "bg-teal/10"
+                      ? "bg-navy/10"
                       : "hover:bg-gray-50"
                   }`}
                   onClick={() => setSelectedStage("processing")}
@@ -1135,7 +1129,7 @@ export default function Services() {
 
               {/* Right side - Stage Details */}
               <div className="md:col-span-7 relative">
-                <div className="relative h-full w-full rounded-3xl overflow-hidden">
+                <div className="relative h-full w-full rounded-3xl overflow-hidden bg-gradient-to-br from-navy to-teal/3 z-[-1]">
                   {/* Base Image Layer */}
                   <Image
                     src="/4.jpg"
@@ -1146,7 +1140,7 @@ export default function Services() {
                   />
 
                   {/* Gradient Overlay */}
-                  {/* <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/90 to-white/95"></div> */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-navy/3 to-teal/3"></div>
 
                   {/* Content Layer */}
                   <div className="relative z-10">
@@ -1154,28 +1148,28 @@ export default function Services() {
                     <div className="p-8 pb-4 border-b border-gray-200">
                       <h2 className="text-3xl font-bold text-center">
                         {selectedStage === "form" && (
-                          <span className="text-navy">
+                          <span className="text-white">
                             Fill Application Form
                           </span>
                         )}
                         {selectedStage === "documents" && (
-                          <span className="text-teal">Document Upload</span>
+                          <span className="text-white">Document Upload</span>
                         )}
                         {selectedStage === "payment" && (
-                          <span className="text-navy">Payment Process</span>
+                          <span className="text-white">Payment Process</span>
                         )}
                         {selectedStage === "processing" && (
-                          <span className="text-teal">
+                          <span className="text-white">
                             Application Processing
                           </span>
                         )}
                         {selectedStage === "verification" && (
-                          <span className="text-navy">
+                          <span className="text-white">
                             Document Verification
                           </span>
                         )}
                         {selectedStage === "delivery" && (
-                          <span className="text-teal">Passport Delivery</span>
+                          <span className="text-white">Passport Delivery</span>
                         )}
                       </h2>
                     </div>

@@ -12,6 +12,12 @@ import {
   FileText,
   Phone,
   Mail,
+  BadgeCheck,
+  SearchCheck,
+  Users,
+  Clock3,
+  FileCheck,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -346,10 +352,10 @@ const CardOfferPage = () => {
         </header>
 
         <div className="max-w-4xl mx-auto text-center mt-10 px-4 mb-12">
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
             Passport Made Easy!
           </h1>
-          <p className="mt-2 text-sm md:text-lg text-gray-600">
+          <p className="text-lg text-gray-600 mt-2">
             No queues. No confusion. Just smooth processing.
           </p>
         </div>
@@ -364,48 +370,95 @@ const CardOfferPage = () => {
             className="w-full max-w-5xl"
           >
             <Card className="grid md:grid-cols-2 rounded-2xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-br from-navy to-teal text-white p-8 flex flex-col justify-between h-full min-h-[520px] rounded-3xl order-2 md:order-1">
-                {/* TOP */}
-                <div className="space-y-6">
-                  <CardHeader className="p-0 mb-6">
-                    <CardTitle className="text-lg lg:text-xl flex items-start gap-2">
-                      <div>
-                        <Gift className="h-5 w-5 mt-1 text-white" />
-                      </div>
-                      Why Choose Passport Suvidha?
-                    </CardTitle>
-                  </CardHeader>
+              <div className="bg-gradient-to-br from-navy to-teal text-white p-8 rounded-3xl flex flex-col h-full min-h-[650px] relative overflow-hidden order-2 md:order-1">
+                {/* Decorative circles */}
+                <div className="absolute -top-20 -right-20 w-60 h-60 bg-white/10 rounded-full" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full" />
 
-                  <CardContent className="space-y-5 p-0">
-                    <ul className="space-y-4 text-sm">
-                      {[
-                        "Apply Online",
-                        "Get Expert Help",
-                        "Track Status Anytime",
-                        "Affordable Consultancy",
-                      ].map((item, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <div>
-                            <CheckCircle className="h-4 w-4 text-green-300 mt-1" />
-                          </div>
-                          <span className="leading-relaxed">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
+                {/* TOP */}
+                <div className="relative z-10">
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold">Passport Made Easy</h2>
+
+                    <p className="text-white/80 mt-2">
+                      Expert guidance from application to approval.
+                    </p>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-3 mb-8">
+                    <Card className="bg-white/10 border-white/10 backdrop-blur">
+                      <CardContent className="p-4 flex items-center gap-3">
+                        <Users className="w-5 h-5 text-cyan-300" />
+                        <div>
+                          <p className="font-bold text-white">5000+</p>
+                          <p className="text-xs text-white/70">Applications</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-white/10 border-white/10 backdrop-blur">
+                      <CardContent className="p-4 flex items-center gap-3">
+                        <Clock3 className="w-5 h-5 text-cyan-300" />
+                        <div>
+                          <p className="font-bold text-white">24x7</p>
+                          <p className="text-xs text-white/70">Support</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-4">
+                    {[
+                      {
+                        icon: FileCheck,
+                        text: "Easy Online Application",
+                      },
+                      {
+                        icon: BadgeCheck,
+                        text: "Expert Passport Assistance",
+                      },
+                      {
+                        icon: SearchCheck,
+                        text: "Track Status Anytime",
+                      },
+                      {
+                        icon: ShieldCheck,
+                        text: "Trusted & Secure Service",
+                      },
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <item.icon className="w-5 h-5 text-green-300" />
+                        <span>{item.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <CardFooter className="p-0 mt-6">
-                  {/* BOTTOM BADGE */}
-                  <div className="mt-8">
-                    <div className="flex items-center gap-3 text-sm bg-white/10 px-4 py-3 rounded-xl w-fit backdrop-blur">
-                      <Shield className="h-5 w-5 text-green-300" />
-                      <span>
-                        Travel dreams start here — let’s make it happen!
+                {/* IMAGE */}
+                <div className="relative z-10 flex justify-center mt-5">
+                  <Image
+                    src="/offer_img/offer_img3.png"
+                    alt="Passport Holder"
+                    width={250}
+                    height={300}
+                    className="object-contain drop-shadow-2xl"
+                    priority
+                  />
+                </div>
+
+                {/* Bottom Badge */}
+                <div className="relative z-10">
+                  <Card className="bg-white/10 border-white/10 backdrop-blur">
+                    <CardContent className="p-3 md:p-3 md:px-8 flex items-center gap-3">
+                      <ShieldCheck className="w-5 h-5 text-green-300" />
+                      <span className="text-sm text-white">
+                        Trusted Passport Consultancy Across India
                       </span>
-                    </div>
-                  </div>
-                </CardFooter>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               {/* RIGHT FORM */}

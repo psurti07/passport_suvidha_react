@@ -31,6 +31,7 @@ interface FormData {
   placeOfBirth: string;
   nationality: string;
   paymentMethod: "credit" | "upi" | "netBanking";
+  fbclid: string;
 }
 
 interface FormEvent {
@@ -143,6 +144,7 @@ function ApplicationForm() {
     placeOfBirth: "",
     nationality: "India",
     paymentMethod: "credit",
+    fbclid: "",
   });
   const windowSize = useWindowSize();
 
@@ -514,6 +516,7 @@ function ApplicationForm() {
             last_name: formData.lastName,
             email: formData.email,
             mobile_number: formData.mobile,
+            fbclid: formData.fbclid
           }),
         });
 
@@ -915,6 +918,21 @@ function ApplicationForm() {
       }
     };
   }, [priceAnimationTimeout]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const fbclid = params.get("fbclid");
+
+    if (fbclid) {
+      setFormData((prev) => ({
+        ...prev,
+        fbclid,
+      }));
+
+      localStorage.setItem("fbclid", fbclid);
+    }
+  }, []);
 
   // --- RETURN STATEMENT ---
   return (

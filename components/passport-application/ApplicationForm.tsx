@@ -793,6 +793,12 @@ function ApplicationForm() {
         description: "Application Fee",
         order_id: order.id,
 
+        prefill: {
+          name: order.name,
+          email: order.email,
+          contact: order.mobile,
+        },
+
         handler: async function (response: any) {
           try {
             await axiosServer.post(

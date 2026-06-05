@@ -27,7 +27,7 @@ export default function ApplyPassport() {
         <div className="container px-2 md:px-6">
           <div className="mx-auto">
             <div className="mb-12 md:mb-8 text-center">
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl gradient-heading">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl md:text-4xl gradient-heading">
                 Passport Application
               </h1>
               <p className="text-muted-foreground text-sm md:text-xl mt-2">
@@ -46,7 +46,7 @@ export default function ApplyPassport() {
           </div>
         </div>
       </motion.main>
-      <footer className="w-full py-4">
+      <footer className="w-full py-4 border-t">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">

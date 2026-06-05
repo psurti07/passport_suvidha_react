@@ -333,8 +333,8 @@ export default function Home() {
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
               <div className="group relative">
-                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <div className="absolute -inset-2 bg-gradient-to-r from-navy to-navy/50 blur-2xl opacity-30 rounded-3xl"></div>
+                <Card className="relative text-card-foreground rounded-3xl border-0 bg-white shadow-xl card-hover">
                   <CardHeader className="pb-2">
                     <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
                       <FileText className="h-6 sm:h-7 w-6 sm:w-7" />

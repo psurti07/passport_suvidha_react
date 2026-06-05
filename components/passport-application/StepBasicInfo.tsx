@@ -8,6 +8,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
 import {
   Shield,
   User,
@@ -17,6 +19,14 @@ import {
   MapPin,
   FileText,
   AlertTriangle,
+  CheckCircle,
+  Clock,
+  Headphones,
+  Award,
+  CalendarCheck,
+  SearchCheck,
+  Calendar,
+  Search,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -278,7 +288,7 @@ const StepBasicInfo = ({
           </motion.div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end border-t pt-6">
+      <CardFooter className="flex justify-end border-t py-6 px-4">
         <motion.div
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
@@ -306,90 +316,379 @@ const StepBasicInfo = ({
         </motion.div>
       </CardFooter>
 
-      <section className="py-6 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-navy mb-3">
-              Apply Passport in 4 Easy Steps
+      <section className="w-full py-20 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
+        {/* <div className="container"> */}
+        <div className="container">
+          <div className="text-center mb-5 md:mb-10 mordern-card">
+            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
+              Why Choose Passport Suvidha?
             </h2>
 
-            <p className="text-muted-foreground max-w-3xl mx-auto">
-              Our experts guide you throughout the passport application process,
-              making it simple, secure and hassle-free.
+            <p className="mt-3 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+              Fast, reliable and expert passport assistance across India.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-8 mx-[150px]">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6">
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
+                {/* <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white"> */}
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <ShieldCheck className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    Secure Process
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 leading-6">
+                    Your information is protected with secure handling and
+                    encrypted systems.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-              return (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
-                >
-                  <div className="h-1.5 bg-gradient-to-r from-navy to-teal" />
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <FileText className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    Document Assistance
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 leading-6">
+                    Expert guidance for required documents and application
+                    preparation.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-                  <div className="p-4">
-                    {/* Icon + Step */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center">
-                        <Icon className="h-5 w-5 text-navy" />
-                      </div>
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
 
-                      <span className="bg-navy text-white text-xs font-medium px-3 py-1 rounded-full">
-                        Step {index + 1}
-                      </span>
-                    </div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <Clock className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    Quick Processing
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 leading-6">
+                    Streamlined passport application process with expert
+                    guidance and timely assistance at every step.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-                    <h3 className="font-semibold text-navy text-lg mb-2">
-                      {step.title}
-                    </h3>
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <Headphones className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    Dedicated Support
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 leading-6">
+                    Get reliable assistance from our experienced support team
+                    for all your passport-related queries.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+        {/* </div> */}
+      </section>
 
-                    <p className="text-sm text-gray-600 leading-6">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+      <section className="overflow-hidden py-20 md:py-24">
+        <div className="container">
+          {/* Heading */}
+          <div className="text-center mb-5 md:mb-10">
+            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
+              Apply Passport In Just 4 Steps
+            </h2>
+
+            <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 max-w-3xl mx-auto">
+              Simple online process designed to help applicants complete their
+              passport application quickly and confidently.
+            </p>
           </div>
 
-          <div className="mt-10 mx-[150px] bg-amber-50 border border-amber-200 rounded-3xl shadow-sm overflow-hidden">
-            <div className="h-2 bg-amber-400" />
+          <div className="relative max-w-6xl mx-auto">
+            {/* Left Badge */}
+            <div className="group hidden xl:flex absolute -left-8 top-24 z-10">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-navy to-teal opacity-0 blur-lg transition-all duration-500 group-hover:opacity-30" />
 
-            <div className="p-3">
-              <div className="flex gap-4">
-                <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-                  <AlertTriangle className="w-7 h-7 text-amber-600" />
-                </div>
+              <div className="relative bg-white border rounded-2xl px-5 py-4 shadow-xl transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
+                <p className="text-md font-bold text-teal">4 Steps</p>
+                <p className="text-md text-gray-500">Easy Process</p>
+              </div>
+            </div>
 
-                <div>
-                  <h3 className="text-xl font-bold text-amber-900 mb-3">
-                    Important Disclaimer
-                  </h3>
+            {/* Right Badge */}
+            <div className="group hidden xl:flex absolute -right-8 bottom-24 z-10">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-teal to-navy opacity-0 blur-lg transition-all duration-500 group-hover:opacity-30" />
 
-                  <p className="text-sm text-amber-900 leading-7">
-                    Passport Suvidha is a private consultancy service provider
-                    assisting applicants with passport-related services. We are
-                    not affiliated with or endorsed by the Government of India,
-                    Ministry of External Affairs, or Passport Seva. Government
-                    fees, appointments, police verification and final approvals
-                    are solely handled by the respective government authorities.
-                  </p>
+              <div className="relative bg-white border rounded-2xl px-5 py-4 shadow-xl transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
+                <p className="text-xl font-bold text-navy">100%</p>
+                <p className="text-sm text-gray-500">Guided Assistance</p>
+              </div>
+            </div>
 
-                  <a
-                    href="/disclaimer"
-                    className="inline-block mt-4 font-medium text-navy hover:underline"
-                  >
-                    Read Full Disclaimer →
-                  </a>
-                </div>
+            {/* Mobile Stats */}
+            <div className="xl:hidden flex justify-center gap-4 mb-6">
+              <div className="bg-white rounded-xl shadow-lg border px-4 py-3 text-center">
+                <p className="text-lg font-bold text-teal">4 Steps</p>
+                <p className="text-xs text-gray-500">Easy Process</p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg border px-4 py-3 text-center">
+                <p className="text-lg font-bold text-navy">100%</p>
+                <p className="text-xs text-gray-500">Guided Assistance</p>
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="rounded-2xl md:rounded-[40px] bg-gradient-to-br from-navy/5 to-teal/5 p-8 sm:p-5 md:p-8">
+              <div
+                className="
+            group
+            overflow-hidden
+            rounded-2xl md:rounded-3xl
+            transition-all duration-500
+            hover:-translate-y-2
+            hover:shadow-[0_35px_100px_rgba(0,51,102,0.20)]
+          "
+              >
+                {/* <Image
+                  src="/lending_page/img2.jpg"
+                  alt="Passport Suvidha Process Flow"
+                  width={1200}
+                  height={600}
+                  priority
+                  className="
+              w-full
+              h-auto
+              object-contain
+              transition-transform duration-500
+              group-hover:scale-[1.02]
+            "
+                /> */}
+
+                <Image
+                  src="/lending_page/img1.jpg"
+                  alt="Passport Suvidha Process Flow"
+                  width={1200}
+                  height={600}
+                  priority
+                  className="
+    w-full
+    h-auto
+    object-contain
+    rounded-2xl md:rounded-3xl
+    transition-all duration-500
+    group-hover:scale-[1.02]
+  "
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <section className="w-full py-20 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
+        {/* <section className="bg-slate-50 pt-0 pb-20 md:pt-0 md:pb-24"> */}
+        <div className="container">
+          {/* <div className="mx-auto"> */}
+          <div className="text-center mb-5 md:mb-10">
+            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
+              Services We Assist With
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-6 sm:p-7 text-center">
+                  <h3 className="text-lg font-semibold mb-2">Fresh Passport</h3>
+
+                  <p className="text-sm text-gray-600 leading-6">
+                    Complete assistance for first-time passport applications
+                    with expert guidance.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <h3 className="font-semibold mb-2">Passport Renewal</h3>
+                  <p className="text-gray-600 text-[14px]">
+                    Hassle-free support for expired or expiring passports with
+                    guidance
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="group relative grid-rows-1">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
+                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
+                  <h3 className="font-semibold mb-2">Tatkal Passport</h3>
+                  <p className="text-gray-600 text-[14px]">
+                    Quick assistance for urgent passport applications with
+                    expert guidance.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+      </section>
+
+      <section className="mt-20 md:mt-24">
+        <div className="container">
+          <div className="mt-0 rounded-3xl bg-gradient-to-r from-navy to-teal p-6 sm:p-8 lg:p-10 text-white">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+              <div>
+                <h3 className="text-lg md:text-xl lg:text-2xl font-bold">
+                  Your Passport Journey Starts Here
+                </h3>
+
+                <p className="mt-3 text-sm text-white/80 leading-7 max-w-2xl">
+                  Our team provides guidance and support throughout the passport
+                  application process, helping applicants complete their journey
+                  with confidence and convenience.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 bg-white/10 backdrop-blur px-4 sm:px-5 py-3 rounded-2xl">
+                <CheckCircle className="h-6 w-6 text-green-300" />
+                <span className="text-sm font-medium">
+                  Secure • Reliable • Professional
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10">
+        <div className="container">
+          <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-6 w-6 text-amber-600 shrink-0 mt-1" />
+
+              <div>
+                <h3 className="text-base sm:text-md font-semibold text-amber-900">
+                  Important Disclaimer
+                </h3>
+
+                <p className="mt-3 text-xs sm:text-sm lg:text-sm text-amber-800 leading-6 sm:leading-7">
+                  Passport Suvidha is a private consultancy service and is not
+                  affiliated with, endorsed by, or operated by the Government of
+                  India, Passport Seva, or any government authority. We provide
+                  application assistance, document guidance, appointment
+                  support, and customer assistance services. Government fees,
+                  processing timelines, approval decisions, and passport
+                  issuance remain solely under the jurisdiction of the relevant
+                  government authorities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-navy/10 flex items-center justify-center mb-5">
+              <FileText className="h-7 w-7 text-navy" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">
+              Application Form Assistance
+            </h3>
+            <p className="text-gray-600">
+              Get expert guidance while filling your passport application to
+              reduce errors and avoid unnecessary delays.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-green-100 flex items-center justify-center mb-5">
+              <ShieldCheck className="h-7 w-7 text-green-600" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Document Review</h3>
+            <p className="text-gray-600">
+              Receive assistance in preparing and reviewing required documents
+              before submission.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-5">
+              <CalendarCheck className="h-7 w-7 text-blue-600" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">
+              Appointment Booking Support
+            </h3>
+            <p className="text-gray-600">
+              Assistance with scheduling your Passport Seva Kendra appointment
+              at your preferred location.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-purple-100 flex items-center justify-center mb-5">
+              <Search className="h-7 w-7 text-purple-600" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Application Tracking</h3>
+            <p className="text-gray-600">
+              Stay updated throughout the application journey with guidance and
+              status support.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-orange-100 flex items-center justify-center mb-5">
+              <Headphones className="h-7 w-7 text-orange-600" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">Dedicated Support</h3>
+            <p className="text-gray-600">
+              Connect with our support team whenever you need assistance during
+              the application process.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="h-14 w-14 rounded-2xl bg-teal-100 flex items-center justify-center mb-5">
+              <Award className="h-7 w-7 text-teal-600" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">End-To-End Guidance</h3>
+            <p className="text-gray-600">
+              Expert assistance from registration and documentation to
+              appointment booking and passport delivery.
+            </p>
+          </CardContent>
+        </Card>
+      </div> */}
     </>
   );
 };

@@ -316,7 +316,7 @@ const StepBasicInfo = ({
         </motion.div>
       </CardFooter>
 
-      <section className="w-full py-20 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
+      <section className="w-full py-20 md:py-20 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
         {/* <div className="container"> */}
         <div className="container">
           <div className="text-center mb-5 md:mb-10 mordern-card">
@@ -400,7 +400,7 @@ const StepBasicInfo = ({
         {/* </div> */}
       </section>
 
-      <section className="overflow-hidden py-20 md:py-24">
+      <section className="overflow-hidden py-20 md:py-20">
         <div className="container">
           {/* Heading */}
           <div className="text-center mb-5 md:mb-10">
@@ -449,7 +449,7 @@ const StepBasicInfo = ({
             </div>
 
             {/* Image */}
-            <div className="rounded-2xl md:rounded-[40px] bg-gradient-to-br from-navy/5 to-teal/5 p-8 sm:p-5 md:p-8">
+            <div className="rounded-2xl md:rounded-[40px] bg-gradient-to-br from-navy/5 to-teal/5 p-4 sm:p-5 md:p-8">
               <div
                 className="
             group
@@ -496,7 +496,7 @@ const StepBasicInfo = ({
         </div>
       </section>
 
-      <section className="w-full py-20 md:py-24 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
+      <section className="w-full py-20 md:py-20 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
         {/* <section className="bg-slate-50 pt-0 pb-20 md:pt-0 md:pb-24"> */}
         <div className="container">
           {/* <div className="mx-auto"> */}
@@ -552,7 +552,7 @@ const StepBasicInfo = ({
         </div>
       </section>
 
-      <section className="mt-20 md:mt-24">
+      <section className="mt-20 md:mt-20">
         <div className="container">
           <div className="mt-0 rounded-3xl bg-gradient-to-r from-navy to-teal p-6 sm:p-8 lg:p-10 text-white">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">

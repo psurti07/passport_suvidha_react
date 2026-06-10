@@ -290,13 +290,13 @@ export default function ScheduleSlotPage() {
                 </div>
 
                 <h3 className="leading-snug text-base">
-                  Take the First Step to a Healthier, Happier You
+                  Get One Step Closer to Your Travel Dreams
                 </h3>
               </div>
 
               <div className="h-24 w-24 rounded-xl bg-white shadow-sm overflow-hidden">
                 <Image
-                  src="/4.jpg"
+                  src="/schedule-slot/img1.png"
                   alt="Passport"
                   width={96}
                   height={96}
@@ -406,7 +406,7 @@ export default function ScheduleSlotPage() {
               <div className="flex -space-x-3">
                 <div className="h-12 w-12 rounded-full border-2 border-white overflow-hidden">
                   <Image
-                    src="/3.jpg"
+                    src="/schedule-slot/img2.png"
                     alt="Passport Application Process"
                     width={48}
                     height={48}
@@ -416,7 +416,7 @@ export default function ScheduleSlotPage() {
 
                 <div className="h-12 w-12 rounded-full border-2 border-white overflow-hidden">
                   <Image
-                    src="/4.jpg"
+                    src="/schedule-slot/img3.png"
                     alt="Passport Assistance"
                     width={48}
                     height={48}
@@ -426,7 +426,7 @@ export default function ScheduleSlotPage() {
 
                 <div className="h-12 w-12 rounded-full border-2 border-white overflow-hidden">
                   <Image
-                    src="/hero.png"
+                    src="/schedule-slot/img4.png"
                     alt="Passport Support"
                     width={48}
                     height={48}
@@ -439,7 +439,7 @@ export default function ScheduleSlotPage() {
                 <h4 className="text-2xl font-bold text-teal">5k+</h4>
 
                 <p className="text-sm text-muted-foreground">
-                  Transformations successfully delivered — Now it’s your turn.
+                  Passport Dreams Turned Into Reality — Now It’s Your Turn.
                 </p>
               </div>
             </div>

@@ -516,7 +516,7 @@ function ApplicationForm() {
             last_name: formData.lastName,
             email: formData.email,
             mobile_number: formData.mobile,
-            fbclid: formData.fbclid
+            fbclid: formData.fbclid,
           }),
         });
 
@@ -1038,7 +1038,7 @@ function ApplicationForm() {
         )}
       </div>
 
-      <div className="mt-4 md:mt-8 text-center">
+      {/* <div className="mt-4 md:mt-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1048,7 +1048,7 @@ function ApplicationForm() {
           <Shield className="h-3 w-3 md:h-4 md:w-4" />
           Your information is secure and encrypted
         </motion.div>
-      </div>
+      </div> */}
     </>
   );
 }

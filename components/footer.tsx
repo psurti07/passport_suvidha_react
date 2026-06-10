@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="w-full pt-8 pb-0 md:pt-12 md:pb-0 bg-navy text-white relative overflow-hidden">
       <div className="container px-4 md:px-6 rel ative">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
-          <div className="space-y-4">
+          <div className="space-y-4 4 col-span-2 md:col-span-2 lg:col-span-1">
             <Link
               href="/"
               className="flex items-center gap-2 sm:gap-3 transition-opacity hover:opacity-90"
@@ -272,7 +272,9 @@ export function Footer() {
                 <Mail className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                 <div>
                   <p className="text-white/90 font-medium">Email</p>
-                  <p className="text-white/70">support@passportsuvidha.com</p>
+                  <p className="text-white/70 break-all">
+                    support@passportsuvidha.com
+                  </p>
                 </div>
               </div>
             </div>

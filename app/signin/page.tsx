@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import axiosServer from "@/lib/axiosServer";
+import ReactCountryFlag from "react-country-flag";
 
 // Add this type if you expect user data or a token back on successful sign-in
 interface SignInResponse {
@@ -326,54 +327,69 @@ export default function SignIn() {
                       <Phone className="h-4 w-4 text-muted-foreground" />
                       Mobile Number
                     </label>
-                    <Input
-                      {...register("mobile", {
-                        required: "Mobile number is required",
-                        pattern: {
-                          value: /^[0-9]{10}$/,
-                          message:
-                            "Please enter a valid 10-digit mobile number",
-                        },
-                      })}
-                      id="mobile"
-                      type="tel"
-                      placeholder="Enter your mobile number"
-                      className={`modern-input ${
-                        errors.mobile ? "border-red-500" : ""
-                      }`}
-                      maxLength={10}
-                      disabled={isOtpSent || isLoading}
-                      onKeyDown={(e) => {
-                        // Allow backspace, delete, tab, escape, enter, and arrow keys
-                        if (
-                          [
-                            "Backspace",
-                            "Delete",
-                            "ArrowLeft",
-                            "ArrowRight",
-                            "Tab",
-                            "Enter",
-                          ].includes(e.key) ||
-                          // Allow Ctrl+A, Command+A
-                          (e.key === "a" && (e.ctrlKey || e.metaKey)) ||
-                          // Allow Ctrl+C, Command+C
-                          (e.key === "c" && (e.ctrlKey || e.metaKey)) ||
-                          // Allow Ctrl+V, Command+V
-                          (e.key === "v" && (e.ctrlKey || e.metaKey)) ||
-                          // Allow Ctrl+X, Command+X
-                          (e.key === "x" && (e.ctrlKey || e.metaKey)) ||
-                          // Allow home, end, left, right, down, up
-                          (e.key >= "ArrowLeft" && e.key <= "ArrowDown")
-                        ) {
-                          // let it happen, don't do anything
-                          return;
-                        }
-                        // Ensure that it is a number and stop the keypress
-                        if (!/[0-9]/.test(e.key)) {
-                          e.preventDefault();
-                        }
-                      }}
-                    />
+
+                    <div className="relative">
+                      {/* India Flag + Country Code */}
+                      <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
+                        <ReactCountryFlag
+                          countryCode="IN"
+                          svg
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                          }}
+                        />
+
+                        <span className="text-sm font-medium text-gray-600">
+                          +91
+                        </span>
+
+                        <div className="h-5 w-px bg-gray-300" />
+                      </div>
+
+                      <Input
+                        {...register("mobile", {
+                          required: "Mobile number is required",
+                          pattern: {
+                            value: /^[0-9]{10}$/,
+                            message:
+                              "Please enter a valid 10-digit mobile number",
+                          },
+                        })}
+                        id="mobile"
+                        type="tel"
+                        placeholder="98765 43210"
+                        className={`modern-input pl-24 ${
+                          errors.mobile ? "border-red-500" : ""
+                        }`}
+                        maxLength={10}
+                        inputMode="numeric"
+                        disabled={isOtpSent || isLoading}
+                        onKeyDown={(e) => {
+                          if (
+                            [
+                              "Backspace",
+                              "Delete",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Tab",
+                              "Enter",
+                            ].includes(e.key) ||
+                            (e.key === "a" && (e.ctrlKey || e.metaKey)) ||
+                            (e.key === "c" && (e.ctrlKey || e.metaKey)) ||
+                            (e.key === "v" && (e.ctrlKey || e.metaKey)) ||
+                            (e.key === "x" && (e.ctrlKey || e.metaKey))
+                          ) {
+                            return;
+                          }
+
+                          if (!/[0-9]/.test(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                    </div>
+
                     {errors.mobile && (
                       <p className="text-red-500 text-sm mt-1">
                         {errors.mobile.message}

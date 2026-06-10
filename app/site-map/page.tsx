@@ -1,7 +1,7 @@
-import type React from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type React from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   FileText,
   Home,
@@ -15,11 +15,13 @@ import {
   Shield,
   FileImage,
   Search,
-} from "lucide-react"
+  BadgeIndianRupee,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function SiteMap() {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">     
+    <div className="flex flex-col relative overflow-hidden">
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
@@ -33,19 +35,24 @@ export default function SiteMap() {
             </div>
 
             <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                 <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-navy"></div>
-                  <CardHeader>
+                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
                     <div className="flex items-center gap-2 mb-2">
                       <Home className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl">Main Pages</CardTitle>
+                      <CardTitle className="text-xl md:!text-xl">
+                        Main Pages
+                      </CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 p-0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ">
                     <ul className="space-y-2">
                       <li>
-                        <Link href="/" className="flex items-center gap-2 text-navy hover:text-teal transition-colors">
+                        <Link
+                          href="/"
+                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                        >
                           <Home className="h-4 w-4" />
                           <span>Home</span>
                         </Link>
@@ -86,7 +93,7 @@ export default function SiteMap() {
                           <span>About Us</span>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link
                           href="/contact"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
@@ -103,30 +110,32 @@ export default function SiteMap() {
                           <HelpCircle className="h-4 w-4" />
                           <span>FAQ</span>
                         </Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </CardContent>
                 </Card>
 
                 <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-teal"></div>
-                  <CardHeader>
+                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
                     <div className="flex items-center gap-2 mb-2">
                       <FileCheck className="h-5 w-5 text-teal" />
-                      <CardTitle className="text-xl">Application Pages</CardTitle>
+                      <CardTitle className="text-xl md:!text-xl">
+                        Application Pages
+                      </CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <ul className="space-y-2">
-                      <li>
+                      {/* <li>
                         <Link
-                          href="/apply"
+                          href="/apply-passport"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
                         >
                           <FileText className="h-4 w-4" />
                           <span>Apply Now</span>
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link
                           href="/apply-passport"
@@ -163,11 +172,20 @@ export default function SiteMap() {
                           <span>Processing Times</span>
                         </Link>
                       </li>
+                      <li>
+                        <Link
+                          href="/signin"
+                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                        >
+                          <Users className="h-4 w-4" />
+                          <span>Sign In</span>
+                        </Link>
+                      </li>
                     </ul>
                   </CardContent>
                 </Card>
 
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                {/* <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-burgundy"></div>
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
@@ -215,14 +233,16 @@ export default function SiteMap() {
                       </li>
                     </ul>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-gold"></div>
-                  <CardHeader>
+                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
                     <div className="flex items-center gap-2 mb-2">
                       <Shield className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl">Legal Pages</CardTitle>
+                      <CardTitle className="text-xl md:!text-xl">
+                        Legal Pages
+                      </CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -256,6 +276,24 @@ export default function SiteMap() {
                       </li>
                       <li>
                         <Link
+                          href="/disclaimer"
+                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                        >
+                          <AlertTriangle className="h-4 w-4" />
+                          <span>Disclaimer</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/refund-policy"
+                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                        >
+                          <BadgeIndianRupee className="h-4 w-4" />
+                          <span>Refund Policy</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
                           href="/site-map"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
                         >
@@ -269,10 +307,12 @@ export default function SiteMap() {
 
                 <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-navy"></div>
-                  <CardHeader>
+                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
                     <div className="flex items-center gap-2 mb-2">
                       <HelpCircle className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl">Support Pages</CardTitle>
+                      <CardTitle className="text-xl md:!text-xl">
+                        Support Pages
+                      </CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -283,7 +323,7 @@ export default function SiteMap() {
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
                         >
                           <HelpCircle className="h-4 w-4" />
-                          <span>Frequently Asked Questions</span>
+                          <span>FAQ</span>
                         </Link>
                       </li>
                       <li>
@@ -304,7 +344,7 @@ export default function SiteMap() {
                           <span>Application Status</span>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link
                           href="/help"
                           className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
@@ -312,12 +352,12 @@ export default function SiteMap() {
                           <HelpCircle className="h-4 w-4" />
                           <span>Help Center</span>
                         </Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </CardContent>
                 </Card>
 
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                {/* <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-teal"></div>
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
@@ -356,10 +396,10 @@ export default function SiteMap() {
                       </li>
                     </ul>
                   </CardContent>
-                </Card>
+                </Card> */}
               </div>
 
-              <div className="bg-navy/5 rounded-xl p-6 border border-navy/10 mb-8">
+              {/* <div className="bg-navy/5 rounded-xl p-6 border border-navy/10 mb-8">
                 <h3 className="text-xl font-medium text-navy mb-4 flex items-center gap-2">
                   <Search className="h-5 w-5" />
                   Search Our Site
@@ -383,13 +423,16 @@ export default function SiteMap() {
                     Search
                   </Button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="bg-teal/5 rounded-xl p-6 border border-teal/10">
-                <h3 className="text-xl font-medium text-teal mb-4">Need Help Finding Something?</h3>
+                <h3 className="text-xl font-medium text-teal mb-4">
+                  Need Help Finding Something?
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  If you can't find what you're looking for, our customer support team is here to help. Contact us for
-                  assistance navigating our website or finding specific information.
+                  If you can't find what you're looking for, our customer
+                  support team is here to help. Contact us for assistance
+                  navigating our website or finding specific information.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
@@ -401,7 +444,11 @@ export default function SiteMap() {
                       Contact Support
                     </Link>
                   </Button>
-                  <Button variant="outline" className="rounded-xl border-teal/20 hover:text-teal  hover:bg-teal/5" asChild>
+                  <Button
+                    variant="outline"
+                    className="rounded-xl border-teal/20 hover:text-teal  hover:bg-teal/5"
+                    asChild
+                  >
                     <Link href="/faq">
                       <HelpCircle className="mr-2 h-4 w-4" />
                       View FAQ
@@ -414,16 +461,19 @@ export default function SiteMap() {
         </section>
       </main>
     </div>
-  )
+  );
 }
 
-function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { className?: string }) {
+function Input({
+  className,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & { className?: string }) {
   return (
     <input
       className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
       {...props}
     />
-  )
+  );
 }
 
 function Calendar({ className }: { className?: string }) {
@@ -443,6 +493,5 @@ function Calendar({ className }: { className?: string }) {
       <line x1="8" x2="8" y1="2" y2="6" />
       <line x1="3" x2="21" y1="10" y2="10" />
     </svg>
-  )
+  );
 }
-

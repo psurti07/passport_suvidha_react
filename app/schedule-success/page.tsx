@@ -93,23 +93,23 @@ export default function ScheduleSuccessPage() {
 
   const slides = [
     {
-      image: "/6.png",
+      image: "/schedule-slot/img12.png",
       title: "Passport Experts,\njust a click away!",
     },
     {
-      image: "/6.png",
+      image: "/schedule-slot/img12.png",
       title: "Fast & Secure\nPassport Assistance",
     },
     {
-      image: "/6.png",
+      image: "/schedule-slot/img12.png",
       title: "Trusted by\nThousands of Applicants",
     },
     {
-      image: "/6.png",
+      image: "/schedule-slot/img12.png",
       title: "Hassle-Free\nDocumentation Support",
     },
     {
-      image: "/6.png",
+      image: "/schedule-slot/img12.png",
       title: "Book Your Slot\nIn Minutes",
     },
   ];
@@ -206,7 +206,7 @@ export default function ScheduleSuccessPage() {
                               {/* <div className="h-2 w-[190px] bg-gradient-to-r from-navy to-teal" /> */}
 
                               <Image
-                                src="/6.png"
+                                src="/schedule-slot/img12.png"
                                 alt="Passport Assistance"
                                 fill
                                 className="object-cover mt-1"

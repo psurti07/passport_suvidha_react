@@ -19,7 +19,7 @@ export default function ApplyPassport() {
       </Head>
       {/* Main Content with Animation */}
       <motion.main
-        className="flex-1 relative z-10 py-12 md:py-16"
+        className="flex-1 relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}

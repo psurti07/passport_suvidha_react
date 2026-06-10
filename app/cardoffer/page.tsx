@@ -439,7 +439,7 @@ const CardOfferPage = () => {
                 {/* IMAGE */}
                 <div className="relative z-10 flex justify-center mt-5">
                   <Image
-                    src="/offer_img/offer_img1.png"
+                    src="/offer_img/offer_img2.png"
                     alt="Passport Holder"
                     width={250}
                     height={300}
@@ -556,7 +556,7 @@ const CardOfferPage = () => {
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="Enter your email"
+                        placeholder="john.doe@example.com"
                         className="mt-1 h-11 rounded-lg"
                       />
                     </div>
@@ -571,6 +571,7 @@ const CardOfferPage = () => {
                           e.target.value = value;
                           handleChange(e);
                         }}
+                        inputMode="numeric"
                         maxLength={10}
                         placeholder="Enter mobile number"
                         className="mt-1 h-11 rounded-lg"

@@ -816,7 +816,7 @@ export default function Home() {
                             id="cityInput"
                             className="modern-input w-full h-12 text-lg px-4 font-medium text-navy placeholder:text-navy/40 rounded-xl"
                             type="text"
-                            placeholder="Enter city name (e.g. Mumbai)"
+                            placeholder="Surat"
                             aria-label="City name input"
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
@@ -845,7 +845,7 @@ export default function Home() {
                       </div>
                       <div className="space-y-4" id="locationsList">
                         <div className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white cursor-pointer">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col md:flex-row items-start justify-between">
                             <div>
                               <h4 className="font-medium text-navy">
                                 Regional Passport Office
@@ -868,7 +868,7 @@ export default function Home() {
                           </div>
                         </div>
                         <div className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white cursor-pointer">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col md:flex-row items-start justify-between">
                             <div>
                               <h4 className="font-medium text-navy">
                                 Passport Seva Kendra
@@ -891,7 +891,7 @@ export default function Home() {
                           </div>
                         </div>
                         <div className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white cursor-pointer">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col md:flex-row  items-start justify-between">
                             <div>
                               <h4 className="font-medium text-navy">
                                 Post Office Passport Seva Kendra
@@ -915,25 +915,35 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex-1 relative min-h-[400px] md:min-h-full">
-                      <iframe
-                        id="locationMap"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.11609823277!2d72.74109995644531!3d19.08219783958221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1628599512345!5m2!1sen!2sin"
-                        className="absolute inset-0 w-full h-full border-0 rounded-xl"
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        allowFullScreen
-                      ></iframe>
-                      <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex items-center gap-1 border-navy text-navy hover:bg-navy hover:text-white rounded-full"
-                        >
-                          <MapPin className="h-4 w-4" />
-                          Find My Location
-                        </Button>
+                    <div className="relative overflow-hidden rounded-3xl flex-1">
+                      {/* Map */}
+                      <div className="aspect-[4/3] md:aspect-auto md:h-full min-h-[250px] md:min-h-[450px]">
+                        <iframe
+                          src="https://maps.google.com/maps?q=Second%20Floor%20Shop%20No.%20227,%20Unique%20Square,%20Opposite%20Shubham%20K%20Mart,%20Singanpore%20Road,%20Singanpore,%20Surat,%20Gujarat%20395004&z=16&output=embed"
+                          loading="lazy"
+                          allowFullScreen
+                          className="w-full h-full border-0 rounded-3xl"
+                        />
                       </div>
+
+                      {/* Open in Maps Button */}
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=Second+Floor+Shop+No+227+Unique+Square+Opposite+Shubham+K+Mart+Singanpore+Road+Singanpore+Surat+Gujarat+395004"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          absolute bottom-3 right-3 md:bottom-4 md:right-4
+                          bg-white shadow-lg hover:shadow-xl
+                          rounded-xl px-3 py-2
+                          flex items-center gap-2
+                          text-xs md:text-sm font-medium
+                          transition-all duration-300
+                          hover:-translate-y-1
+                        "
+                      >
+                        <MapPin className="h-4 w-4 text-navy" />
+                        Open in Maps
+                      </a>
                     </div>
                   </div>
                 </CardContent>
@@ -1112,7 +1122,7 @@ export default function Home() {
                           </label>
                           <Input
                             id="first-name-contact-home"
-                            placeholder="Enter your first name"
+                            placeholder="John"
                             className="modern-input"
                             value={contactFirstName}
                             onChange={(e) =>
@@ -1130,7 +1140,7 @@ export default function Home() {
                           </label>
                           <Input
                             id="last-name-contact-home"
-                            placeholder="Enter your last name"
+                            placeholder="Doe"
                             className="modern-input"
                             value={contactLastName}
                             onChange={(e) => setContactLastName(e.target.value)}
@@ -1148,7 +1158,7 @@ export default function Home() {
                         <Input
                           id="email-contact-home"
                           type="email"
-                          placeholder="Enter your email"
+                          placeholder="john.doe@example.com"
                           className="modern-input"
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
@@ -1164,7 +1174,7 @@ export default function Home() {
                         </label>
                         <Input
                           id="subject-home"
-                          placeholder="Enter subject"
+                          placeholder="Tatkal Passport Query"
                           className="modern-input"
                           value={contactSubject}
                           onChange={(e) => setContactSubject(e.target.value)}
@@ -1180,7 +1190,7 @@ export default function Home() {
                         </label>
                         <Textarea
                           id="message-home"
-                          placeholder="Enter your message"
+                          placeholder="Describe your query or requirement. For example: I need help with passport renewal and would like guidance on the required documents and application process."
                           className="min-h-[178px] modern-input"
                           value={contactMessage}
                           onChange={(e) => setContactMessage(e.target.value)}

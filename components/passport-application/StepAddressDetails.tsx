@@ -128,7 +128,7 @@ const StepAddressDetails = ({
                   value={formData.address}
                   onChange={handleChange}
                   onBlur={() => setTouched((t) => ({ ...t, address: true }))}
-                  placeholder="Enter your street address"
+                  placeholder="XYZ Residency, ABC Main Road"
                   className="modern-input focus-animation"
                 />
                 {touched.address && errors.address && (
@@ -147,9 +147,10 @@ const StepAddressDetails = ({
                       onBlur={() =>
                         setTouched((t) => ({ ...t, zipCode: true }))
                       }
-                      placeholder="Enter ZIP code"
+                      placeholder="395008"
                       className="modern-input focus-animation"
                       maxLength={6}
+                      inputMode="numeric"
                     />
                     {zipLoading && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -179,7 +180,7 @@ const StepAddressDetails = ({
                     value={formData.city}
                     onChange={handleChange}
                     onBlur={() => setTouched((t) => ({ ...t, city: true }))}
-                    placeholder="Enter your city"
+                    placeholder="Surat"
                     className="modern-input focus-animation"
                   />
                   {touched.city && errors.city && (

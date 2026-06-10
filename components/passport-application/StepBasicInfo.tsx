@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import ReactCountryFlag from "react-country-flag";
 import {
   Shield,
   User,
@@ -22,11 +23,9 @@ import {
   CheckCircle,
   Clock,
   Headphones,
-  Award,
-  CalendarCheck,
-  SearchCheck,
-  Calendar,
-  Search,
+  RefreshCw,
+  Clock3,
+  Zap,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -154,7 +153,7 @@ const StepBasicInfo = ({
                 value={formData.firstName}
                 onChange={handleChange}
                 onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
-                placeholder="Enter your first name"
+                placeholder="John"
                 className="modern-input focus-animation"
                 required
               />
@@ -170,7 +169,7 @@ const StepBasicInfo = ({
                 value={formData.lastName}
                 onChange={handleChange}
                 onBlur={() => setTouched((t) => ({ ...t, lastName: true }))}
-                placeholder="Enter your last name"
+                placeholder="Doe"
                 className="modern-input focus-animation"
                 required
               />
@@ -193,7 +192,7 @@ const StepBasicInfo = ({
                 value={formData.email}
                 onChange={handleChange}
                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                placeholder="Enter your email"
+                placeholder="john.doe@example.com"
                 className="modern-input focus-animation"
                 required
               />
@@ -203,28 +202,48 @@ const StepBasicInfo = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="mobile">Mobile Number</Label>
-              <Input
-                id="mobile"
-                name="mobile"
-                type="tel"
-                value={formData.mobile}
-                onChange={(e) => {
-                  // Only allow digits
-                  const value = e.target.value.replace(/[^\d]/g, "");
-                  e.target.value = value;
-                  handleChange(e);
-                }}
-                onBlur={() => setTouched((t) => ({ ...t, mobile: true }))}
-                placeholder="Enter your mobile number"
-                className="modern-input focus-animation"
-                required
-                maxLength={10}
-                inputMode="numeric"
-                pattern="[6-9]{1}[0-9]{9}"
-              />
+
+              <div className="relative">
+                {/* India Flag + Country Code */}
+                <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
+                  <ReactCountryFlag
+                    countryCode="IN"
+                    svg
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+
+                  <span className="text-sm font-medium text-gray-600">+91</span>
+
+                  <div className="h-5 w-px bg-gray-300" />
+                </div>
+
+                <Input
+                  id="mobile"
+                  name="mobile"
+                  type="tel"
+                  value={formData.mobile}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d]/g, "");
+                    e.target.value = value;
+                    handleChange(e);
+                  }}
+                  onBlur={() => setTouched((t) => ({ ...t, mobile: true }))}
+                  placeholder="98765 43210"
+                  className="modern-input focus-animation pl-24"
+                  required
+                  maxLength={10}
+                  inputMode="numeric"
+                  pattern="[6-9]{1}[0-9]{9}"
+                />
+              </div>
+
               <p className="text-xs text-muted-foreground">
                 We'll send a verification code to this number
               </p>
+
               {touched.mobile && errors.mobile && (
                 <p className="text-xs text-red-600 mt-1">{errors.mobile}</p>
               )}
@@ -507,10 +526,16 @@ const StepBasicInfo = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            <div className="group relative grid-rows-1">
+            {/* Fresh Passport */}
+            <div className="group relative">
               <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-6 sm:p-7 text-center">
+
+              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
+                  <div className="h-14 w-14 rounded-2xl bg-navy/10 flex items-center justify-center mb-4">
+                    <FileText className="h-7 w-7 text-navy" />
+                  </div>
+
                   <h3 className="text-lg font-semibold mb-2">Fresh Passport</h3>
 
                   <p className="text-sm text-gray-600 leading-6">
@@ -521,26 +546,44 @@ const StepBasicInfo = ({
               </Card>
             </div>
 
-            <div className="group relative grid-rows-1">
+            {/* Passport Renewal */}
+            <div className="group relative">
               <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
 
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <h3 className="font-semibold mb-2">Passport Renewal</h3>
-                  <p className="text-gray-600 text-[14px]">
+              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
+                  <div className="h-14 w-14 rounded-2xl bg-teal/10 flex items-center justify-center mb-4">
+                    <RefreshCw className="h-7 w-7 text-teal" />
+                  </div>
+
+                  <h3 className="text-lg font-semibold mb-2">
+                    Passport Renewal
+                  </h3>
+
+                  <p className="text-sm text-gray-600 leading-6">
                     Hassle-free support for expired or expiring passports with
-                    guidance
+                    guidance.
                   </p>
                 </CardContent>
               </Card>
             </div>
 
-            <div className="group relative grid-rows-1">
+            {/* Tatkal Passport */}
+            <div className="group relative sm:col-span-2 lg:col-span-1">
               <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <h3 className="font-semibold mb-2">Tatkal Passport</h3>
-                  <p className="text-gray-600 text-[14px]">
+
+              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
+                  <div className="h-14 w-14 rounded-2xl bg-red-100 flex items-center justify-center mb-4">
+                    {/* <Clock3 className="h-7 w-7 text-orange-600" /> */}
+                    <Zap className="h-7 w-7 text-red-600" />
+                  </div>
+
+                  <h3 className="text-lg font-semibold mb-2">
+                    Tatkal Passport
+                  </h3>
+
+                  <p className="text-sm text-gray-600 leading-6">
                     Quick assistance for urgent passport applications with
                     expert guidance.
                   </p>
@@ -605,90 +648,6 @@ const StepBasicInfo = ({
           </div>
         </div>
       </section>
-
-      {/* <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-navy/10 flex items-center justify-center mb-5">
-              <FileText className="h-7 w-7 text-navy" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">
-              Application Form Assistance
-            </h3>
-            <p className="text-gray-600">
-              Get expert guidance while filling your passport application to
-              reduce errors and avoid unnecessary delays.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-green-100 flex items-center justify-center mb-5">
-              <ShieldCheck className="h-7 w-7 text-green-600" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">Document Review</h3>
-            <p className="text-gray-600">
-              Receive assistance in preparing and reviewing required documents
-              before submission.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-5">
-              <CalendarCheck className="h-7 w-7 text-blue-600" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">
-              Appointment Booking Support
-            </h3>
-            <p className="text-gray-600">
-              Assistance with scheduling your Passport Seva Kendra appointment
-              at your preferred location.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-purple-100 flex items-center justify-center mb-5">
-              <Search className="h-7 w-7 text-purple-600" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">Application Tracking</h3>
-            <p className="text-gray-600">
-              Stay updated throughout the application journey with guidance and
-              status support.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-orange-100 flex items-center justify-center mb-5">
-              <Headphones className="h-7 w-7 text-orange-600" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">Dedicated Support</h3>
-            <p className="text-gray-600">
-              Connect with our support team whenever you need assistance during
-              the application process.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl border-0 shadow-[0_20px_60px_rgba(15,23,42,0.08)] hover:-translate-y-2 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="h-14 w-14 rounded-2xl bg-teal-100 flex items-center justify-center mb-5">
-              <Award className="h-7 w-7 text-teal-600" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">End-To-End Guidance</h3>
-            <p className="text-gray-600">
-              Expert assistance from registration and documentation to
-              appointment booking and passport delivery.
-            </p>
-          </CardContent>
-        </Card>
-      </div> */}
     </>
   );
 };

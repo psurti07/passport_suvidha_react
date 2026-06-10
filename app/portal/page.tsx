@@ -18,6 +18,7 @@ import {
   HelpCircle,
   XCircle,
   AlertCircle,
+  AlertTriangle,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { ApplicationProgress, ApplicationStage } from "@/app/types/application";
@@ -35,6 +36,8 @@ export default function PortalDashboard() {
   const [profile, setProfile] = useState<any>(null);
   const [data, setData] = useState<any>(null);
   const [progressData, setProgressData] = useState([]);
+
+  const [customerMessage, setCustomerMessage] = useState("");
 
   useEffect(() => {
     fetchProgress();
@@ -404,6 +407,22 @@ export default function PortalDashboard() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchCustomerMessage = async () => {
+      try {
+        const res = await axiosServer.get("/customer-message");
+
+        if (res.data?.message) {
+          setCustomerMessage(res.data.message);
+        }
+      } catch (error) {
+        console.error("Welcome API error:", error);
+      }
+    };
+
+    fetchCustomerMessage();
+  }, []);
+
   return (
     <motion.div
       variants={containerVariants}
@@ -430,6 +449,27 @@ export default function PortalDashboard() {
           </p>
         </div>
       </motion.div>
+
+      {customerMessage && (
+        <section className="mt-6">
+          <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-sm overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center gap-3 bg-amber-100 border-b border-amber-200 px-5 py-3">
+              <Bell className="h-5 w-5 text-amber-700" />
+              <h3 className="font-semibold text-amber-900">Important Update</h3>
+            </div>
+
+            {/* Content */}
+            <div className="flex gap-3 p-5">
+              <div>
+                <p className="text-sm leading-7 text-amber-900 whitespace-pre-line">
+                  {customerMessage}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Application status */}
       <motion.div variants={itemVariants}>

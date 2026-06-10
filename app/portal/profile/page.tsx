@@ -26,6 +26,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProfileData, ApiResponse } from "@/app/types/api";
+import ReactCountryFlag from "react-country-flag";
 
 export default function ProfilePage() {
   // Animation variants
@@ -233,6 +234,7 @@ export default function ProfilePage() {
                           value={formData.first_name || ""}
                           onChange={handleChange}
                           className="modern-input"
+                          placeholder="John"
                         />
                       ) : (
                         <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
@@ -255,6 +257,7 @@ export default function ProfilePage() {
                           value={formData.last_name || ""}
                           onChange={handleChange}
                           className="modern-input"
+                          placeholder="Doe"
                         />
                       ) : (
                         <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
@@ -270,7 +273,7 @@ export default function ProfilePage() {
                   </div>
 
                   {/* EMAIL */}
-                  
+
                   <div className="space-y-2">
                     {isEditing && <Label>Email</Label>}
                     {isEditing ? (
@@ -279,6 +282,7 @@ export default function ProfilePage() {
                         value={formData.email || ""}
                         onChange={handleChange}
                         className="modern-input"
+                        placeholder="john.doe@example.com"
                       />
                     ) : (
                       <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
@@ -291,14 +295,37 @@ export default function ProfilePage() {
                   {/* PHONE */}
                   <div className="space-y-2">
                     {isEditing && <Label>Phone</Label>}
+
                     {isEditing ? (
-                      <Input
-                        name="mobile_number"
-                        value={formData.mobile_number || ""}
-                        onChange={handleChange}
-                        className="modern-input"
-                        inputMode="numeric"
-                      />
+                      <div className="relative">
+                        {/* India Flag + Country Code */}
+                        <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
+                          <ReactCountryFlag
+                            countryCode="IN"
+                            svg
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                            }}
+                          />
+
+                          <span className="text-xs font-medium text-gray-600">
+                            +91
+                          </span>
+
+                          <div className="h-4 w-px bg-gray-300 ml-1" />
+                        </div>
+
+                        <Input
+                          name="mobile_number"
+                          value={formData.mobile_number || ""}
+                          onChange={handleChange}
+                          className="modern-input pl-24"
+                          inputMode="numeric"
+                          maxLength={10}
+                          placeholder="98765 43210"
+                        />
+                      </div>
                     ) : (
                       <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
                         <p className="text-xs text-muted-foreground">Phone</p>
@@ -319,21 +346,25 @@ export default function ProfilePage() {
                           name="address"
                           value={formData.address || ""}
                           onChange={handleChange}
-                        />
-                        <Input
-                          name="city"
-                          value={formData.city || ""}
-                          onChange={handleChange}
-                        />
-                        <Input
-                          name="state"
-                          value={formData.state || ""}
-                          onChange={handleChange}
+                          placeholder="Flat 101, XYZ residency, AB Road"
                         />
                         <Input
                           name="pin_code"
                           value={formData.pin_code || ""}
                           onChange={handleChange}
+                          placeholder="395001"
+                        />
+                        <Input
+                          name="city"
+                          value={formData.city || ""}
+                          onChange={handleChange}
+                          placeholder="Surat"
+                        />
+                        <Input
+                          name="state"
+                          value={formData.state || ""}
+                          onChange={handleChange}
+                          placeholder="Gujarat"
                         />
                       </div>
                     ) : (
@@ -382,6 +413,7 @@ export default function ProfilePage() {
                         name="place_of_birth"
                         value={formData.place_of_birth || ""}
                         onChange={handleChange}
+                        placeholder="Surat"
                       />
                     ) : (
                       <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
@@ -425,6 +457,7 @@ export default function ProfilePage() {
                         name="nationality"
                         value={formData.nationality || ""}
                         onChange={handleChange}
+                        placeholder="Indian"
                       />
                     ) : (
                       <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">

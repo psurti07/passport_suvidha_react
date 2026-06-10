@@ -32,6 +32,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import axiosServer from "@/lib/axiosServer";
+import ReactCountryFlag from "react-country-flag";
 
 export default function Contact() {
   // const { toast } = useToast();
@@ -169,7 +170,7 @@ export default function Contact() {
                             </label>
                             <Input
                               id="first-name-contact"
-                              placeholder="Enter your first name"
+                              placeholder="John"
                               className="modern-input"
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
@@ -185,7 +186,7 @@ export default function Contact() {
                             </label>
                             <Input
                               id="last-name-contact"
-                              placeholder="Enter your last name"
+                              placeholder="Doe"
                               className="modern-input"
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
@@ -203,7 +204,7 @@ export default function Contact() {
                           <Input
                             id="email-contact"
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder="john.doe@example.com"
                             className="modern-input"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -217,13 +218,38 @@ export default function Contact() {
                           >
                             Phone Number (Optional)
                           </label>
-                          <Input
-                            id="phone-contact"
-                            placeholder="Enter your phone number"
-                            className="modern-input"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                          />
+
+                          <div className="relative">
+                            {/* India Flag + Country Code */}
+                            <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
+                              <ReactCountryFlag
+                                countryCode="IN"
+                                svg
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                }}
+                              />
+
+                              <span className="text-sm font-medium text-gray-600">
+                                +91
+                              </span>
+
+                              <div className="h-5 w-px bg-gray-300" />
+                            </div>
+
+                            <Input
+                              id="phone-contact"
+                              type="tel"
+                              placeholder="98765 43210"
+                              className="modern-input pl-24"
+                              value={phone}
+                              onChange={(e) =>
+                                setPhone(e.target.value.replace(/[^\d]/g, ""))
+                              }
+                              maxLength={10}
+                            />
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <label
@@ -268,7 +294,7 @@ export default function Contact() {
                           </label>
                           <Textarea
                             id="message"
-                            placeholder="Enter your message"
+                            placeholder="Describe your query or requirement. For example: I need help with passport renewal and would like guidance on the required documents and application process."
                             className="min-h-[120px] modern-input"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -493,35 +519,49 @@ export default function Contact() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {/* <div className="aspect-video bg-muted rounded-xl overflow-hidden relative">
-                      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center p-4">
-                          <div className="bg-white rounded-full p-4 shadow-lg inline-block mb-4">
-                            <MapPin className="h-8 w-8 text-navy" />
-                          </div>
-                          <p className="text-navy font-medium">Interactive map will display here</p>
-                          <p className="text-sm text-navy/60">Showing our main office location</p>
-                        </div>
+                    <div className="relative aspect-video rounded-xl overflow-hidden border shadow-sm group">
+                      {/* Clickable Map */}
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=Second+Floor+Shop+No+227+Unique+Square+Opposite+Shubham+K+Mart+Singanpore+Road+Singanpore+Surat+Gujarat+395004"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block h-full"
+                      >
+                        <iframe
+                          src="https://maps.google.com/maps?q=Second%20Floor%20Shop%20No.%20227,%20Unique%20Square,%20Opposite%20Shubham%20K%20Mart,%20Singanpore%20Road,%20Singanpore,%20Surat,%20Gujarat%20395004&z=16&output=embed"
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          className="w-full h-full transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+                      </a>
+
+                      {/* Floating Location Badge */}
+                      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur shadow-lg rounded-xl px-4 py-2 flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-red-500" />
+                        <span className="text-sm font-medium">
+                          Surat Office
+                        </span>
                       </div>
-                    </div> */}
-                    <div className="aspect-video rounded-xl overflow-hidden">
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d29751.157881229865!2d72.7900887!3d21.2360224!3m2!1i1024!2i768!4f13.1!2m1!1sSecond%20Floor%20Shop%20No%20227%20Unique%20Square%20Opposite%20Shubham%20K%20Mart%20Singanpore%20Road%20Singanpore%20Surat%20Gujarat%20395004!5e0!3m2!1sen!2sin!4v1774001253699!5m2!1sen!2sin"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        className="w-full h-full"
-                      ></iframe>
+
+                      {/* Open Maps Button */}
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=Second+Floor+Shop+No+227+Unique+Square+Opposite+Shubham+K+Mart+Singanpore+Road+Singanpore+Surat+Gujarat+395004"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-4 right-4 bg-white shadow-lg hover:shadow-xl px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition-all duration-300 hover:-translate-y-1"
+                      >
+                        <MapPin className="h-4 w-4 text-teal" />
+                        Open in Maps
+                      </a>
                     </div>
-                    <div className="mt-6 flex justify-center">
+
+                    {/* <div className="mt-6 flex justify-center">
                       <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button">
                         Find Nearest Location
                       </Button>
-                    </div>
+                    </div> */}
                   </CardContent>
                 </Card>
               </div>

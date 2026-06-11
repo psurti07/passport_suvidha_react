@@ -524,9 +524,16 @@ function ApplicationForm() {
 
         if (!customerResponse.ok && customerResponse.status !== 200) {
           const firstError = Object.values(customerData.errors || {})[0];
+
           setErrorMessage(
             Array.isArray(firstError) ? firstError[0] : "Validation error",
           );
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+
           return;
         }
 
@@ -799,9 +806,33 @@ function ApplicationForm() {
           contact: order.mobile,
         },
 
-        handler: async function (response: any) {
-          try {
-            await axiosServer.post(
+        // handler: async function (response: any) {
+        //   try {
+        //     await axiosServer.post(
+        //       "/verify-payment",
+        //       {
+        //         razorpay_order_id: response.razorpay_order_id,
+        //         razorpay_payment_id: response.razorpay_payment_id,
+        //         razorpay_signature: response.razorpay_signature,
+        //       },
+        //       {
+        //         headers: {
+        //           Authorization: `Bearer ${token}`,
+        //         },
+        //       },
+        //     );
+
+        //     window.location.href = "/payment-response?status=success";
+        //   } catch {
+        //     setErrorMessage("Payment verification failed. Please try again.");
+        //   }
+        // },
+
+        handler: function (response: any) {
+          window.location.href = `/payment-response?status=success`;
+
+          axiosServer
+            .post(
               "/verify-payment",
               {
                 razorpay_order_id: response.razorpay_order_id,
@@ -813,12 +844,8 @@ function ApplicationForm() {
                   Authorization: `Bearer ${token}`,
                 },
               },
-            );
-
-            window.location.href = "/payment-response?status=success";
-          } catch {
-            setErrorMessage("Payment verification failed. Please try again.");
-          }
+            )
+            .catch(console.error);
         },
 
         modal: {

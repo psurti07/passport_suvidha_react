@@ -41,6 +41,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Image from "next/image";
 import axiosServer from "@/lib/axiosServer";
+import ReactCountryFlag from "react-country-flag";
 // import { buildSeo } from "@/lib/buildSeo";
 
 // export async function generateMetadata() {
@@ -57,6 +58,7 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [locations, setLocations] = useState([]);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const [contactSubmitStatus, setContactSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
@@ -86,7 +88,7 @@ export default function Home() {
     setIsContactSubmitting(true);
     setContactSubmitStatus("idle");
 
-    const name = `${contactFirstName} ${contactLastName}`.trim();
+    // const name = `${contactFirstName} ${contactLastName}`.trim();
     const subject = contactSubject || "General Inquiry";
 
     try {
@@ -94,18 +96,20 @@ export default function Home() {
       const token = localStorage.getItem("authToken");
 
       const response = await axiosServer.post(
-        "/public/support/tickets",
+        "/contact/enquiry",
         {
-          name,
+          first_name: contactFirstName,
+          last_name: contactLastName,
           email: contactEmail,
           subject,
           message: contactMessage,
+          mobile_number: contactPhoneNumber,
         },
-        {
-          headers: {
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        },
+        // {
+        //   headers: {
+        //     ...(token && { Authorization: `Bearer ${token}` }),
+        //   },
+        // },
       );
 
       const resData = response.data;
@@ -125,6 +129,7 @@ export default function Home() {
       setContactEmail("");
       setContactSubject("");
       setContactMessage("");
+      setContactPhoneNumber("");
     } catch (error: any) {
       console.error("API Error:", error);
 
@@ -1148,23 +1153,83 @@ export default function Home() {
                           />
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <label
-                          htmlFor="email-contact-home"
-                          className="text-sm font-medium"
-                        >
-                          Email
-                        </label>
-                        <Input
-                          id="email-contact-home"
-                          type="email"
-                          placeholder="john.doe@example.com"
-                          className="modern-input"
-                          value={contactEmail}
-                          onChange={(e) => setContactEmail(e.target.value)}
-                          required
-                        />
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <label
+                            htmlFor="email-contact-home"
+                            className="text-sm font-medium"
+                          >
+                            Email
+                          </label>
+                          <Input
+                            id="email-contact-home"
+                            type="email"
+                            placeholder="john.doe@example.com"
+                            className="modern-input"
+                            value={contactEmail}
+                            onChange={(e) => setContactEmail(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          {/* <label
+                            htmlFor="last-name-contact-home"
+                            className="text-sm font-medium"
+                          >
+                            Phone Number
+                          </label>
+                          <Input
+                            id="phone-number-contact-home"
+                            placeholder="Doe"
+                            className="modern-input"
+                            value={contactPhoneNumber}
+                            onChange={(e) =>
+                              setContactPhoneNumber(e.target.value)
+                            }
+                            required
+                          /> */}
+                          <label
+                            htmlFor="last-name-contact-home"
+                            className="text-sm font-medium"
+                          >
+                            Phone Number
+                          </label>
+                          <div className="relative">
+                            {/* India Flag + Country Code */}
+                            <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
+                              <ReactCountryFlag
+                                countryCode="IN"
+                                svg
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                }}
+                              />
+
+                              <span className="text-sm font-medium text-gray-600">
+                                +91
+                              </span>
+
+                              <div className="h-5 w-px bg-gray-300" />
+                            </div>
+
+                            <Input
+                              id="phone-contact"
+                              type="tel"
+                              placeholder="98765 43210"
+                              className="modern-input pl-24"
+                              value={contactPhoneNumber}
+                              onChange={(e) =>
+                                setContactPhoneNumber(
+                                  e.target.value.replace(/[^\d]/g, ""),
+                                )
+                              }
+                              maxLength={10}
+                            />
+                          </div>
+                        </div>
                       </div>
+
                       <div className="space-y-2">
                         <label
                           htmlFor="subject-home"

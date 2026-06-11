@@ -150,6 +150,15 @@ const StarOfferPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (errorMessage) {
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+    }
+  }, [errorMessage]);
+
   return (
     <>
       <div className="relative min-h-screen flex flex-col bg-white">

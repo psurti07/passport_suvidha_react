@@ -523,29 +523,29 @@ export default function AboutUs() {
                     {
                       quote:
                         "PassportSuvidha made getting my first passport incredibly easy. Their step-by-step guidance saved me hours of research and stress.",
-                      author: "Emily R.",
-                      location: "Chicago, IL",
+                      author: "Priya Sharma",
+                      location: "Ahmedabad, Gujarat",
                       rating: 5,
                     },
                     {
                       quote:
                         "When I needed an expedited passport for an unexpected business trip, PassportSuvidha delivered in just 3 days. Absolutely worth every penny!",
-                      author: "Marcus T.",
-                      location: "Atlanta, GA",
+                      author: "Rahul Patel",
+                      location: "Surat, Gujarat",
                       rating: 5,
                     },
                     {
                       quote:
                         "The customer service team went above and beyond to help with my complicated name change situation. I couldn't be more grateful.",
-                      author: "Sophia L.",
-                      location: "San Francisco, CA",
+                      author: "Kavya Reddy",
+                      location: "Hyderabad, Telangana",
                       rating: 5,
                     },
                     {
                       quote:
                         "As someone who travels frequently for work, I appreciate the efficiency and reliability of PassportSuvidha. They've handled my renewals for years.",
-                      author: "James K.",
-                      location: "Boston, MA",
+                      author: "Rohan Nair",
+                      location: "Bengaluru, Karnataka",
                       rating: 5,
                     },
                   ].map((testimonial, index) => (

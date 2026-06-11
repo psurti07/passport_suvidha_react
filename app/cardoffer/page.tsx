@@ -174,6 +174,15 @@ const CardOfferPage = () => {
     (s) => s.service_code === selectedService,
   );
 
+  useEffect(() => {
+    if (errorMessage) {
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+    }
+  }, [errorMessage]);
+
   const handleSubmit = async () => {
     if (!isValid) return;
 

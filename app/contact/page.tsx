@@ -63,19 +63,20 @@ export default function Contact() {
       const token = localStorage.getItem("authToken");
 
       const response = await axiosServer.post(
-        "/public/support/tickets",
+        "/contact/enquiry",
         {
-          name,
-          email,
-          subject,
-          message,
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          subject: inquiryType,
+          message: message,
           mobile_number: phone,
         },
-        {
-          headers: {
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        },
+        // {
+        //   headers: {
+        //     ...(token && { Authorization: `Bearer ${token}` }),
+        //   },
+        // },
       );
 
       const resData = response.data;

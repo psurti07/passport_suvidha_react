@@ -19,6 +19,7 @@ import {
   XCircle,
   AlertCircle,
   AlertTriangle,
+  BadgeAlert,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { ApplicationProgress, ApplicationStage } from "@/app/types/application";
@@ -452,20 +453,13 @@ export default function PortalDashboard() {
 
       {customerMessage && (
         <section className="mt-6">
-          <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-sm overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center gap-3 bg-amber-100 border-b border-amber-200 px-5 py-3">
-              <Bell className="h-5 w-5 text-amber-700" />
-              <h3 className="font-semibold text-amber-900">Important Update</h3>
-            </div>
-
-            {/* Content */}
-            <div className="flex gap-3 p-5">
-              <div>
-                <p className="text-sm leading-7 text-amber-900 whitespace-pre-line">
-                  {customerMessage}
-                </p>
-              </div>
+          <div className="bg-navy/5 p-4 rounded-lg my-6 flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-navy mt-0.5" />
+            <div>
+              <h4 className="text-navy font-medium mb-1">Important Update</h4>
+              <p className="text-sm text-muted-foreground m-0">
+                {customerMessage}
+              </p>
             </div>
           </div>
         </section>

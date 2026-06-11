@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { ApplicationProgress } from "@/app/types/application";
 import axiosServer from "@/lib/axiosServer";
+import Image from "next/image";
 
 function SidebarNavigation({
   applicationProgress,
@@ -455,38 +456,45 @@ export default function PortalLayout({
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t py-4 px-4 md:px-8 border-t">
-        <div className="container">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-navy" />
-              <span className="font-medium text-navy">PassportSuvidha</span>
+      <footer className="bg-white border-t px-4 md:px-8 py-6">
+        <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Left: Logo + Brand */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Image
+                src="/icon/passport-suvidha-icon.png"
+                alt="Passport Suvidha Logo"
+                width={48}
+                height={48}
+                className="h-10 w-10"
+              />
             </div>
-            {/* <div className="flex items-center gap-4">
-              <Link
-                href="/privacy-policy"
-                className="hover:text-navy transition-colors"
-              >
-                Privacy
-              </Link>
-              <Link
-                href="/terms-of-service"
-                className="hover:text-navy transition-colors"
-              >
-                Terms
-              </Link>
-              <Link
-                href="/contact"
-                className="hover:text-navy transition-colors"
-              >
-                Contact
-              </Link>
-            </div> */}
-            <div>
-              {" "}
-              © {new Date().getFullYear()} BOUNDLESS PASSPORT SUVIDHA LLP. All
-              rights reserved.
+
+            <div className="leading-tight relative">
+              <p className="font-semibold text-navy">PassportSuvidha</p>
+              <p className="text-xs text-muted-foreground">
+                Secure. Fast. Reliable passport services
+              </p>
             </div>
+          </div>
+
+          {/* Center: Optional Links (you can enable later) */}
+          {/* <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <a href="/privacy-policy" className="hover:text-navy transition">
+              Privacy
+            </a>
+            <a href="/terms-of-service" className="hover:text-navy transition">
+              Terms
+            </a>
+            <a href="/contact" className="hover:text-navy transition">
+              Contact
+            </a>
+          </div> */}
+
+          {/* Right: Copyright */}
+          <div className="text-xs text-muted-foreground text-center md:text-right">
+            <p>© {new Date().getFullYear()} Boundless Passport Suvidha LLP</p>
+            <p>All rights reserved</p>
           </div>
         </div>
       </footer>

@@ -253,7 +253,7 @@ export default function DocumentsPage() {
           <CardHeader className="bg-navy/5">
             <CardTitle>Required Documents</CardTitle>
             <CardDescription>
-              Please upload all the required documents in PDF, JPG, or PNG
+              Please upload all the required documents in PDF, JPG, JPEG or PNG
               format
             </CardDescription>
           </CardHeader>

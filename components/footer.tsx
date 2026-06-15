@@ -199,6 +199,14 @@ export function Footer() {
                   Check Status
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/feeCalculator"
+                  className="text-white/70 hover:text-gold transition-colors"
+                >
+                  Fee Calculator
+                </Link>
+              </li>
             </ul>
           </div>
 

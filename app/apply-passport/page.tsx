@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import ApplicationForm from "@/components/passport-application/ApplicationForm";
 import { FileText } from "lucide-react";
 import Head from "next/head";
+import { useEffect } from "react";
+import Image from "next/image";
 
 export default function ApplyPassport() {
   return (
@@ -17,6 +19,24 @@ export default function ApplyPassport() {
           content="Apply for your Indian passport online in a few simple steps. Fast, secure, and hassle-free application process with Passport Suvidha."
         />
       </Head>
+
+      {/* Header */}
+      <header className="w-full border-b mb-10 mt-2 pb-2">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex items-center h-16 md:h-20">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo/passport-suvidha.png"
+                alt="Passport Suvidha"
+                className="h-16 md:h-16 w-auto object-contain"
+                width={100}
+                height={100}
+              />
+            </Link>
+          </div>
+        </div>
+      </header>
+
       {/* Main Content with Animation */}
       <motion.main
         className="flex-1 relative z-10"
@@ -49,8 +69,14 @@ export default function ApplyPassport() {
       <footer className="w-full py-4 border-t">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-navy" />
+            <div className="flex items-center">
+              <Image
+                src="/icon/passport-suvidha-icon.png"
+                alt="Passport Suvidha Logo"
+                width={100}
+                height={100}
+                className="h-12 w-12"
+              />
               <span className="font-medium text-navy">PassportSuvidha</span>
             </div>
             {/* <div className="flex items-center justify-center gap-4">

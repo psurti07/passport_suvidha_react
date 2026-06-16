@@ -37,6 +37,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home", ariaLabel: "Go to home page" },
+    { href: "/about", label: "About Us", ariaLabel: "Learn about us" },
     { href: "/services", label: "Services", ariaLabel: "View our services" },
     {
       href: "/requirements",
@@ -48,7 +49,6 @@ export function Navbar() {
       label: "Locations",
       ariaLabel: "Find passport offices",
     },
-    { href: "/about", label: "About Us", ariaLabel: "Learn about us" },
   ];
 
   return (
@@ -73,7 +73,7 @@ export function Navbar() {
               width={180}
               height={40}
               priority
-              className="h-10 w-auto sm:h-10 md:h-12 lg:h-11 xl:h-14"
+              className="h-16 w-auto sm:h-12 md:h-16 lg:h-11 xl:h-14"
             />
           </div>
         </Link>

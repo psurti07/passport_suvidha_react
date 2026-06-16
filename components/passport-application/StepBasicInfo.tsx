@@ -264,14 +264,8 @@ const StepBasicInfo = ({
               />
               <Label htmlFor="terms" className="text-xs leading-5">
                 By submitting the form, you agree to the{" "}
-                <a href="/terms" className="text-muted-foreground">
-                  Terms of Use
-                </a>{" "}
-                and{" "}
-                <a href="/privacy-policy" className="text-muted-foreground">
-                  Privacy Policy
-                </a>{" "}
-                of PassportSuvidha.
+                <a href="/terms">Terms of Use</a> and{" "}
+                <a href="/privacy-policy">Privacy Policy</a> of PassportSuvidha.
               </Label>
             </div>
 

@@ -172,57 +172,43 @@ const StarOfferPage = () => {
           <div className="absolute bottom-0 left-[30%] w-[400px] h-[400px] bg-blue-50 opacity-30 rounded-full blur-2xl" />
         </div> */}
 
-        <header
-          className={cn(
-            "sticky top-0 z-50 w-full transition-all duration-300",
-            scrolled
-              ? "glass-nav-scrolled backdrop-blur-md bg-navy/80"
-              : "glass-nav",
-          )}
-        >
-          <div className="container flex h-16 sm:h-20 items-center justify-between">
+        <header className="w-full border-b border-slate-200 bg-transparent mt-2 pb-2">
+          <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6 ">
+            {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 sm:gap-3 transition-opacity hover:opacity-90"
+              className="flex items-center transition-opacity hover:opacity-90"
               aria-label="Passport Suvidha Home"
             >
-              <div className="relative">
-                <Image
-                  src="/logo/ps-logo-1.png"
-                  alt="Passport Suvidha"
-                  width={180}
-                  height={40}
-                  priority
-                  className="h-12 w-auto sm:h-10 md:h-16"
-                />
-              </div>
+              <Image
+                src="/logo/passport-suvidha.png"
+                alt="Passport Suvidha"
+                width={180}
+                height={40}
+                priority
+                className="h-16 md:h-16 w-auto"
+              />
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav
-              className="hidden md:flex items-center gap-6 lg:gap-8"
-              role="navigation"
-              aria-label="Main navigation"
-            >
+            {/* Desktop Menu */}
+            <nav className="hidden md:flex items-center">
               <div
                 className="relative"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
               >
-                <Menu className="h-6 w-6 cursor-pointer text-white" />
+                <Menu className="h-6 w-6 cursor-pointer text-navy" />
 
                 {showTooltip && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-lg border rounded-lg p-4 text-sm w-72 text-black space-y-3">
-                    {/* PHONE */}
+                  <div className="absolute right-0 mt-3 w-72 rounded-xl border bg-white shadow-lg p-4 text-sm text-slate-700 space-y-3">
                     <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-teal flex-shrink-0" />
-                      <span className="whitespace-nowrap"> +91-7486046591</span>
+                      <Phone className="h-5 w-5 text-navy" />
+                      <span className="text-navy">+91-7486046591</span>
                     </div>
 
-                    {/* EMAIL */}
                     <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-teal flex-shrink-0" />
-                      <span className="break-all">
+                      <Mail className="h-5 w-5 text-navy" />
+                      <span className="text-navy">
                         support@passportsuvidha.com
                       </span>
                     </div>
@@ -236,33 +222,28 @@ const StarOfferPage = () => {
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="md:hidden ml-auto bg-transparent hover:bg-transparent"
+                  className="md:hidden ml-auto hover:bg-transparent"
                 >
-                  <Menu className="h-6 w-6 text-white" />
+                  <Menu className="h-6 w-6 text-slate-700" />
                 </Button>
               </SheetTrigger>
+
               <SheetContent
                 side="right"
-                className="w-full bg-navy/95 backdrop-blur-lg border-none p-6"
+                className="w-full sm:w-[400px] bg-white"
               >
-                <div className="mt-16 flex flex-col items-center text-center gap-8">
-                  {/* HEADING */}
-                  <h2 className="text-white text-xl font-semibold">
-                    Contact Us
-                  </h2>
+                <div className="mt-16 flex flex-col items-center gap-8">
+                  <h2 className="text-xl font-semibold">Contact Us</h2>
 
-                  {/* CONTACT CARD */}
-                  <div className="bg-white text-black rounded-2xl shadow-xl p-6 w-full max-w-sm space-y-4">
-                    <div className="flex items-center gap-3 justify-center">
-                      <Phone className="h-5 w-5 text-teal" />
-                      <span className="font-medium"> +91-7486046591</span>
+                  <div className="w-full rounded-2xl border p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Phone className="h-5 w-5 text-teal-600" />
+                      <span>+91-7486046591</span>
                     </div>
 
-                    <div className="flex items-center gap-3 justify-center">
-                      <Mail className="h-5 w-5 text-teal" />
-                      <span className="break-all">
-                        support@passportsuvidha.com
-                      </span>
+                    <div className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-teal-600" />
+                      <span>support@passportsuvidha.com</span>
                     </div>
                   </div>
                 </div>
@@ -445,8 +426,11 @@ const StarOfferPage = () => {
                             {service.service_name}
                           </h3>
                           <p className="text-[10px] text-gray-500 mt-2">
-                            Govt ₹{service.service_gov_amount} + Charges ₹
-                            {service.service_charges}
+                            {/* Govt ₹{service.service_gov_amount} + Charges ₹
+                            {service.service_charges} */}
+                            ₹{service.service_gov_amount} (Govt. Fees) + ₹
+                            {service.service_charges + service.service_gst}{" "}
+                            (Service Charges + GST)
                           </p>
                         </div>
                       );

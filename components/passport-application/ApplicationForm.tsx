@@ -694,6 +694,12 @@ function ApplicationForm() {
     // Move to the next step for other transitions
     setStep((prevStep) => prevStep + 1);
   };
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [step]);
 
   const prevStep = () => {
     setStep(step - 1);

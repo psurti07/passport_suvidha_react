@@ -20,7 +20,7 @@ export function Footer() {
                   width={180}
                   height={40}
                   priority
-                  className="h-12 w-auto sm:h-10 md:h-16"
+                  className="h-16 w-auto sm:h-12 md:h-16"
                 />
               </div>
             </Link>
@@ -129,12 +129,20 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gold">Quick Links</h3>
             <ul className="space-y-2">
-              <li>
+              {/* <li>
                 <Link
                   href="/"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
                   Home
+                </Link>
+              </li> */}
+              <li>
+                <Link
+                  href="/about"
+                  className="text-white/70 hover:text-gold transition-colors"
+                >
+                  About Us
                 </Link>
               </li>
               <li>
@@ -159,14 +167,6 @@ export function Footer() {
                   className="text-white/70 hover:text-gold transition-colors"
                 >
                   Locations
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-white/70 hover:text-gold transition-colors"
-                >
-                  About Us
                 </Link>
               </li>
             </ul>

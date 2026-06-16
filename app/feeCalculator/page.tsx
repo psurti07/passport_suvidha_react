@@ -482,8 +482,10 @@ export default function FeeCalculatorPage() {
             {fee && (
               <div className="mt-6 p-4 rounded-xl bg-green-50 text-bold border border-green-200 text-green-900 text-sm ">
                 <p>
-                  Fee Amount (in Rs.): ₹
-                  {fee.service_gov_amount.toLocaleString("en-IN")}
+                  Goverment Fees :
+                  <span className="text-lg font-bold">
+                    ₹{fee.service_gov_amount.toLocaleString("en-IN")}
+                  </span>
                 </p>
               </div>
             )}

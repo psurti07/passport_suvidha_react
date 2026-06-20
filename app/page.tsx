@@ -64,6 +64,25 @@ export default function Home() {
   >("idle");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
+  const fullText = "Passport Suvidha Company is a Private Consultancy.";
+  // const [typedText, setTypedText] = useState("");
+  // const [startMarquee, setStartMarquee] = useState(false);
+
+  // useEffect(() => {
+  //   let index = 0;
+
+  //   const interval = setInterval(() => {
+  //     setTypedText(fullText.slice(0, index + 1));
+  //     index++;
+
+  //     if (index === fullText.length) {
+  //       clearInterval(interval);
+  //       setStartMarquee(true);
+  //     }
+  //   }, 80);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   useEffect(() => {
     const fetchWelcomeMessage = async () => {
@@ -323,6 +342,13 @@ export default function Home() {
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
             <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
+              <div className="mb-6 text-center">
+                <div className="overflow-hidden whitespace-nowrap rounded-full rounded-lg bg-teal/5 py-3 shadow-sm">
+                  <div className="inline-block animate-marquee px-6 text-[#0F2B5B] font-semibold text-sm md:text-base">
+                    Passport Suvidha Company is a Private Consultancy.
+                  </div>
+                </div>
+              </div>
               <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy">
                 <span>Our Services</span>
               </div>

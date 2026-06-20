@@ -169,7 +169,7 @@ const StepVerification = ({
                 maxLength={1}
                 inputMode="numeric"
                 autoComplete="one-time-code"
-                className="modern-input lg:w-14 sm:w-9 sm:h-9 lg:h-14 text-center text-xl font-medium"
+                className="modern-input lg:w-14 -h-10 !sm:w-12 !sm:h-12 lg:h-14 text-center text-xl font-medium"
               />
             ))}
           </div>

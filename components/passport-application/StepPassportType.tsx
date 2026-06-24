@@ -136,7 +136,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "30-45 days processing",
+        text: "25-30 days processing",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,
@@ -159,7 +159,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "30-45 days processing",
+        text: "25-30 days processing",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,
@@ -182,7 +182,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "1-3 days processing",
+        text: "1-7 days working",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,
@@ -205,7 +205,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "1-3 days processing",
+        text: "1-7 days working",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,
@@ -336,7 +336,7 @@ const StepPassportType = ({
                   <PassportTypeCard
                     key={service.id}
                     title={staticData.title}
-                    price={`₹${service.service_charges}`}
+                    price={`₹${service.service_total_amount}`}
                     description={staticData.description}
                     features={staticData.features}
                     badge={staticData.badge}
@@ -682,23 +682,17 @@ const StepPassportType = ({
       )}
 
       {/* Important Note */}
+      <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+        <div className="flex items-center gap-3">
+          <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
 
-      <div className="mt-4 rounded-xl border border-navy/15 bg-navy/[0.03] px-4 py-3">
-        <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy/10">
-            <Info className="h-4 w-4 text-navy" />
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-navy">
-              Important Information
-            </p>
-
-            <p className="mt-1 text-xs md:text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm font-semibold text-amber-900">
+            Important:{" "}
+            <span className="font-medium">
               This fee is for consultation only. Government charges will be
               applicable separately.
-            </p>
-          </div>
+            </span>
+          </p>
         </div>
       </div>
 

@@ -25,6 +25,7 @@ import {
   Zap,
   Award,
   ArrowRight,
+  Info,
 } from "lucide-react";
 import axiosServer from "@/lib/axiosServer";
 
@@ -55,7 +56,7 @@ export default function Services() {
   const tatkal60 = services?.find((item) => item.service_code === "TP60");
 
   const gstCalculation = (service_charges: number) => {
-    return service_charges * 0.18;
+    return Number((service_charges * 0.18).toFixed(2));
   };
 
   const stageContent: Record<StageKey, React.ReactElement> = {
@@ -254,11 +255,11 @@ export default function Services() {
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-navy" />
-                Normal: 30-45 days
+                Normal: 25-30 days
               </li>
               <li className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-navy" />
-                Tatkal: 1-3 days
+                Tatkal: 1-7 days
               </li>
             </ul>
           </div>
@@ -697,7 +698,7 @@ export default function Services() {
                           <Check className="h-3 w-3 text-navy" />
                         </div>
                         <span className="text-sm">
-                          30-45 days processing time
+                          25-30 days processing time
                         </span>
                       </div>
                       <div className="flex items-start">
@@ -729,6 +730,19 @@ export default function Services() {
                         <span className="text-sm">
                           Online application assistance
                         </span>
+                      </div>
+                    </div>
+                    <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+
+                        <p className="text-sm font-semibold text-amber-900">
+                          Important:{" "}
+                          <span className="font-medium">
+                            This fee is for consultation only. Government
+                            charges will be applicable separately.
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -825,9 +839,7 @@ export default function Services() {
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
                           <Check className="h-3 w-3 text-teal" />
                         </div>
-                        <span className="text-sm">
-                          1-3 days processing time
-                        </span>
+                        <span className="text-sm">1-7 days working time</span>
                       </div>
                       <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
@@ -856,6 +868,19 @@ export default function Services() {
                           <Check className="h-3 w-3 text-teal" />
                         </div>
                         <span className="text-sm">24/7 support assistance</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+
+                        <p className="text-sm font-semibold text-amber-900">
+                          Important:{" "}
+                          <span className="font-medium">
+                            This fee is for consultation only. Government
+                            charges will be applicable separately.
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </CardContent>

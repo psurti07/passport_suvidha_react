@@ -55,7 +55,7 @@ export default function Services() {
   const tatkal60 = services?.find((item) => item.service_code === "TP60");
 
   const gstCalculation = (service_charges: number) => {
-    return Math.round(service_charges * 0.18);
+    return service_charges * 0.18;
   };
 
   const stageContent: Record<StageKey, React.ReactElement> = {
@@ -647,10 +647,10 @@ export default function Services() {
                             ₹{normal36?.service_total_amount}
                           </div>
                           <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal36?.service_gov_amount}</span>
-                            </div>
+                            </div> */}
                             <div className="flex justify-between">
                               <span>Service Charge:</span>
                               <span>₹{normal36?.service_charges}</span>
@@ -671,10 +671,10 @@ export default function Services() {
                             ₹{normal60?.service_total_amount}
                           </div>
                           <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal60?.service_gov_amount}</span>
-                            </div>
+                            </div> */}
                             <div className="flex justify-between">
                               <span>Service Charge:</span>
                               <span>₹{normal60?.service_charges}</span>
@@ -776,10 +776,10 @@ export default function Services() {
                             ₹{tatkal36?.service_total_amount}
                           </div>
                           <div className="space-y-1 mt-2">
-                            <div className="text-sm text-teal/70 flex justify-between">
+                            {/* <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
                               <span>₹{tatkal36?.service_gov_amount}</span>
-                            </div>
+                            </div> */}
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Service Charge</span>
                               <span>₹{tatkal36?.service_charges}</span>
@@ -800,10 +800,10 @@ export default function Services() {
                             ₹{tatkal60?.service_total_amount}
                           </div>
                           <div className="space-y-1 mt-2">
-                            <div className="text-sm text-teal/70 flex justify-between">
+                            {/* <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
                               <span>₹{tatkal60?.service_gov_amount}</span>
-                            </div>
+                            </div> */}
                             <div className="text-sm text-teal/70 flex justify-between">
                               <span>Service Charge</span>
                               <span>₹{tatkal60?.service_charges}</span>

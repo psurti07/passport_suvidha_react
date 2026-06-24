@@ -512,7 +512,7 @@ const CardOfferPage = () => {
                         <p className="text-[10px] text-gray-500 mt-2">
                           {/* ₹{service.service_gov_amount} (Govt. Fees) + Charges ₹
                           {service.service_charges} (Service Charges + GST) */}
-                          ₹{service.service_gov_amount} (Govt. Fees) + ₹
+                          {/* ₹{service.service_gov_amount} (Govt. Fees) +  */}₹
                           {service.service_charges + service.service_gst}{" "}
                           (Service Charges + GST)
                         </p>

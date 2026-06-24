@@ -428,8 +428,8 @@ const StarOfferPage = () => {
                           <p className="text-[10px] text-gray-500 mt-2">
                             {/* Govt ₹{service.service_gov_amount} + Charges ₹
                             {service.service_charges} */}
-                            ₹{service.service_gov_amount} (Govt. Fees) + ₹
-                            {service.service_charges + service.service_gst}{" "}
+                            {/* ₹{service.service_gov_amount} (Govt. Fees) +  */}
+                            ₹{service.service_charges + service.service_gst}{" "}
                             (Service Charges + GST)
                           </p>
                         </div>
@@ -458,6 +458,7 @@ const StarOfferPage = () => {
                           placeholder="Enter your full name"
                           className="mt-1 h-11 rounded-lg"
                         />
+                        
                       </div>
 
                       <div>

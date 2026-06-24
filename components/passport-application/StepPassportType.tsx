@@ -7,13 +7,12 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Autoplay from "embla-carousel-autoplay";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import {
   CreditCard,
   FileText,
@@ -22,6 +21,13 @@ import {
   ArrowLeft,
   ArrowRight,
   Loader2,
+  ShieldCheck,
+  Users,
+  Clock3,
+  AlertCircle,
+  Headphones,
+  FileCheck,
+  Info,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import axiosServer from "@/lib/axiosServer";
@@ -124,7 +130,7 @@ const passportTypes = [
     passportType: "normal",
     bookSize: "36",
     title: "Normal 36-Page",
-    price: "₹2,680",
+    price: "₹999",
     description: "Perfect for occasional travelers",
     badge: "Most Popular",
     features: [
@@ -147,7 +153,7 @@ const passportTypes = [
     passportType: "normal",
     bookSize: "60",
     title: "Normal 60-Page",
-    price: "₹3,180",
+    price: "₹999",
     description: "Ideal for frequent travelers",
     badge: "Extra Capacity",
     features: [
@@ -170,7 +176,7 @@ const passportTypes = [
     passportType: "tatkal",
     bookSize: "36",
     title: "Tatkal 36-Page",
-    price: "₹4,680",
+    price: "₹999",
     description: "For urgent travel needs",
     badge: "Express Service",
     features: [
@@ -193,7 +199,7 @@ const passportTypes = [
     passportType: "tatkal",
     bookSize: "60",
     title: "Tatkal 60-Page",
-    price: "₹5,180",
+    price: "₹999",
     description: "Ultimate express package",
     badge: "Premium Service",
     features: [
@@ -330,7 +336,7 @@ const StepPassportType = ({
                   <PassportTypeCard
                     key={service.id}
                     title={staticData.title}
-                    price={`₹${service.service_total_amount}`}
+                    price={`₹${service.service_charges}`}
                     description={staticData.description}
                     features={staticData.features}
                     badge={staticData.badge}
@@ -360,14 +366,14 @@ const StepPassportType = ({
                 </h3>
               </div>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
+                {/* <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
                   <span className="text-base text-muted-foreground">
                     Government Fees
                   </span>
                   <span className="text-base font-medium text-navy">
                     ₹{selectedService?.service_gov_amount || 0}
                   </span>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
                   <span className="text-base text-muted-foreground">
                     Service Charge
@@ -606,14 +612,14 @@ const StepPassportType = ({
                       <h3 className="text-lg font-semibold text-navy mb-3">
                         Price Breakdown
                       </h3>
-                      <div className="flex justify-between items-center">
+                      {/* <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">
                           Government Fees
                         </span>
                         <span className="text-sm font-medium text-navy">
                           ₹{selectedService?.service_gov_amount || 0}
                         </span>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">
                           Service Charge
@@ -674,6 +680,117 @@ const StepPassportType = ({
           </CardContent>
         </>
       )}
+
+      {/* Important Note */}
+
+      <div className="mt-4 rounded-xl border border-navy/15 bg-navy/[0.03] px-4 py-3">
+        <div className="flex items-start gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy/10">
+            <Info className="h-4 w-4 text-navy" />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-navy">
+              Important Information
+            </p>
+
+            <p className="mt-1 text-xs md:text-sm text-muted-foreground leading-relaxed">
+              This fee is for consultation only. Government charges will be
+              applicable separately.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Features */}
+      <motion.div variants={itemVariants} className="mt-8 mb-10 pb-4">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          plugins={[
+            Autoplay({
+              delay: 2500,
+            }),
+          ]}
+          className="w-full"
+        >
+          <CarouselContent>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
+                <div className="p-3 rounded-full bg-navy/10">
+                  <ShieldCheck className="h-8 w-8 text-navy" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-navy">100% Secure</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Your data is protected and encrypted
+                  </p>
+                </div>
+              </div>
+            </CarouselItem>
+
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
+                <div className="p-3 rounded-full bg-navy/10">
+                  <Users className="h-8 w-8 text-navy" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-navy">Expert Assistance</h4>
+                  <p className="text-xs text-muted-foreground">
+                    End-to-end application support
+                  </p>
+                </div>
+              </div>
+            </CarouselItem>
+
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
+                <div className="p-3 rounded-full bg-navy/10">
+                  <Clock3 className="h-8 w-8 text-navy" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-navy">Fast Processing</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Quick review and submission guidance
+                  </p>
+                </div>
+              </div>
+            </CarouselItem>
+
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
+                <div className="p-3 rounded-full bg-navy/10">
+                  <Headphones className="h-8 w-8 text-navy" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-navy">Dedicated Support</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Assistance throughout your application journey
+                  </p>
+                </div>
+              </div>
+            </CarouselItem>
+
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
+                <div className="p-3 rounded-full bg-navy/10">
+                  <FileCheck className="h-8 w-8 text-navy" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-navy">
+                    Document Verification
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Thorough review to minimize application errors
+                  </p>
+                </div>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+        </Carousel>
+      </motion.div>
     </>
   );
 };

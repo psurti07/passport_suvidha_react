@@ -28,7 +28,9 @@ interface FormData {
   zipCode: string;
   gender: string;
   dateOfBirth: string;
-  placeOfBirth: string;
+  // placeOfBirth: string;
+  education_qualification: string;
+  employment_type: string;
   nationality: string;
   paymentMethod: "credit" | "upi" | "netBanking";
   fbclid: string;
@@ -141,7 +143,9 @@ function ApplicationForm() {
     zipCode: "",
     gender: "",
     dateOfBirth: "",
-    placeOfBirth: "",
+    // placeOfBirth: "",
+    education_qualification: "",
+    employment_type: "",
     nationality: "India",
     paymentMethod: "credit",
     fbclid: "",
@@ -658,7 +662,9 @@ function ApplicationForm() {
             gender: formData.gender,
             // date_of_birth: formattedDob,
             date_of_birth: formData.dateOfBirth,
-            place_of_birth: formData.placeOfBirth,
+            // place_of_birth: formData.placeOfBirth,
+            education_qualification: formData.education_qualification,
+            employment_type: formData.employment_type,
           }),
         });
 

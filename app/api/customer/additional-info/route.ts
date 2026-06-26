@@ -8,6 +8,8 @@ interface AdditionalInfoRequestBody {
   state: string;
   gender: string;
   date_of_birth: string;
+  education_qualification: string;
+  employment_type: string;
   // place_of_birth: string;
 }
 
@@ -69,6 +71,14 @@ export async function POST(request: NextRequest) {
     // if (!body.place_of_birth?.trim()) {
     //   errors.place_of_birth = ["Place of birth is required"];
     // }
+
+    if (!body.education_qualification?.trim()) {
+      errors.education_qualification = ["Education qualification is required"];
+    }
+
+    if (!body.employment_type?.trim()) {
+      errors.employment_type = ["Employement type is required"];
+    }
 
     // If there are validation errors, return them
     if (Object.keys(errors).length > 0) {

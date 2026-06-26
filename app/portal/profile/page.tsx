@@ -18,6 +18,13 @@ import {
   Globe,
   AlertCircle,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -400,6 +407,93 @@ export default function ProfilePage() {
                         </p>
                         <p className="font-semibold">
                           {formatDate(profile.date_of_birth) || "-"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    {isEditing ? (
+                      <>
+                        <Label>Education Qualification</Label>
+
+                        <Select
+                          value={formData.education_qualification || ""}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              education_qualification: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Qualification" />
+                          </SelectTrigger>
+
+                          <SelectContent>
+                            <SelectItem value="Below 10th">
+                              Below 10th
+                            </SelectItem>
+                            <SelectItem value="10th Pass And Above">
+                              10th Pass And Above
+                            </SelectItem>
+                            <SelectItem value="Graduate And Above">
+                              Graduate And Above
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </>
+                    ) : (
+                      <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                        <p className="text-xs text-muted-foreground">
+                          Education Qualification
+                        </p>
+                        <p className="font-semibold">
+                          {profile.education_qualification || "-"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    {isEditing ? (
+                      <>
+                        <Label>Employment Type</Label>
+
+                        <Select
+                          value={formData.employment_type || ""}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              employment_type: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Employment Type" />
+                          </SelectTrigger>
+
+                          <SelectContent>
+                            <SelectItem value="Government">
+                              Government
+                            </SelectItem>
+                            <SelectItem value="Private">Private</SelectItem>
+                            <SelectItem value="Self Employed">
+                              Self Employed
+                            </SelectItem>
+                            <SelectItem value="Student">Student</SelectItem>
+                            <SelectItem value="Homemaker">Homemaker</SelectItem>
+                            <SelectItem value="Retired">Retired</SelectItem>
+                            <SelectItem value="Others">Others</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </>
+                    ) : (
+                      <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                        <p className="text-xs text-muted-foreground">
+                          Employment Type
+                        </p>
+                        <p className="font-semibold">
+                          {profile.employment_type || "-"}
                         </p>
                       </div>
                     )}

@@ -46,6 +46,8 @@ const StepAddressDetails = ({
     state: false,
     gender: false,
     dateOfBirth: false,
+    education_qualification: false,
+    employment_type: false,
     // placeOfBirth: false,
   });
 
@@ -84,6 +86,12 @@ const StepAddressDetails = ({
     state: !formData.state.trim() ? "State is required" : "",
     gender: !formData.gender.trim() ? "Gender is required" : "",
     dateOfBirth: getDateOfBirthError(formData.dateOfBirth),
+    education_qualification: !(formData.education_qualification || "").trim()
+      ? "Education Qualification is required"
+      : "",
+    employment_type: !(formData.employment_type || "").trim()
+      ? "Employment Type is required"
+      : "",
     // placeOfBirth: !formData.placeOfBirth.trim()
     //   ? "Place of birth is required"
     //   : /\d/.test(formData.placeOfBirth)
@@ -97,7 +105,9 @@ const StepAddressDetails = ({
     !errors.city &&
     !errors.state &&
     !errors.gender &&
-    !errors.dateOfBirth;
+    !errors.dateOfBirth &&
+    !errors.education_qualification &&
+    !errors.employment_type;
   // !errors.placeOfBirth;
 
   return (
@@ -307,6 +317,93 @@ const StepAddressDetails = ({
                   </p>
                 )}
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Education Qualification */}
+                <div className="space-y-2">
+                  <Label htmlFor="education_qualification">
+                    Education Qualification
+                  </Label>
+
+                  <Select
+                    value={formData.education_qualification}
+                    onValueChange={(value) => {
+                      handleSelectChange("education_qualification", value);
+                      if (!touched.education_qualification)
+                        setTouched((t) => ({
+                          ...t,
+                          education_qualification: true,
+                        }));
+                    }}
+                  >
+                    {/* <Select
+                    value={formData.education_qualification}
+                    onValueChange={(value) =>
+                      setFormData((prev: any) => ({
+                        ...prev,
+                        education_qualification: value,
+                      }))
+                    }
+                  > */}
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Education" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="Below 10th">Below 10th</SelectItem>
+                      <SelectItem value="10th Pass and Above">
+                        10th Pass and Above
+                      </SelectItem>
+                      <SelectItem value="Graduate and Above">
+                        Graduate and Above
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Employment Type */}
+                <div className="space-y-2">
+                  <Label htmlFor="employment_type">Employment Type</Label>
+
+                  <Select
+                    value={formData.employment_type}
+                    onValueChange={(value) => {
+                      handleSelectChange("employment_type", value);
+                      if (!touched.employment_type)
+                        setTouched((t) => ({
+                          ...t,
+                          employment_type: true,
+                        }));
+                    }}
+                  >
+                    {/* <Select
+                    value={formData.employment_type}
+                    onValueChange={(value) =>
+                      setFormData((prev: any) => ({
+                        ...prev,
+                        employment_type: value,
+                      }))
+                    }
+                  > */}
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Employment" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectItem value="Government">Government</SelectItem>
+                      <SelectItem value="Private">Private</SelectItem>
+                      <SelectItem value="Self Employed">
+                        Self Employed
+                      </SelectItem>
+                      <SelectItem value="Student">Student</SelectItem>
+                      <SelectItem value="Homemaker">Homemaker</SelectItem>
+                      <SelectItem value="Retired">Retired</SelectItem>
+                      <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
               {/* <div className="space-y-2">
                 <Label htmlFor="placeOfBirth">Place of Birth</Label>
                 <Input

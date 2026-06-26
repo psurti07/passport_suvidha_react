@@ -46,7 +46,7 @@ const StepAddressDetails = ({
     state: false,
     gender: false,
     dateOfBirth: false,
-    placeOfBirth: false,
+    // placeOfBirth: false,
   });
 
   function isValidDate(date: string) {
@@ -84,11 +84,11 @@ const StepAddressDetails = ({
     state: !formData.state.trim() ? "State is required" : "",
     gender: !formData.gender.trim() ? "Gender is required" : "",
     dateOfBirth: getDateOfBirthError(formData.dateOfBirth),
-    placeOfBirth: !formData.placeOfBirth.trim()
-      ? "Place of birth is required"
-      : /\d/.test(formData.placeOfBirth)
-        ? "Place of birth should not contain digits"
-        : "",
+    // placeOfBirth: !formData.placeOfBirth.trim()
+    //   ? "Place of birth is required"
+    //   : /\d/.test(formData.placeOfBirth)
+    //     ? "Place of birth should not contain digits"
+    //     : "",
   };
 
   const isValid =
@@ -97,8 +97,8 @@ const StepAddressDetails = ({
     !errors.city &&
     !errors.state &&
     !errors.gender &&
-    !errors.dateOfBirth &&
-    !errors.placeOfBirth;
+    !errors.dateOfBirth;
+  // !errors.placeOfBirth;
 
   return (
     <>
@@ -137,7 +137,7 @@ const StepAddressDetails = ({
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="zipCode">ZIP Code</Label>
+                  <Label htmlFor="zipCode">Pin Code</Label>
                   <div className="relative">
                     <Input
                       id="zipCode"
@@ -307,7 +307,7 @@ const StepAddressDetails = ({
                   </p>
                 )}
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="placeOfBirth">Place of Birth</Label>
                 <Input
                   id="placeOfBirth"
@@ -337,7 +337,7 @@ const StepAddressDetails = ({
                     {errors.placeOfBirth}
                   </p>
                 )}
-              </div>
+              </div> */}
             </div>
           </motion.div>
 

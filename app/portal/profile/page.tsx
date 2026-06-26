@@ -406,7 +406,7 @@ export default function ProfilePage() {
                   </div>
 
                   {/* PLACE OF BIRTH */}
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     {isEditing && <Label>Place of Birth</Label>}
                     {isEditing ? (
                       <Input
@@ -425,7 +425,7 @@ export default function ProfilePage() {
                         </p>
                       </div>
                     )}
-                  </div>
+                  </div> */}
 
                   {/* GENDER */}
                   <div className="space-y-2">

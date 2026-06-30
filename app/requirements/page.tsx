@@ -1,12 +1,28 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FileText, Download, Camera, CreditCard, Clock, AlertTriangle, CheckCircle, Info, Check } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  FileText,
+  Download,
+  Camera,
+  CreditCard,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  Info,
+  Check,
+} from "lucide-react";
 
 export default function Requirements() {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">            
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
@@ -15,7 +31,8 @@ export default function Requirements() {
                 Passport Requirements
               </h1>
               <p className="text-muted-foreground md:text-xl mt-2">
-                Everything you need to know about passport application requirements
+                Everything you need to know about passport application
+                requirements
               </p>
             </div>
 
@@ -38,7 +55,9 @@ export default function Requirements() {
                         <FileText className="h-5 w-5 text-navy" />
                         Required Documents
                       </CardTitle>
-                      <CardDescription>Documents needed for passport applications and renewals</CardDescription>
+                      <CardDescription>
+                        Documents needed for passport applications and renewals
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="space-y-4">
@@ -49,12 +68,21 @@ export default function Requirements() {
                           </h3>
                           <ul className="space-y-2 pl-7 list-disc">
                             <li>Completed online application form</li>
-                            <li>Proof of Identity (Aadhaar Card/Voter ID/PAN Card)</li>
-                            <li>Proof of Address (Aadhaar/Utility Bills/Bank Statement)</li>
-                            <li>Proof of Date of Birth (Birth Certificate/Aadhaar)</li>
-                            <li>Recent passport size photographs (5.0 cm x 5.0 cm)</li>
+                            <li>
+                              Proof of Identity (Aadhaar Card/Voter ID/PAN Card)
+                            </li>
+                            <li>
+                              Proof of Address (Aadhaar/Utility Bills/Bank
+                              Statement)
+                            </li>
+                            <li>
+                              Proof of Date of Birth (Birth Certificate/Aadhaar)
+                            </li>
+                            <li>
+                              Recent passport size photographs (5.0 cm x 5.0 cm)
+                            </li>
                             <li>Payment of applicable fees</li>
-                          </ul>                          
+                          </ul>
                         </div>
 
                         <div className="bg-teal/5 rounded-xl p-5 border border-teal/10">
@@ -65,10 +93,12 @@ export default function Requirements() {
                           <ul className="space-y-2 pl-7 list-disc">
                             <li>Completed online application form</li>
                             <li>Original old passport</li>
-                            <li>Self-attested copies of first and last pages</li>
+                            <li>
+                              Self-attested copies of first and last pages
+                            </li>
                             <li>Recent passport size photographs</li>
                             <li>Payment of applicable fees</li>
-                          </ul>                         
+                          </ul>
                         </div>
 
                         <div className="bg-burgundy/5 rounded-xl p-5 border border-burgundy/10">
@@ -84,7 +114,7 @@ export default function Requirements() {
                             <li>Parents' presence required at PSK</li>
                             <li>Recent passport size photographs</li>
                             <li>Payment of applicable fees</li>
-                          </ul>                          
+                          </ul>
                         </div>
 
                         {/* <div className="bg-gold/5 rounded-xl p-5 border border-gold/10">
@@ -278,50 +308,64 @@ export default function Requirements() {
                     <CardHeader>
                       <CardTitle className="text-2xl flex items-center gap-2">
                         <CreditCard className="h-5 w-5 text-navy" />
-                        Passport Fees                    
+                        Passport Fees
                       </CardTitle>
-                      <CardDescription>Current fees for passport books, cards, and services</CardDescription>
+                      <CardDescription>
+                        Current fees for passport books, cards, and services
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="overflow-x-auto">
                         <table className="w-full border-collapse">
                           <thead>
                             <tr className="bg-navy text-white">
-                              <th className="p-3 text-left rounded-tl-lg">Type of Passport</th>
+                              <th className="p-3 text-left rounded-tl-lg">
+                                Type of Passport
+                              </th>
                               <th className="p-3 text-left">Gov. Fees</th>
                               <th className="p-3 text-left">Service Charge</th>
-                              <th className="p-3 text-left">GST (18%)</th>
-                              <th className="p-3 text-left rounded-tr-lg">Total</th>
+                              {/* <th className="p-3 text-left">GST (18%)</th> */}
+                              <th className="p-3 text-left rounded-tr-lg">
+                                Total
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr className="border-b border-border">
-                              <td className="p-3 font-medium">Normal Passport (36 Page)</td>
-                              <td className="p-3">₹1,500</td>
-                              <td className="p-3">₹1,000</td>
-                              <td className="p-3">₹180</td>
-                              <td className="p-3 font-medium">₹2,680</td>
+                              <td className="p-3 font-medium">
+                                Normal Passport (36 Page)
+                              </td>
+                              <td className="p-3">₹2,500</td>
+                              <td className="p-3">₹999</td>
+                              {/* <td className="p-3">₹180</td> */}
+                              <td className="p-3 font-medium">₹3,499</td>
                             </tr>
                             <tr className="border-b border-border bg-muted/30">
-                              <td className="p-3 font-medium">Normal Passport (60 Page)</td>
-                              <td className="p-3">₹2,000</td>
-                              <td className="p-3">₹1,000</td>
-                              <td className="p-3">₹180</td>
-                              <td className="p-3 font-medium">₹3,180</td>
+                              <td className="p-3 font-medium">
+                                Normal Passport (60 Page)
+                              </td>
+                              <td className="p-3">₹3,500</td>
+                              <td className="p-3">₹999</td>
+                              {/* <td className="p-3">₹180</td> */}
+                              <td className="p-3 font-medium">₹4,499</td>
                             </tr>
                             <tr className="border-b border-border">
-                              <td className="p-3 font-medium">Tatkal Passport (36 Page)</td>
-                              <td className="p-3">₹3,500</td>
-                              <td className="p-3">₹1,000</td>
-                              <td className="p-3">₹180</td>
-                              <td className="p-3 font-medium">₹4,680</td>
+                              <td className="p-3 font-medium">
+                                Tatkal Passport (36 Page)
+                              </td>
+                              <td className="p-3">₹5,000</td>
+                              <td className="p-3">₹999</td>
+                              {/* <td className="p-3">₹180</td> */}
+                              <td className="p-3 font-medium">₹5,999</td>
                             </tr>
                             <tr className="border-b border-border bg-muted/30">
-                              <td className="p-3 font-medium">Tatkal Passport (60 Page)</td>
-                              <td className="p-3">₹4,000</td>
-                              <td className="p-3">₹1,000</td>
-                              <td className="p-3">₹180</td>
-                              <td className="p-3 font-medium">₹5,180</td>
+                              <td className="p-3 font-medium">
+                                Tatkal Passport (60 Page)
+                              </td>
+                              <td className="p-3">₹6,000</td>
+                              <td className="p-3">₹999</td>
+                              {/* <td className="p-3">₹180</td> */}
+                              <td className="p-3 font-medium">₹6,999</td>
                             </tr>
                           </tbody>
                         </table>
@@ -332,38 +376,50 @@ export default function Requirements() {
                             <div className="h-10 w-10 rounded-full bg-navy/10 flex items-center justify-center">
                               <CreditCard className="h-5 w-5 text-navy" />
                             </div>
-                            <h3 className="text-lg font-semibold text-navy">Normal Passport (36 Page)</h3>
+                            <h3 className="text-lg font-semibold text-navy">
+                              Normal Passport (36 Page)
+                            </h3>
                           </div>
                           <ul className="space-y-3">
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Ideal for occasional travelers</span>
+                              <span className="text-gray-700">
+                                Ideal for occasional travelers
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">36 pages for visa stamps</span>
+                              <span className="text-gray-700">
+                                36 pages for visa stamps
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Standard processing time</span>
+                              <span className="text-gray-700">
+                                Standard processing time
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Most economical option</span>
+                              <span className="text-gray-700">
+                                Most economical option
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">10 years validity</span>
+                              <span className="text-gray-700">
+                                10 years validity
+                              </span>
                             </li>
                           </ul>
                           <div className="mt-5 p-3 bg-navy/5 rounded-lg text-sm text-navy flex items-center gap-2">
@@ -377,38 +433,50 @@ export default function Requirements() {
                             <div className="h-10 w-10 rounded-full bg-teal/10 flex items-center justify-center">
                               <CreditCard className="h-5 w-5 text-teal" />
                             </div>
-                            <h3 className="text-lg font-semibold text-teal">Normal Passport (60 Page)</h3>
+                            <h3 className="text-lg font-semibold text-teal">
+                              Normal Passport (60 Page)
+                            </h3>
                           </div>
                           <ul className="space-y-3">
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Perfect for frequent travelers</span>
+                              <span className="text-gray-700">
+                                Perfect for frequent travelers
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">60 pages for extra visa stamps</span>
+                              <span className="text-gray-700">
+                                60 pages for extra visa stamps
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Standard processing time</span>
+                              <span className="text-gray-700">
+                                Standard processing time
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Longer validity period</span>
+                              <span className="text-gray-700">
+                                Longer validity period
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">10 years validity</span>
+                              <span className="text-gray-700">
+                                10 years validity
+                              </span>
                             </li>
                           </ul>
                           <div className="mt-5 p-3 bg-teal/5 rounded-lg text-sm text-teal flex items-center gap-2">
@@ -422,38 +490,50 @@ export default function Requirements() {
                             <div className="h-10 w-10 rounded-full bg-navy/10 flex items-center justify-center">
                               <Clock className="h-5 w-5 text-navy" />
                             </div>
-                            <h3 className="text-lg font-semibold text-navy">Tatkal Passport (36 Page)</h3>
+                            <h3 className="text-lg font-semibold text-navy">
+                              Tatkal Passport (36 Page)
+                            </h3>
                           </div>
                           <ul className="space-y-3">
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Expedited processing (1-3 days)</span>
+                              <span className="text-gray-700">
+                                Expedited processing (1-3 days)
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">36 pages for visa stamps</span>
+                              <span className="text-gray-700">
+                                36 pages for visa stamps
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Priority verification</span>
+                              <span className="text-gray-700">
+                                Priority verification
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">Emergency travel support</span>
+                              <span className="text-gray-700">
+                                Emergency travel support
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-navy/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-navy" />
                               </div>
-                              <span className="text-gray-700">10 years validity</span>
+                              <span className="text-gray-700">
+                                10 years validity
+                              </span>
                             </li>
                           </ul>
                           <div className="mt-5 p-3 bg-navy/5 rounded-lg text-sm text-navy flex items-center gap-2">
@@ -467,38 +547,50 @@ export default function Requirements() {
                             <div className="h-10 w-10 rounded-full bg-teal/10 flex items-center justify-center">
                               <Clock className="h-5 w-5 text-teal" />
                             </div>
-                            <h3 className="text-lg font-semibold text-teal">Tatkal Passport (60 Page)</h3>
+                            <h3 className="text-lg font-semibold text-teal">
+                              Tatkal Passport (60 Page)
+                            </h3>
                           </div>
                           <ul className="space-y-3">
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Expedited processing (1-3 days)</span>
+                              <span className="text-gray-700">
+                                Expedited processing (1-3 days)
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">60 pages for extra visa stamps</span>
+                              <span className="text-gray-700">
+                                60 pages for extra visa stamps
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Priority verification</span>
+                              <span className="text-gray-700">
+                                Priority verification
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">Premium service benefits</span>
+                              <span className="text-gray-700">
+                                Premium service benefits
+                              </span>
                             </li>
                             <li className="flex items-center gap-3">
                               <div className="h-6 w-6 rounded-full bg-teal/5 flex items-center justify-center">
                                 <Check className="h-4 w-4 text-teal" />
                               </div>
-                              <span className="text-gray-700">10 years validity</span>
+                              <span className="text-gray-700">
+                                10 years validity
+                              </span>
                             </li>
                           </ul>
                           <div className="mt-5 p-3 bg-teal/5 rounded-lg text-sm text-teal flex items-center gap-2">
@@ -676,8 +768,7 @@ export default function Requirements() {
             </Tabs>
           </div>
         </section>
-      </main>     
+      </main>
     </div>
-  )
+  );
 }
-

@@ -728,6 +728,223 @@ function ApplicationForm() {
     });
   };
 
+  // const completePayment = async () => {
+  //   if (typeof window === "undefined") return;
+
+  //   setLoading(true);
+  //   setErrorMessage("");
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+
+  //     if (!token) {
+  //       setErrorMessage("Session expired. Please login again.");
+  //       return;
+  //     }
+
+  //     let serviceCode: string | undefined;
+
+  //     if (formData.passportType === "normal" && formData.bookSize === "36") {
+  //       serviceCode = "NP36";
+  //     } else if (
+  //       formData.passportType === "normal" &&
+  //       formData.bookSize === "60"
+  //     ) {
+  //       serviceCode = "NP60";
+  //     } else if (
+  //       formData.passportType === "tatkal" &&
+  //       formData.bookSize === "36"
+  //     ) {
+  //       serviceCode = "TP36";
+  //     } else if (
+  //       formData.passportType === "tatkal" &&
+  //       formData.bookSize === "60"
+  //     ) {
+  //       serviceCode = "TP60";
+  //     }
+
+  //     if (!serviceCode) {
+  //       setErrorMessage("Invalid service selection");
+  //       return;
+  //     }
+
+  //     await axiosServer.post(
+  //       "/customer/select-service",
+  //       {
+  //         service_code: serviceCode,
+  //         book_size: String(formData.bookSize),
+  //         passport_type: formData.passportType,
+  //         nationality: formData.nationality,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     const orderRes = await axiosServer.post(
+  //       "/create-order",
+  //       {
+  //         service_code: serviceCode,
+  //         mobile: formData.mobile,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     const order = orderRes.data;
+
+  //     const loaded = await loadRazorpayScript();
+  //     if (!loaded) {
+  //       setErrorMessage("Razorpay SDK failed to load");
+  //       return;
+  //     }
+
+  //     const rzp = new window.Razorpay({
+  //       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+  //       amount: order.amount,
+  //       currency: "INR",
+  //       name: "Passport Service",
+  //       description: "Application Fee",
+  //       order_id: order.id,
+
+  //       prefill: {
+  //         name: order.name,
+  //         email: order.email,
+  //         contact: order.mobile,
+  //       },
+
+  //       // handler: async function (response: any) {
+  //       //   try {
+  //       //     await axiosServer.post(
+  //       //       "/verify-payment",
+  //       //       {
+  //       //         razorpay_order_id: response.razorpay_order_id,
+  //       //         razorpay_payment_id: response.razorpay_payment_id,
+  //       //         razorpay_signature: response.razorpay_signature,
+  //       //       },
+  //       //       {
+  //       //         headers: {
+  //       //           Authorization: `Bearer ${token}`,
+  //       //         },
+  //       //       },
+  //       //     );
+
+  //       //     window.location.href = "/payment-response?status=success";
+  //       //   } catch {
+  //       //     setErrorMessage("Payment verification failed. Please try again.");
+  //       //   }
+  //       // },
+
+  //       // handler: function (response: any) {
+  //       //   window.location.href = `/payment-response?status=success`;
+
+  //       //   axiosServer
+  //       //     .post(
+  //       //       "/verify-payment",
+  //       //       {
+  //       //         razorpay_order_id: response.razorpay_order_id,
+  //       //         razorpay_payment_id: response.razorpay_payment_id,
+  //       //         razorpay_signature: response.razorpay_signature,
+  //       //       },
+  //       //       {
+  //       //         headers: {
+  //       //           Authorization: `Bearer ${token}`,
+  //       //         },
+  //       //       },
+  //       //     )
+  //       //     .catch(console.error);
+  //       // },
+
+  //       handler: async function (response: any) {
+  //         try {
+  //           await axiosServer.post(
+  //             "/verify-payment",
+  //             {
+  //               razorpay_order_id: response.razorpay_order_id,
+  //               razorpay_payment_id: response.razorpay_payment_id,
+  //               razorpay_signature: response.razorpay_signature,
+  //             },
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${token}`,
+  //               },
+  //             },
+  //           );
+
+  //           window.location.href = "/payment-response?status=success";
+  //         } catch (err) {
+  //           console.error(err);
+
+  //           window.location.href = "/payment-response?status=failed";
+  //         }
+  //       },
+
+  //       modal: {
+  //         ondismiss: async function () {
+  //           console.log("Payment popup closed by user");
+
+  //           // try {
+  //           //   await axiosServer.post(
+  //           //     "/payment-failed",
+  //           //     {
+  //           //       razorpay_order_id: order.id,
+  //           //       reason: "User closed payment popup",
+  //           //     },
+  //           //     {
+  //           //       headers: {
+  //           //         Authorization: `Bearer ${token}`,
+  //           //       },
+  //           //     },
+  //           //   );
+  //           // } catch (err) {
+  //           //   console.error("Failed to update dismiss status:", err);
+  //           // }
+
+  //           // refresh current page
+  //           window.location.reload();
+  //         },
+  //       },
+  //     });
+
+  //     // rzp.on("payment.failed", async function (response) {
+  //     //   try {
+  //     //     await axiosServer.post(
+  //     //       "/payment-failed",
+  //     //       {
+  //     //         razorpay_order_id: response.error.metadata.order_id,
+  //     //         razorpay_payment_id: response.error.metadata.payment_id,
+  //     //       },
+  //     //       {
+  //     //         headers: {
+  //     //           Authorization: `Bearer ${token}`,
+  //     //         },
+  //     //       },
+  //     //     );
+  //     //   } catch (err) {
+  //     //     console.error("Failed to update payment failure:", err);
+  //     //   }
+
+  //     //   // reload current page
+  //     //   window.location.reload();
+  //     // });
+
+  //     rzp.open();
+  //   } catch (err: any) {
+  //     console.error("MAIN ERROR:", err.response?.data || err);
+
+  //     setErrorMessage(
+  //       err.response?.data?.message || "Something went wrong during payment",
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const completePayment = async () => {
     if (typeof window === "undefined") return;
 
@@ -764,10 +981,11 @@ function ApplicationForm() {
       }
 
       if (!serviceCode) {
-        setErrorMessage("Invalid service selection");
+        setErrorMessage("Invalid service selected");
         return;
       }
 
+      // Select Service
       await axiosServer.post(
         "/customer/select-service",
         {
@@ -783,7 +1001,8 @@ function ApplicationForm() {
         },
       );
 
-      const orderRes = await axiosServer.post(
+      // Create Razorpay Order
+      const { data: order } = await axiosServer.post(
         "/create-order",
         {
           service_code: serviceCode,
@@ -796,20 +1015,22 @@ function ApplicationForm() {
         },
       );
 
-      const order = orderRes.data;
-
       const loaded = await loadRazorpayScript();
+
       if (!loaded) {
-        setErrorMessage("Razorpay SDK failed to load");
+        setErrorMessage("Unable to load Razorpay.");
         return;
       }
 
       const rzp = new window.Razorpay({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+
         amount: order.amount,
         currency: "INR",
+
         name: "Passport Service",
         description: "Application Fee",
+
         order_id: order.id,
 
         prefill: {
@@ -818,33 +1039,9 @@ function ApplicationForm() {
           contact: order.mobile,
         },
 
-        // handler: async function (response: any) {
-        //   try {
-        //     await axiosServer.post(
-        //       "/verify-payment",
-        //       {
-        //         razorpay_order_id: response.razorpay_order_id,
-        //         razorpay_payment_id: response.razorpay_payment_id,
-        //         razorpay_signature: response.razorpay_signature,
-        //       },
-        //       {
-        //         headers: {
-        //           Authorization: `Bearer ${token}`,
-        //         },
-        //       },
-        //     );
-
-        //     window.location.href = "/payment-response?status=success";
-        //   } catch {
-        //     setErrorMessage("Payment verification failed. Please try again.");
-        //   }
-        // },
-
-        handler: function (response: any) {
-          window.location.href = `/payment-response?status=success`;
-
-          axiosServer
-            .post(
+        handler: async function (response: any) {
+          try {
+            await axiosServer.post(
               "/verify-payment",
               {
                 razorpay_order_id: response.razorpay_order_id,
@@ -856,44 +1053,42 @@ function ApplicationForm() {
                   Authorization: `Bearer ${token}`,
                 },
               },
-            )
-            .catch(console.error);
+            );
+
+            window.location.href = "/payment-response?status=success";
+          } catch (error: any) {
+            console.log("VERIFY ERROR");
+
+            console.log(error);
+
+            console.log(error.response);
+
+            console.log(error.response?.data);
+
+            window.location.href = "/payment-response?status=failed";
+          }
         },
 
         modal: {
-          ondismiss: async function () {
-            console.log("Payment popup closed by user");
+          escape: false,
 
-            try {
-              await axiosServer.post(
-                "/payment-failed",
-                {
-                  razorpay_order_id: order.id,
-                  reason: "User closed payment popup",
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                },
-              );
-            } catch (err) {
-              console.error("Failed to update dismiss status:", err);
-            }
+          ondismiss: function () {
+            console.log("User closed payment popup");
 
-            // refresh current page
-            window.location.reload();
+            window.location.href = "/payment-response?status=cancelled";
           },
         },
       });
 
-      rzp.on("payment.failed", async function (response) {
+      // Only actual payment failures
+      rzp.on("payment.failed", async function (response: any) {
         try {
           await axiosServer.post(
             "/payment-failed",
             {
               razorpay_order_id: response.error.metadata.order_id,
               razorpay_payment_id: response.error.metadata.payment_id,
+              reason: response.error.description,
             },
             {
               headers: {
@@ -902,20 +1097,17 @@ function ApplicationForm() {
             },
           );
         } catch (err) {
-          console.error("Failed to update payment failure:", err);
+          console.error("Payment Failed API Error", err);
         }
 
-        // reload current page
-        window.location.reload();
+        window.location.href = "/payment-response?status=failed";
       });
 
       rzp.open();
     } catch (err: any) {
-      console.error("MAIN ERROR:", err.response?.data || err);
+      console.error(err);
 
-      setErrorMessage(
-        err.response?.data?.message || "Something went wrong during payment",
-      );
+      setErrorMessage(err.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }

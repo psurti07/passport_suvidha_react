@@ -1065,7 +1065,8 @@ function ApplicationForm() {
 
             console.log(error.response?.data);
 
-            window.location.href = "/payment-response?status=failed";
+            window.location.reload();
+            // window.location.href = "/payment-response?status=failed";
           }
         },
 
@@ -1074,8 +1075,9 @@ function ApplicationForm() {
 
           ondismiss: function () {
             console.log("User closed payment popup");
+            window.location.reload();
 
-            window.location.href = "/payment-response?status=cancelled";
+            // window.location.href = "/payment-response?status=cancelled";
           },
         },
       });
@@ -1099,8 +1101,9 @@ function ApplicationForm() {
         } catch (err) {
           console.error("Payment Failed API Error", err);
         }
+        window.location.reload();
 
-        window.location.href = "/payment-response?status=failed";
+        // window.location.href = "/payment-response?status=failed";
       });
 
       rzp.open();

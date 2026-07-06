@@ -696,6 +696,19 @@ const StepPassportType = ({
         </div>
       </div>
 
+      <div className="mt-6 mb-6 flex justify-center">
+        <div className="w-full max-w-4xl overflow-hidden rounded-full border border-teal-200 bg-teal-50 shadow-sm">
+          <div className="flex items-center animate-marquee whitespace-nowrap py-2 px-6">
+            <Info className="mr-2 h-4 w-4 flex-shrink-0 text-teal-700" />
+
+            <span className="text-xs md:text-sm font-medium text-teal-800">
+              Passport Suvidha Company is a private consultancy and is not affiliated
+              with the Government of India or the Ministry of External Affairs.
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Trust Features */}
       <motion.div variants={itemVariants} className="mt-8 mb-10 pb-4">
         <Carousel

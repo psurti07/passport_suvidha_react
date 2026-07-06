@@ -342,10 +342,13 @@ export default function Home() {
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
             <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
-              <div className="mb-6 text-center">
-                <div className="overflow-hidden whitespace-nowrap rounded-full rounded-lg bg-teal/5 py-3 shadow-sm">
-                  <div className="inline-block animate-marquee px-6 text-[#0F2B5B] font-semibold text-sm md:text-base">
-                    Passport Suvidha Company is a Private Consultancy.
+              <div className="mb-6 flex justify-center">
+                <div className="max-w-4xl w-full overflow-hidden rounded-full border border-amber-200 bg-amber-50 shadow-sm">
+                  <div className="animate-marquee whitespace-nowrap py-2 px-6">
+                    <span className="text-xs md:text-sm font-medium text-amber-800">
+                      ⚠️ Passport Suvidha Company is a private consultancy and is not affiliated
+                      with the Government of India or the Ministry of External Affairs.
+                    </span>
                   </div>
                 </div>
               </div>

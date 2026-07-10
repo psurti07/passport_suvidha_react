@@ -598,7 +598,7 @@ export default function Home() {
                   className="flex items-center justify-center text-sm md:text-base font-medium px-3 py-2.5 rounded-xl transition-colors hover:text-navy focus:text-navy w-full"
                 >
                   <Award className="w-4 h-4 mr-2 flex-shrink-0" />
-                  <span className="truncate">Awards & Recognition</span>
+                  <span className="truncate">24x7 Helpline</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="testimonials"
@@ -677,32 +677,32 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {[
                     {
-                      title: "Excellence in Customer Service",
-                      organization: "National Passport Association",
-                      year: "2023",
+                      title: "Dedicated Assistance",
+                      // organization: "National Passport Association",
+                      // year: "2023",
                       description:
-                        "Recognized for outstanding customer service and satisfaction rates above industry average.",
+                        "Our team provides personalized support for every customer, ensuring smooth handling of passport applications from start to finish.",
                     },
                     {
-                      title: "Best Passport Service Provider",
-                      organization: "Travel Industry Awards",
-                      year: "2022",
+                      title: "Guidance Anytime",
+                      // organization: "Travel Industry Awards",
+                      // year: "2022",
                       description:
-                        "Voted as the top passport service provider by travel industry professionals.",
+                        "Round-the-clock expert advice is available, so customers never feel stuck or uncertain during the process.",
                     },
                     {
-                      title: "Innovation in Government Services",
-                      organization: "Public Service Excellence Awards",
-                      year: "2021",
+                      title: "Customer Satisfaction Guarantee",
+                      // organization: "Public Service Excellence Awards",
+                      // year: "2021",
                       description:
-                        "Honored for our innovative approach to streamlining government documentation processes.",
+                        "We prioritize customer happiness by delivering reliable consultancy and resolving queries with care and efficiency.",
                     },
                     {
-                      title: "Trusted Partner Award",
-                      organization: "International Travel Association",
-                      year: "2020",
+                      title: "Always-on Support",
+                      // organization: "International Travel Association",
+                      // year: "2020",
                       description:
-                        "Recognized for reliability and excellence in passport processing services.",
+                        "Whether day or night, our helpline ensures uninterrupted assistance for all passport-related needs.",
                     },
                   ].map((award, index) => (
                     <motion.div
@@ -724,9 +724,9 @@ export default function Home() {
                                 {award.organization}
                               </CardDescription>
                             </div>
-                            <div className="bg-gold/10 text-navy text-sm font-medium px-3 py-1 rounded-full">
+                            {/* <div className="bg-gold/10 text-navy text-sm font-medium px-3 py-1 rounded-full">
                               {award.year}
-                            </div>
+                            </div> */}
                           </div>
                         </CardHeader>
                         <CardContent>

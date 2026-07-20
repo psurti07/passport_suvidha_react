@@ -1,6 +1,7 @@
 import { FileText, Phone, Mail, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Receipt } from "lucide-react";
 
 export function Footer() {
   return (
@@ -282,6 +283,15 @@ export function Footer() {
                   <p className="text-white/90 font-medium">Email</p>
                   <p className="text-white/70 break-all">
                     support@passportsuvidha.com
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Receipt className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-white/90 font-medium">GST Number</p>
+                  <p className="text-white/70 break-all">
+                    24ABEFB9441P1Z1
                   </p>
                 </div>
               </div>

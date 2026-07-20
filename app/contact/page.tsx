@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import axiosServer from "@/lib/axiosServer";
 import ReactCountryFlag from "react-country-flag";
+import { Receipt } from "lucide-react";
 
 export default function Contact() {
   // const { toast } = useToast();
@@ -463,6 +464,17 @@ export default function Contact() {
                           </p>
                           <p className="text-muted-foreground">
                             Surat, Gujarat - 395004
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-full bg-teal/10 text-teal">
+                          <Receipt className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-teal">GST Number</h4>
+                          <p className="text-muted-foreground">
+                            24ABEFB9441P1Z1
                           </p>
                         </div>
                       </div>

@@ -8,8 +8,13 @@ interface ProgressBarProps {
   windowSize: { width: number; height: number };
 }
 
-const ProgressBar = ({ step, stepTitles, progressWidth, windowSize }: ProgressBarProps) => (
-  <div className="relative px-2 md:px-0 mb-4 md:mb-8">
+const ProgressBar = ({
+  step,
+  stepTitles,
+  progressWidth,
+  windowSize,
+}: ProgressBarProps) => (
+  <div className="container mx-auto relative px-2 md:px-0 mb-4 md:mb-8">
     <div className="relative flex justify-between items-center">
       {Object.entries(stepTitles).map(([stepNum, title], index) => (
         <div
@@ -24,8 +29,8 @@ const ProgressBar = ({ step, stepTitles, progressWidth, windowSize }: ProgressBa
                 parseInt(stepNum) < step
                   ? "bg-gradient-to-r from-navy to-teal text-white"
                   : parseInt(stepNum) === step
-                  ? "bg-gradient-to-r from-navy via-teal to-navy text-white ring-4 ring-white"
-                  : "bg-white text-gray-400 border-2 border-gray-200"
+                    ? "bg-gradient-to-r from-navy via-teal to-navy text-white ring-4 ring-white"
+                    : "bg-white text-gray-400 border-2 border-gray-200"
               }
               ${parseInt(stepNum) === step ? "shadow-lg" : ""}
             `}
@@ -95,4 +100,4 @@ const ProgressBar = ({ step, stepTitles, progressWidth, windowSize }: ProgressBa
   </div>
 );
 
-export default ProgressBar; 
+export default ProgressBar;

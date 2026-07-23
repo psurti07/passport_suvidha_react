@@ -8,60 +8,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import ReactCountryFlag from "react-country-flag";
-import {
-  Shield,
-  User,
-  ArrowRight,
-  Loader2,
-  ShieldCheck,
-  MapPin,
-  FileText,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Headphones,
-  RefreshCw,
-  Clock3,
-  Zap,
-} from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { User, ShieldCheck, Zap, PlaneIcon } from "lucide-react";
 
-const steps = [
-  {
-    title: "Basic Information",
-    description:
-      "Provide your personal details including name, email address and mobile number to begin your passport application.",
-    icon: User,
-  },
-  {
-    title: "Mobile Verification",
-    description:
-      "Verify your registered mobile number through OTP authentication for secure application processing.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Address Details",
-    description:
-      "Enter your current residential address and supporting information required for passport verification.",
-    icon: MapPin,
-  },
-  {
-    title: "Passport Service",
-    description:
-      "Choose the passport service that best suits your requirements and proceed with the application.",
-    icon: FileText,
-  },
-];
 interface StepBasicInfoProps {
   formData: {
-    firstName: string;
-    lastName: string;
+    fullName: string;
     email: string;
     mobile: string;
+    serviceType?: string;
+    passportType: "normal" | "tatkal";
+    bookSize: "36" | "60";
   };
   handleChange: (e: any) => void;
   nextStep: () => void;
@@ -79,22 +39,16 @@ const StepBasicInfo = ({
   loading = false,
 }: StepBasicInfoProps) => {
   const [touched, setTouched] = useState({
-    firstName: false,
-    lastName: false,
+    fullName: false,
     email: false,
     mobile: false,
   });
 
   const errors = {
-    firstName: !formData.firstName.trim()
-      ? "First name is required"
-      : !/^[A-Za-z ]+$/.test(formData.firstName)
-        ? "First name should only contain letters"
-        : "",
-    lastName: !formData.lastName.trim()
-      ? "Last name is required"
-      : !/^[A-Za-z ]+$/.test(formData.lastName)
-        ? "Last name should only contain letters"
+    fullName: !formData.fullName.trim()
+      ? "Full name is required"
+      : !/^[A-Za-z ]+$/.test(formData.fullName)
+        ? "Full name should only contain letters"
         : "",
     email: !formData.email.trim()
       ? "Email is required"
@@ -108,540 +62,382 @@ const StepBasicInfo = ({
         : !/^[6-9]/.test(formData.mobile)
           ? "Mobile number should start with 6, 7, 8, or 9"
           : "",
+    passportType: !formData.passportType
+      ? "Please select passport service type"
+      : "",
+
+    bookSize: !formData.bookSize ? "Please select passport page size" : "",
   };
 
+  const serviceCode =
+    formData.passportType === "normal"
+      ? `NP${formData.bookSize}`
+      : `TP${formData.bookSize}`;
+
   const isValid =
-    !errors.firstName && !errors.lastName && !errors.email && !errors.mobile;
+    !errors.fullName &&
+    !errors.email &&
+    !errors.mobile &&
+    !errors.passportType &&
+    !errors.bookSize;
   const [termsAccepted, setTermsAccepted] = useState(true); // ✅ default checked
   const [marketingConsent, setMarketingConsent] = useState(true); // optional
   return (
     <>
-      <CardHeader>
-        <motion.div variants={itemVariants}>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <User className="h-5 w-5 text-navy" />
-            Basic Information
-          </CardTitle>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <CardDescription>
-            Please provide your personal details as they appear on your
-            identification documents
-          </CardDescription>
-        </motion.div>
-      </CardHeader>
-      <CardContent className="space-y-8">
-        {errorMessage && (
-          <motion.div
-            variants={itemVariants}
-            className="p-3 bg-red-50 border border-red-200 rounded-lg"
-          >
-            <p className="text-sm text-red-600">{errorMessage}</p>
-          </motion.div>
-        )}
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-center bg-no-repeat" />
 
-        <div className="space-y-6">
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                onBlur={() => setTouched((t) => ({ ...t, firstName: true }))}
-                placeholder="John"
-                className="modern-input focus-animation"
-                required
-              />
-              {touched.firstName && errors.firstName && (
-                <p className="text-xs text-red-600 mt-1">{errors.firstName}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                onBlur={() => setTouched((t) => ({ ...t, lastName: true }))}
-                placeholder="Doe"
-                className="modern-input focus-animation"
-                required
-              />
-              {touched.lastName && errors.lastName && (
-                <p className="text-xs text-red-600 mt-1">{errors.lastName}</p>
-              )}
-            </div>
-          </motion.div>
+        {/* Main Content */}
+        <div className="relative z-10 min-h-screen flex items-center justify-end px-8 py-10">
+          <Image
+            src="/lending_page/passport_bg.png"
+            alt="Passport Background"
+            fill
+            priority
+            className="object-cover -z-10"
+          />
+          <div className="w-full max-w-[1200px] grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            {/* LEFT SIDE TEXT */}
+            <motion.div
+              variants={itemVariants}
+              className="hidden lg:block"
+            ></motion.div>
 
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                placeholder="john.doe@example.com"
-                className="modern-input focus-animation"
-                required
-              />
-              {touched.email && errors.email && (
-                <p className="text-xs text-red-600 mt-1">{errors.email}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="mobile">Mobile Number</Label>
+            {/* FORM CARD */}
+            <motion.div
+              variants={itemVariants}
+              className="
+               bg-white
+              w-full
+              max-w-[665px]
+              rounded-[17.5px]
+              border
+              border-gray-200
+              shadow-xl
+              px-6
+              py-6
+              md:px-[35px]
+              md:pt-[32px]
+              md:pb-[35px]
+              ml-auto
+              space-y-[17.5px]
+                "
+            >
+              <CardHeader className="!p-0 space-y-2">
+                <CardTitle
+                  className="
+              text-xl
+              flex
+              items-center
+              gap-2
+              text-[#103B82]
+              "
+                >
+                  <User className="h-5 w-5 text-blue-600" />
+                  Basic Information
+                </CardTitle>
 
-              <div className="relative">
-                {/* India Flag + Country Code */}
-                <div className="absolute inset-y-0 left-3 flex items-center gap-2 z-10">
-                  <ReactCountryFlag
-                    countryCode="IN"
-                    svg
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                    }}
+                <CardDescription className="text-xs mt-2">
+                  Please provide your personal details as they appear on your
+                  identification documents
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="!p-0 space-y-[17.5px]">
+                {errorMessage && (
+                  <div
+                    className="
+          p-3
+          bg-red-50
+          border
+          border-red-200
+          rounded-lg
+          "
+                  >
+                    <p className="text-sm text-red-600">{errorMessage}</p>
+                  </div>
+                )}
+
+                {/* NAME */}
+
+                <div>
+                  <Label>Full Name *</Label>
+
+                  <Input
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="As per Aadhaar / ID"
+                    className="
+          h-11
+          rounded-lg
+          border-blue-300
+          mt-2
+          "
                   />
-
-                  <span className="text-sm font-medium text-gray-600">+91</span>
-
-                  <div className="h-5 w-px bg-gray-300" />
                 </div>
 
-                <Input
-                  id="mobile"
-                  name="mobile"
-                  type="tel"
-                  value={formData.mobile}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^\d]/g, "");
-                    e.target.value = value;
-                    handleChange(e);
-                  }}
-                  onBlur={() => setTouched((t) => ({ ...t, mobile: true }))}
-                  placeholder="98765 43210"
-                  className="modern-input focus-animation pl-24"
-                  required
-                  maxLength={10}
-                  inputMode="numeric"
-                  pattern="[6-9]{1}[0-9]{9}"
-                />
-              </div>
+                {/* EMAIL MOBILE */}
 
-              <p className="text-xs text-muted-foreground">
-                We'll send a verification code to this number
-              </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Email Address *</Label>
 
-              {touched.mobile && errors.mobile && (
-                <p className="text-xs text-red-600 mt-1">{errors.mobile}</p>
-              )}
-            </div>
-          </motion.div>
+                    <Input
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      className="mt-2 h-11"
+                    />
+                  </div>
 
-          <motion.div variants={itemVariants} className="space-y-4">
-            {/* Terms & Privacy */}
-            <div className="flex items-start gap-2">
-              <input
-                type="checkbox"
-                id="terms"
-                name="terms"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                required
-                className="mt-1"
-              />
-              <Label htmlFor="terms" className="text-xs leading-5">
-                By submitting the form, you agree to the{" "}
-                <a href="/terms">Terms of Use</a> and{" "}
-                <a href="/privacy-policy">Privacy Policy</a> of PassportSuvidha.
-              </Label>
-            </div>
+                  <div>
+                    <Label>Mobile Number *</Label>
 
-            {/* Marketing Consent */}
-            <div className="flex items-start gap-2">
-              <input
-                type="checkbox"
-                id="marketing"
-                checked={marketingConsent}
-                onChange={(e) => setMarketingConsent(e.target.checked)}
-                name="marketing"
-                className="mt-1"
-              />
-              <Label htmlFor="marketing" className="text-xs leading-5">
-                I agree to receive promotional & informational communications
-                from PassportSuvidha through Emails, calls or SMS, RCS Services.
-              </Label>
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={itemVariants}
-            className="flex items-center gap-2 p-3 bg-navy/5 rounded-lg text-sm text-muted-foreground"
-            whileHover={{ backgroundColor: "rgba(0, 51, 102, 0.1)" }}
-          >
-            <div>
-              <Shield className="h-5 w-5 text-navy" />
-            </div>
-            <p>
-              Your information is secure and will only be used for passport
-              processing purposes.
-            </p>
-          </motion.div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-end border-t py-6 px-4">
-        <motion.div
-          variants={itemVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button
-            className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
-            onClick={nextStep}
-            disabled={
-              !isValid || loading || !termsAccepted || !marketingConsent
-            }
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Sending OTP...
-              </>
-            ) : (
-              <>
-                Continue
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </motion.div>
-      </CardFooter>
-
-      <section className="w-full py-20 md:py-20 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
-        {/* <div className="container"> */}
-        <div className="container">
-          <div className="text-center mb-5 md:mb-10 mordern-card">
-            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
-              Why Choose Passport Suvidha?
-            </h2>
-
-            <p className="mt-3 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-              Fast, reliable and expert passport assistance across India.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6">
-            <div className="group relative grid-rows-1">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
-                {/* <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white"> */}
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <ShieldCheck className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
-                  <h3 className="text-base sm:text-lg font-semibold">
-                    Secure Process
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-6">
-                    Your information is protected with secure handling and
-                    encrypted systems.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="group relative grid-rows-1">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <FileText className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
-                  <h3 className="text-base sm:text-lg font-semibold">
-                    Document Assistance
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-6">
-                    Expert guidance for required documents and application
-                    preparation.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="group relative grid-rows-1">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <Clock className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
-                  <h3 className="text-base sm:text-lg font-semibold">
-                    Quick Processing
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-6">
-                    Streamlined passport application process with expert
-                    guidance and timely assistance at every step.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="group relative grid-rows-1">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white">
-                <CardContent className="p-5 sm:p-6 lg:p-7 text-center">
-                  <Headphones className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-teal mb-4" />
-                  <h3 className="text-base sm:text-lg font-semibold">
-                    Dedicated Support
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-6">
-                    Get reliable assistance from our experienced support team
-                    for all your passport-related queries.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-        {/* </div> */}
-      </section>
-
-      <section className="overflow-hidden py-20 md:py-20">
-        <div className="container">
-          {/* Heading */}
-          <div className="text-center mb-5 md:mb-10">
-            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
-              Apply Passport In Just 4 Steps
-            </h2>
-
-            <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 max-w-3xl mx-auto">
-              Simple online process designed to help applicants complete their
-              passport application quickly and confidently.
-            </p>
-          </div>
-
-          <div className="relative max-w-6xl mx-auto">
-            {/* Left Badge */}
-            <div className="group hidden xl:flex absolute -left-8 top-24 z-10">
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-navy to-teal opacity-0 blur-lg transition-all duration-500 group-hover:opacity-30" />
-
-              <div className="relative bg-white border rounded-2xl px-5 py-4 shadow-xl transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
-                <p className="text-md font-bold text-teal">4 Steps</p>
-                <p className="text-md text-gray-500">Easy Process</p>
-              </div>
-            </div>
-
-            {/* Right Badge */}
-            <div className="group hidden xl:flex absolute -right-8 bottom-24 z-10">
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-teal to-navy opacity-0 blur-lg transition-all duration-500 group-hover:opacity-30" />
-
-              <div className="relative bg-white border rounded-2xl px-5 py-4 shadow-xl transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
-                <p className="text-xl font-bold text-navy">100%</p>
-                <p className="text-sm text-gray-500">Guided Assistance</p>
-              </div>
-            </div>
-
-            {/* Mobile Stats */}
-            <div className="xl:hidden flex justify-center gap-4 mb-6">
-              <div className="bg-white rounded-xl shadow-lg border px-4 py-3 text-center">
-                <p className="text-lg font-bold text-teal">4 Steps</p>
-                <p className="text-xs text-gray-500">Easy Process</p>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg border px-4 py-3 text-center">
-                <p className="text-lg font-bold text-navy">100%</p>
-                <p className="text-xs text-gray-500">Guided Assistance</p>
-              </div>
-            </div>
-
-            {/* Image */}
-            <div className="rounded-2xl md:rounded-[40px] bg-gradient-to-br from-navy/5 to-teal/5 p-4 sm:p-5 md:p-8">
-              <div
-                className="
-            group
-            overflow-hidden
-            rounded-2xl md:rounded-3xl
-            transition-all duration-500
-            hover:-translate-y-2
-            hover:shadow-[0_35px_100px_rgba(0,51,102,0.20)]
+                    <div className="relative mt-2">
+                      <div
+                        className="
+          absolute
+          left-3
+          top-3
+          flex
+          gap-2
+          items-center
           "
-              >
-                {/* <Image
-                  src="/lending_page/img2.jpg"
-                  alt="Passport Suvidha Process Flow"
-                  width={1200}
-                  height={600}
-                  priority
-                  className="
-              w-full
-              h-auto
-              object-contain
-              transition-transform duration-500
-              group-hover:scale-[1.02]
-            "
-                /> */}
+                      >
+                        <ReactCountryFlag
+                          countryCode="IN"
+                          svg
+                          className="w-7 h-7 rounded-full"
+                        />
+                        <span className="text-sm">+91</span>
+                      </div>
 
-                <Image
-                  src="/lending_page/img1.jpg"
-                  alt="Passport Suvidha Process Flow"
-                  width={1200}
-                  height={600}
-                  priority
-                  className="
-    w-full
+                      <Input
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+
+                          e.target.value = value;
+
+                          handleChange(e);
+                        }}
+                        maxLength={10}
+                        placeholder="98765XXXXX"
+                        className="
+          pl-16
+          h-11
+          "
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* PASSPORT TYPE */}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "passportType",
+                          value: "normal",
+                        },
+                      })
+                    }
+                    className={`
     h-auto
-    object-contain
-    rounded-2xl md:rounded-3xl
-    transition-all duration-500
-    group-hover:scale-[1.02]
-  "
-                />
-              </div>
-            </div>
+    p-3
+    rounded-lg
+    justify-start
+    hover:bg-transparent
+    ${
+      formData.passportType === "normal"
+        ? "border-blue-400 bg-blue-50"
+        : "border-gray-200"
+    }
+  `}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <PlaneIcon className="h-5 w-5 text-blue-600" />
+                        <span className="font-medium">Normal Passport</span>
+                      </div>
+
+                      <p className="mt-2 text-xs text-gray-500">
+                        Standard Processing Time
+                      </p>
+                    </div>
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "passportType",
+                          value: "tatkal",
+                        },
+                      })
+                    }
+                    className={`
+    h-auto
+    p-3
+    rounded-lg
+    justify-start
+    hover:bg-transparent
+    ${
+      formData.passportType === "tatkal"
+        ? "border-blue-400 bg-blue-50"
+        : "border-gray-200"
+    }
+  `}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Zap className="h-5 w-5 text-yellow-500" />
+                        <span className="font-medium">Tatkal Passport</span>
+                      </div>
+
+                      <p className="mt-2 text-xs text-gray-500">
+                        Fast Processing
+                      </p>
+                    </div>
+                  </Button>
+                </div>
+
+                {/* BOOK SIZE */}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "bookSize",
+                          value: "36",
+                        },
+                      })
+                    }
+                    className={`
+    rounded-lg
+    justify-start
+    hover:bg-transparent
+    ${
+      formData.bookSize === "36"
+        ? "border-blue-400 bg-blue-50"
+        : "border-gray-200"
+    }
+  `}
+                  >
+                    36 pages
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "bookSize",
+                          value: "60",
+                        },
+                      })
+                    }
+                    className={`
+    rounded-lg
+    justify-start
+    hover:bg-transparent
+    ${
+      formData.bookSize === "60"
+        ? "border-blue-400 bg-blue-50"
+        : "border-gray-200"
+    }
+  `}
+                  >
+                    60 pages
+                  </Button>
+                </div>
+
+                {/* TERMS */}
+
+                <div className="space-y-3 text-xs">
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                    />
+
+                    <span>
+                      By submitting the form, you agree to Terms of Use and
+                      Privacy Policy
+                    </span>
+                  </label>
+
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      checked={marketingConsent}
+                      onChange={(e) => setMarketingConsent(e.target.checked)}
+                    />
+
+                    <span>I agree to receive promotional communications</span>
+                  </label>
+                </div>
+
+                {/* SECURITY */}
+
+                <div
+                  className="
+          bg-blue-50
+          rounded-lg
+          p-3
+          flex
+          gap-2
+          text-xs
+          text-gray-600
+          "
+                >
+                  <ShieldCheck className="h-5 w-5 text-green-600" />
+                  Your information is secure and only used for passport
+                  processing.
+                </div>
+              </CardContent>
+
+              <CardFooter className="!p-0 !pt-2">
+                <Button
+                  onClick={nextStep}
+                  disabled={
+                    !isValid || loading || !termsAccepted || !marketingConsent
+                  }
+                  className="
+          w-full
+          h-11
+          rounded-xl
+          bg-gradient-to-r
+          from-yellow-400
+          to-yellow-500
+          text-black
+          font-semibold
+          "
+                >
+                  {loading ? "Sending OTP..." : <>Continue →</>}
+                </Button>
+              </CardFooter>
+            </motion.div>
           </div>
         </div>
-      </section>
-
-      <section className="w-full py-20 md:py-20 bg-gradient-to-br from-teal/5 via-navy/5 to-teal/5 relative overflow-hidden w-screen relative left-1/2 -translate-x-1/2">
-        {/* <section className="bg-slate-50 pt-0 pb-20 md:pt-0 md:pb-24"> */}
-        <div className="container">
-          {/* <div className="mx-auto"> */}
-          <div className="text-center mb-5 md:mb-10">
-            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl text-navy">
-              Services We Assist With
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            {/* Fresh Passport */}
-            <div className="group relative">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-
-              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
-                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
-                  <div className="h-14 w-14 rounded-2xl bg-navy/10 flex items-center justify-center mb-4">
-                    <FileText className="h-7 w-7 text-navy" />
-                  </div>
-
-                  <h3 className="text-lg font-semibold mb-2">Fresh Passport</h3>
-
-                  <p className="text-sm text-gray-600 leading-6">
-                    Complete assistance for first-time passport applications
-                    with expert guidance.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Passport Renewal */}
-            <div className="group relative">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-
-              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
-                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
-                  <div className="h-14 w-14 rounded-2xl bg-teal/10 flex items-center justify-center mb-4">
-                    <RefreshCw className="h-7 w-7 text-teal" />
-                  </div>
-
-                  <h3 className="text-lg font-semibold mb-2">
-                    Passport Renewal
-                  </h3>
-
-                  <p className="text-sm text-gray-600 leading-6">
-                    Hassle-free support for expired or expiring passports with
-                    guidance.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Tatkal Passport */}
-            <div className="group relative sm:col-span-2 lg:col-span-1">
-              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-teal opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-
-              <Card className="relative bg-white border-0 rounded-3xl shadow-lg h-full overflow-hidden transition-all duration-300 hover:-translate-y-2">
-                <CardContent className="p-6 sm:p-7 text-center flex flex-col items-center">
-                  <div className="h-14 w-14 rounded-2xl bg-red-100 flex items-center justify-center mb-4">
-                    {/* <Clock3 className="h-7 w-7 text-orange-600" /> */}
-                    <Zap className="h-7 w-7 text-red-600" />
-                  </div>
-
-                  <h3 className="text-lg font-semibold mb-2">
-                    Tatkal Passport
-                  </h3>
-
-                  <p className="text-sm text-gray-600 leading-6">
-                    Quick assistance for urgent passport applications with
-                    expert guidance.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-          {/* </div> */}
-        </div>
-      </section>
-
-      <section className="mt-20 md:mt-20">
-        <div className="container">
-          <div className="mt-0 rounded-3xl bg-gradient-to-r from-navy to-teal p-6 sm:p-8 lg:p-10 text-white">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div>
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold">
-                  Your Passport Journey Starts Here
-                </h3>
-
-                <p className="mt-3 text-sm text-white/80 leading-7 max-w-2xl">
-                  Our team provides guidance and support throughout the passport
-                  application process, helping applicants complete their journey
-                  with confidence and convenience.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur px-4 sm:px-5 py-3 rounded-2xl">
-                <CheckCircle className="h-6 w-6 text-green-300" />
-                <span className="text-sm font-medium">
-                  Secure • Reliable • Professional
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-10">
-        <div className="container">
-          <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="h-6 w-6 text-amber-600 shrink-0 mt-1" />
-
-              <div>
-                <h3 className="text-base sm:text-md font-semibold text-amber-900">
-                  Important Disclaimer
-                </h3>
-
-                <p className="mt-3 text-xs sm:text-sm lg:text-sm text-amber-800 leading-6 sm:leading-7">
-                  Passport Suvidha is a private consultancy service and is not
-                  affiliated with, endorsed by, or operated by the Government of
-                  India, Passport Seva, or any government authority. We provide
-                  application assistance, document guidance, appointment
-                  support, and customer assistance services. Government fees,
-                  processing timelines, approval decisions, and passport
-                  issuance remain solely under the jurisdiction of the relevant
-                  government authorities.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
     </>
   );
 };

@@ -702,8 +702,9 @@ const StepPassportType = ({
             <Info className="mr-2 h-4 w-4 flex-shrink-0 text-teal-700" />
 
             <span className="text-xs md:text-sm font-medium text-teal-800">
-              Passport Suvidha Company is a private consultancy and is not affiliated
-              with the Government of India or the Ministry of External Affairs.
+              Passport Suvidha Company is a private consultancy and is not
+              affiliated with the Government of India or the Ministry of
+              External Affairs.
             </span>
           </div>
         </div>

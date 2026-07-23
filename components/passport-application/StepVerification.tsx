@@ -1,21 +1,13 @@
 import {
   CardHeader,
+  Card,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  AlertCircle,
-  Mail,
-  Phone,
-  ArrowRight,
-  ArrowLeft,
-  Loader2,
-  Timer,
-} from "lucide-react";
+import { AlertCircle, Mail, Phone, ArrowRight, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -116,102 +108,124 @@ const StepVerification = ({
   };
 
   return (
-    <>
-      <CardHeader>
-        <motion.div variants={itemVariants}>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Phone className="h-5 w-5 text-navy" />
-            Verify Your Identity
-          </CardTitle>
-        </motion.div>
+    <div className="min-h-screen w-full bg-[#f5f8ff] flex flex-col items-center py-12 px-4 lg:px-8">
+      {/* centered card like Figma */}
+      <Card className="w-full max-w-4xl rounded-[18px] shadow-2xl border border-transparent overflow-hidden">
+        <CardContent className="px-6 sm:px-12 py-12 sm:py-16 flex flex-col items-center">
+          <CardHeader className="p-0 mb-4 text-center">
+            <CardTitle className="text-2xl sm:text-3xl font-extrabold text-[#103B82] flex items-center justify-center gap-3">
+              <Phone className="h-6 w-6 text-blue-700" />
+              Verify Your Identity
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base text-gray-500 mt-2">
+              We've sent a 4-digit verification code to your mobile number
+            </CardDescription>
+          </CardHeader>
 
-        <motion.div variants={itemVariants}>
-          <CardDescription>
-            We've sent a 4-digit verification code to your mobile number
-          </CardDescription>
-        </motion.div>
-      </CardHeader>
-
-      <CardContent className="space-y-8">
-        <motion.div
-          variants={slideVariants}
-          className="p-6 bg-muted/10 rounded-xl text-center space-y-4"
-        >
           <motion.div
-            className="mx-auto w-16 h-16 rounded-full bg-navy/10 flex items-center justify-center"
-            animate={{
-              boxShadow: [
-                "0px 0px 0px rgba(0,51,102,0.3)",
-                "0px 0px 20px rgba(0,51,102,0.5)",
-                "0px 0px 0px rgba(0,51,102,0.3)",
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
+            variants={slideVariants}
+            className="w-full max-w-xl flex flex-col items-center text-center"
           >
-            <Mail className="h-8 w-8 text-navy" />
-          </motion.div>
+            <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center mb-6 shadow-sm">
+              <Mail className="h-9 w-9 text-blue-700" />
+            </div>
 
-          <h3 className="text-lg font-medium">Enter 4-Digit Code</h3>
-
-          <p className="text-muted-foreground">
-            Code sent to {formData.mobile}
-          </p>
-
-          <div className="flex justify-center gap-3 max-w-xs mx-auto">
-            {otpDigits.map((digit, index) => (
-              <Input
-                key={index}
-                name={`otp-${index}`}
-                value={digit}
-                onChange={(e) => handleOTPChange(index, e.target.value)}
-                onKeyDown={(e) => handleOTPKeyDown(index, e)}
-                onPaste={handleOTPPaste}
-                maxLength={1}
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                className="modern-input lg:w-14 -h-10 !sm:w-12 !sm:h-12 lg:h-14 text-center text-xl font-medium"
-              />
-            ))}
-          </div>
-
-          {errorMessage && (
-            <p className="text-sm text-red-600">
-              <AlertCircle className="h-4 w-4 inline mr-1" />
-              {errorMessage}
+            <h3 className="text-lg sm:text-xl font-semibold text-[#103B82] mb-1">
+              Enter 4-Digit Code
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-400 mb-6">
+              Code sent to +91 {formData.mobile}
             </p>
-          )}
 
-          <Button
-            className="w-full bg-gradient-to-r from-navy to-teal text-white"
-            onClick={verifyOTP}
-            disabled={loading || formData.otp.length < 4}
-          >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {loading ? "Verifying..." : "Verify Code"}
-          </Button>
+            <div className="flex justify-center gap-4 sm:gap-6 mb-4 w-full">
+              {otpDigits.map((digit, index) => (
+                <Input
+                  key={index}
+                  name={`otp-${index}`}
+                  value={digit}
+                  onChange={(e) => handleOTPChange(index, e.target.value)}
+                  onKeyDown={(e) => handleOTPKeyDown(index, e)}
+                  onPaste={handleOTPPaste}
+                  maxLength={1}
+                  inputMode="numeric"
+                  className="
+                    w-14
+                    h-14
+                    sm:w-16
+                    sm:h-16
+                    text-center
+                    text-lg
+                    sm:text-2xl
+                    font-semibold
+                    rounded-md
+                    border
+                    border-gray-200
+                    bg-white
+                    shadow-sm
+                    focus:shadow-outline
+                  "
+                />
+              ))}
+            </div>
 
-          <div className="text-sm mt-2">
-            {isResendDisabled ? (
-              <span>Resend in {formatTime(timeRemaining)}</span>
-            ) : (
-              <button onClick={handleResendOTP}>Resend OTP</button>
+            {errorMessage && (
+              <p className="text-sm text-red-500 mb-3 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                {errorMessage}
+              </p>
             )}
-          </div>
-        </motion.div>
-      </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <Button onClick={prevStep} disabled={otpVerified}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+            <div className="text-xs sm:text-sm text-gray-500">
+              {isResendDisabled ? (
+                <>Resend OTP in {formatTime(timeRemaining)}</>
+              ) : (
+                <button
+                  onClick={handleResendOTP}
+                  className="text-[#103B82] font-medium underline"
+                >
+                  Resend OTP
+                </button>
+              )}
+            </div>
+          </motion.div>
+        </CardContent>
+      </Card>
+
+      {/* Back and Continue buttons aligned like Figma */}
+      <div className="w-full max-w-4xl mt-6 flex items-center justify-between px-2 sm:px-6">
+        <Button
+          onClick={prevStep}
+          disabled={loading}
+          variant="outline"
+          className="flex items-center gap-2 rounded-full px-4 py-2 sm:px-6 sm:py-3 bg-white shadow-sm"
+        >
+          <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
 
-        <Button onClick={nextStep} disabled={!otpVerified}>
-          Address Details
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </CardFooter>
-    </>
+        <div className="flex items-center gap-2">
+          <div className="text-xs text-gray-400 hidden sm:block mr-4"> </div>
+          <Button
+            onClick={nextStep}
+            disabled={!otpVerified || loading}
+            className="
+              flex items-center gap-2
+              rounded-full
+              px-6
+              py-3
+              bg-gradient-to-r from-yellow-400 to-yellow-500
+              text-black
+              font-semibold
+              shadow-2xl
+              hover:shadow-2xl
+            "
+          >
+            Continue
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -12,13 +12,13 @@ import ConfettiOverlay from "./ConfettiOverlay";
 import { formatDate } from "@/lib/utils";
 import { clearToken } from "@/lib/auth";
 import axiosServer from "@/lib/axiosServer";
+import StepFamilyDetails from "./StepFamilyDetails";
 
 // Type definitions
 interface FormData {
   passportType: "normal" | "tatkal";
   bookSize: "36" | "60";
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   mobile: string;
   otp: string;
@@ -117,7 +117,7 @@ const formatDateForApi = (dateString: string): string => {
 };
 
 function ApplicationForm() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [loading, setLoading] = useState(false);
   const [zipLoading, setZipLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -132,8 +132,7 @@ function ApplicationForm() {
   const [formData, setFormData] = useState<FormData>({
     passportType: "normal",
     bookSize: "36",
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     mobile: "",
     otp: "",
@@ -242,8 +241,9 @@ function ApplicationForm() {
   const stepTitles = {
     1: "Basic Info",
     2: "Verification",
-    3: "Address Details",
-    4: "Passport Type",
+    3: "Family Details",
+    4: "Address Details",
+    5: "Passport Type",
     // 5: "Payment"
   };
 
@@ -516,10 +516,13 @@ function ApplicationForm() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            first_name: formData.firstName,
-            last_name: formData.lastName,
+            full_name: formData.fullName,
             email: formData.email,
             mobile_number: formData.mobile,
+            service_code:
+              formData.passportType === "normal"
+                ? `NP${formData.bookSize}`
+                : `TP${formData.bookSize}`,
             fbclid: formData.fbclid,
           }),
         });
@@ -700,6 +703,7 @@ function ApplicationForm() {
     // Move to the next step for other transitions
     setStep((prevStep) => prevStep + 1);
   };
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -1174,18 +1178,42 @@ function ApplicationForm() {
     }
   }, []);
 
+  const passportTitle = `${formData.passportType === "normal" ? "NORMAL PASSPORT" : "TATKAL PASSPORT"} - ${formData.bookSize}-PAGE`;
+
   // --- RETURN STATEMENT ---
   return (
     <>
       <ConfettiOverlay showConfetti={showConfetti} />
 
-      <div className="relative">
-        <ProgressBar
-          step={step}
-          stepTitles={stepTitles}
-          progressWidth={progressWidth}
-          windowSize={windowSize}
-        />
+      <div className="relative mt-10">
+        {step !== 1 && (
+          <div className="mb-12 md:mb-8 text-center">
+            {/* Passport Type Badge */}
+            <div className="mb-4 h-8 inline-flex items-center rounded-full border border-yellow-300 bg-yellow-50 px-4 py-1 text-xs font-semibold tracking-widest text-blue-900">
+              <span className="mr-2 text-yellow-500">•</span>
+              {passportTitle}
+            </div>
+
+            {/* Main Title */}
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl gradient-heading">
+              Passport Application
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-muted-foreground text-sm md:text-xl mt-2">
+              Complete your application in a few simple steps
+            </p>
+          </div>
+        )}
+
+        {step !== 1 && (
+          <ProgressBar
+            step={step}
+            stepTitles={stepTitles}
+            progressWidth={progressWidth}
+            windowSize={windowSize}
+          />
+        )}
 
         {/* ...rest of the JSX for all steps and UI... */}
         {step === 1 && (
@@ -1238,6 +1266,32 @@ function ApplicationForm() {
             animate="visible"
             exit="exit"
           >
+            {step === 3 && (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <StepFamilyDetails
+                  formData={formData}
+                  handleChange={handleChange}
+                  prevStep={prevStep}
+                  nextStep={nextStep}
+                  loading={zipLoading}
+                  slideVariants={containerVariants}
+                />
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+        {step === 4 && (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
             <StepAddressDetails
               formData={formData}
               handleChange={handleChange}
@@ -1249,7 +1303,7 @@ function ApplicationForm() {
             />
           </motion.div>
         )}
-        {step === 4 && (
+        {step === 5 && (
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -1273,16 +1327,16 @@ function ApplicationForm() {
       </div>
 
       {/* <div className="mt-4 md:mt-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm text-navy"
-        >
-          <Shield className="h-3 w-3 md:h-4 md:w-4" />
-          Your information is secure and encrypted
-        </motion.div>
-      </div> */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm text-navy"
+          >
+            <Shield className="h-3 w-3 md:h-4 md:w-4" />
+            Your information is secure and encrypted
+          </motion.div>
+        </div> */}
     </>
   );
 }

@@ -41,6 +41,7 @@ interface StepFamilyDetailsProps {
   slideVariants?: any;
   itemVariants?: any;
   errorMessage?: any;
+  mobileNumber?: string;
 }
 
 const StepFamilyDetails = ({
@@ -52,6 +53,7 @@ const StepFamilyDetails = ({
   slideVariants,
   itemVariants,
   errorMessage,
+  mobileNumber,
 }: StepFamilyDetailsProps) => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [touched, setTouched] = useState({
@@ -102,7 +104,9 @@ const StepFamilyDetails = ({
         ? "Enter a valid 10-digit emergency contact number"
         : !/^[6-9]/.test(formData.emergencyContactMobile)
           ? "Emergency contact number should start with 6, 7, 8, or 9"
-          : "",
+          : formData.emergencyContactMobile === mobileNumber
+            ? "Emergency contact number cannot be the same as your mobile number"
+            : "",
 
     emergencyContactEmail: !formData.emergencyContactEmail?.trim()
       ? "Emergency contact email is required"
@@ -209,12 +213,12 @@ const StepFamilyDetails = ({
                   <motion.div className="flex flex-col gap-3 md:col-span-2">
                     <Label className="text-sm">Marital Status *</Label>
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
                       {maritalOptions.map((status) => (
-                        <button
-                          name="maritalStatus"
+                        <Button
                           key={status}
                           type="button"
+                          variant="outline"
                           onClick={() => {
                             setTouched((prev) => ({
                               ...prev,
@@ -228,14 +232,36 @@ const StepFamilyDetails = ({
                               },
                             });
                           }}
-                          className={`rounded-md px-4 py-2 text-sm font-medium transition ${
-                            formData.maritalStatus === status
-                              ? "modern-input focus-animation border border-muted-400 bg-muted scale-105 shadow-lg"
-                              : "bg-white/90 text-slate-700 shadow-[inset_0_0_0_1px_rgba(15,23,42,0.06)]"
-                          }`}
+                          className={`
+      h-auto
+      p-3
+      rounded-lg
+      justify-between
+      transition-all
+      duration-300
+      hover:bg-transparent
+      hover:text-black
+      hover:border-navy
+      modern-button
+      ${formData.maritalStatus === status ? "bg-muted scale-105" : "bg-white"}
+    `}
                         >
-                          {status}
-                        </button>
+                          <div className="flex items-center gap-2">
+                            <div className="text-left">
+                              <p className="font-medium">{status}</p>
+                            </div>
+                          </div>
+
+                          {/* Radio Button */}
+                          <input
+                            type="radio"
+                            name="maritalStatus"
+                            value={status}
+                            checked={formData.maritalStatus === status}
+                            onChange={() => {}}
+                            className="h-4 w-4 accent-teal cursor-pointer"
+                          />
+                        </Button>
                       ))}
                     </div>
                     {touched.maritalStatus && errors.maritalStatus && (

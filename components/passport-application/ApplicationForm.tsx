@@ -1505,6 +1505,7 @@ function ApplicationForm() {
               slideVariants={slideVariants}
               errorMessage={errorMessage}
               itemVariants={itemVariants}
+              mobileNumber={formData.mobile}
             />
           </motion.div>
         )}

@@ -8,6 +8,7 @@ import Script from "next/script";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import FacebookPixel from "@/components/FacebookPixel";
+import GoogleTagManager from "@/components/GoogleTagManager";
 
 import { buildSeo } from "@/lib/buildSeo";
 
@@ -29,8 +30,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      {/* <!-- End Google Tag Manager --> */}
       <body className={inter.className}>
         <FacebookPixel />
+
+        <GoogleTagManager />
+
         <ScrollProgress />
         {children}
         <SonnerToaster richColors position="top-right" />

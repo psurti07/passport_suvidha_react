@@ -37,8 +37,7 @@ import { Receipt } from "lucide-react";
 
 export default function Contact() {
   // const { toast } = useToast();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [inquiryType, setInquiryType] = useState("");
@@ -56,7 +55,6 @@ export default function Contact() {
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    const name = `${firstName} ${lastName}`.trim();
     const subject = inquiryType || "General Inquiry";
 
     try {
@@ -66,8 +64,7 @@ export default function Contact() {
       const response = await axiosServer.post(
         "/contact/enquiry",
         {
-          first_name: firstName,
-          last_name: lastName,
+          full_name: fullName,
           email: email,
           subject: inquiryType,
           message: message,
@@ -92,8 +89,7 @@ export default function Contact() {
       });
 
       //  Reset form
-      setFirstName("");
-      setLastName("");
+      setFullName("");
       setEmail("");
       setPhone("");
       setInquiryType("");
@@ -162,39 +158,21 @@ export default function Contact() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <label
-                              htmlFor="first-name-contact"
-                              className="text-sm font-medium"
-                            >
-                              First Name
-                            </label>
-                            <Input
-                              id="first-name-contact"
-                              placeholder="John"
-                              className="modern-input"
-                              value={firstName}
-                              onChange={(e) => setFirstName(e.target.value)}
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label
-                              htmlFor="last-name-contact"
-                              className="text-sm font-medium"
-                            >
-                              Last Name
-                            </label>
-                            <Input
-                              id="last-name-contact"
-                              placeholder="Doe"
-                              className="modern-input"
-                              value={lastName}
-                              onChange={(e) => setLastName(e.target.value)}
-                              required
-                            />
-                          </div>
+                        <div className="space-y-2">
+                          <label
+                            htmlFor="first-name-contact"
+                            className="text-sm font-medium"
+                          >
+                            Full Name
+                          </label>
+                          <Input
+                            id="first-name-contact"
+                            placeholder="John Doe"
+                            className="modern-input"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            required
+                          />
                         </div>
                         <div className="space-y-2">
                           <label
@@ -371,8 +349,7 @@ export default function Contact() {
                             !termsAccepted ||
                             !marketingConsent ||
                             isSubmitting ||
-                            !firstName ||
-                            !lastName ||
+                            !fullName ||
                             !email ||
                             !message
                           }

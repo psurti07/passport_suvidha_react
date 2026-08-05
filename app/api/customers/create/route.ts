@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axiosServer from "@/lib/axiosServer";
 
 interface CustomerRequestBody {
-  first_name: string;
-  last_name: string;
+  full_name: string;
   email: string;
   mobile_number: string;
 }
@@ -31,14 +30,14 @@ export async function POST(request: NextRequest) {
 
     const errors: ValidationErrors = {};
 
-    if (!body.first_name?.trim()) {
-      errors.first_name = ["First name is required"];
-    } else if (!/^[A-Za-z ]+$/.test(body.first_name)) {
-      errors.first_name = ["Only letters allowed"];
-    }
+    // if (!body.first_name?.trim()) {
+    //   errors.first_name = ["First name is required"];
+    // } else if (!/^[A-Za-z ]+$/.test(body.first_name)) {
+    //   errors.first_name = ["Only letters allowed"];
+    // }
 
-    if (!body.last_name?.trim()) {
-      errors.last_name = ["Last name is required"];
+    if (!body.full_name?.trim()) {
+      errors.full_name = ["Full name is required"];
     }
 
     if (!body.email?.trim()) {

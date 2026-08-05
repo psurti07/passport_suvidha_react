@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import useWindowSize from "@/hooks/useWindowSize";
 import StepBasicInfo from "./StepBasicInfo";
 import StepVerification from "./StepVerification";
-import StepAddressDetails from "./StepAddressDetails";
+import StepPersonalDetails from "./StepPersonalDetails";
 import StepPassportType from "./StepPassportType";
 import ProgressBar from "./ProgressBar";
 import ConfettiOverlay from "./ConfettiOverlay";
@@ -13,6 +13,16 @@ import { formatDate } from "@/lib/utils";
 import { clearToken } from "@/lib/auth";
 import axiosServer from "@/lib/axiosServer";
 import StepFamilyDetails from "./StepFamilyDetails";
+
+import { User, ShieldCheck, Users, MapPin, CreditCard } from "lucide-react";
+
+const stepIcons = {
+  1: User,
+  2: ShieldCheck,
+  3: Users,
+  4: MapPin,
+  5: CreditCard,
+};
 
 // Type definitions
 interface FormData {
@@ -22,13 +32,21 @@ interface FormData {
   email: string;
   mobile: string;
   otp: string;
+  fatherName: string;
+  motherName: string;
+  maritalStatus: string;
+  spouseName: string;
+  emergencyContactName: string;
+  emergencyContactMobile: string;
+  emergencyContactEmail: string;
   address: string;
   city: string;
   state: string;
   zipCode: string;
   gender: string;
   dateOfBirth: string;
-  // placeOfBirth: string;
+  policeStationName: string;
+  placeOfBirth: string;
   education_qualification: string;
   employment_type: string;
   nationality: string;
@@ -117,7 +135,7 @@ const formatDateForApi = (dateString: string): string => {
 };
 
 function ApplicationForm() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [zipLoading, setZipLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -127,6 +145,10 @@ function ApplicationForm() {
   const [progressWidth, setProgressWidth] = useState(0);
   const [otpDigits, setOtpDigits] = useState(["", "", "", ""]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [policeStationOptions, setPoliceStationOptions] = useState<any[]>([]);
+  const [selectedPolicePincode, setSelectedPolicePincode] = useState("");
+  const [loadingPoliceStations, setLoadingPoliceStations] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [priceAnimationTimeout, setPriceAnimationTimeout] =
     useState<NodeJS.Timeout | null>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -136,13 +158,21 @@ function ApplicationForm() {
     email: "",
     mobile: "",
     otp: "",
+    fatherName: "",
+    motherName: "",
+    maritalStatus: "",
+    spouseName: "",
+    emergencyContactName: "",
+    emergencyContactMobile: "",
+    emergencyContactEmail: "",
     address: "",
     city: "",
     state: "",
     zipCode: "",
     gender: "",
     dateOfBirth: "",
-    // placeOfBirth: "",
+    policeStationName: "",
+    placeOfBirth: "",
     education_qualification: "",
     employment_type: "",
     nationality: "India",
@@ -187,15 +217,35 @@ function ApplicationForm() {
     }
   }, []);
 
+  useEffect(() => {
+    const savedFormData = localStorage.getItem("passportFormData");
+    const savedStep = localStorage.getItem("passportFormStep");
+    const savedOtp = localStorage.getItem("otpVerified");
+
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+
+    if (savedStep) {
+      setStep(Number(savedStep));
+    }
+
+    if (savedOtp) {
+      setOtpVerified(savedOtp === "true");
+    }
+
+    setInitialized(true);
+  }, []);
+
   // Save form data and current step to localStorage whenever they change
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("passportFormData", JSON.stringify(formData));
-      localStorage.setItem("passportFormStep", step.toString());
-      localStorage.setItem("otpVerified", otpVerified.toString());
-      localStorage.setItem("passportFormTimestamp", Date.now().toString());
-    }
-  }, [formData, step, otpVerified]);
+    if (!initialized) return;
+
+    localStorage.setItem("passportFormData", JSON.stringify(formData));
+    localStorage.setItem("passportFormStep", step.toString());
+    localStorage.setItem("otpVerified", otpVerified.toString());
+    localStorage.setItem("passportFormTimestamp", Date.now().toString());
+  }, [initialized, formData, step, otpVerified]);
 
   // Animation variants
   const containerVariants = {
@@ -242,7 +292,7 @@ function ApplicationForm() {
     1: "Basic Info",
     2: "Verification",
     3: "Family Details",
-    4: "Address Details",
+    4: "Personal Details",
     5: "Passport Type",
     // 5: "Payment"
   };
@@ -262,7 +312,7 @@ function ApplicationForm() {
 
   // Update progress width based on current step
   useEffect(() => {
-    const width = ((step - 1) / 3) * 100;
+    const width = ((step - 1) / 4) * 100;
     const margin = windowSize.width >= 768 ? "5rem" : "4rem";
     setProgressWidth(width);
   }, [step, windowSize.width]);
@@ -283,6 +333,22 @@ function ApplicationForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
+    if (name !== "zipCode") return;
+
+    // Reset if pincode is incomplete
+    if (value.length < 6) {
+      setFormData((prev) => ({
+        ...prev,
+        zipCode: value,
+        city: "",
+        state: "",
+      }));
+
+      setPoliceStationOptions([]);
+      setSelectedPolicePincode("");
+      return;
+    }
+
     // If zipCode is changed and has 6 digits, fetch city and state
     if (name === "zipCode" && value.length === 6) {
       setZipLoading(true);
@@ -300,15 +366,42 @@ function ApplicationForm() {
           const postOffice = data[0].PostOffice[0];
           setFormData((prev) => ({
             ...prev,
+            zipCode: value,
             city: postOffice.District,
             state: postOffice.State,
           }));
+          fetchPoliceStations(value);
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            city: "",
+            state: "",
+          }));
+
+          setPoliceStationOptions([]);
         }
       } catch (error) {
         console.error("Error fetching address details:", error);
       } finally {
         setZipLoading(false);
       }
+    }
+  };
+
+  const fetchPoliceStations = async (pincode: string) => {
+    try {
+      setLoadingPoliceStations(true);
+
+      const response = await fetch(`/api/police-stations?pincode=${pincode}`);
+
+      const data = await response.json();
+
+      setPoliceStationOptions(data || []);
+    } catch (error) {
+      console.error(error);
+      setPoliceStationOptions([]);
+    } finally {
+      setLoadingPoliceStations(false);
     }
   };
 
@@ -463,19 +556,51 @@ function ApplicationForm() {
         throw { response: { data, status: response.status } };
       }
 
-      setOtpVerified(true);
+      const customerResponse = await fetch("/api/customers/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: formData.fullName,
+          email: formData.email,
+          mobile_number: formData.mobile,
+          service_code:
+            formData.passportType === "normal"
+              ? `NP${formData.bookSize}`
+              : `TP${formData.bookSize}`,
+          fbclid: formData.fbclid,
+        }),
+      });
 
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
+      const customerData = await customerResponse.json();
+
+      if (!customerResponse.ok && customerResponse.status !== 200) {
+        const firstError = Object.values(customerData.errors || {})[0];
+
+        setErrorMessage(
+          Array.isArray(firstError) ? firstError[0] : "Validation error",
+        );
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+
+        return;
       }
 
-      const nextStepFromAPI = data?.next_step;
+      setOtpVerified(true);
+
+      if (customerData?.token) {
+        localStorage.setItem("token", customerData.token);
+      }
+
+      const nextStepFromAPI = customerData?.next_step;
 
       const stepMapping: any = {
         otp_verification: 2,
-        additional_information: 3,
-        service_selection: 4,
-        payment: 4,
+        family_details: 3,
+        personal_details: 4,
+        payment: 5,
       };
 
       setTimeout(() => {
@@ -512,37 +637,37 @@ function ApplicationForm() {
       setErrorMessage("");
 
       try {
-        const customerResponse = await fetch("/api/customers/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            full_name: formData.fullName,
-            email: formData.email,
-            mobile_number: formData.mobile,
-            service_code:
-              formData.passportType === "normal"
-                ? `NP${formData.bookSize}`
-                : `TP${formData.bookSize}`,
-            fbclid: formData.fbclid,
-          }),
-        });
+        // const customerResponse = await fetch("/api/customers/create", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     full_name: formData.fullName,
+        //     email: formData.email,
+        //     mobile_number: formData.mobile,
+        //     service_code:
+        //       formData.passportType === "normal"
+        //         ? `NP${formData.bookSize}`
+        //         : `TP${formData.bookSize}`,
+        //     fbclid: formData.fbclid,
+        //   }),
+        // });
 
-        const customerData = await customerResponse.json();
+        // const customerData = await customerResponse.json();
 
-        if (!customerResponse.ok && customerResponse.status !== 200) {
-          const firstError = Object.values(customerData.errors || {})[0];
+        // if (!customerResponse.ok && customerResponse.status !== 200) {
+        //   const firstError = Object.values(customerData.errors || {})[0];
 
-          setErrorMessage(
-            Array.isArray(firstError) ? firstError[0] : "Validation error",
-          );
+        //   setErrorMessage(
+        //     Array.isArray(firstError) ? firstError[0] : "Validation error",
+        //   );
 
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
+        //   window.scrollTo({
+        //     top: 0,
+        //     behavior: "smooth",
+        //   });
 
-          return;
-        }
+        //   return;
+        // }
 
         // if (customerResponse.status === 200) {
         //   const nextStepFromAPI = customerData?.next_step;
@@ -586,54 +711,156 @@ function ApplicationForm() {
         //   setOtpSent(true);
         //   setStep(2);
         // }
-        if (
-          customerResponse.status === 200 ||
-          customerResponse.status === 201
-        ) {
-          console.log("Customer saved/updated successfully");
+        // if (
+        //   customerResponse.status === 200 ||
+        //   customerResponse.status === 201
+        // ) {
+        // console.log("Customer saved/updated successfully");
 
-          // ALWAYS SEND OTP
-          const otpResponse = await fetch("/api/otp/send", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              mobile_number: formData.mobile,
-              purpose: "registration",
-            }),
-          });
+        const checkResponse = await axiosServer.post("/check-user", {
+          mobile_number: formData.mobile,
+          email: formData.email,
+        });
 
-          const otpData = await otpResponse.json();
+        if (!checkResponse.status) {
+          setErrorMessage(checkResponse.data.message || "Failed to check user");
+          return;
+        }
+        // ALWAYS SEND OTP
+        const otpResponse = await fetch("/api/otp/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mobile_number: formData.mobile,
+            purpose: "registration",
+          }),
+        });
 
-          if (!otpResponse.ok) {
-            setErrorMessage(
-              otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
-            );
+        const otpData = await otpResponse.json();
 
-            return;
-          }
-
-          // OTP SENT SUCCESSFULLY
-          setOtpSent(true);
-
-          // ALWAYS GO TO OTP STEP
-          setStep(2);
+        if (!otpResponse.ok) {
+          setErrorMessage(
+            otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
+          );
 
           return;
         }
-      } catch (error) {
+
+        // OTP SENT SUCCESSFULLY
+        setOtpSent(true);
+
+        // ALWAYS GO TO OTP STEP
+        setStep(2);
+
+        //   return;
+        // }
+      } catch (error: any) {
         console.error("Unexpected Error:", error);
-        setErrorMessage("Something went wrong. Please try again.");
+
+        if (error.response?.data?.errors?.mobile_number) {
+          setErrorMessage(error.response.data.errors.mobile_number[0]);
+        } else if (error.response?.data?.errors?.email) {
+          setErrorMessage(error.response.data.errors.email[0]);
+        } else if (error.response?.data?.message) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("Something went wrong. Please try again.");
+        }
       } finally {
         setLoading(false);
       }
 
       return;
     }
-
     // If moving from step 3 to 4, submit additional information
     if (step === 3) {
+      if (!formData.fatherName.trim()) {
+        setErrorMessage("Father name is required.");
+        return;
+      }
+
+      if (!formData.motherName.trim()) {
+        setErrorMessage("Mother name is required.");
+        return;
+      }
+
+      if (!formData.maritalStatus) {
+        setErrorMessage("Please select marital status.");
+        return;
+      }
+
+      if (formData.maritalStatus === "Married" && !formData.spouseName.trim()) {
+        setErrorMessage("Spouse name is required.");
+        return;
+      }
+
+      setLoading(true);
+      setErrorMessage("");
+
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          setErrorMessage("Session expired. Please start over.");
+          return;
+        }
+
+        const response = await fetch("/api/customer/family-details", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            father_name: formData.fatherName,
+            mother_name: formData.motherName,
+            marital_status: formData.maritalStatus,
+            spouse_name: formData.spouseName,
+            emergency_contact_name: formData.emergencyContactName,
+            emergency_contact_mobile: formData.emergencyContactMobile,
+            emergency_contact_email: formData.emergencyContactEmail,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw {
+            response: {
+              data,
+              status: response.status,
+            },
+          };
+        }
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+          clearSavedFormData();
+          setStep(1);
+          setErrorMessage("Session expired. Please login again.");
+          return;
+        }
+
+        const errors = error.response?.data?.errors;
+
+        if (errors) {
+          const firstError = Object.values(errors).flat()[0];
+          setErrorMessage(firstError as string);
+        } else {
+          setErrorMessage(
+            error.response?.data?.message || "Failed to save family details.",
+          );
+        }
+
+        return;
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // If moving from step 4 to 5, submit additional information
+    if (step === 4) {
       setLoading(true);
       setErrorMessage("");
 
@@ -648,10 +875,10 @@ function ApplicationForm() {
         }
 
         // Format date for API
-        // const formattedDob = formatDateForApi(formData.dateOfBirth);
+        const formattedDob = formatDateForApi(formData.dateOfBirth);
 
         // Send additional information to API using the internal API route
-        const response = await fetch(`/api/customer/additional-info`, {
+        const response = await fetch(`/api/customer/personal-details`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -663,9 +890,10 @@ function ApplicationForm() {
             city: formData.city,
             state: formData.state,
             gender: formData.gender,
-            // date_of_birth: formattedDob,
-            date_of_birth: formData.dateOfBirth,
-            // place_of_birth: formData.placeOfBirth,
+            police_station_name: formData.policeStationName,
+            date_of_birth: formattedDob,
+            // date_of_birth: formData.dateOfBirth,
+            place_of_birth: formData.placeOfBirth,
             education_qualification: formData.education_qualification,
             employment_type: formData.employment_type,
           }),
@@ -963,53 +1191,53 @@ function ApplicationForm() {
         return;
       }
 
-      let serviceCode: string | undefined;
+      // let serviceCode: string | undefined;
 
-      if (formData.passportType === "normal" && formData.bookSize === "36") {
-        serviceCode = "NP36";
-      } else if (
-        formData.passportType === "normal" &&
-        formData.bookSize === "60"
-      ) {
-        serviceCode = "NP60";
-      } else if (
-        formData.passportType === "tatkal" &&
-        formData.bookSize === "36"
-      ) {
-        serviceCode = "TP36";
-      } else if (
-        formData.passportType === "tatkal" &&
-        formData.bookSize === "60"
-      ) {
-        serviceCode = "TP60";
-      }
+      // if (formData.passportType === "normal" && formData.bookSize === "36") {
+      //   serviceCode = "NP36";
+      // } else if (
+      //   formData.passportType === "normal" &&
+      //   formData.bookSize === "60"
+      // ) {
+      //   serviceCode = "NP60";
+      // } else if (
+      //   formData.passportType === "tatkal" &&
+      //   formData.bookSize === "36"
+      // ) {
+      //   serviceCode = "TP36";
+      // } else if (
+      //   formData.passportType === "tatkal" &&
+      //   formData.bookSize === "60"
+      // ) {
+      //   serviceCode = "TP60";
+      // }
 
-      if (!serviceCode) {
-        setErrorMessage("Invalid service selected");
-        return;
-      }
+      // if (!serviceCode) {
+      //   setErrorMessage("Invalid service selected");
+      //   return;
+      // }
 
       // Select Service
-      await axiosServer.post(
-        "/customer/select-service",
-        {
-          service_code: serviceCode,
-          book_size: String(formData.bookSize),
-          passport_type: formData.passportType,
-          nationality: formData.nationality,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      // await axiosServer.post(
+      //   "/customer/select-service",
+      //   {
+      //     service_code: serviceCode,
+      //     book_size: String(formData.bookSize),
+      //     passport_type: formData.passportType,
+      //     nationality: formData.nationality,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
 
       // Create Razorpay Order
       const { data: order } = await axiosServer.post(
         "/create-order",
         {
-          service_code: serviceCode,
+          // service_code: serviceCode,
           mobile: formData.mobile,
         },
         {
@@ -1185,22 +1413,22 @@ function ApplicationForm() {
     <>
       <ConfettiOverlay showConfetti={showConfetti} />
 
-      <div className="relative mt-10">
+      <div className={`relative ${step === 1 ? "mt-0" : "mt-10"}`}>
         {step !== 1 && (
           <div className="mb-12 md:mb-8 text-center">
             {/* Passport Type Badge */}
-            <div className="mb-4 h-8 inline-flex items-center rounded-full border border-yellow-300 bg-yellow-50 px-4 py-1 text-xs font-semibold tracking-widest text-blue-900">
-              <span className="mr-2 text-yellow-500">•</span>
+            <div className="mb-4 h-8 inline-flex items-center rounded-full border border-teal bg-teal/20 px-4 py-1 text-xs font-semibold tracking-widest text-blue-900">
+              <span className="mr-2 font-bold text-xl text-teal">•</span>
               {passportTitle}
             </div>
 
             {/* Main Title */}
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tighter sm:text-4xl gradient-heading">
+            <h1 className="text-2xl lg:text-5xl md:text-3xl font-bold tracking-tighter sm:text-4xl gradient-heading">
               Passport Application
             </h1>
 
             {/* Subtitle */}
-            <p className="text-muted-foreground text-sm md:text-xl mt-2">
+            <p className="text-muted-foreground text-xs mt-2">
               Complete your application in a few simple steps
             </p>
           </div>
@@ -1212,6 +1440,7 @@ function ApplicationForm() {
             stepTitles={stepTitles}
             progressWidth={progressWidth}
             windowSize={windowSize}
+            icons={stepIcons}
           />
         )}
 
@@ -1261,28 +1490,22 @@ function ApplicationForm() {
         )}
         {step === 3 && (
           <motion.div
+            className="card-content shadow-xl"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {step === 3 && (
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <StepFamilyDetails
-                  formData={formData}
-                  handleChange={handleChange}
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  loading={zipLoading}
-                  slideVariants={containerVariants}
-                />
-              </motion.div>
-            )}
+            <StepFamilyDetails
+              formData={formData}
+              handleChange={handleChange}
+              prevStep={prevStep}
+              nextStep={nextStep}
+              loading={loading}
+              slideVariants={slideVariants}
+              errorMessage={errorMessage}
+              itemVariants={itemVariants}
+            />
           </motion.div>
         )}
         {step === 4 && (
@@ -1292,7 +1515,7 @@ function ApplicationForm() {
             animate="visible"
             exit="exit"
           >
-            <StepAddressDetails
+            <StepPersonalDetails
               formData={formData}
               handleChange={handleChange}
               handleSelectChange={handleSelectChange}
@@ -1300,6 +1523,10 @@ function ApplicationForm() {
               prevStep={prevStep}
               nextStep={nextStep}
               itemVariants={itemVariants}
+              errorMessage={errorMessage}
+              fetchPoliceStations={fetchPoliceStations}
+              policeStationOptions={policeStationOptions}
+              loadingPoliceStations={loadingPoliceStations}
             />
           </motion.div>
         )}

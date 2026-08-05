@@ -12,7 +12,14 @@ import Image from "next/image";
 import ReactCountryFlag from "react-country-flag";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { User, ShieldCheck, Zap, PlaneIcon } from "lucide-react";
+import {
+  User,
+  ShieldCheck,
+  Clock,
+  PlaneIcon,
+  ArrowRight,
+  AlertCircle,
+} from "lucide-react";
 
 interface StepBasicInfoProps {
   formData: {
@@ -42,6 +49,8 @@ const StepBasicInfo = ({
     fullName: false,
     email: false,
     mobile: false,
+    passportType: false,
+    bookSize: false,
   });
 
   const errors = {
@@ -84,357 +93,508 @@ const StepBasicInfo = ({
   const [marketingConsent, setMarketingConsent] = useState(true); // optional
   return (
     <>
-      <div className="min-h-screen relative overflow-hidden">
+      <div className="relative min-h-screen">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-center bg-no-repeat" />
+        {/* <Image
+          src="/lending_page/passport_bg.png"
+          alt="Passport Background"
+          fill
+          priority
+          className="-z-10 object-cover object-center"
+        /> */}
+        <div className="relative min-h-screen bg-white lg:bg-[url('/lending_page/passport_bg.png')] lg:bg-cover lg:bg-no-repeat lg:bg-left">
+          {/* Mobile Hero Image */}
+          <div className="block lg:hidden">
+            <Image
+              src="/lending_page/passport_bg_mobile.png"
+              alt="Passport"
+              width={1200}
+              height={900}
+              priority
+              className="w-full h-auto object-cover"
+            />
+          </div>
+          <div className="relative z-10 min-h-screen flex items-center px-3 sm:px-4 lg:px-10 xl:px-16 py-4 lg:py-8 justify-center">
+            <div className="container-fluid lg:ml-auto justify-end max-w-7xl grid grid-cols-12 gap-6">
+              {/* Left Space */}
+              <div className="hidden lg:block lg:col-span-6">
+                {/* Empty only on desktop */}
+              </div>
 
-        {/* Main Content */}
-        <div className="relative z-10 min-h-screen flex items-center justify-end px-8 py-10">
-          <Image
-            src="/lending_page/passport_bg.png"
-            alt="Passport Background"
-            fill
-            priority
-            className="object-cover -z-10"
-          />
-          <div className="w-full max-w-[1200px] grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            {/* LEFT SIDE TEXT */}
-            <motion.div
-              variants={itemVariants}
-              className="hidden lg:block"
-            ></motion.div>
-
-            {/* FORM CARD */}
-            <motion.div
-              variants={itemVariants}
-              className="
-               bg-white
-              w-full
-              max-w-[665px]
-              rounded-[17.5px]
-              border
-              border-gray-200
-              shadow-xl
-              px-6
-              py-6
-              md:px-[35px]
-              md:pt-[32px]
-              md:pb-[35px]
-              ml-auto
-              space-y-[17.5px]
+              {/* Form */}
+              <motion.div
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="
+                  col-span-12
+                  lg:col-span-6
+                  xl:col-span-6
+                  mt-0      
+                  lg:justify-self-end
+                  w-full
+                  max-w-[665px]
+                  min-h-[650px]
+                  rounded-[18px]
+                  bg-white
+                  shadow-2xl
+                  p-5 md:p-8
+                  flex
+                  flex-col
+                  gap-5
                 "
-            >
-              <CardHeader className="!p-0 space-y-2">
-                <CardTitle
-                  className="
-              text-xl
-              flex
-              items-center
-              gap-2
-              text-[#103B82]
-              "
-                >
-                  <User className="h-5 w-5 text-blue-600" />
-                  Basic Information
-                </CardTitle>
-
-                <CardDescription className="text-xs mt-2">
-                  Please provide your personal details as they appear on your
-                  identification documents
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="!p-0 space-y-[17.5px]">
-                {errorMessage && (
-                  <div
+              >
+                <CardHeader className="!p-0 space-y-2">
+                  <CardTitle
                     className="
-          p-3
-          bg-red-50
-          border
-          border-red-200
-          rounded-lg
-          "
+                      text-xl
+                      flex
+                      items-center
+                      gap-2
+                      gradient-heading
+                      "
                   >
-                    <p className="text-sm text-red-600">{errorMessage}</p>
-                  </div>
-                )}
+                    <User className="h-5 w-5 text-navy" />
+                    Basic Information
+                  </CardTitle>
 
-                {/* NAME */}
+                  <CardDescription className="text-xs mt-2 text-muted-foreground">
+                    Please provide your personal details as they appear on your
+                    identification documents
+                  </CardDescription>
+                </CardHeader>
 
-                <div>
-                  <Label>Full Name *</Label>
+                <CardContent className="!p-0 space-y-[17.5px]">
+                  {errorMessage && (
+                    <div className=" p-3 bg-red-50 border border-red-200 rounded-lg ">
+                      <p className="text-sm text-red-600">{errorMessage}</p>
+                    </div>
+                  )}
 
-                  <Input
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    placeholder="As per Aadhaar / ID"
-                    className="
-          h-11
-          rounded-lg
-          border-blue-300
-          mt-2
-          "
-                  />
-                </div>
+                  {/* NAME */}
 
-                {/* EMAIL MOBILE */}
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label>Email Address *</Label>
+                  <motion.div variants={itemVariants}>
+                    <Label className="font-medium">Full Name *</Label>
 
                     <Input
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
                       onChange={handleChange}
-                      placeholder="you@example.com"
-                      className="mt-2 h-11"
+                      onBlur={() =>
+                        setTouched((prev) => ({
+                          ...prev,
+                          fullName: true,
+                        }))
+                      }
+                      placeholder="As per Aadhaar / ID"
+                      className=" rounded-lg mt-2 modern-input focus-animation "
                     />
-                  </div>
+                    {touched.fullName && errors.fullName && (
+                      <p className="mt-1 flex items-center gap-1 text-xs text-red-600">
+                        <AlertCircle className="h-3 w-3" />
+                        {errors.fullName}
+                      </p>
+                    )}
+                  </motion.div>
 
-                  <div>
-                    <Label>Mobile Number *</Label>
+                  {/* EMAIL MOBILE */}
 
-                    <div className="relative mt-2">
-                      <div
-                        className="
-          absolute
-          left-3
-          top-3
-          flex
-          gap-2
-          items-center
-          "
-                      >
-                        <ReactCountryFlag
-                          countryCode="IN"
-                          svg
-                          className="w-7 h-7 rounded-full"
-                        />
-                        <span className="text-sm">+91</span>
-                      </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <motion.div variants={itemVariants}>
+                      <Label className="font-medium">Email Address *</Label>
 
                       <Input
-                        name="mobile"
-                        value={formData.mobile}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-
-                          e.target.value = value;
-
-                          handleChange(e);
-                        }}
-                        maxLength={10}
-                        placeholder="98765XXXXX"
-                        className="
-          pl-16
-          h-11
-          "
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="you@example.com"
+                        className="mt-2 modern-input focus-animation"
+                        onBlur={() =>
+                          setTouched((prev) => ({
+                            ...prev,
+                            email: true,
+                          }))
+                        }
                       />
-                    </div>
+                      {touched.email && errors.email && (
+                        <p className="mt-1 flex items-center gap-1 text-xs text-red-600">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.email}
+                        </p>
+                      )}
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <Label htmlFor="mobile" className="font-medium">
+                        Mobile Number *
+                      </Label>
+
+                      <div className="relative mt-2">
+                        <div
+                          className="
+        absolute
+        left-3
+        top-1/2
+        -translate-y-1/2
+        z-10
+        flex
+        items-center
+        gap-2
+        pointer-events-none
+      "
+                        >
+                          <ReactCountryFlag
+                            countryCode="IN"
+                            svg
+                            className="w-5 h-5 rounded-full"
+                          />
+
+                          <span className="text-sm text-gray-700">+91</span>
+                          <span className="h-5 w-px bg-gray-300 mx-1"></span>
+                        </div>
+
+                        <Input
+                          id="mobile"
+                          name="mobile"
+                          value={formData.mobile}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, "");
+
+                            e.target.value = value;
+
+                            handleChange(e);
+                          }}
+                          onBlur={() =>
+                            setTouched((prev) => ({
+                              ...prev,
+                              mobile: true,
+                            }))
+                          }
+                          maxLength={10}
+                          placeholder="9876543210"
+                          className="
+        pl-20
+        modern-input
+        focus-animation
+      "
+                        />
+                      </div>
+                      {touched.mobile && errors.mobile && (
+                        <p className="mt-1 flex items-center gap-1 text-xs text-red-600">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.mobile}
+                        </p>
+                      )}
+
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        We'll send a verification code to this number.
+                      </p>
+                    </motion.div>
                   </div>
-                </div>
 
-                {/* PASSPORT TYPE */}
+                  {/* PASSPORT TYPE */}
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: "passportType",
-                          value: "normal",
-                        },
-                      })
-                    }
-                    className={`
-    h-auto
-    p-3
-    rounded-lg
-    justify-start
-    hover:bg-transparent
-    ${
-      formData.passportType === "normal"
-        ? "border-blue-400 bg-blue-50"
-        : "border-gray-200"
-    }
-  `}
+                  <div className="grid grid-cols-2 xl:grid-cols-2 gap-4">
+                    <motion.div variants={itemVariants}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setTouched((prev) => ({
+                            ...prev,
+                            passportType: true,
+                          }));
+
+                          handleChange({
+                            target: {
+                              name: "passportType",
+                              value: "normal",
+                            },
+                          });
+                        }}
+                        className={`
+                          h-auto
+                          p-3
+                          w-full
+                          rounded-lg
+                          justify-between
+                          
+                          transition-all
+                          duration-300
+                          hover:bg-transparent
+                          hover:text-black
+                          hover:border-navy
+                          modern-button
+                          ${formData.passportType === "normal" ? "bg-muted scale-105" : "bg-white"}
+                        `}
+                      >
+                        <div className="flex items-center gap-2">
+                          <PlaneIcon className="h-5 w-5 text-navy hidden sm:block" />
+
+                          <div className="text-left">
+                            <p className="font-medium">
+                              Normal{" "}
+                              <span className="hidden sm:inline">Passport</span>
+                            </p>
+
+                            <p className="mt-1 text-xs text-muted-foreground hidden sm:block lg:hidden xl:block">
+                              Standard Processing Time
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Right Radio Button */}
+                        <input
+                          type="radio"
+                          name="passportType"
+                          value="normal"
+                          checked={formData.passportType === "normal"}
+                          onChange={handleChange}
+                          className="h-4 w-4 accent-teal cursor-pointer"
+                        />
+                      </Button>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setTouched((prev) => ({
+                            ...prev,
+                            passportType: true,
+                          }));
+
+                          handleChange({
+                            target: {
+                              name: "passportType",
+                              value: "tatkal",
+                            },
+                          });
+                        }}
+                        className={`
+                          h-auto
+                          p-3
+                          w-full
+                          rounded-lg
+                          justify-between
+                          transition-all
+                          duration-300
+                          hover:bg-transparent
+                          hover:text-black
+                          hover:border-navy
+                          modern-button
+                          ${formData.passportType === "tatkal" ? "bg-muted scale-105" : "bg-white"}
+                        `}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-5 w-5 text-navy hidden sm:block" />
+
+                          <div className="text-left">
+                            <p className="font-medium">
+                              Tatkal{" "}
+                              <span className="hidden sm:inline">Passport</span>
+                            </p>
+
+                            <p className="mt-1 text-xs text-muted-foreground hidden sm:block lg:hidden xl:block">
+                              Fast Processing (Urgent)
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Right Radio Button */}
+                        <input
+                          type="radio"
+                          name="passportType"
+                          value="tatkal"
+                          checked={formData.passportType === "tatkal"}
+                          onChange={handleChange}
+                          className="h-4 w-4 accent-teal cursor-pointer"
+                        />
+                      </Button>
+                      {touched.passportType && errors.passportType && (
+                        <p className="mt-2 flex items-center gap-1 text-xs text-red-600">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.passportType}
+                        </p>
+                      )}
+                    </motion.div>
+                  </div>
+
+                  {/* BOOK SIZE */}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <motion.div variants={itemVariants}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setTouched((prev) => ({
+                            ...prev,
+                            bookSize: true,
+                          }));
+
+                          handleChange({
+                            target: {
+                              name: "bookSize",
+                              value: "36",
+                            },
+                          });
+                        }}
+                        className={`
+                          w-full
+                          rounded-md
+                          justify-between
+                          transition-all
+                          duration-300
+                          hover:bg-transparent
+                          hover:text-black
+                          hover:border-navy
+                          modern-button
+                          ${formData.bookSize === "36" ? "bg-muted scale-105" : "bg-white"}
+                        `}
+                      >
+                        <span>36 pages</span>
+
+                        <input
+                          type="radio"
+                          name="bookSize"
+                          value="36"
+                          checked={formData.bookSize === "36"}
+                          onChange={handleChange}
+                          className="h-4 w-4 accent-teal cursor-pointer"
+                        />
+                      </Button>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setTouched((prev) => ({
+                            ...prev,
+                            bookSize: true,
+                          }));
+
+                          handleChange({
+                            target: {
+                              name: "bookSize",
+                              value: "60",
+                            },
+                          });
+                        }}
+                        className={`
+                          w-full
+                          rounded-lg
+                          justify-between
+                          transition-all
+                          duration-300
+                          hover:bg-transparent
+                          hover:text-black
+                          hover:border-navy
+                          modern-button
+                          ${formData.bookSize === "60" ? "bg-muted scale-105" : "bg-white"}
+                        `}
+                      >
+                        <span>60 pages</span>
+
+                        <input
+                          type="radio"
+                          name="bookSize"
+                          value="60"
+                          checked={formData.bookSize === "60"}
+                          onChange={handleChange}
+                          className="h-4 w-4 accent-teal cursor-pointer"
+                        />
+                      </Button>
+                      {touched.bookSize && errors.bookSize && (
+                        <p className="mt-2 flex items-center gap-1 text-xs text-red-600">
+                          <AlertCircle className="h-3 w-3" />
+                          {errors.bookSize}
+                        </p>
+                      )}
+                    </motion.div>
+                  </div>
+
+                  {/* TERMS */}
+
+                  <div className="space-y-3 text-xs">
+                    <label className="flex gap-2">
+                      <input
+                        type="checkbox"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                      />
+
+                      <span>
+                        By submitting the form, you agree to Terms of Use and
+                        Privacy Policy
+                      </span>
+                    </label>
+
+                    <label className="flex gap-2">
+                      <input
+                        type="checkbox"
+                        checked={marketingConsent}
+                        onChange={(e) => setMarketingConsent(e.target.checked)}
+                      />
+
+                      <span>
+                        I agree to receive promotional & informational
+                        communications from passport suvidha via Email, SMS or
+                        Calls.
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* SECURITY */}
+
+                  <div
+                    className="
+                      bg-muted
+                      rounded-lg
+                      p-3
+                      flex
+                      gap-2
+                      text-xs
+                      text-muted-foreground
+                      "
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <PlaneIcon className="h-5 w-5 text-blue-600" />
-                        <span className="font-medium">Normal Passport</span>
-                      </div>
+                    <ShieldCheck className="h-5 w-5 text-teal" />
+                    Your information is secure and will only be used for
+                    passport processing purposes.
+                  </div>
+                </CardContent>
 
-                      <p className="mt-2 text-xs text-gray-500">
-                        Standard Processing Time
-                      </p>
-                    </div>
-                  </Button>
-
+                <CardFooter className="!p-0 !pt-2">
                   <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: "passportType",
-                          value: "tatkal",
-                        },
-                      })
+                    onClick={nextStep}
+                    disabled={
+                      !isValid || loading || !termsAccepted || !marketingConsent
                     }
-                    className={`
-    h-auto
-    p-3
-    rounded-lg
-    justify-start
-    hover:bg-transparent
-    ${
-      formData.passportType === "tatkal"
-        ? "border-blue-400 bg-blue-50"
-        : "border-gray-200"
-    }
-  `}
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <Zap className="h-5 w-5 text-yellow-500" />
-                        <span className="font-medium">Tatkal Passport</span>
-                      </div>
-
-                      <p className="mt-2 text-xs text-gray-500">
-                        Fast Processing
-                      </p>
-                    </div>
-                  </Button>
-                </div>
-
-                {/* BOOK SIZE */}
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: "bookSize",
-                          value: "36",
-                        },
-                      })
-                    }
-                    className={`
-    rounded-lg
-    justify-start
-    hover:bg-transparent
-    ${
-      formData.bookSize === "36"
-        ? "border-blue-400 bg-blue-50"
-        : "border-gray-200"
-    }
-  `}
-                  >
-                    36 pages
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: "bookSize",
-                          value: "60",
-                        },
-                      })
-                    }
-                    className={`
-    rounded-lg
-    justify-start
-    hover:bg-transparent
-    ${
-      formData.bookSize === "60"
-        ? "border-blue-400 bg-blue-50"
-        : "border-gray-200"
-    }
-  `}
-                  >
-                    60 pages
-                  </Button>
-                </div>
-
-                {/* TERMS */}
-
-                <div className="space-y-3 text-xs">
-                  <label className="flex gap-2">
-                    <input
-                      type="checkbox"
-                      checked={termsAccepted}
-                      onChange={(e) => setTermsAccepted(e.target.checked)}
-                    />
-
-                    <span>
-                      By submitting the form, you agree to Terms of Use and
-                      Privacy Policy
-                    </span>
-                  </label>
-
-                  <label className="flex gap-2">
-                    <input
-                      type="checkbox"
-                      checked={marketingConsent}
-                      onChange={(e) => setMarketingConsent(e.target.checked)}
-                    />
-
-                    <span>I agree to receive promotional communications</span>
-                  </label>
-                </div>
-
-                {/* SECURITY */}
-
-                <div
-                  className="
-          bg-blue-50
-          rounded-lg
-          p-3
-          flex
-          gap-2
-          text-xs
-          text-gray-600
-          "
-                >
-                  <ShieldCheck className="h-5 w-5 text-green-600" />
-                  Your information is secure and only used for passport
-                  processing.
-                </div>
-              </CardContent>
-
-              <CardFooter className="!p-0 !pt-2">
-                <Button
-                  onClick={nextStep}
-                  disabled={
-                    !isValid || loading || !termsAccepted || !marketingConsent
-                  }
-                  className="
+                    className="
           w-full
           h-11
-          rounded-xl
-          bg-gradient-to-r
-          from-yellow-400
-          to-yellow-500
-          text-black
+          rounded-xl bg-gradient-to-r from-navy to-teal text-white shadow-lg modern-button
           font-semibold
           "
-                >
-                  {loading ? "Sending OTP..." : <>Continue →</>}
-                </Button>
-              </CardFooter>
-            </motion.div>
+                  >
+                    {loading ? (
+                      "Sending OTP..."
+                    ) : (
+                      <>
+                        Continue{" "}
+                        <ArrowRight className="inline-block ml-1 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                </CardFooter>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

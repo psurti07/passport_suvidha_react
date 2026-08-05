@@ -1,11 +1,12 @@
-import { Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 
 interface ProgressBarProps {
   step: number;
   stepTitles: { [key: number]: string };
   progressWidth: number;
   windowSize: { width: number; height: number };
+  icons: { [key: number]: React.ElementType };
 }
 
 const ProgressBar = ({
@@ -13,6 +14,7 @@ const ProgressBar = ({
   stepTitles,
   progressWidth,
   windowSize,
+  icons,
 }: ProgressBarProps) => (
   <div className="container mx-auto relative px-2 md:px-0 mb-4 md:mb-8">
     <div className="relative flex justify-between items-center">
@@ -35,13 +37,29 @@ const ProgressBar = ({
               ${parseInt(stepNum) === step ? "shadow-lg" : ""}
             `}
           >
-            {parseInt(stepNum) < step ? (
+            {/* {parseInt(stepNum) < step ? (
               <Check className="w-4 h-4 md:w-5 md:h-5" />
             ) : (
               <span className="text-sm md:text-base font-semibold">
                 {stepNum}
               </span>
-            )}
+            )} */}
+            {(() => {
+              const currentStep = parseInt(stepNum);
+              const Icon = icons[currentStep];
+
+              if (currentStep < step) {
+                return <Check className="w-4 h-4 md:w-5 md:h-5 text-white" />;
+              }
+
+              return (
+                <Icon
+                  className={`w-4 h-4 md:w-5 md:h-5 ${
+                    currentStep === step ? "text-white" : "text-gray-400"
+                  }`}
+                />
+              );
+            })()}
             {parseInt(stepNum) === step && (
               <motion.div
                 className="absolute inset-0 rounded-full"

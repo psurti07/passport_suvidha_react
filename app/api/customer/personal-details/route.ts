@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axiosServer from "@/lib/axiosServer";
 
-interface AdditionalInfoRequestBody {
+interface PersonalDetailsRequestBody {
   address: string;
   pin_code: string;
   city: string;
@@ -10,7 +10,9 @@ interface AdditionalInfoRequestBody {
   date_of_birth: string;
   education_qualification: string;
   employment_type: string;
-  // place_of_birth: string;
+  police_station_name: string;
+  place_of_birth: string;
+  nationality: "Indian";
 }
 
 interface ValidationErrors {
@@ -33,7 +35,7 @@ export async function POST(request: NextRequest) {
     // Extract token
     const token = authHeader.split(" ")[1];
 
-    const body: AdditionalInfoRequestBody = await request.json();
+    const body: PersonalDetailsRequestBody = await request.json();
 
     // Validate required fields
     const errors: ValidationErrors = {};
@@ -68,9 +70,9 @@ export async function POST(request: NextRequest) {
       errors.date_of_birth = ["Date must be in YYYY-MM-DD format"];
     }
 
-    // if (!body.place_of_birth?.trim()) {
-    //   errors.place_of_birth = ["Place of birth is required"];
-    // }
+    if (!body.place_of_birth?.trim()) {
+      errors.place_of_birth = ["Place of birth is required"];
+    }
 
     if (!body.education_qualification?.trim()) {
       errors.education_qualification = ["Education qualification is required"];
@@ -78,6 +80,10 @@ export async function POST(request: NextRequest) {
 
     if (!body.employment_type?.trim()) {
       errors.employment_type = ["Employement type is required"];
+    }
+
+    if (!body.police_station_name?.trim()) {
+      errors.police_station_name = ["Police station name is required"];
     }
 
     // If there are validation errors, return them
@@ -88,7 +94,7 @@ export async function POST(request: NextRequest) {
     // TODO: Uncomment this when external API is available
     try {
       const response = await axiosServer.post(
-        "/customer/additional-info",
+        "/customer/personal-details",
         body,
         {
           headers: {
@@ -122,7 +128,7 @@ export async function POST(request: NextRequest) {
       state: body.state,
       gender: body.gender,
       date_of_birth: body.date_of_birth,
-      // place_of_birth: body.place_of_birth,
+      place_of_birth: body.place_of_birth,
       updated_at: new Date().toISOString(),
     };
 

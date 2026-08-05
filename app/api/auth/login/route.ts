@@ -5,6 +5,16 @@ import axios, { AxiosError } from "axios";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    if (!body) {
+      return NextResponse.json(
+        {
+          message: "Invalid request body",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
     const { mobile_number } = body;
 
     //  Validate input

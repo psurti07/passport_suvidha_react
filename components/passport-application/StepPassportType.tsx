@@ -45,85 +45,6 @@ interface StepPassportTypeProps {
   windowSize: { width: number; height: number };
 }
 
-interface PassportTypeCardProps {
-  title: string;
-  price: string;
-  description: string;
-  features: { icon: React.ReactNode; text: string }[];
-  selected: boolean;
-  badge?: string;
-  onClick: () => void;
-  children?: React.ReactNode;
-}
-
-const PassportTypeCard = ({
-  title,
-  price,
-  description,
-  features,
-  selected,
-  badge,
-  onClick,
-  children,
-}: PassportTypeCardProps) => (
-  <motion.div
-    className={`relative overflow-hidden p-6 md:p-8 rounded-2xl cursor-pointer transition-all duration-300 group ${
-      selected
-        ? "bg-gradient-to-br from-navy/10 via-teal/5 to-navy/10 border-navy"
-        : "bg-white hover:bg-gradient-to-br hover:from-navy/[0.02] hover:via-teal/[0.01] hover:to-navy/[0.02] border-gray-200"
-    } border-2 hover:border-navy/30 hover:shadow-xl`}
-    onClick={onClick}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-  >
-    <div className="absolute top-0 right-0 p-2 m-4 rounded-full bg-navy/5">
-      <FileText className="h-5 w-5 text-navy" />
-    </div>
-    <div className="relative z-10">
-      {badge && (
-        <div className="inline-flex items-center px-3 py-1 rounded-full bg-navy/5 text-navy text-sm font-medium mb-4">
-          {badge}
-        </div>
-      )}
-      <h3 className="text-xl md:text-2xl font-bold text-navy mb-2">{title}</h3>
-      <div className="flex items-baseline gap-1 mb-1">
-        <span className="text-3xl md:text-4xl font-bold text-navy">
-          {price}
-        </span>
-        <span className="text-sm text-muted-foreground">/passport</span>
-      </div>
-      <p className="text-sm text-muted-foreground mb-6">{description}</p>
-      <div className="space-y-4">
-        {features.map((feature, idx) => (
-          <div className="flex items-center gap-3 text-sm" key={idx}>
-            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-navy/10">
-              {feature.icon}
-            </div>
-            <span className="text-muted-foreground">{feature.text}</span>
-          </div>
-        ))}
-      </div>
-      {children}
-    </div>
-    {selected && (
-      <motion.div
-        className="absolute top-4 right-4 w-8 h-8 bg-navy rounded-full flex items-center justify-center"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      >
-        <motion.div
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Check className="h-5 w-5 text-white" />
-        </motion.div>
-      </motion.div>
-    )}
-  </motion.div>
-);
-
 const passportTypes = [
   {
     key: "normal-36",
@@ -219,6 +140,21 @@ const passportTypes = [
   },
 ];
 
+const mapServiceCodeToType = (serviceCode: string) => {
+  switch (serviceCode) {
+    case "NP36":
+      return { passportType: "normal", bookSize: "36" };
+    case "NP60":
+      return { passportType: "normal", bookSize: "60" };
+    case "TP36":
+      return { passportType: "tatkal", bookSize: "36" };
+    case "TP60":
+      return { passportType: "tatkal", bookSize: "60" };
+    default:
+      return { passportType: "", bookSize: "" };
+  }
+};
+
 const StepPassportType = ({
   formData,
   handlePassportTypeChange,
@@ -252,186 +188,162 @@ const StepPassportType = ({
     fetchServices();
   }, []);
 
-  const selectedService = services.find((s) => {
-    let type = "";
-    let size = "";
+  const selectedService = services.find((service) => {
+    const { passportType, bookSize } = mapServiceCodeToType(
+      service.service_code,
+    );
 
-    if (s.service_code === "NP36") {
-      type = "normal";
-      size = "36";
-    } else if (s.service_code === "NP60") {
-      type = "normal";
-      size = "60";
-    } else if (s.service_code === "TP36") {
-      type = "tatkal";
-      size = "36";
-    } else if (s.service_code === "TP60") {
-      type = "tatkal";
-      size = "60";
-    }
-
-    return type === formData.passportType && size === formData.bookSize;
+    return (
+      passportType === formData.passportType && bookSize === formData.bookSize
+    );
   });
+
+  const selectedStaticData = passportTypes.find(
+    (entry) =>
+      entry.passportType === formData.passportType &&
+      entry.bookSize === formData.bookSize,
+  );
+
+  const selectedTitle = (
+    selectedService?.service_name ||
+    selectedStaticData?.title ||
+    "Selected Passport"
+  ).replace(/\s*\(.*?\)/, "");
+  const selectedDescription =
+    selectedStaticData?.description ||
+    selectedService?.service_name ||
+    "Review your selected passport service before completing payment.";
+
   return (
     <>
-      {windowSize.width >= 768 ? (
-        // Desktop/Tablet Layout
-        <>
-          <CardHeader className="pb-6">
-            <motion.div variants={itemVariants}>
-              <CardTitle className="text-xl md:text-3xl flex items-center gap-3 text-navy">
-                <div className="p-2 rounded-full bg-navy/5">
-                  <Clock className="h-6 w-6 md:h-7 md:w-7" />
+      <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full max-w-5xl mx-auto">
+          <div className="rounded-3xl bg-white md:p-6 shadow-xl">
+            <CardHeader className="pb-6">
+              <motion.div variants={itemVariants}>
+                <CardTitle className="md:text-2xl font-semibold tracking-tight text-2xl flex items-center gap-2 gradient-heading">
+                  <Clock className="h-5 w-5 text-navy" />
+                  Review & Pay
+                </CardTitle>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <CardDescription className="!text-xs text-muted-foreground">
+                  Review your selection and complete the payment to submit your
+                  application
+                </CardDescription>
+              </motion.div>
+            </CardHeader>
+
+            <CardContent className="sm:p-2 !pt-0">
+              {errorMessage && (
+                <div className=" p-3 mb-4 bg-red-50 border border-red-200 rounded-lg ">
+                  <p className="text-sm text-red-600">{errorMessage}</p>
                 </div>
-                Choose Your Passport
-              </CardTitle>
-            </motion.div>
-            <motion.div variants={itemVariants}>
-              <CardDescription className="text-sm md:text-base mt-3">
-                Select the passport type that best matches your travel
-                requirements and timeline
-              </CardDescription>
-            </motion.div>
-          </CardHeader>
-          <CardContent className="space-y-8">
-            {errorMessage && (
+              )}
+
               <motion.div
                 variants={itemVariants}
-                className="p-3 bg-red-50 border border-red-200 rounded-lg"
+                className="grid gap-6 lg:grid-cols-2"
               >
-                <p className="text-sm text-red-600">{errorMessage}</p>
+                <div className="space-y-6">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">
+                          Selected Service
+                        </p>
+                        <h2 className="mt-3 text-2xl font-semibold text-navy">
+                          {selectedTitle}
+                        </h2>
+                        <p className=" text-sm font-medium text-muted-foreground">
+                          {formData.bookSize} Pages
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-8 space-y-3">
+                      {(selectedStaticData?.features || []).map(
+                        (feature, index) => (
+                          <div
+                            key={index}
+                            className="flex items-start gap-3 rounded-xl bg-muted px-4 py-3"
+                          >
+                            <div className="mt-1 flex">{feature.icon}</div>
+                            <p className="text-sm text-muted-foreground">
+                              {feature.text}
+                            </p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="mt-3 flex items-center gap-2">
+                    <div className="rounded-2xl bg-teal-50 text-teal-700">
+                      <CreditCard className="h-5 w-5 text-navy" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-navy">
+                        Price Breakdown
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 space-y-4">
+                    <div className="rounded-2xl bg-slate-50">
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>Service Charge</span>
+                        <span>₹{selectedService?.service_charges || 0}</span>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl bg-slate-50">
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>GST (18%)</span>
+                        <span>₹{selectedService?.service_gst || 0}</span>
+                      </div>
+                    </div>
+                    <div className="rounded-xl bg-muted p-3">
+                      <div className="flex justify-between items-center text-base font-semibold text-navy">
+                        <span>Total Amount</span>
+                        <span>
+                          ₹{selectedService?.service_total_amount || 0}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rounded-xl bg-muted p-3">
+                      <div className="flex gap-3">
+                        <Info className="h-5 w-5 text-navy flex-shrink-0 pt-1" />
+
+                        <p className="text-xs font-semibold text-navy">
+                          Important:{" "}
+                          <span className="font-medium text-muted-foreground">
+                            This fee is for consultation only. Government
+                            charges will be applicable separately.
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
-            )}
+            </CardContent>
+          </div>
 
-            {/* Passport Type Selection Cards */}
-            <motion.div
-              variants={itemVariants}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            >
-              {services.map((service) => {
-                let type = "";
-                let size = "";
-
-                if (service.service_code === "NP36") {
-                  type = "normal";
-                  size = "36";
-                } else if (service.service_code === "NP60") {
-                  type = "normal";
-                  size = "60";
-                } else if (service.service_code === "TP36") {
-                  type = "tatkal";
-                  size = "36";
-                } else if (service.service_code === "TP60") {
-                  type = "tatkal";
-                  size = "60";
-                }
-
-                const staticData = passportTypes.find(
-                  (t) => t.passportType === type && t.bookSize === size,
-                );
-
-                if (!staticData) return null;
-
-                return (
-                  <PassportTypeCard
-                    key={service.id}
-                    title={staticData.title}
-                    price={`₹${service.service_total_amount}`}
-                    description={staticData.description}
-                    features={staticData.features}
-                    badge={staticData.badge}
-                    selected={
-                      formData.passportType === type &&
-                      formData.bookSize === size
-                    }
-                    onClick={() => {
-                      handlePassportTypeChange(type as "normal" | "tatkal");
-                      handleBookSizeChange(size as "36" | "60");
-                    }}
-                  />
-                );
-              })}
-            </motion.div>
-            {/* Price Breakdown */}
-            <motion.div
-              variants={itemVariants}
-              className="max-w-xl mt-8 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-navy/[0.03] to-teal/[0.03] border border-navy/10"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-full bg-navy/5">
-                  <CreditCard className="h-5 w-5 text-navy" />
-                </div>
-                <h3 className="text-lg md:text-xl font-semibold text-navy">
-                  Price Breakdown
-                </h3>
-              </div>
-              <div className="space-y-4">
-                {/* <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
-                  <span className="text-base text-muted-foreground">
-                    Government Fees
-                  </span>
-                  <span className="text-base font-medium text-navy">
-                    ₹{selectedService?.service_gov_amount || 0}
-                  </span>
-                </div> */}
-                <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
-                  <span className="text-base text-muted-foreground">
-                    Service Charge
-                  </span>
-                  <span className="text-base font-medium text-navy">
-                    ₹{selectedService?.service_charges || 0}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-white/50">
-                  <span className="text-base text-muted-foreground">
-                    GST (18%)
-                  </span>
-                  <span className="text-base font-medium text-navy">
-                    ₹{selectedService?.service_gst || 0}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-4 mt-2 rounded-lg bg-navy/5 border border-navy/10">
-                  <span className="text-lg font-semibold text-navy">
-                    Total Amount
-                  </span>
-                  <motion.span
-                    animate={
-                      animatePrice
-                        ? {
-                            scale: [1, 1.1, 1],
-                            color: ["#003366", "#008080", "#003366"],
-                          }
-                        : {}
-                    }
-                    transition={{ duration: 0.5 }}
-                    className="text-xl font-bold text-navy"
-                  >
-                    ₹{selectedService?.service_total_amount || 0}
-                  </motion.span>
-                </div>
-              </div>
-            </motion.div>
-          </CardContent>
-          <CardFooter className="flex flex-col sm:flex-row justify-between gap-4 border-t pt-6">
-            <motion.div variants={itemVariants} className="w-full sm:w-auto">
+          <motion.div className="mt-4 flex">
+            <CardFooter className="flex w-full gap-3 sm:flex-row justify-between">
               <Button
                 variant="outline"
-                className="w-full sm:w-auto rounded-xl border-navy/20 hover:bg-navy/5 hover:text-navy text-base font-medium modern-button"
+                className="rounded-md bg-primary text-primary-foreground px-4 modern-buttonlg"
                 onClick={prevStep}
                 disabled={loading}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Previous Step
+                Back
               </Button>
-            </motion.div>
-            <motion.div
-              variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto"
-            >
               <Button
-                className="w-full sm:w-auto bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl text-base font-medium shadow-lg"
+                className="rounded-xl bg-gradient-to-r from-navy to-teal px-4 text-white shadow-lg modern-button"
                 onClick={completePayment}
                 disabled={
                   !formData.passportType || !formData.bookSize || loading
@@ -444,361 +356,15 @@ const StepPassportType = ({
                   </>
                 ) : (
                   <>
-                    Complete Application
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    Complete Payment • ₹
+                    {selectedService?.service_total_amount || 0}
                   </>
                 )}
               </Button>
-            </motion.div>
-          </CardFooter>
-        </>
-      ) : (
-        // Mobile Layout
-        <>
-          <CardHeader className="pb-4">
-            <motion.div variants={itemVariants}>
-              <CardTitle className="text-lg md:text-2xl flex items-center gap-2 text-navy">
-                <Clock className="h-5 w-5" />
-                Select Your Passport Type
-              </CardTitle>
-              <CardDescription className="text-muted-foreground mt-1">
-                Choose between normal and tatkal processing
-              </CardDescription>
-            </motion.div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {errorMessage && (
-              <motion.div
-                variants={itemVariants}
-                className="p-3 bg-red-50 border border-red-200 rounded-lg"
-              >
-                <p className="text-sm text-red-600">{errorMessage}</p>
-              </motion.div>
-            )}
-
-            <motion.div variants={itemVariants}>
-              {/* Passport Type Selection */}
-              <div className="grid grid-cols-2 gap-4">
-                {["normal", "tatkal"].map((type) => (
-                  <div
-                    key={type}
-                    className={`rounded-lg cursor-pointer transition-all duration-300 ${
-                      formData.passportType === type
-                        ? "bg-gradient-to-br from-navy/10 via-teal/5 to-navy/10 border-navy shadow-lg"
-                        : "bg-white hover:bg-gradient-to-br hover:from-navy/[0.02] hover:via-teal/[0.01] hover:to-navy/[0.02] hover:border-navy/30"
-                    } border-2 p-4`}
-                    onClick={() =>
-                      handlePassportTypeChange(type as "normal" | "tatkal")
-                    }
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                          formData.passportType === type
-                            ? "border-navy bg-navy"
-                            : "border-gray-300"
-                        }`}
-                      >
-                        {formData.passportType === type && (
-                          <Check className="h-3 w-3 text-white" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-medium text-navy">
-                          {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Page Selection */}
-              {formData.passportType && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4 mt-6"
-                >
-                  <h3 className="text-lg font-semibold text-navy">
-                    Select Number of Pages
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {["36", "60"].map((size) => (
-                      <div
-                        key={size}
-                        className={`rounded-lg cursor-pointer transition-all duration-300 ${
-                          formData.bookSize === size
-                            ? "bg-gradient-to-br from-navy/10 via-teal/5 to-navy/10 border-navy shadow-lg"
-                            : "bg-white hover:bg-gradient-to-br hover:from-navy/[0.02] hover:via-teal/[0.01] hover:to-navy/[0.02] hover:border-navy/30"
-                        } border-2 p-4`}
-                        onClick={() =>
-                          handleBookSizeChange(size as "36" | "60")
-                        }
-                      >
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                              formData.bookSize === size
-                                ? "border-navy bg-navy"
-                                : "border-gray-300"
-                            }`}
-                          >
-                            {formData.bookSize === size && (
-                              <Check className="h-3 w-3 text-white" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-medium text-navy">
-                              {size} Pages
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Benefits and Price Breakdown */}
-              {formData.passportType && formData.bookSize && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 space-y-6 border-2 rounded-xl p-6"
-                >
-                  {/* Reuse PassportTypeCard for summary */}
-                  <PassportTypeCard
-                    title={
-                      passportTypes.find(
-                        (t) =>
-                          t.passportType === formData.passportType &&
-                          t.bookSize === formData.bookSize,
-                      )?.title || ""
-                    }
-                    price={
-                      passportTypes.find(
-                        (t) =>
-                          t.passportType === formData.passportType &&
-                          t.bookSize === formData.bookSize,
-                      )?.price || ""
-                    }
-                    description={
-                      passportTypes.find(
-                        (t) =>
-                          t.passportType === formData.passportType &&
-                          t.bookSize === formData.bookSize,
-                      )?.description || ""
-                    }
-                    features={
-                      passportTypes.find(
-                        (t) =>
-                          t.passportType === formData.passportType &&
-                          t.bookSize === formData.bookSize,
-                      )?.features || []
-                    }
-                    badge={
-                      passportTypes.find(
-                        (t) =>
-                          t.passportType === formData.passportType &&
-                          t.bookSize === formData.bookSize,
-                      )?.badge
-                    }
-                    selected={true}
-                    onClick={() => {}}
-                  >
-                    {/* Price Breakdown */}
-                    <div className="space-y-3 pt-4 border-t border-navy/10">
-                      <h3 className="text-lg font-semibold text-navy mb-3">
-                        Price Breakdown
-                      </h3>
-                      {/* <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                          Government Fees
-                        </span>
-                        <span className="text-sm font-medium text-navy">
-                          ₹{selectedService?.service_gov_amount || 0}
-                        </span>
-                      </div> */}
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                          Service Charge
-                        </span>
-                        <span className="text-sm font-medium text-navy">
-                          ₹{selectedService?.service_charges || 0}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                          Service Charge GST
-                        </span>
-                        <span className="text-sm font-medium text-navy">
-                          ₹{selectedService?.service_gst || 0}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center pt-2 border-t border-navy/10">
-                        <span className="font-medium text-navy">
-                          Total Amount
-                        </span>
-                        <motion.span
-                          animate={
-                            animatePrice
-                              ? {
-                                  scale: [1, 1.1, 1],
-                                  color: ["#003366", "#008080", "#003366"],
-                                }
-                              : {}
-                          }
-                          transition={{ duration: 0.5 }}
-                          className="text-lg font-bold text-navy"
-                        >
-                          ₹{selectedService?.service_total_amount || 0}
-                        </motion.span>
-                      </div>
-                    </div>
-                    <Button
-                      className="w-full mt-4 bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl"
-                      onClick={completePayment}
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          Complete Application
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  </PassportTypeCard>
-                </motion.div>
-              )}
-            </motion.div>
-          </CardContent>
-        </>
-      )}
-
-      {/* Important Note */}
-      <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
-        <div className="flex items-center gap-3">
-          <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
-
-          <p className="text-sm font-semibold text-amber-900">
-            Important:{" "}
-            <span className="font-medium">
-              This fee is for consultation only. Government charges will be
-              applicable separately.
-            </span>
-          </p>
+            </CardFooter>
+          </motion.div>
         </div>
       </div>
-
-      <div className="mt-6 mb-6 flex justify-center">
-        <div className="w-full max-w-4xl overflow-hidden rounded-full border border-teal-200 bg-teal-50 shadow-sm">
-          <div className="flex items-center animate-marquee whitespace-nowrap py-2 px-6">
-            <Info className="mr-2 h-4 w-4 flex-shrink-0 text-teal-700" />
-
-            <span className="text-xs md:text-sm font-medium text-teal-800">
-              Passport Suvidha Company is a private consultancy and is not
-              affiliated with the Government of India or the Ministry of
-              External Affairs.
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Trust Features */}
-      <motion.div variants={itemVariants} className="mt-8 mb-10 pb-4">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          plugins={[
-            Autoplay({
-              delay: 2500,
-            }),
-          ]}
-          className="w-full"
-        >
-          <CarouselContent>
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
-                <div className="p-3 rounded-full bg-navy/10">
-                  <ShieldCheck className="h-8 w-8 text-navy" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-navy">100% Secure</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Your data is protected and encrypted
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
-                <div className="p-3 rounded-full bg-navy/10">
-                  <Users className="h-8 w-8 text-navy" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-navy">Expert Assistance</h4>
-                  <p className="text-xs text-muted-foreground">
-                    End-to-end application support
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
-                <div className="p-3 rounded-full bg-navy/10">
-                  <Clock3 className="h-8 w-8 text-navy" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-navy">Fast Processing</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Quick review and submission guidance
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
-                <div className="p-3 rounded-full bg-navy/10">
-                  <Headphones className="h-8 w-8 text-navy" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-navy">Dedicated Support</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Assistance throughout your application journey
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-              <div className="flex items-center gap-4 p-5 rounded-xl border bg-white shadow-sm h-full">
-                <div className="p-3 rounded-full bg-navy/10">
-                  <FileCheck className="h-8 w-8 text-navy" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-navy">
-                    Document Verification
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    Thorough review to minimize application errors
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-      </motion.div>
     </>
   );
 };

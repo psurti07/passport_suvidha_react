@@ -50,8 +50,7 @@ import { Receipt } from "lucide-react";
 // }
 
 export default function Home() {
-  const [contactFirstName, setContactFirstName] = useState("");
-  const [contactLastName, setContactLastName] = useState("");
+  const [contactFullName, setContactFullName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactSubject, setContactSubject] = useState("");
   const [contactMessage, setContactMessage] = useState("");
@@ -118,8 +117,7 @@ export default function Home() {
       const response = await axiosServer.post(
         "/contact/enquiry",
         {
-          first_name: contactFirstName,
-          last_name: contactLastName,
+          full_name: contactFullName,
           email: contactEmail,
           subject,
           message: contactMessage,
@@ -144,8 +142,7 @@ export default function Home() {
       });
 
       //  Reset form
-      setContactFirstName("");
-      setContactLastName("");
+      setContactFullName("");
       setContactEmail("");
       setContactSubject("");
       setContactMessage("");
@@ -347,8 +344,9 @@ export default function Home() {
                 <div className="max-w-4xl w-full overflow-hidden rounded-full border border-amber-200 bg-amber-50 shadow-sm">
                   <div className="animate-marquee whitespace-nowrap py-2 px-6">
                     <span className="text-xs md:text-sm font-medium text-amber-800">
-                      ⚠️ Passport Suvidha Company is a private consultancy and is not affiliated
-                      with the Government of India or the Ministry of External Affairs.
+                      ⚠️ Passport Suvidha Company is a private consultancy and
+                      is not affiliated with the Government of India or the
+                      Ministry of External Affairs.
                     </span>
                   </div>
                 </div>
@@ -721,9 +719,9 @@ export default function Home() {
                               <CardTitle className="text-xl">
                                 {award.title}
                               </CardTitle>
-                              <CardDescription>
+                              {/* <CardDescription>
                                 {award.organization}
-                              </CardDescription>
+                              </CardDescription> */}
                             </div>
                             {/* <div className="bg-gold/10 text-navy text-sm font-medium px-3 py-1 rounded-full">
                               {award.year}
@@ -1147,42 +1145,23 @@ export default function Home() {
                   </CardHeader>
                   <CardContent>
                     <form className="space-y-6" onSubmit={handleContactSubmit}>
-                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <label
-                            htmlFor="first-name-contact-home"
-                            className="text-sm font-medium"
-                          >
-                            First Name
-                          </label>
-                          <Input
-                            id="first-name-contact-home"
-                            placeholder="John"
-                            className="modern-input"
-                            value={contactFirstName}
-                            onChange={(e) =>
-                              setContactFirstName(e.target.value)
-                            }
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label
-                            htmlFor="last-name-contact-home"
-                            className="text-sm font-medium"
-                          >
-                            Last Name
-                          </label>
-                          <Input
-                            id="last-name-contact-home"
-                            placeholder="Doe"
-                            className="modern-input"
-                            value={contactLastName}
-                            onChange={(e) => setContactLastName(e.target.value)}
-                            required
-                          />
-                        </div>
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="first-name-contact-home"
+                          className="text-sm font-medium"
+                        >
+                          First Name
+                        </label>
+                        <Input
+                          id="full-name-contact-home"
+                          placeholder="John Doe"
+                          className="modern-input"
+                          value={contactFullName}
+                          onChange={(e) => setContactFullName(e.target.value)}
+                          required
+                        />
                       </div>
+
                       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="space-y-2">
                           <label
@@ -1297,8 +1276,7 @@ export default function Home() {
                         className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={
                           isContactSubmitting ||
-                          !contactFirstName ||
-                          !contactLastName ||
+                          !contactFullName ||
                           !contactEmail ||
                           !contactMessage ||
                           !contactSubject

@@ -12,14 +12,21 @@ export interface ApiResponse<T = any> {
  */
 export interface ProfileData {
   id: number;
-  first_name: string;
-  last_name: string;
+  full_name: string;
   mobile_number: string;
   email: string;
+  father_name: string;
+  mother_name: string;
+  marital_status: string;
+  spouse_name: string;
+  emergency_contact_name: string;
+  emergency_contact_email: string;
+  emergency_contact_mobile: string;
   address: string;
   pin_code: string;
   city: string;
   state: string;
+  police_station_name: string;
   gender: string;
   date_of_birth: string;
   place_of_birth: string;
@@ -31,4 +38,6 @@ export interface ProfileData {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-} 
+  education_qualification: string;
+  employment_type: string;
+}

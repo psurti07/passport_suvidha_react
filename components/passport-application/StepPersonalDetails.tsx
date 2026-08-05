@@ -21,7 +21,7 @@ import { Shield, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-interface StepAddressDetailsProps {
+interface StepPersonalDetailsProps {
   formData: any;
   handleChange: (e: any) => void;
   handleSelectChange: (name: string, value: string) => void;
@@ -29,9 +29,13 @@ interface StepAddressDetailsProps {
   prevStep: () => void;
   nextStep: () => void;
   itemVariants: any;
+  fetchPoliceStations: (pincode: string) => void;
+  policeStationOptions: any[];
+  loadingPoliceStations: boolean;
+  errorMessage?: string;
 }
 
-const StepAddressDetails = ({
+const StepPersonalDetails = ({
   formData,
   handleChange,
   handleSelectChange,
@@ -39,7 +43,11 @@ const StepAddressDetails = ({
   prevStep,
   nextStep,
   itemVariants,
-}: StepAddressDetailsProps) => {
+  errorMessage,
+  fetchPoliceStations,
+  policeStationOptions,
+  loadingPoliceStations,
+}: StepPersonalDetailsProps) => {
   const [touched, setTouched] = useState({
     address: false,
     zipCode: false,
@@ -49,17 +57,9 @@ const StepAddressDetails = ({
     dateOfBirth: false,
     education_qualification: false,
     employment_type: false,
-    // placeOfBirth: false,
+    policeStationName: false,
+    placeOfBirth: false,
   });
-
-  function isValidDate(date: string) {
-    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) return false;
-    const [d, m, y] = date.split("/").map(Number);
-    const dt = new Date(y, m - 1, d);
-    return (
-      dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d
-    );
-  }
 
   function getDateOfBirthError(date: string) {
     if (!date.trim()) return "Date of birth is required";
@@ -83,6 +83,9 @@ const StepAddressDetails = ({
       : !/^\d{6}$/.test(formData.zipCode)
         ? "Enter a valid 6-digit ZIP code"
         : "",
+    policeStationName: !formData.policeStationName
+      ? "Please select a police station"
+      : "",
     city: !formData.city.trim() ? "City is required" : "",
     state: !formData.state.trim() ? "State is required" : "",
     gender: !formData.gender.trim() ? "Gender is required" : "",
@@ -93,11 +96,11 @@ const StepAddressDetails = ({
     employment_type: !(formData.employment_type || "").trim()
       ? "Employment Type is required"
       : "",
-    // placeOfBirth: !formData.placeOfBirth.trim()
-    //   ? "Place of birth is required"
-    //   : /\d/.test(formData.placeOfBirth)
-    //     ? "Place of birth should not contain digits"
-    //     : "",
+    placeOfBirth: !formData.placeOfBirth.trim()
+      ? "Place of birth is required"
+      : /\d/.test(formData.placeOfBirth)
+        ? "Place of birth should not contain digits"
+        : "",
   };
 
   const isValid =
@@ -105,37 +108,43 @@ const StepAddressDetails = ({
     !errors.zipCode &&
     !errors.city &&
     !errors.state &&
+    !errors.policeStationName &&
     !errors.gender &&
     !errors.dateOfBirth &&
     !errors.education_qualification &&
-    !errors.employment_type;
-  // !errors.placeOfBirth;
+    !errors.employment_type &&
+    !errors.placeOfBirth;
 
   return (
     <>
-      <div className="min-h-screen bg-[#f5f8ff] py-8 px-4">
-        <div className="container mx-auto">
-          <div className="rounded-3xl border border-[#DCE5F5] bg-white shadow-sm overflow-hidden">
-            <CardHeader className="px-8 pt-8 pb-4">
+      <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full max-w-5xl mx-auto">
+          <div className="rounded-3xl bg-white md:p-6 shadow-xl">
+            <CardHeader className="pl-3 md:px-8 pt-8 pb-4">
               <motion.div variants={itemVariants}>
-                <CardTitle className="flex items-center gap-3 text-[30px] font-bold text-[#123D82]">
-                  <MapPin className="h-7 w-7 text-[#123D82]" />
+                <CardTitle className="md:text-2xl font-semibold tracking-tight text-2xl flex items-center gap-2 gradient-heading">
+                  <MapPin className="h-5 w-5 text-navy" />
                   Personal Details
                 </CardTitle>
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <CardDescription className="mt-2 text-[#7B879F]">
+                <CardDescription className="!text-xs text-muted-foreground">
                   Please provide your additional personal information.
                 </CardDescription>
               </motion.div>
             </CardHeader>
 
-            <CardContent className="px-8 pb-8">
-              <div className="space-y-6">
+            <CardContent className="sm:p-2 !pt-0">
+              <div className="space-y-4">
                 <motion.div variants={itemVariants} className="space-y-2">
+                  {errorMessage && (
+                    <div className=" p-3 bg-red-50 border border-red-200 rounded-lg ">
+                      <p className="text-sm text-red-600">{errorMessage}</p>
+                    </div>
+                  )}
                   <h3 className="text-lg font-medium">Address Information</h3>
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="address">Street Address</Label>
                       <Textarea
@@ -163,7 +172,38 @@ const StepAddressDetails = ({
                             id="zipCode"
                             name="zipCode"
                             value={formData.zipCode}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, "");
+
+                              handleChange({
+                                target: {
+                                  name: "zipCode",
+                                  value,
+                                },
+                              });
+
+                              // if (value.length === 6) {
+                              //   fetchPoliceStations(value);
+                              // }
+
+                              if (value.length < 6) {
+                                handleChange({
+                                  target: {
+                                    name: "city",
+                                    value: "",
+                                  },
+                                });
+
+                                handleChange({
+                                  target: {
+                                    name: "state",
+                                    value: "",
+                                  },
+                                });
+
+                                // handleSelectChange("policeStationPincode", "");
+                              }
+                            }}
                             onBlur={() =>
                               setTouched((t) => ({ ...t, zipCode: true }))
                             }
@@ -202,8 +242,9 @@ const StepAddressDetails = ({
                           onBlur={() =>
                             setTouched((t) => ({ ...t, city: true }))
                           }
-                          placeholder="Surat"
-                          className="modern-input focus-animation"
+                          disabled
+                          readOnly
+                          className="modern-input focus-animation bg-gray-100 cursor-not-allowed"
                         />
                         {touched.city && errors.city && (
                           <p className="text-xs text-red-600 mt-1">
@@ -213,7 +254,16 @@ const StepAddressDetails = ({
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="state">State</Label>
-                        <Select
+                        <Input
+                          id="state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleChange}
+                          readOnly
+                          disabled
+                          className="modern-input bg-gray-100 cursor-not-allowed"
+                        />
+                        {/* <Select
                           value={formData.state}
                           onValueChange={(value) => {
                             handleSelectChange("state", value);
@@ -288,7 +338,7 @@ const StepAddressDetails = ({
                               West Bengal
                             </SelectItem>
                           </SelectContent>
-                        </Select>
+                        </Select> */}
                         {touched.state && errors.state && (
                           <p className="text-xs text-red-600 mt-1">
                             {errors.state}
@@ -297,47 +347,57 @@ const StepAddressDetails = ({
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="address">
-                        Nearest Police Station Pincode * e.g. 395007
-                      </Label>
+                      <Label>Nearest Police Station Name</Label>
+
                       <Input
-                        id="zipCode"
-                        name="zipCode"
-                        value={formData.zipCode}
+                        id="police Station"
+                        name="policeStationName"
+                        value={formData.policeStationName || ""}
                         onChange={handleChange}
-                        onBlur={() =>
-                          setTouched((t) => ({ ...t, zipCode: true }))
-                        }
-                        placeholder="395008"
                         className="modern-input focus-animation"
-                        maxLength={6}
-                        inputMode="numeric"
+                        onBlur={() =>
+                          setTouched((t) => ({
+                            ...t,
+                            policeStationName: true,
+                          }))
+                        }
                       />
-                      {zipLoading && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                            className="w-4 h-4 border-2 border-navy border-t-transparent rounded-full"
-                          />
-                        </div>
-                      )}
-                      {touched.address && errors.address && (
-                        <p className="text-xs text-red-600 mt-1">
-                          {errors.address}
-                        </p>
-                      )}
+                      {/* <Select
+                        value={formData.policeStationName|| ""}
+                        onValueChange={(value) => {
+                          handleSelectChange("policeStation", value);
+
+                          setTouched((t) => ({
+                            ...t,
+                            policeStation: true,
+                          }));
+                        }}
+                      >
+                        <SelectTrigger className="modern-input">
+                          <SelectValue placeholder="Select Nearest Police Station" />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          {policeStationOptions.map((station) => (
+                            <SelectItem key={station.name} value={station.name}>
+                              {station.name} ({station.pincode})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select> */}
+                      {touched.policeStationName &&
+                        errors.policeStationName && (
+                          <p className="text-xs text-red-600">
+                            {errors.policeStationName}
+                          </p>
+                        )}
                     </div>
                   </div>
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="space-y-2">
+                <motion.div variants={itemVariants} className="space-y-4">
                   <h3 className="text-lg font-medium">Personal Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="gender">Gender</Label>
                       <Select
@@ -385,29 +445,47 @@ const StepAddressDetails = ({
                         </p>
                       )}
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="placeOfBirth">Place of Birth</Label>
+                      <Input
+                        name="placeOfBirth"
+                        value={formData.placeOfBirth || ""}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          setTouched((prev) => ({
+                            ...prev,
+                            placeOfBirth: true,
+                          }))
+                        }
+                        placeholder="Enter your place of birth"
+                        className="modern-input focus-animation"
+                      />
+                      {touched.placeOfBirth && errors.placeOfBirth && (
+                        <p className="text-xs text-red-600 mt-1">
+                          {errors.placeOfBirth}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    {/* Education Qualification */}
+                    <div className="space-y-2">
+                      <Label htmlFor="education_qualification">
+                        Education Qualification
+                      </Label>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Education Qualification */}
-                      <div className="space-y-2">
-                        <Label htmlFor="education_qualification">
-                          Education Qualification
-                        </Label>
-
-                        <Select
-                          value={formData.education_qualification}
-                          onValueChange={(value) => {
-                            handleSelectChange(
-                              "education_qualification",
-                              value,
-                            );
-                            if (!touched.education_qualification)
-                              setTouched((t) => ({
-                                ...t,
-                                education_qualification: true,
-                              }));
-                          }}
-                        >
-                          {/* <Select
+                      <Select
+                        value={formData.education_qualification}
+                        onValueChange={(value) => {
+                          handleSelectChange("education_qualification", value);
+                          if (!touched.education_qualification)
+                            setTouched((t) => ({
+                              ...t,
+                              education_qualification: true,
+                            }));
+                        }}
+                      >
+                        {/* <Select
                     value={formData.education_qualification}
                     onValueChange={(value) =>
                       setFormData((prev: any) => ({
@@ -416,40 +494,43 @@ const StepAddressDetails = ({
                       }))
                     }
                   > */}
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Education" />
-                          </SelectTrigger>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Education" />
+                        </SelectTrigger>
 
-                          <SelectContent>
-                            <SelectItem value="Below 10th">
-                              Below 10th
-                            </SelectItem>
-                            <SelectItem value="10th Pass and Above">
-                              10th Pass and Above
-                            </SelectItem>
-                            <SelectItem value="Graduate and Above">
-                              Graduate and Above
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        <SelectContent>
+                          <SelectItem value="10th Pass and Above">
+                            10th Pass and Above
+                          </SelectItem>
+                          <SelectItem value="7th Pass Or Less">
+                            7th Pass Or Less
+                          </SelectItem>
+                          <SelectItem value="Between 8th And 9th Standard">
+                            Between 8th And 9th Standard
+                          </SelectItem>
+                          <SelectItem value="Graduate and Above">
+                            Graduate and Above
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                      {/* Employment Type */}
-                      <div className="space-y-2">
-                        <Label htmlFor="employment_type">Employment Type</Label>
+                    {/* Employment Type */}
+                    <div className="space-y-2">
+                      <Label htmlFor="employment_type">Employment Type</Label>
 
-                        <Select
-                          value={formData.employment_type}
-                          onValueChange={(value) => {
-                            handleSelectChange("employment_type", value);
-                            if (!touched.employment_type)
-                              setTouched((t) => ({
-                                ...t,
-                                employment_type: true,
-                              }));
-                          }}
-                        >
-                          {/* <Select
+                      <Select
+                        value={formData.employment_type}
+                        onValueChange={(value) => {
+                          handleSelectChange("employment_type", value);
+                          if (!touched.employment_type)
+                            setTouched((t) => ({
+                              ...t,
+                              employment_type: true,
+                            }));
+                        }}
+                      >
+                        {/* <Select
                     value={formData.employment_type}
                     onValueChange={(value) =>
                       setFormData((prev: any) => ({
@@ -458,58 +539,23 @@ const StepAddressDetails = ({
                       }))
                     }
                   > */}
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Employment" />
-                          </SelectTrigger>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Employment" />
+                        </SelectTrigger>
 
-                          <SelectContent>
-                            <SelectItem value="Government">
-                              Government
-                            </SelectItem>
-                            <SelectItem value="Private">Private</SelectItem>
-                            <SelectItem value="Self Employed">
-                              Self Employed
-                            </SelectItem>
-                            <SelectItem value="Student">Student</SelectItem>
-                            <SelectItem value="Homemaker">Homemaker</SelectItem>
-                            <SelectItem value="Retired">Retired</SelectItem>
-                            <SelectItem value="Others">Others</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        <SelectContent>
+                          <SelectItem value="Government">Government</SelectItem>
+                          <SelectItem value="Private">Private</SelectItem>
+                          <SelectItem value="Self Employed">
+                            Self Employed
+                          </SelectItem>
+                          <SelectItem value="Student">Student</SelectItem>
+                          <SelectItem value="Homemaker">Homemaker</SelectItem>
+                          <SelectItem value="Retired">Retired</SelectItem>
+                          <SelectItem value="Others">Others</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-
-                    {/* <div className="space-y-2">
-                <Label htmlFor="placeOfBirth">Place of Birth</Label>
-                <Input
-                  id="placeOfBirth"
-                  name="placeOfBirth"
-                  value={formData.placeOfBirth}
-                  onChange={(e) => {
-                    // Filter out digits from input
-                    const value = e.target.value.replace(/[0-9]/g, "");
-                    const customEvent = {
-                      ...e,
-                      target: {
-                        ...e.target,
-                        name: "placeOfBirth",
-                        value,
-                      },
-                    };
-                    handleChange(customEvent);
-                  }}
-                  onBlur={() =>
-                    setTouched((t) => ({ ...t, placeOfBirth: true }))
-                  }
-                  placeholder="City, State, Country"
-                  className="modern-input focus-animation"
-                />
-                {touched.placeOfBirth && errors.placeOfBirth && (
-                  <p className="text-xs text-red-600 mt-1">
-                    {errors.placeOfBirth}
-                  </p>
-                )}
-              </div> */}
                   </div>
                 </motion.div>
 
@@ -528,16 +574,17 @@ const StepAddressDetails = ({
                 </motion.div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between items-center border-t bg-[#FAFBFD] px-8 py-6">
+          </div>
+
+          <motion.div className="mt-4 flex">
+            <CardFooter className="flex w-full gap-3 sm:flex-row justify-between">
               <Button
-                variant="outline"
                 onClick={prevStep}
-                className="rounded-full px-6 h-11"
+                className="rounded-md bg-primary text-primary-foreground px-4 modern-button"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
-
               <motion.div
                 variants={itemVariants}
                 whileHover={{ scale: 1.03 }}
@@ -546,18 +593,18 @@ const StepAddressDetails = ({
                 <Button
                   onClick={nextStep}
                   disabled={!isValid}
-                  className="rounded-full h-11 px-8 bg-[#FFC107] hover:bg-[#FFB300] text-black font-semibold shadow-lg"
+                  className="rounded-xl bg-gradient-to-r from-navy to-teal px-4 text-white shadow-lg modern-button"
                 >
                   Continue
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
             </CardFooter>
-          </div>
+          </motion.div>
         </div>
       </div>
     </>
   );
 };
 
-export default StepAddressDetails;
+export default StepPersonalDetails;

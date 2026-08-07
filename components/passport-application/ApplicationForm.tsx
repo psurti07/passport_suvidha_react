@@ -51,7 +51,7 @@ interface FormData {
   employment_type: string;
   nationality: string;
   paymentMethod: "credit" | "upi" | "netBanking";
-  fbclid: string;
+  encryptId: string;
 }
 
 interface FormEvent {
@@ -134,6 +134,12 @@ const formatDateForApi = (dateString: string): string => {
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
 };
 
+declare global {
+  interface Window {
+    dataLayer: Array<Record<string, unknown>>;
+  }
+}
+
 function ApplicationForm() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -177,7 +183,7 @@ function ApplicationForm() {
     employment_type: "",
     nationality: "India",
     paymentMethod: "credit",
-    fbclid: "",
+    encryptId: "",
   });
   const windowSize = useWindowSize();
 
@@ -567,7 +573,7 @@ function ApplicationForm() {
             formData.passportType === "normal"
               ? `NP${formData.bookSize}`
               : `TP${formData.bookSize}`,
-          fbclid: formData.fbclid,
+          encryptId: formData.encryptId,
         }),
       });
 
@@ -587,6 +593,14 @@ function ApplicationForm() {
 
         return;
       }
+
+      window.dataLayer = window.dataLayer || [];
+
+      window.dataLayer.push({
+        event: "otp_verified_auto",
+        otp_method: "auto_detect",
+        verification_status: "success",
+      });
 
       setOtpVerified(true);
 
@@ -648,7 +662,7 @@ function ApplicationForm() {
         //       formData.passportType === "normal"
         //         ? `NP${formData.bookSize}`
         //         : `TP${formData.bookSize}`,
-        //     fbclid: formData.fbclid,
+        //     encryptId: formData.encryptId,
         //   }),
         // });
 
@@ -1394,15 +1408,15 @@ function ApplicationForm() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    const fbclid = params.get("fbclid");
+    const encryptId = params.get("encryptId");
 
-    if (fbclid) {
+    if (encryptId) {
       setFormData((prev) => ({
         ...prev,
-        fbclid,
+        encryptId,
       }));
 
-      localStorage.setItem("fbclid", fbclid);
+      localStorage.setItem("encryptId", encryptId);
     }
   }, []);
 

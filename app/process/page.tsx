@@ -9,14 +9,14 @@ export default function Process() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const fbclid = searchParams.get("id");
+    const encryptId = searchParams.get("id");
 
-    if (!fbclid) return;
+    if (!encryptId) return;
 
     const getCustomerDetails = async () => {
       try {
-        const { data } = await axiosServer.post("/customer/fbclid", {
-          id: fbclid,
+        const { data } = await axiosServer.post("/customer/encryptId", {
+          id: encryptId,
         });
 
         const customer = data.customer;
@@ -53,7 +53,7 @@ export default function Process() {
           employment_type: customer.employment_type ?? "",
           nationality: customer.nationality ?? "",
           paymentMethod: "",
-          fbclid: fbclid,
+          encryptId: encryptId,
         };
 
         const token = data.token;

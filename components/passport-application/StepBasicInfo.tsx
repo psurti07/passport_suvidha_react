@@ -338,11 +338,11 @@ const StepBasicInfo = ({
           priority
           className="-z-10 object-cover object-center"
         /> */}
-        <div className="relative min-h-screen bg-white lg:bg-[url('/lending_page/bg_d.png')] lg:bg-cover lg:bg-no-repeat lg:bg-left">
+        <div className="relative min-h-screen bg-white lg:bg-[url('/lending_page/bg_md.png')] xl:bg-[url('/lending_page/bg_dd.png')] lg:bg-cover lg:bg-no-repeat lg:bg-left">
           {/* Mobile Hero Image */}
           <div className="block lg:hidden">
             <Image
-              src="/lending_page/bg_m.png"
+              src="/lending_page/bg_mm.png"
               alt="Passport"
               width={1200}
               height={900}
@@ -836,7 +836,7 @@ const StepBasicInfo = ({
       </div>
 
       {/* How it work section */}
-      <section className="py-4 lg:py-16  bg-gradient-to-b from-white to-slate-50">
+      <section className="py-10 lg:py-16  bg-gradient-to-b from-white to-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto mb-12 ">
@@ -1297,7 +1297,7 @@ const StepBasicInfo = ({
       </section>
 
       {/* Important Disclaimer  */}
-      <section className="pt-8 mb-16">
+      <section className="pt-8 mb-10">
         <div className="container">
           <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8">
             <div className="flex items-start gap-3">

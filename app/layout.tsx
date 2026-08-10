@@ -62,13 +62,6 @@ export default function RootLayout({
             }),
           }}
         />
-        <script
-          id="messenger-widget-b"
-          src="https://cdn.express-chat.com/website-bot.js"
-          defer
-        >
-          6a76c1152d8f27e936e5715f,6a75cca21d2e325f2330e17c,agent
-        </script>
       </body>
     </html>
   );

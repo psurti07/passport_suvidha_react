@@ -119,19 +119,27 @@ const stateNameToCode: { [key: string]: string } = {
 };
 
 // Helper function to convert date from DD/MM/YYYY to YYYY-MM-DD format
-const formatDateForApi = (dateString: string): string => {
-  if (!dateString) return "";
+// const formatDateForApi = (dateString: string): string => {
+//   if (!dateString) return "";
 
-  // Check if it's already in YYYY-MM-DD format
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-    return dateString;
-  }
+//   // Check if it's already in YYYY-MM-DD format
+//   if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+//     return dateString;
+//   }
 
-  // Convert from DD/MM/YYYY to YYYY-MM-DD
-  const parts = dateString.split("/");
-  if (parts.length !== 3) return dateString;
+//   // Convert from DD/MM/YYYY to YYYY-MM-DD
+//   const parts = dateString.split("/");
+//   if (parts.length !== 3) return dateString;
 
-  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+//   return `${parts[2]}-${parts[1]}-${parts[0]}`;
+// };
+
+const formatDateForApi = (date: string) => {
+  if (!date) return "";
+
+  const [year, month, day] = date.split("/");
+
+  return `${year}-${month}-${day}`;
 };
 
 declare global {

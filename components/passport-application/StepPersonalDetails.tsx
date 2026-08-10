@@ -15,9 +15,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Shield, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Shield,
+  MapPin,
+  ArrowLeft,
+  ArrowRight,
+  CalendarIcon,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -62,16 +75,47 @@ const StepPersonalDetails = ({
   });
 
   function getDateOfBirthError(date: string) {
-    if (!date.trim()) return "Date of birth is required";
+    if (!date.trim()) {
+      return "Date of birth is required";
+    }
 
-    const dob = new Date(date);
-    if (isNaN(dob.getTime())) return "Enter a valid date";
+    // Must be exactly YYYY/MM/DD
+    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
+      return "Enter date in YYYY/MM/DD format";
+    }
 
-    const now = new Date();
+    const [year, month, day] = date.split("/").map(Number);
 
-    if (dob > now) return "Date of birth cannot be in the future";
+    if (year < 1900 || year > new Date().getFullYear()) {
+      return "Enter a valid year";
+    }
 
-    if (dob.getFullYear() < 1900) return `Year must be after 1900`;
+    if (month < 1 || month > 12) {
+      return "Enter a valid month";
+    }
+
+    if (day < 1 || day > 31) {
+      return "Enter a valid day";
+    }
+
+    // Check actual calendar date
+    const parsedDate = new Date(year, month - 1, day);
+
+    if (
+      parsedDate.getFullYear() !== year ||
+      parsedDate.getMonth() !== month - 1 ||
+      parsedDate.getDate() !== day
+    ) {
+      return "Enter a valid date";
+    }
+
+    // Don't allow future dates
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (parsedDate > today) {
+      return "Date of birth cannot be in the future";
+    }
 
     return "";
   }
@@ -114,6 +158,52 @@ const StepPersonalDetails = ({
     !errors.education_qualification &&
     !errors.employment_type &&
     !errors.placeOfBirth;
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    const cursorPosition = input.selectionStart ?? 0;
+
+    const digitsBeforeCursor = input.value
+      .slice(0, cursorPosition)
+      .replace(/\D/g, "");
+
+    let digits = input.value.replace(/\D/g, "");
+
+    // YYYYMMDD = maximum 8 digits
+    digits = digits.slice(0, 8);
+
+    let formattedValue = digits;
+
+    if (digits.length > 4) {
+      formattedValue = digits.slice(0, 4) + "/" + digits.slice(4);
+    }
+
+    if (digits.length > 6) {
+      formattedValue =
+        digits.slice(0, 4) + "/" + digits.slice(4, 6) + "/" + digits.slice(6);
+    }
+
+    handleChange({
+      target: {
+        name: "dateOfBirth",
+        value: formattedValue,
+      },
+    });
+
+    let newCursorPosition = digitsBeforeCursor.length;
+
+    if (digitsBeforeCursor.length > 4) {
+      newCursorPosition += 1;
+    }
+
+    if (digitsBeforeCursor.length > 6) {
+      newCursorPosition += 1;
+    }
+
+    requestAnimationFrame(() => {
+      input.setSelectionRange(newCursorPosition, newCursorPosition);
+    });
+  };
 
   return (
     <>
@@ -425,8 +515,83 @@ const StepPersonalDetails = ({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                      <div className="relative">
+                        <Input
+                          id="dateOfBirth"
+                          name="dateOfBirth"
+                          type="text"
+                          placeholder="YYYY/MM/DD"
+                          value={formData.dateOfBirth}
+                          onChange={handleDateChange}
+                          onBlur={() =>
+                            setTouched((t) => ({
+                              ...t,
+                              dateOfBirth: true,
+                            }))
+                          }
+                          className="modern-input focus-animation pr-12"
+                          inputMode="numeric"
+                          maxLength={10}
+                        />
 
-                      <Input
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button
+                              type="button"
+                              className="absolute right-3 top-1/2 -translate-y-1/2"
+                            >
+                              <CalendarIcon className="h-5 w-5 text-muted-foreground" />
+                            </button>
+                          </PopoverTrigger>
+
+                          <PopoverContent className="w-auto p-0" align="end">
+                            <Calendar
+                              mode="single"
+                              captionLayout="dropdown"
+                              selected={
+                                formData.dateOfBirth &&
+                                /^\d{4}\/\d{2}\/\d{2}$/.test(
+                                  formData.dateOfBirth,
+                                )
+                                  ? (() => {
+                                      const [year, month, day] =
+                                        formData.dateOfBirth
+                                          .split("/")
+                                          .map(Number);
+
+                                      return new Date(year, month - 1, day);
+                                    })()
+                                  : undefined
+                              }
+                              onSelect={(date) => {
+                                if (!date) return;
+
+                                const formattedDate = format(
+                                  date,
+                                  "yyyy/MM/dd",
+                                );
+
+                                handleChange({
+                                  target: {
+                                    name: "dateOfBirth",
+                                    value: formattedDate,
+                                  },
+                                });
+
+                                if (!touched.dateOfBirth) {
+                                  setTouched((t) => ({
+                                    ...t,
+                                    dateOfBirth: true,
+                                  }));
+                                }
+                              }}
+                              disabled={(date) => date > new Date()}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      {/* <Input
                         id="dateOfBirth"
                         name="dateOfBirth"
                         type="date"
@@ -437,7 +602,7 @@ const StepPersonalDetails = ({
                         }
                         className="modern-input focus-animation"
                         max={new Date().toISOString().split("T")[0]}
-                      />
+                      /> */}
 
                       {touched.dateOfBirth && errors.dateOfBirth && (
                         <p className="text-xs text-red-600 mt-1">

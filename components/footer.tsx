@@ -1,9 +1,13 @@
+"use client";
 import { FileText, Phone, Mail, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Receipt } from "lucide-react";
+import { usePathname } from "next/navigation";
+import Script from "next/script";
 
 export function Footer() {
+  const pathName = usePathname();
   return (
     <>
       <footer className="w-full pt-8 pb-0 md:pt-12 md:pb-0 bg-navy text-white relative overflow-hidden">
@@ -307,13 +311,15 @@ export function Footer() {
           </div>
         </div>
       </footer>
-      <script
-        id="messenger-widget-b"
-        src="https://cdn.express-chat.com/website-bot.js"
-        defer
-      >
-        6a76c1152d8f27e936e5715f,6a75cca21d2e325f2330e17c,agent
-      </script>
+      {pathName !== "/apply-passport" && (
+        <Script
+          id="messenger-widget-b"
+          src="https://cdn.express-chat.com/website-bot.js"
+          defer
+        >
+          6a76c1152d8f27e936e5715f,6a75cca21d2e325f2330e17c,agent
+        </Script>
+      )}
     </>
   );
 }

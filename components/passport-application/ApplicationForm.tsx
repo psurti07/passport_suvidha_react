@@ -82,41 +82,41 @@ interface PinCodeResponse {
   PostOffice: PostOffice[];
 }
 
-const stateNameToCode: { [key: string]: string } = {
-  "Andaman and Nicobar Islands": "AN",
-  "Andhra Pradesh": "AP",
-  "Arunachal Pradesh": "AR",
-  Assam: "AS",
-  Bihar: "BR",
-  Chandigarh: "CH",
-  Chhattisgarh: "CT",
-  Delhi: "DL",
-  Goa: "GA",
-  Gujarat: "GJ",
-  Haryana: "HR",
-  "Himachal Pradesh": "HP",
-  "Jammu and Kashmir": "JK",
-  Jharkhand: "JH",
-  Karnataka: "KA",
-  Kerala: "KL",
-  "Madhya Pradesh": "MP",
-  Maharashtra: "MH",
-  Manipur: "MN",
-  Meghalaya: "ML",
-  Mizoram: "MZ",
-  Nagaland: "NL",
-  Odisha: "OR",
-  Puducherry: "PY",
-  Punjab: "PB",
-  Rajasthan: "RJ",
-  Sikkim: "SK",
-  "Tamil Nadu": "TN",
-  Telangana: "TG",
-  Tripura: "TR",
-  "Uttar Pradesh": "UP",
-  Uttarakhand: "UT",
-  "West Bengal": "WB",
-};
+// const stateNameToCode: { [key: string]: string } = {
+//   "Andaman and Nicobar Islands": "AN",
+//   "Andhra Pradesh": "AP",
+//   "Arunachal Pradesh": "AR",
+//   Assam: "AS",
+//   Bihar: "BR",
+//   Chandigarh: "CH",
+//   Chhattisgarh: "CT",
+//   Delhi: "DL",
+//   Goa: "GA",
+//   Gujarat: "GJ",
+//   Haryana: "HR",
+//   "Himachal Pradesh": "HP",
+//   "Jammu and Kashmir": "JK",
+//   Jharkhand: "JH",
+//   Karnataka: "KA",
+//   Kerala: "KL",
+//   "Madhya Pradesh": "MP",
+//   Maharashtra: "MH",
+//   Manipur: "MN",
+//   Meghalaya: "ML",
+//   Mizoram: "MZ",
+//   Nagaland: "NL",
+//   Odisha: "OR",
+//   Puducherry: "PY",
+//   Punjab: "PB",
+//   Rajasthan: "RJ",
+//   Sikkim: "SK",
+//   "Tamil Nadu": "TN",
+//   Telangana: "TG",
+//   Tripura: "TR",
+//   "Uttar Pradesh": "UP",
+//   Uttarakhand: "UT",
+//   "West Bengal": "WB",
+// };
 
 // Helper function to convert date from DD/MM/YYYY to YYYY-MM-DD format
 // const formatDateForApi = (dateString: string): string => {
@@ -740,44 +740,168 @@ function ApplicationForm() {
         // console.log("Customer saved/updated successfully");
 
         const checkResponse = await axiosServer.post("/check-user", {
-          mobile_number: formData.mobile,
+          full_name: formData.fullName,
           email: formData.email,
+          mobile_number: formData.mobile,
+          service_code:
+            formData.passportType === "normal"
+              ? `NP${formData.bookSize}`
+              : `TP${formData.bookSize}`,
         });
 
         if (!checkResponse.status) {
           setErrorMessage(checkResponse.data.message || "Failed to check user");
           return;
         }
-        // ALWAYS SEND OTP
-        const otpResponse = await fetch("/api/otp/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            purpose: "registration",
-          }),
-        });
 
-        const otpData = await otpResponse.json();
+        const data = checkResponse.data;
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
 
-        if (!otpResponse.ok) {
-          setErrorMessage(
-            otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
-          );
+        if (data.registration_step) {
+          localStorage.setItem("passportFormStep", data.registration_step);
+        }
+
+        if (data?.customer) {
+          const customer = data.customer;
+
+          setFormData((prev) => ({
+            ...prev,
+
+            fullName: customer.full_name ?? prev.fullName,
+            email: customer.email ?? prev.email,
+            mobile: customer.mobile_number ?? prev.mobile,
+
+            fatherName: customer.father_name ?? prev.fatherName,
+            motherName: customer.mother_name ?? prev.motherName,
+            maritalStatus: customer.marital_status ?? prev.maritalStatus,
+            spouseName: customer.spouse_name ?? prev.spouseName,
+
+            emergencyContactName:
+              customer.emergency_contact_name ?? prev.emergencyContactName,
+
+            emergencyContactMobile:
+              customer.emergency_contact_mobile ?? prev.emergencyContactMobile,
+
+            emergencyContactEmail:
+              customer.emergency_contact_email ?? prev.emergencyContactEmail,
+
+            address: customer.address ?? prev.address,
+            city: customer.city ?? prev.city,
+            state: customer.state ?? prev.state,
+            zipCode: customer.pin_code ?? prev.zipCode,
+
+            gender: customer.gender ?? prev.gender,
+
+            dateOfBirth: customer.date_of_birth ?? prev.dateOfBirth,
+
+            policeStationName:
+              customer.police_station_name ?? prev.policeStationName,
+
+            placeOfBirth: customer.place_of_birth ?? prev.placeOfBirth,
+
+            education_qualification:
+              customer.education_qualification ?? prev.education_qualification,
+
+            employment_type: customer.employment_type ?? prev.employment_type,
+
+            nationality: customer.nationality ?? prev.nationality,
+          }));
+        }
+
+        if (data.success === true && !data.customer) {
+          // New customer always starts with OTP
+          localStorage.setItem("passportFormStep", "2");
+          localStorage.setItem("otpVerified", "false");
+
+          const otpResponse = await fetch("/api/otp/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              purpose: "registration",
+            }),
+          });
+
+          const otpData = await otpResponse.json();
+
+          if (!otpResponse.ok) {
+            setErrorMessage(
+              otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
+            );
+
+            return;
+          }
+
+          setOtpSent(true);
+          setOtpVerified(false);
+          setStep(2);
 
           return;
         }
 
-        // OTP SENT SUCCESSFULLY
-        setOtpSent(true);
+        const registrationStep = Number(data?.registration_step || 1);
 
-        // ALWAYS GO TO OTP STEP
-        setStep(2);
+        localStorage.setItem("passportFormStep", registrationStep.toString());
 
-        //   return;
-        // }
+        const stepMapping: Record<string, number> = {
+          otp_verification: 2,
+          family_details: 3,
+          personal_details: 4,
+          payment: 5,
+        };
+
+        const nextStepFromAPI = data?.next_step;
+
+        if (nextStepFromAPI === "otp_verification") {
+          // ALWAYS SEND OTP
+          const otpResponse = await fetch("/api/otp/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              purpose: "registration",
+            }),
+          });
+
+          const otpData = await otpResponse.json();
+
+          if (!otpResponse.ok) {
+            setErrorMessage(
+              otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
+            );
+
+            return;
+          }
+
+          // OTP SENT SUCCESSFULLY
+          setOtpSent(true);
+
+          // ALWAYS GO TO OTP STEP
+          setStep(2);
+
+          return;
+        }
+        if (registrationStep >= 3) {
+          setOtpVerified(true);
+
+          localStorage.setItem("otpVerified", "true");
+        }
+        const targetStep = stepMapping[nextStepFromAPI];
+
+        if (targetStep) {
+          setStep(targetStep);
+
+          localStorage.setItem("passportFormStep", targetStep.toString());
+        } else {
+          // Fallback
+          setStep(registrationStep);
+        }
       } catch (error: any) {
         console.error("Unexpected Error:", error);
 

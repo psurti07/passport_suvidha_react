@@ -17,6 +17,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     "/staroffer",
     "/schedule-slot",
     "/schedule-success",
+    "/process",
   ];
 
   // Check if path starts with /portal

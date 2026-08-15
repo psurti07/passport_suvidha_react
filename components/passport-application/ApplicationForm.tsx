@@ -137,7 +137,7 @@ const stateNameToCode: { [key: string]: string } = {
 const formatDateForApi = (date: string) => {
   if (!date) return "";
 
-  const [year, month, day] = date.split("/");
+  const [day, month, year] = date.split("/");
 
   return `${year}-${month}-${day}`;
 };
@@ -1309,6 +1309,7 @@ function ApplicationForm() {
               },
             );
 
+            localStorage.clear();
             window.location.href = "/payment-response?status=success";
           } catch (error: any) {
             console.log("VERIFY ERROR");

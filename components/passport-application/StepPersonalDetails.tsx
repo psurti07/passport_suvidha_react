@@ -79,21 +79,24 @@ const StepPersonalDetails = ({
       return "Date of birth is required";
     }
 
-    // Must be exactly YYYY/MM/DD
-    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
-      return "Enter date in YYYY/MM/DD format";
+    // Must be exactly DD/MM/YYYY
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+      return "Enter date in DD/MM/YYYY format";
     }
 
-    const [year, month, day] = date.split("/").map(Number);
+    const [day, month, year] = date.split("/").map(Number);
 
+    // Validate year
     if (year < 1900 || year > new Date().getFullYear()) {
       return "Enter a valid year";
     }
 
+    // Validate month
     if (month < 1 || month > 12) {
       return "Enter a valid month";
     }
 
+    // Validate day
     if (day < 1 || day > 31) {
       return "Enter a valid day";
     }
@@ -167,20 +170,23 @@ const StepPersonalDetails = ({
       .slice(0, cursorPosition)
       .replace(/\D/g, "");
 
+    // Keep only numbers
     let digits = input.value.replace(/\D/g, "");
 
-    // YYYYMMDD = maximum 8 digits
+    // DDMMYYYY = maximum 8 digits
     digits = digits.slice(0, 8);
 
     let formattedValue = digits;
 
-    if (digits.length > 4) {
-      formattedValue = digits.slice(0, 4) + "/" + digits.slice(4);
+    // DD/MM
+    if (digits.length > 2) {
+      formattedValue = digits.slice(0, 2) + "/" + digits.slice(2);
     }
 
-    if (digits.length > 6) {
+    // DD/MM/YYYY
+    if (digits.length > 4) {
       formattedValue =
-        digits.slice(0, 4) + "/" + digits.slice(4, 6) + "/" + digits.slice(6);
+        digits.slice(0, 2) + "/" + digits.slice(2, 4) + "/" + digits.slice(4);
     }
 
     handleChange({
@@ -190,13 +196,16 @@ const StepPersonalDetails = ({
       },
     });
 
+    /*
+     * Keep cursor position correct after adding "/"
+     */
     let newCursorPosition = digitsBeforeCursor.length;
 
-    if (digitsBeforeCursor.length > 4) {
+    if (digitsBeforeCursor.length > 2) {
       newCursorPosition += 1;
     }
 
-    if (digitsBeforeCursor.length > 6) {
+    if (digitsBeforeCursor.length > 4) {
       newCursorPosition += 1;
     }
 
@@ -520,7 +529,7 @@ const StepPersonalDetails = ({
                           id="dateOfBirth"
                           name="dateOfBirth"
                           type="text"
-                          placeholder="YYYY/MM/DD"
+                          placeholder="DD/MM/YYYY"
                           value={formData.dateOfBirth}
                           onChange={handleDateChange}
                           onBlur={() =>
@@ -550,11 +559,11 @@ const StepPersonalDetails = ({
                               captionLayout="dropdown"
                               selected={
                                 formData.dateOfBirth &&
-                                /^\d{4}\/\d{2}\/\d{2}$/.test(
+                                /^\d{2}\/\d{2}\/\d{4}$/.test(
                                   formData.dateOfBirth,
                                 )
                                   ? (() => {
-                                      const [year, month, day] =
+                                      const [day, month, year] =
                                         formData.dateOfBirth
                                           .split("/")
                                           .map(Number);
@@ -568,7 +577,7 @@ const StepPersonalDetails = ({
 
                                 const formattedDate = format(
                                   date,
-                                  "yyyy/MM/dd",
+                                  "dd/MM/yyyy",
                                 );
 
                                 handleChange({

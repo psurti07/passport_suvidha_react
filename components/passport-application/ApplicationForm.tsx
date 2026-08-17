@@ -149,7 +149,7 @@ declare global {
 }
 
 function ApplicationForm() {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [zipLoading, setZipLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);

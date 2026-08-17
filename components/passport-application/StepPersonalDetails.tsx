@@ -673,7 +673,7 @@ const StepPersonalDetails = ({
                         </SelectTrigger>
 
                         <SelectContent>
-                          <SelectItem value="10th Pass and Above">
+                          <SelectItem value="10th Pass And Above">
                             10th Pass and Above
                           </SelectItem>
                           <SelectItem value="7th Pass Or Less">
@@ -682,7 +682,7 @@ const StepPersonalDetails = ({
                           <SelectItem value="Between 8th And 9th Standard">
                             Between 8th And 9th Standard
                           </SelectItem>
-                          <SelectItem value="Graduate and Above">
+                          <SelectItem value="Graduate And Above">
                             Graduate and Above
                           </SelectItem>
                         </SelectContent>

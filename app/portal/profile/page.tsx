@@ -941,8 +941,8 @@ export default function ProfilePage() {
                             </SelectTrigger>
 
                             <SelectContent>
-                              <SelectItem value="10th Pass and Above">
-                                10th Pass and Above
+                              <SelectItem value="10th Pass And Above">
+                                10th Pass And Above
                               </SelectItem>
                               <SelectItem value="7th Pass Or Less">
                                 7th Pass Or Less
@@ -950,8 +950,8 @@ export default function ProfilePage() {
                               <SelectItem value="Between 8th And 9th Standard">
                                 Between 8th And 9th Standard
                               </SelectItem>
-                              <SelectItem value="Graduate and Above">
-                                Graduate and Above
+                              <SelectItem value="Graduate And Above">
+                                Graduate And Above
                               </SelectItem>
                             </SelectContent>
                           </Select>

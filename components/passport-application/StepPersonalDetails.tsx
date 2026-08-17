@@ -620,7 +620,9 @@ const StepPersonalDetails = ({
                       )}
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="placeOfBirth">Place of Birth</Label>
+                      <Label htmlFor="placeOfBirth">
+                        Place of Birth (Village/Town/City)
+                      </Label>
                       <Input
                         name="placeOfBirth"
                         value={formData.placeOfBirth || ""}
@@ -631,7 +633,7 @@ const StepPersonalDetails = ({
                             placeOfBirth: true,
                           }))
                         }
-                        placeholder="Enter your place of birth"
+                        placeholder="Place of Birth (Village/Town/City)"
                         className="modern-input focus-animation"
                       />
                       {touched.placeOfBirth && errors.placeOfBirth && (

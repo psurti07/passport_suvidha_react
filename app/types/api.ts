@@ -40,4 +40,5 @@ export interface ProfileData {
   deleted_at: string | null;
   education_qualification: string;
   employment_type: string;
+  organisation_name: string;
 }

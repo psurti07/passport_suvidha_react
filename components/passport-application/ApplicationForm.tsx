@@ -49,6 +49,7 @@ interface FormData {
   placeOfBirth: string;
   education_qualification: string;
   employment_type: string;
+  organisation_name: string;
   nationality: string;
   paymentMethod: "credit" | "upi" | "netBanking";
   encryptId: string;
@@ -189,6 +190,7 @@ function ApplicationForm() {
     placeOfBirth: "",
     education_qualification: "",
     employment_type: "",
+    organisation_name: "",
     nationality: "India",
     paymentMethod: "credit",
     encryptId: "",
@@ -918,6 +920,7 @@ function ApplicationForm() {
             place_of_birth: formData.placeOfBirth,
             education_qualification: formData.education_qualification,
             employment_type: formData.employment_type,
+            organisation_name: formData.organisation_name,
           }),
         });
 

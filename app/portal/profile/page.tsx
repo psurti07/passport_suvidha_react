@@ -830,7 +830,9 @@ export default function ProfilePage() {
                     Personal Information
                   </h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                  <div
+                    className={`grid grid-cols-1 md:grid-cols-2 ${formData.employment_type === "Government" ? "xl:grid-cols-4" : "xl:grid-cols-3"}  gap-5`}
+                  >
                     {/* Gender */}
                     <div className="space-y-2">
                       {isEditing && <Label>Gender</Label>}
@@ -1014,6 +1016,32 @@ export default function ProfilePage() {
                         </div>
                       )}
                     </div>
+
+                    {/* Organisation Name */}
+                    {formData.employment_type === "Government" && (
+                      <div className="space-y-2">
+                        {isEditing && <Label>Organisation Name</Label>}
+
+                        {isEditing ? (
+                          <Input
+                            name="organisation_name"
+                            value={formData.organisation_name || ""}
+                            onChange={handleChange}
+                            className="modern-input"
+                            placeholder="Enter Organisation Name"
+                          />
+                        ) : (
+                          <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                            <p className="text-xs text-muted-foreground ">
+                              Organisation Name
+                            </p>
+                            <p className="font-semibold">
+                              {profile.organisation_name || "-"}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </>

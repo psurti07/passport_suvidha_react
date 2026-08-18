@@ -13,6 +13,7 @@ interface PersonalDetailsRequestBody {
   police_station_name: string;
   place_of_birth: string;
   nationality: "Indian";
+  organisation_name: string;
 }
 
 interface ValidationErrors {
@@ -84,6 +85,13 @@ export async function POST(request: NextRequest) {
 
     if (!body.police_station_name?.trim()) {
       errors.police_station_name = ["Police station name is required"];
+    }
+
+    if (
+      body.employment_type === "Government" &&
+      !body.organisation_name?.trim()
+    ) {
+      errors.organisation_name = ["Organisation name is required"];
     }
 
     // If there are validation errors, return them

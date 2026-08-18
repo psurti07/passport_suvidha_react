@@ -72,6 +72,7 @@ const StepPersonalDetails = ({
     employment_type: false,
     policeStationName: false,
     placeOfBirth: false,
+    organisation_name: false,
   });
 
   function getDateOfBirthError(date: string) {
@@ -148,6 +149,11 @@ const StepPersonalDetails = ({
       : /\d/.test(formData.placeOfBirth)
         ? "Place of birth should not contain digits"
         : "",
+    organisation_name:
+      formData.employment_type === "Government" &&
+      !formData.organisation_name?.trim()
+        ? "Organisation Name is required"
+        : "",
   };
 
   const isValid =
@@ -160,7 +166,8 @@ const StepPersonalDetails = ({
     !errors.dateOfBirth &&
     !errors.education_qualification &&
     !errors.employment_type &&
-    !errors.placeOfBirth;
+    !errors.placeOfBirth &&
+    !errors.organisation_name;
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
@@ -643,7 +650,9 @@ const StepPersonalDetails = ({
                       )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                  <div
+                    className={`grid grid-cols-1  gap-6 ${formData.employment_type === "Government" ? "md:grid-cols-3 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-2"}`}
+                  >
                     {/* Education Qualification */}
                     <div className="space-y-2">
                       <Label htmlFor="education_qualification">
@@ -732,6 +741,33 @@ const StepPersonalDetails = ({
                         </SelectContent>
                       </Select>
                     </div>
+
+                    {formData.employment_type === "Government" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="Organisation_name">
+                          Organisation Name
+                        </Label>
+                        <Input
+                          name="organisation_name"
+                          value={formData.organisation_name || ""}
+                          onChange={handleChange}
+                          onBlur={() =>
+                            setTouched((prev) => ({
+                              ...prev,
+                              ordanisation_name: true,
+                            }))
+                          }
+                          placeholder="Enter Organisation Name"
+                          className="modern-input focus-animation"
+                        />
+                        {touched.organisation_name &&
+                          errors.organisation_name && (
+                            <p className="text-xs text-red-600 mt-1">
+                              {errors.organisation_name}
+                            </p>
+                          )}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
 

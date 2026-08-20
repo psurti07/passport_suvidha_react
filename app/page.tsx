@@ -341,9 +341,9 @@ export default function Home() {
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
             <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
               <div className="mb-6 flex justify-center">
-                <div className="max-w-4xl w-full overflow-hidden rounded-full border border-amber-200 bg-amber-50 shadow-sm">
+                <div className=" w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
                   <div className="animate-marquee whitespace-nowrap py-2 px-6">
-                    <span className="text-xs md:text-sm font-medium text-amber-800">
+                    <span className="text-xs md:text-sm font-medium text-teal">
                       ⚠️ Passport Suvidha Company is a private consultancy and
                       is not affiliated with the Government of India or the
                       Ministry of External Affairs.

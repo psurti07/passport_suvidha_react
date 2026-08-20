@@ -216,7 +216,7 @@ const StepPassportType = ({
 
   return (
     <>
-      <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+      <div className="min-h-screen px-4 md:py-6 sm:px-6 lg:px-8">
         <div className="w-full max-w-5xl mx-auto">
           <div className="rounded-3xl bg-white md:p-6 shadow-xl">
             <CardHeader className="pb-6">
@@ -236,7 +236,7 @@ const StepPassportType = ({
 
             <CardContent className="sm:p-2 !pt-0">
               {errorMessage && (
-                <div className=" p-3 mb-4 bg-red-50 border border-red-200 rounded-lg ">
+                <div className="p-3 mb-4 bg-red-50 border border-red-200 rounded-lg ">
                   <p className="text-sm text-red-600">{errorMessage}</p>
                 </div>
               )}
@@ -252,7 +252,7 @@ const StepPassportType = ({
                         <p className="text-sm text-muted-foreground">
                           Selected Service
                         </p>
-                        <h2 className="mt-3 text-2xl font-semibold text-navy">
+                        <h2 className="md:mt-3 text-2xl font-semibold text-navy">
                           {selectedTitle}
                         </h2>
                         <p className=" text-sm font-medium text-muted-foreground">
@@ -261,12 +261,12 @@ const StepPassportType = ({
                       </div>
                     </div>
 
-                    <div className="mt-8 space-y-3">
+                    <div className="mt-4 md:mt-8 space-y-3">
                       {(selectedStaticData?.features || []).map(
                         (feature, index) => (
                           <div
                             key={index}
-                            className="flex items-start gap-3 rounded-xl bg-muted px-4 py-3"
+                            className="flex items-start gap-3 rounded-xl bg-muted px-4 py-2 md:py-3"
                           >
                             <div className="mt-1 flex">{feature.icon}</div>
                             <p className="text-sm text-muted-foreground">
@@ -280,7 +280,7 @@ const StepPassportType = ({
                 </div>
 
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <div className="mt-3 flex items-center gap-2">
+                  <div className="md:mt-3 flex items-center gap-2">
                     <div className="rounded-2xl bg-teal-50 text-teal-700">
                       <CreditCard className="h-5 w-5 text-navy" />
                     </div>
@@ -291,7 +291,7 @@ const StepPassportType = ({
                     </div>
                   </div>
 
-                  <div className="mt-8 space-y-4">
+                  <div className="mt-4 md:mt-8 space-y-3 md:space-y-4">
                     <div className="rounded-2xl bg-slate-50">
                       <div className="flex justify-between text-sm text-muted-foreground">
                         <span>Service Charge</span>
@@ -304,7 +304,7 @@ const StepPassportType = ({
                         <span>₹{selectedService?.service_gst || 0}</span>
                       </div>
                     </div>
-                    <div className="rounded-xl bg-muted p-3">
+                    <div className="rounded-xl bg-muted px-4 py-2 md:py-3">
                       <div className="flex justify-between items-center text-base font-semibold text-navy">
                         <span>Total Amount</span>
                         <span>
@@ -312,7 +312,7 @@ const StepPassportType = ({
                         </span>
                       </div>
                     </div>
-                    <div className="rounded-xl bg-muted p-3">
+                    <div className="rounded-xl bg-muted px-4 py-2 md:py-3">
                       <div className="flex gap-3">
                         <Info className="h-5 w-5 text-navy flex-shrink-0 pt-1" />
 

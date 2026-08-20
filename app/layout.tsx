@@ -54,7 +54,7 @@ export default function RootLayout({
               logo: "https://passportsuvidha.com/logo/ps-logo-1.png",
               contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+91-7486046591",
+                telephone: "+91-6358292349",
                 contactType: "customer service",
                 areaServed: "IN",
                 availableLanguage: ["English", "Hindi"],

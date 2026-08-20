@@ -498,7 +498,7 @@ export default function ApplicationReviewPage() {
                                         </p>
 
                                         <h5 className="text-lg sm:text-xl font-bold text-navy mt-1 break-all">
-                                          +91-7486046591
+                                          +91-6358292349
                                         </h5>
 
                                         <p className="text-xs sm:text-sm text-muted-foreground mt-1">

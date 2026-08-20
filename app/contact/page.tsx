@@ -398,7 +398,7 @@ export default function Contact() {
                             Phone Support
                           </h4>
                           <p className="text-muted-foreground">
-                            +91-7486046591
+                            +91-6358292349
                           </p>
                           <p className="text-sm text-muted-foreground">
                             Monday-Saturday, 10:00 AM to 05:00 PM

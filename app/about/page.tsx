@@ -724,7 +724,7 @@ export default function AboutUs() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <p className="font-medium">+91-7486046591</p>
+                    <p className="font-medium">+91-6358292349</p>
                     <p className="text-sm text-muted-foreground">
                       Monday-Saturday, 10AM - 05PM
                     </p>

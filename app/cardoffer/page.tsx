@@ -292,7 +292,7 @@ const CardOfferPage = () => {
                   <div className="absolute right-0 mt-3 w-72 rounded-xl border bg-white shadow-lg p-4 text-sm text-slate-700 space-y-3">
                     <div className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-navy" />
-                      <span className="text-navy">+91-7486046591</span>
+                      <span className="text-navy">+91-6358292349</span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -327,7 +327,7 @@ const CardOfferPage = () => {
                   <div className="w-full rounded-2xl border p-6 space-y-4">
                     <div className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-teal-600" />
-                      <span>+91-7486046591</span>
+                      <span>+91-6358292349</span>
                     </div>
 
                     <div className="flex items-center gap-3">

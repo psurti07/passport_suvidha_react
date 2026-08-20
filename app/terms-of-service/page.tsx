@@ -434,7 +434,7 @@ export default function TermsOfService() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-5 w-5 text-navy" />
-                      <span>+91-7486046591 (Legal Department)</span>
+                      <span>+91-6358292349 (Legal Department)</span>
                     </div>
                     <div className="flex items-start gap-2">
                       <MapPin className="h-5 w-5 text-navy mt-0.5" />

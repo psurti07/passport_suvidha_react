@@ -35,6 +35,8 @@ import {
   Users,
   Eye,
   Loader2,
+  Newspaper,
+  ArrowUpRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -812,8 +814,181 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Media Coverage Section */}
+        <section className="w-full py-16 md:py-20 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+          <div className="container mx-auto px-4 md:px-6 max-w-[100vw]">
+            <div className="mx-auto max-w-3xl text-center mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
+                  <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
+                    <span>In The Media</span>
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+                      Media Coverage
+                    </h2>
+                    <p className="mt-4 text-muted-foreground md:text-xl">
+                      Explore our latest media coverage and featured stories
+                      about PassportSuvidha and our passport assistance
+                      services.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Media Cards */}
+            <div className="relative mx-auto max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Media Link 1 */}
+                <a
+                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+professional+assistance+to+indias+growing+passport+application+needs-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_9bda962099ff11f1aef7f486b5beeea7?sm=Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-3xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-navy to-teal" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-xl
+                bg-gradient-to-br from-navy/10 to-teal/10
+                text-navy
+                transition-all duration-300
+                group-hover:from-navy group-hover:to-teal
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Media Coverage
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        PassportSuvidha Featured Story
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Read our latest feature and learn more about our
+                        passport assistance services.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read More
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Media Link 2 */}
+                <a
+                  href="https://example.com/media-coverage-2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-2xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal to-navy" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-3xl
+                bg-gradient-to-br from-teal/10 to-navy/10
+                text-teal
+                transition-all duration-300
+                group-hover:from-teal group-hover:to-navy
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Featured Article
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        PassportSuvidha in the News
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Discover our latest news feature and updates from
+                        PassportSuvidha.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read More
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom Note */}
+            {/* <div className="mt-8 text-center">
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Trusted passport assistance services, helping customers across
+                India.
+              </p>
+            </div> */}
+          </div>
+        </section>
+
         {/* Locations Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
@@ -988,7 +1163,7 @@ export default function Home() {
         {/* <PassportLocator /> */}
 
         {/* FAQ Section */}
-        <section className="w-full py-20 md:py-24 bg-white">
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5">
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[300px] h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[400px] h-[400px] left-0 bottom-0"></div>
@@ -1115,7 +1290,7 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">

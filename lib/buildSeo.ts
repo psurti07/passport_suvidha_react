@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
 import { getseo } from "./seo";
 import axiosServer from "@/lib/axiosServer";
+import { getFacebookSettings } from "@/lib/fetchFacebookSettings";
 
 export async function buildSeo(slug: string): Promise<Metadata> {
-  let domainVerification = "";
+  // let domainVerification = "";
 
-  try {
-    const { data } = await axiosServer.get("/fb-pixel");
+  // try {
+  //   // const { data } = await axiosServer.get("/fb-pixel");
+  //   const data = await getFacebookSettings();
 
-    domainVerification = data?.domain_verification || "";
+  //   domainVerification = data?.domain_verification || "";
 
-    // console.log(
-    //   "Facebook Pixel and Domain Verification Data:",
-    //   domainVerification,
-    // );
-  } catch (error) {
-    console.error("Error fetching Facebook Pixel data:", error);
-  }
+  //   // console.log(
+  //   //   "Facebook Pixel and Domain Verification Data:",
+  //   //   domainVerification,
+  //   // );
+  // } catch (error) {
+  //   console.error("Error fetching Facebook Pixel data:", error);
+  // }
 
-  const seo = await getseo(slug);
+  const [facebookSettings, seo] = await Promise.all([
+    getFacebookSettings(),
+    getseo(slug),
+  ]);
+
+  const domainVerification = facebookSettings?.domain_verification || "";
+
+  // const seo = await getseo(slug);
 
   const title =
     seo?.title || "Passport Assistance Services in India | PassportSuvidha";

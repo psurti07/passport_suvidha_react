@@ -1,25 +1,31 @@
 import Script from "next/script";
 import axiosServer from "@/lib/axiosServer";
 import { unstable_cache } from "next/cache";
+import { getFacebookSettings } from "@/lib/fetchFacebookSettings";
+
+// const getFacebookPixel = unstable_cache(
+//   async () => {
+//     console.log(" Calling /fb-pixel API");
+//     const { data } = await axiosServer.get("/fb-pixel");
+//     return data;
+//   },
+//   ["facebook-pixel"],
+//   {
+//     revalidate: 3600, // Cache for 1 hour
+//   },
+// );
 
 export default async function FacebookPixel() {
   try {
-    const getFacebookPixel = unstable_cache(
-      async () => {
-        // console.log(" Calling /fb-pixel API");
-        const { data } = await axiosServer.get("/fb-pixel");
-        return data;
-      },
-      ["facebook-pixel"],
-      {
-        revalidate: 3600, // Cache for 1 hour
-      },
-    );
     // const { data } = await axiosServer.get("/fb-pixel");
 
     // console.log("Facebook Pixel and Domain Verification Data:", data);
-    const data = await getFacebookPixel();
+    const data = await getFacebookSettings();
     const pixelId = data?.fb_pixel_key;
+
+    if (!pixelId) {
+      return null;
+    }
     // const domainVerification = data?.document_verification;
 
     return (

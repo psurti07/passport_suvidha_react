@@ -912,7 +912,7 @@ export default function Home() {
 
                 {/* Media Link 2 */}
                 <a
-                  href="https://example.com/media-coverage-2"
+                  href="https://hindustanmetro.com/passport-suvidha-brings-professional-assistance-to-indias-growing-passport-application-needs"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="

@@ -255,7 +255,7 @@ export default function Services() {
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-navy" />
-                Normal: 25-30 days
+                Normal: 15-25 days
               </li>
               <li className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-navy" />
@@ -698,7 +698,7 @@ export default function Services() {
                           <Check className="h-3 w-3 text-navy" />
                         </div>
                         <span className="text-sm">
-                          25-30 days processing time
+                          15-25 days processing time
                         </span>
                       </div>
                       <div className="flex items-start">

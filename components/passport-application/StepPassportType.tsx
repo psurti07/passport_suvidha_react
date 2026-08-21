@@ -57,7 +57,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "25-30 days processing",
+        text: "15-25 days processing",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,
@@ -80,7 +80,7 @@ const passportTypes = [
     features: [
       {
         icon: <Clock className="h-3.5 w-3.5 text-navy" />,
-        text: "25-30 days processing",
+        text: "15-25 days processing",
       },
       {
         icon: <FileText className="h-3.5 w-3.5 text-navy" />,

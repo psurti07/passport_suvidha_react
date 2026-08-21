@@ -36,7 +36,7 @@ export default function PaymentResponsePage() {
               isSuccess ? "gradient-heading" : "text-red-600"
             }`}
           >
-            {isSuccess ? "Thank You!" : "Oops!"}
+            {isSuccess ? "Thank You!" : "Payment Unsuccessful"}
           </h1>
 
           {/* Message */}
@@ -67,9 +67,9 @@ export default function PaymentResponsePage() {
               </>
             ) : (
               <>
-                <Link href="/apply-passport">
+                <Link href="/staroffer">
                   <Button className="md:h-12 md:px-8 rounded-xl bg-gradient-to-r from-navy to-teal text-white shadow-lg modern-button">
-                    Try Again
+                    Try Another Method
                   </Button>
                 </Link>
 

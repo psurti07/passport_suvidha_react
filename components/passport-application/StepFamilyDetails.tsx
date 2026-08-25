@@ -116,12 +116,12 @@ const StepFamilyDetails = ({
   };
 
   const maritalOptions = [
-    "Single",
-    "Married",
-    "Widow",
-    "Widower",
-    "Separated",
-    "Divorced",
+    "single",
+    "married",
+    "widow",
+    "widower",
+    "separated",
+    "divorced",
   ];
 
   const onContinue = () => {
@@ -248,7 +248,10 @@ const StepFamilyDetails = ({
                         >
                           <div className="flex items-center gap-2">
                             <div className="text-left">
-                              <p className="font-medium">{status}</p>
+                              <p className="font-medium">
+                                {status.charAt(0).toUpperCase() +
+                                  status.slice(1).toLowerCase()}
+                              </p>
                             </div>
                           </div>
 
@@ -258,7 +261,20 @@ const StepFamilyDetails = ({
                             name="maritalStatus"
                             value={status}
                             checked={formData.maritalStatus === status}
-                            onChange={() => {}}
+                            onChange={(e) => {
+                              setTouched((prev) => ({
+                                ...prev,
+                                maritalStatus: true,
+                              }));
+
+                              handleChange({
+                                target: {
+                                  name: "maritalStatus",
+                                  value: e.target.value,
+                                },
+                              });
+                            }}
+                            onClick={(e) => e.stopPropagation()}
                             className="h-4 w-4 accent-teal cursor-pointer"
                           />
                         </Button>

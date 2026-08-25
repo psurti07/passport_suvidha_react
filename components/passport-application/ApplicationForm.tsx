@@ -740,45 +740,187 @@ function ApplicationForm() {
         //   customerResponse.status === 201
         // ) {
         // console.log("Customer saved/updated successfully");
-
+        const serviceCode =
+          formData.passportType === "normal"
+            ? `NP${formData.bookSize}`
+            : `TP${formData.bookSize}`;
         const checkResponse = await axiosServer.post("/check-user", {
           mobile_number: formData.mobile,
           email: formData.email,
+          name: formData.fullName,
+          service_code: serviceCode,
         });
 
-        if (!checkResponse.status) {
-          setErrorMessage(checkResponse.data.message || "Failed to check user");
+        const data = checkResponse.data;
+
+        if (data.is_lead == true) {
+          const customer = data.customer;
+          const registrationStep = Number(data.registration_step || 1);
+          // console.log("Lead customer found:", customer);
+          // console.log("Registration step:", registrationStep);
+
+          if (customer) {
+            const serviceCode = customer.service?.service_code ?? "";
+
+            const passportType = serviceCode.startsWith("TP")
+              ? "tatkal"
+              : "normal";
+
+            const bookSize = serviceCode.endsWith("60") ? "60" : "36";
+            setFormData((prev) => ({
+              ...prev,
+
+              fullName: customer.full_name ?? prev.fullName,
+              email: customer.email ?? prev.email,
+              mobile: customer.mobile_number ?? prev.mobile,
+
+              passportType: passportType ?? prev.passportType,
+              bookSize: bookSize ?? prev.bookSize,
+              paymentMethod: prev.paymentMethod,
+              encryptId: prev.encryptId,
+
+              fatherName: customer.father_name ?? prev.fatherName,
+              motherName: customer.mother_name ?? prev.motherName,
+              maritalStatus: customer.marital_status ?? prev.maritalStatus,
+              spouseName: customer.spouse_name ?? prev.spouseName,
+
+              emergencyContactName:
+                customer.emergency_contact_name ?? prev.emergencyContactName,
+
+              emergencyContactMobile:
+                customer.emergency_contact_mobile ??
+                prev.emergencyContactMobile,
+
+              emergencyContactEmail:
+                customer.emergency_contact_email ?? prev.emergencyContactEmail,
+
+              address: customer.address ?? prev.address,
+              zipCode: customer.pin_code ?? prev.zipCode,
+              city: customer.city ?? prev.city,
+              state: customer.state ?? prev.state,
+
+              gender: customer.gender ?? prev.gender,
+              dateOfBirth: customer.date_of_birth
+                ? customer.date_of_birth.replace(/-/g, "/")
+                : prev.dateOfBirth,
+              placeOfBirth: customer.place_of_birth ?? prev.placeOfBirth,
+
+              policeStationName:
+                customer.police_station_name ?? prev.policeStationName,
+
+              education_qualification:
+                customer.education_qualification ??
+                prev.education_qualification,
+
+              employment_type: customer.employment_type ?? prev.employment_type,
+
+              organisation_name:
+                customer.organisation_name ?? prev.organisation_name,
+
+              nationality: customer.nationality ?? prev.nationality,
+            }));
+            if (data?.token) {
+              localStorage.setItem("token", data.token);
+            }
+          }
+
+          if (registrationStep >= 2) {
+            setOtpVerified(true);
+            setStep(registrationStep);
+          }
+
+          if (registrationStep <= 1) {
+            // Lead has not completed OTP yet.
+            const otpResponse = await fetch("/api/otp/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                mobile_number: customer?.mobile_number || formData.mobile,
+                purpose: "registration",
+              }),
+            });
+            setOtpSent(true);
+            setOtpVerified(false);
+            setStep(2);
+            return;
+          }
+
+          if (registrationStep >= 2) {
+            setStep(registrationStep);
+            return;
+          }
+        }
+
+        if (data.is_lead === false) {
+          console.log("New customer. Sending OTP...");
+
+          const otpResponse = await fetch("/api/otp/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mobile_number: formData.mobile,
+              purpose: "registration",
+            }),
+          });
+
+          const otpData = await otpResponse.json();
+
+          if (!otpResponse.ok) {
+            setErrorMessage(
+              otpData.errors?.mobile_number?.[0] ||
+                otpData.message ||
+                "Failed to send OTP",
+            );
+
+            return;
+          }
+          console.log("OTP sent successfully.");
+
+          setOtpSent(true);
+          setStep(2);
+
           return;
         }
-        // ALWAYS SEND OTP
-        const otpResponse = await fetch("/api/otp/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mobile_number: formData.mobile,
-            purpose: "registration",
-          }),
-        });
+        // }
 
-        const otpData = await otpResponse.json();
+        // if (!checkResponse.status) {
+        //   setErrorMessage(checkResponse.data.message || "Failed to check user");
+        //   return;
+        // }
+        // // ALWAYS SEND OTP
+        // const otpResponse = await fetch("/api/otp/send", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     mobile_number: formData.mobile,
+        //     purpose: "registration",
+        //   }),
+        // });
 
-        if (!otpResponse.ok) {
-          setErrorMessage(
-            otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
-          );
+        // const otpData = await otpResponse.json();
 
-          return;
-        }
-
-        // OTP SENT SUCCESSFULLY
-        setOtpSent(true);
-
-        // ALWAYS GO TO OTP STEP
-        setStep(2);
+        // if (!otpResponse.ok) {
+        //   setErrorMessage(
+        //     otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
+        //   );
 
         //   return;
+        // }
+
+        // OTP SENT SUCCESSFULLY
+        // setOtpSent(true);
+
+        // ALWAYS GO TO OTP STEP
+        // setOtpSent(true);
+        // setStep(2);
+
+        // return;
         // }
       } catch (error: any) {
         console.error("Unexpected Error:", error);

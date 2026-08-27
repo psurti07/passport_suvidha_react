@@ -336,7 +336,7 @@ export default function Home() {
 
         <section
           id="services"
-          className="w-full py-12 sm:py-16 md:py-24 bg-white"
+          className="w-full pb-12 sm:pb-16 md:pb-24 bg-white"
         >
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
@@ -348,7 +348,9 @@ export default function Home() {
                     <span className="text-xs md:text-sm font-medium text-teal">
                       ⚠️ Passport Suvidha Company is a private consultancy and
                       is not affiliated with the Government of India or the
-                      Ministry of External Affairs.
+                      Ministry of External Affairs.⚠️ पासपोर्ट सुविधा कंपनी एक
+                      प्राइवेट कंसल्टेंसी है और यह भारत सरकार या विदेश मंत्रालय
+                      से जुड़ी हुई नहीं है।
                     </span>
                   </div>
                 </div>

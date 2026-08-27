@@ -363,6 +363,18 @@ const StepPassportType = ({
               </Button>
             </CardFooter>
           </motion.div>
+
+          <div className=" w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
+            <div className="animate-marquee whitespace-nowrap py-2 px-6">
+              <span className="text-xs md:text-sm font-medium text-teal">
+                ⚠️ Passport Suvidha Company is a private consultancy and is not
+                affiliated with the Government of India or the Ministry of
+                External Affairs. ⚠️ पासपोर्ट सुविधा कंपनी एक प्राइवेट
+                कंसल्टेंसी है और यह भारत सरकार या विदेश मंत्रालय से जुड़ी हुई
+                नहीं है।
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </>

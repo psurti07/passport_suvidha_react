@@ -87,6 +87,7 @@ export default function ApplicationStatus() {
     blue: "bg-blue-100 text-blue-800",
     orange: "bg-orange-100 text-orange-800",
     yellow: "bg-yellow-100 text-yellow-800",
+    purple: "bg-purple-100 text-purple-600",
     gray: "bg-gray-100 text-gray-800",
   };
 

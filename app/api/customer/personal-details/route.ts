@@ -6,6 +6,11 @@ interface PersonalDetailsRequestBody {
   pin_code: string;
   city: string;
   state: string;
+  is_address_permanent: 0 | 1;
+  permanent_address: string;
+  permanent_pin_code: string;
+  permanent_city: string;
+  permanent_state: string;
   gender: string;
   date_of_birth: string;
   education_qualification: string;
@@ -94,6 +99,27 @@ export async function POST(request: NextRequest) {
       errors.organisation_name = ["Organisation name is required"];
     }
 
+    if (body.is_address_permanent === 0 && !body.permanent_address?.trim()) {
+      errors.permanentAddress = ["Permanent address is required"];
+    }
+
+    if (body.is_address_permanent === 0 && !body.permanent_pin_code?.trim()) {
+      errors.permanentPinCode = ["Permanent pin code is required"];
+    } else if (
+      body.is_address_permanent === 0 &&
+      !/^\d{6}$/.test(body.permanent_pin_code || "")
+    ) {
+      errors.permanentPinCode = ["Enter a valid 6-digit permanent pin code"];
+    }
+
+    if (body.is_address_permanent === 0 && !body.permanent_city?.trim()) {
+      errors.permanentCity = ["Permanent city is required"];
+    }
+
+    if (body.is_address_permanent === 0 && !body.permanent_state?.trim()) {
+      errors.permanentState = ["Permanent state is required"];
+    }
+
     // If there are validation errors, return them
     if (Object.keys(errors).length > 0) {
       return NextResponse.json({ errors }, { status: 422 });
@@ -124,30 +150,30 @@ export async function POST(request: NextRequest) {
     }
 
     // Mock implementation
-    const customer = {
-      id: `CUS_${Date.now()}`,
-      first_name: "Demo",
-      last_name: "User",
-      email: "demo@example.com",
-      mobile_number: "9876543210",
-      address: body.address,
-      pin_code: body.pin_code,
-      city: body.city,
-      state: body.state,
-      gender: body.gender,
-      date_of_birth: body.date_of_birth,
-      place_of_birth: body.place_of_birth,
-      updated_at: new Date().toISOString(),
-    };
+    // const customer = {
+    //   id: `CUS_${Date.now()}`,
+    //   first_name: "Demo",
+    //   last_name: "User",
+    //   email: "demo@example.com",
+    //   mobile_number: "9876543210",
+    //   address: body.address,
+    //   pin_code: body.pin_code,
+    //   city: body.city,
+    //   state: body.state,
+    //   gender: body.gender,
+    //   date_of_birth: body.date_of_birth,
+    //   place_of_birth: body.place_of_birth,
+    //   updated_at: new Date().toISOString(),
+    // };
 
-    return NextResponse.json(
-      {
-        message: "Additional information saved successfully",
-        customer,
-        next_step: "service_selection",
-      },
-      { status: 200 },
-    );
+    // return NextResponse.json(
+    //   {
+    //     message: "Additional information saved successfully",
+    //     customer,
+    //     next_step: "service_selection",
+    //   },
+    //   { status: 200 },
+    // );
   } catch (error) {
     console.error("Error saving additional information:", error);
     return NextResponse.json(

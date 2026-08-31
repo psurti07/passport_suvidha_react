@@ -96,6 +96,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [zipLoading, setZipLoading] = useState(false);
+  const [permanentZipLoading, setPermanentZipLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<ProfileData>>({});
   const [isEditing, setIsEditing] = useState(false);
   const [policeStationOptions, setPoliceStationOptions] = useState<any[]>([]);
@@ -113,74 +114,225 @@ export default function ProfilePage() {
   //   }));
   // };
 
+  // const handleChange = async (e: FormEvent) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+
+  //   if (name !== "pin_code") return;
+
+  //   // Reset if pincode is incomplete
+  //   if (value.length < 6) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       pin_code: value,
+  //       city: "",
+  //       state: "",
+  //     }));
+
+  //     // setPoliceStationOptions([]);
+  //     // setSelectedPolicePincode("");
+  //     return;
+  //   }
+
+  //   // If pin_code is changed and has 6 digits, fetch city and state
+  //   if (name === "pin_code" && value.length === 6) {
+  //     setZipLoading(true);
+  //     try {
+  //       const response = await fetch(
+  //         `https://api.postalpincode.in/pincode/${value}`,
+  //       );
+  //       const data: PinCodeResponse[] = await response.json();
+
+  //       if (
+  //         data[0].Status === "Success" &&
+  //         data[0].PostOffice &&
+  //         data[0].PostOffice.length > 0
+  //       ) {
+  //         const postOffice = data?.[0]?.PostOffice?.[0];
+
+  //         if (!postOffice) {
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             city: "",
+  //             state: "",
+  //           }));
+  //           return;
+  //         }
+
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           pin_code: value,
+  //           city: postOffice.District,
+  //           state: postOffice.State,
+  //         }));
+  //         // fetchPoliceStations(value);
+  //       } else {
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           city: "",
+  //           state: "",
+  //         }));
+
+  //         // setPoliceStationOptions([]);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching address details:", error);
+  //     } finally {
+  //       setZipLoading(false);
+  //     }
+  //   }
+  // };
+
   const handleChange = async (e: FormEvent) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name !== "pin_code") return;
-
-    // Reset if pincode is incomplete
-    if (value.length < 6) {
+    // Normal fields
+    if (name !== "pin_code" && name !== "permanent_pin_code") {
       setFormData((prev) => ({
         ...prev,
-        pin_code: value,
-        city: "",
-        state: "",
+        [name]: value,
       }));
-
-      // setPoliceStationOptions([]);
-      // setSelectedPolicePincode("");
       return;
     }
 
-    // If pin_code is changed and has 6 digits, fetch city and state
-    if (name === "pin_code" && value.length === 6) {
-      setZipLoading(true);
-      try {
-        const response = await fetch(
-          `https://api.postalpincode.in/pincode/${value}`,
-        );
-        const data: PinCodeResponse[] = await response.json();
+    const pinCode = value.replace(/\D/g, "");
 
-        if (
-          data[0].Status === "Success" &&
-          data[0].PostOffice &&
-          data[0].PostOffice.length > 0
-        ) {
+    // ================= CURRENT ADDRESS PIN =================
+    if (name === "pin_code") {
+      // Always update only current PIN
+      setFormData((prev) => ({
+        ...prev,
+        pin_code: pinCode,
+      }));
+
+      // If incomplete, clear ONLY current address city/state
+      if (pinCode.length < 6) {
+        setFormData((prev) => ({
+          ...prev,
+          pin_code: pinCode,
+          city: "",
+          state: "",
+        }));
+
+        setPoliceStationOptions([]);
+        setSelectedPolicePincode("");
+
+        return;
+      }
+
+      // Fetch current address city/state
+      if (pinCode.length === 6) {
+        setZipLoading(true);
+
+        try {
+          const response = await fetch(
+            `https://api.postalpincode.in/pincode/${pinCode}`,
+          );
+
+          const data: PinCodeResponse[] = await response.json();
+
           const postOffice = data?.[0]?.PostOffice?.[0];
 
-          if (!postOffice) {
+          if (data?.[0]?.Status === "Success" && postOffice) {
             setFormData((prev) => ({
               ...prev,
+              pin_code: pinCode,
+              city: postOffice.District,
+              state: postOffice.State,
+            }));
+
+            // Fetch police stations only for current address
+            fetchPoliceStations(pinCode);
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              pin_code: pinCode,
               city: "",
               state: "",
             }));
-            return;
-          }
 
-          setFormData((prev) => ({
-            ...prev,
-            pin_code: value,
-            city: postOffice.District,
-            state: postOffice.State,
-          }));
-          // fetchPoliceStations(value);
-        } else {
+            setPoliceStationOptions([]);
+            setSelectedPolicePincode("");
+          }
+        } catch (error) {
+          console.error("Error fetching current address:", error);
+
           setFormData((prev) => ({
             ...prev,
             city: "",
             state: "",
           }));
-
-          // setPoliceStationOptions([]);
+        } finally {
+          setZipLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching address details:", error);
-      } finally {
-        setZipLoading(false);
+      }
+
+      return;
+    }
+
+    // ================= PERMANENT ADDRESS PIN =================
+    if (name === "permanent_pin_code") {
+      // Always update ONLY permanent PIN
+      setFormData((prev) => ({
+        ...prev,
+        permanent_pin_code: pinCode,
+      }));
+
+      // If incomplete, clear ONLY permanent city/state
+      if (pinCode.length < 6) {
+        setFormData((prev) => ({
+          ...prev,
+          permanent_pin_code: pinCode,
+          permanent_city: "",
+          permanent_state: "",
+        }));
+
+        return;
+      }
+
+      // Fetch permanent address city/state
+      if (pinCode.length === 6) {
+        setPermanentZipLoading(true);
+
+        try {
+          const response = await fetch(
+            `https://api.postalpincode.in/pincode/${pinCode}`,
+          );
+
+          const data: PinCodeResponse[] = await response.json();
+
+          const postOffice = data?.[0]?.PostOffice?.[0];
+
+          if (data?.[0]?.Status === "Success" && postOffice) {
+            setFormData((prev) => ({
+              ...prev,
+              permanent_pin_code: pinCode,
+              permanent_city: postOffice.District,
+              permanent_state: postOffice.State,
+            }));
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              permanent_pin_code: pinCode,
+              permanent_city: "",
+              permanent_state: "",
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching permanent address:", error);
+
+          setFormData((prev) => ({
+            ...prev,
+            permanent_city: "",
+            permanent_state: "",
+          }));
+        } finally {
+          setPermanentZipLoading(false);
+        }
       }
     }
   };
+
   const customerId = profile?.id; // gets the ID from loaded profile
 
   const fetchPoliceStations = async (pincode: string) => {
@@ -682,36 +834,44 @@ export default function ProfilePage() {
                             name="pin_code"
                             value={formData.pin_code || ""}
                             onChange={(e) => {
-                              const value = e.target.value.replace(/\D/g, "");
-
-                              setFormData((prev) => ({
-                                ...prev,
-                                pin_code: value,
-                              }));
-
-                              // if (value.length < 6) {
-                              //   setPoliceStationOptions([]);
-
-                              //   setFormData((prev) => ({
-                              //     ...prev,
-                              //     pin_code: value,
-                              //     city: "",
-                              //     state: "",
-                              //     police_station_name: "",
-                              //   }));
-
-                              //   return;
-                              // }
-
-                              if (value.length === 6) {
-                                handleChange({
-                                  target: {
-                                    name: "pin_code",
-                                    value,
-                                  },
-                                });
-                              }
+                              handleChange({
+                                target: {
+                                  name: "pin_code",
+                                  value: e.target.value,
+                                },
+                              });
                             }}
+                            // onChange={(e) => {
+                            //   const value = e.target.value.replace(/\D/g, "");
+
+                            //   setFormData((prev) => ({
+                            //     ...prev,
+                            //     pin_code: value,
+                            //   }));
+
+                            //   // if (value.length < 6) {
+                            //   //   setPoliceStationOptions([]);
+
+                            //   //   setFormData((prev) => ({
+                            //   //     ...prev,
+                            //   //     pin_code: value,
+                            //   //     city: "",
+                            //   //     state: "",
+                            //   //     police_station_name: "",
+                            //   //   }));
+
+                            //   //   return;
+                            //   // }
+
+                            //   if (value.length === 6) {
+                            //     handleChange({
+                            //       target: {
+                            //         name: "pin_code",
+                            //         value,
+                            //       },
+                            //     });
+                            //   }
+                            // }}
                             placeholder="395008"
                             className="modern-input focus-animation"
                             maxLength={6}
@@ -764,6 +924,135 @@ export default function ProfilePage() {
                     {/* Pincode */}
                     {/* City */}
                     {/* State */}
+                    {/* Address same as current address */}
+                    <div className="space-y-3 mb-5">
+                      {isEditing ? (
+                        <>
+                          <Label>
+                            Is Permanent Address Same as Current Address?
+                          </Label>
+
+                          <div className="flex gap-6">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="is_address_permanent"
+                                value="1"
+                                checked={
+                                  Number(formData.is_address_permanent) === 1
+                                }
+                                onChange={handleChange}
+                              />
+                              Yes
+                            </label>
+
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="is_address_permanent"
+                                value="0"
+                                checked={
+                                  Number(formData.is_address_permanent) === 0
+                                }
+                                onChange={handleChange}
+                              />
+                              No
+                            </label>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Is Permanent Address Same as Current Address?
+                          </p>
+
+                          <p className="font-semibold">
+                            {Number(profile?.is_address_permanent) === 1
+                              ? "Yes"
+                              : "No"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {/* Show permanent fields only when user selects No */}
+                    {Number(formData.is_address_permanent) === 0 && (
+                      <div className="space-y-2">
+                        {isEditing && <Label>Permanent Address</Label>}
+
+                        {isEditing ? (
+                          <div className="space-y-3">
+                            {/* Permanent Address */}
+                            <Input
+                              name="permanent_address"
+                              value={formData.permanent_address || ""}
+                              onChange={handleChange}
+                              placeholder="Flat 101, XYZ Residency, AB Road"
+                              className="modern-input"
+                            />
+
+                            {/* Permanent PIN */}
+                            <Input
+                              name="permanent_pin_code"
+                              value={formData.permanent_pin_code || ""}
+                              onChange={(e) => {
+                                handleChange({
+                                  target: {
+                                    name: "permanent_pin_code",
+                                    value: e.target.value,
+                                  },
+                                });
+                              }}
+                              placeholder="395008"
+                              className="modern-input focus-animation"
+                              maxLength={6}
+                              inputMode="numeric"
+                            />
+
+                            {/* Permanent City */}
+                            <Input
+                              value={
+                                permanentZipLoading
+                                  ? "Fetching city..."
+                                  : formData.permanent_city || ""
+                              }
+                              placeholder="City"
+                              readOnly
+                              disabled
+                              className="modern-input bg-muted cursor-not-allowed"
+                            />
+
+                            {/* Permanent State */}
+                            <Input
+                              value={
+                                permanentZipLoading
+                                  ? "Fetching state..."
+                                  : formData.permanent_state || ""
+                              }
+                              placeholder="State"
+                              readOnly
+                              disabled
+                              className="modern-input bg-muted cursor-not-allowed"
+                            />
+                          </div>
+                        ) : (
+                          <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                            <p className="text-xs text-muted-foreground">
+                              Permanent Address
+                            </p>
+
+                            <p className="font-semibold">
+                              {profile?.permanent_address || "-"}
+                            </p>
+
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {profile?.permanent_city || "-"},{" "}
+                              {profile?.permanent_state || "-"} -{" "}
+                              {profile?.permanent_pin_code || "-"}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     {/* Nearest Police Station */}
                     <div className="space-y-2">
                       {isEditing && <Label>Nearest Police Station</Label>}

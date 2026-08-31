@@ -33,12 +33,14 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface StepPersonalDetailsProps {
   formData: any;
   handleChange: (e: any) => void;
   handleSelectChange: (name: string, value: string) => void;
   zipLoading: boolean;
+  permanentZipLoading: boolean;
   prevStep: () => void;
   nextStep: () => void;
   itemVariants: any;
@@ -53,6 +55,7 @@ const StepPersonalDetails = ({
   handleChange,
   handleSelectChange,
   zipLoading,
+  permanentZipLoading,
   prevStep,
   nextStep,
   itemVariants,
@@ -66,6 +69,11 @@ const StepPersonalDetails = ({
     zipCode: false,
     city: false,
     state: false,
+    isAddressPermanent: false,
+    permanentAddress: false,
+    permanentCity: false,
+    permanentState: false,
+    permanentPinCode: false,
     gender: false,
     dateOfBirth: false,
     education_qualification: false,
@@ -154,6 +162,36 @@ const StepPersonalDetails = ({
       !formData.organisation_name?.trim()
         ? "Organisation Name is required"
         : "",
+
+    isAddressPermanent:
+      formData.isAddressPermanent === undefined ||
+      formData.isAddressPermanent === null ||
+      formData.isAddressPermanent === ""
+        ? "Please select Yes or No"
+        : "",
+
+    permanentAddress:
+      formData.isAddressPermanent === 0 && !formData.permanentAddress?.trim()
+        ? "Permanent Address is required"
+        : "",
+
+    permanentPinCode:
+      formData.isAddressPermanent === 0 && !formData.permanentPinCode?.trim()
+        ? "Permanent Pin Code is required"
+        : !formData.permanentPinCode?.match(/^\d{6}$/) &&
+            formData.isAddressPermanent === 0
+          ? "Enter a valid 6-digit Permanent Pin Code"
+          : "",
+
+    permanentCity:
+      formData.isAddressPermanent === 0 && !formData.permanentCity?.trim()
+        ? "Permanent City is required"
+        : "",
+
+    permanentState:
+      formData.isAddressPermanent === 0 && !formData.permanentState?.trim()
+        ? "Permanent State is required"
+        : "",
   };
 
   const isValid =
@@ -167,7 +205,12 @@ const StepPersonalDetails = ({
     !errors.education_qualification &&
     !errors.employment_type &&
     !errors.placeOfBirth &&
-    !errors.organisation_name;
+    !errors.organisation_name &&
+    !errors.isAddressPermanent &&
+    !errors.permanentAddress &&
+    !errors.permanentPinCode &&
+    !errors.permanentCity &&
+    !errors.permanentState;
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
@@ -252,7 +295,7 @@ const StepPersonalDetails = ({
                   <h3 className="text-lg font-medium">Address Information</h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="address">Street Address</Label>
+                      <Label htmlFor="address">Current Address</Label>
                       <Textarea
                         id="address"
                         name="address"
@@ -452,6 +495,229 @@ const StepPersonalDetails = ({
                         )}
                       </div>
                     </div>
+                    <div className="space-y-3">
+                      <Label>
+                        Is your current address your permanent address?
+                      </Label>
+
+                      <RadioGroup
+                        value={String(formData.isAddressPermanent ?? "")}
+                        onValueChange={(value) => {
+                          const isAddressPermanent = Number(value);
+
+                          handleChange({
+                            target: {
+                              name: "isAddressPermanent",
+                              value: isAddressPermanent,
+                            },
+                          });
+
+                          // If YES, clear permanent address fields
+                          if (isAddressPermanent === 1) {
+                            handleChange({
+                              target: {
+                                name: "permanentAddress",
+                                value: "",
+                              },
+                            });
+
+                            handleChange({
+                              target: {
+                                name: "permanentPinCode",
+                                value: "",
+                              },
+                            });
+
+                            handleChange({
+                              target: {
+                                name: "permanentCity",
+                                value: "",
+                              },
+                            });
+
+                            handleChange({
+                              target: {
+                                name: "permanentState",
+                                value: "",
+                              },
+                            });
+                          }
+                        }}
+                        className="flex items-center gap-8"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="1" id="addressPermanentYes" />
+                          <Label
+                            htmlFor="addressPermanentYes"
+                            className="cursor-pointer font-normal"
+                          >
+                            Yes
+                          </Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="0" id="addressPermanentNo" />
+                          <Label
+                            htmlFor="addressPermanentNo"
+                            className="cursor-pointer font-normal"
+                          >
+                            No
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                    {formData.isAddressPermanent === 0 && (
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="permanentAddress">
+                            Permanent Address
+                          </Label>
+                          <Textarea
+                            id="permanentAddress"
+                            name="permanentAddress"
+                            value={formData.permanentAddress}
+                            onChange={handleChange}
+                            onBlur={() =>
+                              setTouched((t) => ({
+                                ...t,
+                                permanentAddress: true,
+                              }))
+                            }
+                            placeholder="XYZ Residency, ABC Main Road"
+                            className="modern-input focus-animation"
+                          />
+                          {touched.permanentAddress &&
+                            errors.permanentAddress && (
+                              <p className="text-xs text-red-600 mt-1">
+                                {errors.permanentAddress}
+                              </p>
+                            )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="permanentPinCode">
+                              Permanent Pin Code
+                            </Label>
+                            <div className="relative">
+                              <Input
+                                id="permanentPinCode"
+                                name="permanentPinCode"
+                                value={formData.permanentPinCode}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(
+                                    /\D/g,
+                                    "",
+                                  );
+
+                                  handleChange({
+                                    target: {
+                                      name: "permanentPinCode",
+                                      value,
+                                    },
+                                  });
+
+                                  // if (value.length === 6) {
+                                  //   fetchPoliceStations(value);
+                                  // }
+
+                                  if (value.length < 6) {
+                                    handleChange({
+                                      target: {
+                                        name: "permanentCity",
+                                        value: "",
+                                      },
+                                    });
+
+                                    handleChange({
+                                      target: {
+                                        name: "permanentState",
+                                        value: "",
+                                      },
+                                    });
+
+                                    // handleSelectChange("policeStationPincode", "");
+                                  }
+                                }}
+                                onBlur={() =>
+                                  setTouched((t) => ({
+                                    ...t,
+                                    permanentPinCode: true,
+                                  }))
+                                }
+                                placeholder="395008"
+                                className="modern-input focus-animation"
+                                maxLength={6}
+                                inputMode="numeric"
+                              />
+                              {permanentZipLoading && (
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                  <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{
+                                      duration: 1,
+                                      repeat: Infinity,
+                                      ease: "linear",
+                                    }}
+                                    className="w-4 h-4 border-2 border-navy border-t-transparent rounded-full"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            {touched.permanentPinCode &&
+                              errors.permanentPinCode && (
+                                <p className="text-xs text-red-600 mt-1">
+                                  {errors.permanentPinCode}
+                                </p>
+                              )}
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="permanentCity">
+                              Permanent City
+                            </Label>
+                            <Input
+                              id="permanentCity"
+                              name="permanentCity"
+                              value={formData.permanentCity}
+                              onChange={handleChange}
+                              onBlur={() =>
+                                setTouched((t) => ({
+                                  ...t,
+                                  permanentCity: true,
+                                }))
+                              }
+                              disabled
+                              readOnly
+                              className="modern-input focus-animation bg-gray-100 cursor-not-allowed"
+                            />
+                            {touched.permanentCity && errors.permanentCity && (
+                              <p className="text-xs text-red-600 mt-1">
+                                {errors.permanentCity}
+                              </p>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="permanentState">
+                              Permanent State
+                            </Label>
+                            <Input
+                              id="permanentState"
+                              name="permanentState"
+                              value={formData.permanentState}
+                              onChange={handleChange}
+                              readOnly
+                              disabled
+                              className="modern-input bg-gray-100 cursor-not-allowed"
+                            />
+                            {touched.permanentState &&
+                              errors.permanentState && (
+                                <p className="text-xs text-red-600 mt-1">
+                                  {errors.permanentState}
+                                </p>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <Label>Nearest Police Station Name</Label>
 

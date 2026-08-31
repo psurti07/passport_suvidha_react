@@ -26,6 +26,11 @@ export interface ProfileData {
   pin_code: string;
   city: string;
   state: string;
+  is_address_permanent: boolean;
+  permanent_address: string;
+  permanent_pin_code: string;
+  permanent_city: string;
+  permanent_state: string;
   police_station_name: string;
   gender: string;
   date_of_birth: string;

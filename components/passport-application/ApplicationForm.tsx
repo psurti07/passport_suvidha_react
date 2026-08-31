@@ -43,6 +43,11 @@ interface FormData {
   city: string;
   state: string;
   zipCode: string;
+  isAddressPermanent: string;
+  permanentAddress: string;
+  permanentCity: string;
+  permanentState: string;
+  permanentPinCode: string;
   gender: string;
   dateOfBirth: string;
   policeStationName: string;
@@ -153,6 +158,7 @@ function ApplicationForm() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [zipLoading, setZipLoading] = useState(false);
+  const [permanentZipLoading, setPermanentZipLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [animatePrice, setAnimatePrice] = useState(false);
@@ -184,6 +190,11 @@ function ApplicationForm() {
     city: "",
     state: "",
     zipCode: "",
+    isAddressPermanent: "1",
+    permanentAddress: "",
+    permanentCity: "",
+    permanentState: "",
+    permanentPinCode: "",
     gender: "",
     dateOfBirth: "",
     policeStationName: "",
@@ -345,61 +356,227 @@ function ApplicationForm() {
     setPriceAnimationTimeout(timer);
   };
 
-  const handleChange = async (e: FormEvent) => {
+  // const handleChange = async (e: FormEvent) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+
+  //   if (!["zipCode", "permanentPinCode"].includes(name)) return;
+
+  //   // Reset if pincode is incomplete
+  //   if (value.length < 6) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       zipCode: value,
+  //       city: "",
+  //       state: "",
+  //       permanentPinCode: value,
+  //       permanentCity: "",
+  //       permanentState: "",
+  //     }));
+
+  //     setPoliceStationOptions([]);
+  //     setSelectedPolicePincode("");
+  //     return;
+  //   }
+
+  //   // If zipCode is changed and has 6 digits, fetch city and state
+  //   if (
+  //     (name === "zipCode" || name === "permanentPinCode") &&
+  //     value.length === 6
+  //   ) {
+  //     if (name === "zipCode") {
+  //       setZipLoading(true);
+  //     } else {
+  //       setPermanentZipLoading(true);
+  //     }
+
+  //     try {
+  //       const response = await fetch(
+  //         `https://api.postalpincode.in/pincode/${value}`,
+  //       );
+  //       const data: PinCodeResponse[] = await response.json();
+
+  //       if (
+  //         data[0].Status === "Success" &&
+  //         data[0].PostOffice &&
+  //         data[0].PostOffice.length > 0
+  //       ) {
+  //         const postOffice = data[0].PostOffice[0];
+
+  //         if (name === "zipCode") {
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             zipCode: value,
+  //             city: postOffice.District,
+  //             state: postOffice.State,
+  //           }));
+  //           fetchPoliceStations(value);
+  //         } else {
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             permanentPinCode: value,
+  //             permanentCity: postOffice.District,
+  //             permanentState: postOffice.State,
+  //           }));
+  //           fetchPoliceStations(value);
+  //         }
+  //       } else {
+  //         if (name === "zipCode") {
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             city: "",
+  //             state: "",
+  //           }));
+  //           setPoliceStationOptions([]);
+  //         } else {
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             permanentCity: "",
+  //             permanentState: "",
+  //           }));
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching address details:", error);
+  //     } finally {
+  //       if (name === "zipCode") {
+  //         setZipLoading(false);
+  //       } else {
+  //         setPermanentZipLoading(false);
+  //       }
+  //     }
+  //   }
+  // };
+
+  const handleChange = async (e: any) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name !== "zipCode") return;
-
-    // Reset if pincode is incomplete
-    if (value.length < 6) {
+    if (name !== "zipCode" && name !== "permanentPinCode") {
       setFormData((prev) => ({
         ...prev,
-        zipCode: value,
-        city: "",
-        state: "",
+        [name]: value,
       }));
-
-      setPoliceStationOptions([]);
-      setSelectedPolicePincode("");
       return;
     }
 
-    // If zipCode is changed and has 6 digits, fetch city and state
-    if (name === "zipCode" && value.length === 6) {
-      setZipLoading(true);
-      try {
-        const response = await fetch(
-          `https://api.postalpincode.in/pincode/${value}`,
-        );
-        const data: PinCodeResponse[] = await response.json();
+    if (name === "zipCode") {
+      setFormData((prev) => ({
+        ...prev,
+        zipCode: value,
+      }));
 
-        if (
-          data[0].Status === "Success" &&
-          data[0].PostOffice &&
-          data[0].PostOffice.length > 0
-        ) {
-          const postOffice = data[0].PostOffice[0];
-          setFormData((prev) => ({
-            ...prev,
-            zipCode: value,
-            city: postOffice.District,
-            state: postOffice.State,
-          }));
-          fetchPoliceStations(value);
-        } else {
-          setFormData((prev) => ({
-            ...prev,
-            city: "",
-            state: "",
-          }));
+      if (value.length < 6) {
+        setFormData((prev) => ({
+          ...prev,
+          zipCode: value,
+          city: "",
+          state: "",
+        }));
 
-          setPoliceStationOptions([]);
+        setPoliceStationOptions([]);
+        setSelectedPolicePincode("");
+        return;
+      }
+
+      if (value.length === 6) {
+        setZipLoading(true);
+
+        try {
+          const response = await fetch(
+            `https://api.postalpincode.in/pincode/${value}`,
+          );
+
+          const data: PinCodeResponse[] = await response.json();
+
+          if (
+            data[0]?.Status === "Success" &&
+            data[0]?.PostOffice &&
+            data[0].PostOffice.length > 0
+          ) {
+            const postOffice = data[0].PostOffice[0];
+
+            setFormData((prev) => ({
+              ...prev,
+              zipCode: value,
+              city: postOffice.District,
+              state: postOffice.State,
+            }));
+
+            fetchPoliceStations(value);
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              zipCode: value,
+              city: "",
+              state: "",
+            }));
+
+            setPoliceStationOptions([]);
+            setSelectedPolicePincode("");
+          }
+        } catch (error) {
+          console.error("Error fetching current address:", error);
+        } finally {
+          setZipLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching address details:", error);
-      } finally {
-        setZipLoading(false);
+      }
+
+      return;
+    }
+
+    if (name === "permanentPinCode") {
+      setFormData((prev) => ({
+        ...prev,
+        permanentPinCode: value,
+      }));
+
+      if (value.length < 6) {
+        setFormData((prev) => ({
+          ...prev,
+          permanentPinCode: value,
+          permanentCity: "",
+          permanentState: "",
+        }));
+
+        return;
+      }
+
+      if (value.length === 6) {
+        setPermanentZipLoading(true);
+
+        try {
+          const response = await fetch(
+            `https://api.postalpincode.in/pincode/${value}`,
+          );
+
+          const data: PinCodeResponse[] = await response.json();
+
+          if (
+            data[0]?.Status === "Success" &&
+            data[0]?.PostOffice &&
+            data[0].PostOffice.length > 0
+          ) {
+            const postOffice = data[0].PostOffice[0];
+
+            setFormData((prev) => ({
+              ...prev,
+              permanentPinCode: value,
+              permanentCity: postOffice.District,
+              permanentState: postOffice.State,
+            }));
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              permanentPinCode: value,
+              permanentCity: "",
+              permanentState: "",
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching permanent address:", error);
+        } finally {
+          setPermanentZipLoading(false);
+        }
       }
     }
   };
@@ -1056,6 +1233,11 @@ function ApplicationForm() {
             city: formData.city,
             state: formData.state,
             gender: formData.gender,
+            is_address_permanent: Number(formData.isAddressPermanent),
+            permanent_address: formData.permanentAddress,
+            permanent_pin_code: formData.permanentPinCode,
+            permanent_city: formData.permanentCity,
+            permanent_state: formData.permanentState,
             police_station_name: formData.policeStationName,
             date_of_birth: formattedDob,
             // date_of_birth: formData.dateOfBirth,
@@ -1689,6 +1871,7 @@ function ApplicationForm() {
               handleChange={handleChange}
               handleSelectChange={handleSelectChange}
               zipLoading={zipLoading}
+              permanentZipLoading={permanentZipLoading}
               prevStep={prevStep}
               nextStep={nextStep}
               itemVariants={itemVariants}

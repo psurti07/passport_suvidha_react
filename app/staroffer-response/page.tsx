@@ -41,9 +41,22 @@ export default function StarOfferResponsePage() {
 
           {/* Message */}
           <p className="mt-4 text-base text-muted-foreground leading-8 max-w-xl mx-auto">
-            {isSuccess
-              ? "Your payment has been received successfully. Your passport application has been submitted successfully. Our team will contact you shortly with the next steps."
-              : "We couldn't complete your payment. Please try again. If the amount was deducted, it will be refunded automatically as per your bank's processing timeline."}
+            {isSuccess ? (
+              <>
+                <p>
+                  Dear Customer, your payment has been received successfully.
+                  For your further passport process, our team will contact you
+                  shortly with the next step.{" "}
+                </p>
+                <p>
+                  प्रिय ग्राहक, आपका पेमेंट सफलतापूर्वक प्राप्त हो गया है।
+                  पासपोर्ट की आगे की प्रक्रिया के लिए, हमारी टीम जल्द ही आपसे
+                  संपर्क करके अगले कदम के बारे में बताएगी।
+                </p>
+              </>
+            ) : (
+              "We couldn't complete your payment. Please try again. If the amount was deducted, it will be refunded automatically as per your bank's processing timeline."
+            )}
           </p>
 
           {/* Buttons */}

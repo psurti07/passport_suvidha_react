@@ -15,6 +15,7 @@ import {
   Settings,
   CheckCircle,
   ListChecks,
+  ClipboardList,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -367,13 +368,13 @@ export default function PortalLayout({
               href="/portal"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal" && "text-gold",
+                pathname === "/portal" && "text-teal",
               )}
             >
               <Home
                 className={cn(
                   "h-5 w-5",
-                  pathname === "/portal" ? "text-gold" : "text-navy",
+                  pathname === "/portal" ? "text-teal" : "text-navy",
                 )}
               />
               <span className="text-[10px] mt-0.5">Home</span>
@@ -382,16 +383,34 @@ export default function PortalLayout({
               href="/portal/documents"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/documents" && "text-gold",
+                pathname === "/portal/documents" && "text-teal",
               )}
             >
               <FileText
                 className={cn(
                   "h-5 w-5",
-                  pathname === "/portal/documents" ? "text-gold" : "text-navy",
+                  pathname === "/portal/documents" ? "text-teal" : "text-navy",
                 )}
               />
               <span className="text-[10px] mt-0.5">Docs</span>
+            </Link>
+            <Link
+              href="/portal/application-status"
+              className={cn(
+                "flex flex-col items-center py-2 px-3",
+                pathname === "/portal/application-status" && "text-teal",
+              )}
+            >
+              <ListChecks
+                className={cn(
+                  "h-5 w-5",
+                  pathname === "/portal/application-status"
+                    ? "text-teal"
+                    : "text-navy",
+                )}
+              />
+
+              <span className="text-[10px] mt-0.5">Status</span>
             </Link>
             {applicationProgress?.stages?.some(
               (stage) => stage?.title?.toLowerCase() === "details_verification",
@@ -400,14 +419,14 @@ export default function PortalLayout({
                 href="/portal/application-review"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/application-review" && "text-gold",
+                  pathname === "/portal/application-review" && "text-teal",
                 )}
               >
                 <CheckCircle
                   className={cn(
                     "h-5 w-5",
                     pathname === "/portal/application-review"
-                      ? "text-gold"
+                      ? "text-teal"
                       : "text-navy",
                   )}
                 />
@@ -422,14 +441,14 @@ export default function PortalLayout({
                 href="/portal/appointment-letter"
                 className={cn(
                   "flex flex-col items-center py-2 px-3",
-                  pathname === "/portal/appointment-letter" && "text-gold",
+                  pathname === "/portal/appointment-letter" && "text-teal",
                 )}
               >
                 <Clock
                   className={cn(
                     "h-5 w-5",
                     pathname === "/portal/appointment-letter"
-                      ? "text-gold"
+                      ? "text-teal"
                       : "text-navy",
                   )}
                 />
@@ -440,13 +459,13 @@ export default function PortalLayout({
               href="/portal/support"
               className={cn(
                 "flex flex-col items-center py-2 px-3",
-                pathname === "/portal/support" && "text-gold",
+                pathname === "/portal/support" && "text-teal",
               )}
             >
               <HelpCircle
                 className={cn(
                   "h-5 w-5",
-                  pathname === "/portal/support" ? "text-gold" : "text-navy",
+                  pathname === "/portal/support" ? "text-teal" : "text-navy",
                 )}
               />
               <span className="text-[10px] mt-0.5">Help</span>

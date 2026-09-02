@@ -849,7 +849,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Media Link 1 */}
                 <a
-                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+professional+assistance+to+indias+growing+passport+application+needs-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_9bda962099ff11f1aef7f486b5beeea7?sm=Y"
+                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/how+passport+suvidha+is+redefining+the+passport+assistance+experience+in+india-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_0de67550a68e11f1abbee57769f7cd2c?sm=Y"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="
@@ -914,7 +914,7 @@ export default function Home() {
 
                 {/* Media Link 2 */}
                 <a
-                  href="https://hindustanmetro.com/passport-suvidha-brings-professional-assistance-to-indias-growing-passport-application-needs"
+                  href="https://hindustanmetro.com/how-passport-suvidha-is-redefining-the-passport-assistance-experience-in-india"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="

@@ -185,7 +185,7 @@ export default function ApplicationStatus() {
 
                       {/* Remark */}
                       <TableCell className="align-top">
-                        <div className="w-[450px] lg:w-auto overflow-hidden whitespace-normal break-words leading-6">
+                        <div className="w-[500px] lg:w-auto overflow-hidden whitespace-normal break-words leading-6">
                           {item.remark || "-"}
                         </div>
                       </TableCell>

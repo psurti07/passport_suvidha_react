@@ -120,8 +120,8 @@ export default function ApplicationStatus() {
               Please check status updates and admin remarks at each stage
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-6">
-            <Table>
+          <CardContent className="p-6 w-full overflow-x-auto">
+            <Table className="min-w-[700px] table-auto">
               <TableHeader>
                 <TableRow>
                   <TableHead>Status Name</TableHead>
@@ -184,8 +184,10 @@ export default function ApplicationStatus() {
                       </TableCell> */}
 
                       {/* Remark */}
-                      <TableCell className="whitespace-normal break-words max-w-xs">
-                        {item.remark || "-"}
+                      <TableCell className="align-top">
+                        <div className="w-[450px] lg:w-auto overflow-hidden whitespace-normal break-words leading-6">
+                          {item.remark || "-"}
+                        </div>
                       </TableCell>
 
                       {/* File */}

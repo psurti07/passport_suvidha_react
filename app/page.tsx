@@ -849,6 +849,139 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Media Link 1 */}
                 <a
+                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+professional+assistance+to+indias+growing+passport+application+needs-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_9bda962099ff11f1aef7f486b5beeea7?sm=Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-3xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-navy to-teal" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-xl
+                bg-gradient-to-br from-navy/10 to-teal/10
+                text-navy
+                transition-all duration-300
+                group-hover:from-navy group-hover:to-teal
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Media Coverage
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Passport Assistance Made Easy
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Learn how PassportSuvidha is helping applicants navigate
+                        the passport application process with professional
+                        assistance, guidance, and convenient support.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Media Link 2 */}
+                <a
+                  href="https://hindustanmetro.com/passport-suvidha-brings-professional-assistance-to-indias-growing-passport-application-needs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-2xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal to-navy" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-3xl
+                bg-gradient-to-br from-teal/10 to-navy/10
+                text-teal
+                transition-all duration-300
+                group-hover:from-teal group-hover:to-navy
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Featured Article
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Professional Passport Support
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Discover how PassportSuvidha simplifies the passport
+                        application journey by providing reliable guidance and
+                        support throughout the process.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Media Link 1 */}
+                <a
                   href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/how+passport+suvidha+is+redefining+the+passport+assistance+experience+in+india-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_0de67550a68e11f1abbee57769f7cd2c?sm=Y"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -889,16 +1022,17 @@ export default function Home() {
                       </p>
 
                       <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
-                        PassportSuvidha Featured Story
+                        Redefining Passport Assistance
                       </h3>
 
                       <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                        Read our latest feature and learn more about our
-                        passport assistance services.
+                        Explore how PassportSuvidha is creating a more
+                        convenient and accessible passport assistance experience
+                        for applicants across India.
                       </p>
 
                       <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
-                        Read More
+                        Read Article
                         <ArrowUpRight
                           className="
                     h-4 w-4
@@ -954,16 +1088,17 @@ export default function Home() {
                       </p>
 
                       <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
-                        PassportSuvidha in the News
+                        Simplifying Passport Assistance
                       </h3>
 
                       <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                        Discover our latest news feature and updates from
-                        PassportSuvidha.
+                        Read about PassportSuvidha’s approach to making passport
+                        assistance simpler, more professional, and easier for
+                        applicants to navigate.
                       </p>
 
                       <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
-                        Read More
+                        Read Article
                         <ArrowUpRight
                           className="
                     h-4 w-4

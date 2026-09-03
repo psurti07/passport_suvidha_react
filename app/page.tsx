@@ -846,7 +846,7 @@ export default function Home() {
 
             {/* Media Cards */}
             <div className="relative mx-auto max-w-4xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {/* Media Link 1 */}
                 <a
                   href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+professional+assistance+to+indias+growing+passport+application+needs-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_9bda962099ff11f1aef7f486b5beeea7?sm=Y"

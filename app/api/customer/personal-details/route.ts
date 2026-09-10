@@ -148,32 +148,6 @@ export async function POST(request: NextRequest) {
         { status: 503 },
       );
     }
-
-    // Mock implementation
-    // const customer = {
-    //   id: `CUS_${Date.now()}`,
-    //   first_name: "Demo",
-    //   last_name: "User",
-    //   email: "demo@example.com",
-    //   mobile_number: "9876543210",
-    //   address: body.address,
-    //   pin_code: body.pin_code,
-    //   city: body.city,
-    //   state: body.state,
-    //   gender: body.gender,
-    //   date_of_birth: body.date_of_birth,
-    //   place_of_birth: body.place_of_birth,
-    //   updated_at: new Date().toISOString(),
-    // };
-
-    // return NextResponse.json(
-    //   {
-    //     message: "Additional information saved successfully",
-    //     customer,
-    //     next_step: "service_selection",
-    //   },
-    //   { status: 200 },
-    // );
   } catch (error) {
     console.error("Error saving additional information:", error);
     return NextResponse.json(

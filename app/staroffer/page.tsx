@@ -162,16 +162,6 @@ const StarOfferPage = () => {
   return (
     <>
       <div className="relative min-h-screen flex flex-col bg-white">
-        {/* <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-white" />
-
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/40 via-white to-white" />
-
-          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-100 opacity-30 rounded-full blur-3xl" />
-          <div className="absolute top-[30%] right-0 w-[500px] h-[500px] bg-teal-100 opacity-20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-[30%] w-[400px] h-[400px] bg-blue-50 opacity-30 rounded-full blur-2xl" />
-        </div> */}
-
         <header className="w-full border-b border-slate-200 bg-transparent mt-2 pb-2">
           <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6 ">
             {/* Logo */}

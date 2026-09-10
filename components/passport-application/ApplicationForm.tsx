@@ -125,21 +125,6 @@ const stateNameToCode: { [key: string]: string } = {
 };
 
 // Helper function to convert date from DD/MM/YYYY to YYYY-MM-DD format
-// const formatDateForApi = (dateString: string): string => {
-//   if (!dateString) return "";
-
-//   // Check if it's already in YYYY-MM-DD format
-//   if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-//     return dateString;
-//   }
-
-//   // Convert from DD/MM/YYYY to YYYY-MM-DD
-//   const parts = dateString.split("/");
-//   if (parts.length !== 3) return dateString;
-
-//   return `${parts[2]}-${parts[1]}-${parts[0]}`;
-// };
-
 const formatDateForApi = (date: string) => {
   if (!date) return "";
 
@@ -356,98 +341,6 @@ function ApplicationForm() {
     setPriceAnimationTimeout(timer);
   };
 
-  // const handleChange = async (e: FormEvent) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-
-  //   if (!["zipCode", "permanentPinCode"].includes(name)) return;
-
-  //   // Reset if pincode is incomplete
-  //   if (value.length < 6) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       zipCode: value,
-  //       city: "",
-  //       state: "",
-  //       permanentPinCode: value,
-  //       permanentCity: "",
-  //       permanentState: "",
-  //     }));
-
-  //     setPoliceStationOptions([]);
-  //     setSelectedPolicePincode("");
-  //     return;
-  //   }
-
-  //   // If zipCode is changed and has 6 digits, fetch city and state
-  //   if (
-  //     (name === "zipCode" || name === "permanentPinCode") &&
-  //     value.length === 6
-  //   ) {
-  //     if (name === "zipCode") {
-  //       setZipLoading(true);
-  //     } else {
-  //       setPermanentZipLoading(true);
-  //     }
-
-  //     try {
-  //       const response = await fetch(
-  //         `https://api.postalpincode.in/pincode/${value}`,
-  //       );
-  //       const data: PinCodeResponse[] = await response.json();
-
-  //       if (
-  //         data[0].Status === "Success" &&
-  //         data[0].PostOffice &&
-  //         data[0].PostOffice.length > 0
-  //       ) {
-  //         const postOffice = data[0].PostOffice[0];
-
-  //         if (name === "zipCode") {
-  //           setFormData((prev) => ({
-  //             ...prev,
-  //             zipCode: value,
-  //             city: postOffice.District,
-  //             state: postOffice.State,
-  //           }));
-  //           fetchPoliceStations(value);
-  //         } else {
-  //           setFormData((prev) => ({
-  //             ...prev,
-  //             permanentPinCode: value,
-  //             permanentCity: postOffice.District,
-  //             permanentState: postOffice.State,
-  //           }));
-  //           fetchPoliceStations(value);
-  //         }
-  //       } else {
-  //         if (name === "zipCode") {
-  //           setFormData((prev) => ({
-  //             ...prev,
-  //             city: "",
-  //             state: "",
-  //           }));
-  //           setPoliceStationOptions([]);
-  //         } else {
-  //           setFormData((prev) => ({
-  //             ...prev,
-  //             permanentCity: "",
-  //             permanentState: "",
-  //           }));
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching address details:", error);
-  //     } finally {
-  //       if (name === "zipCode") {
-  //         setZipLoading(false);
-  //       } else {
-  //         setPermanentZipLoading(false);
-  //       }
-  //     }
-  //   }
-  // };
-
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
 
@@ -597,27 +490,6 @@ function ApplicationForm() {
       setLoadingPoliceStations(false);
     }
   };
-
-  // const handleOTPChange = (index: number, value: string) => {
-  //   // Only allow numbers
-  //   if (value && !/^\d+$/.test(value)) return;
-
-  //   // Update the OTP digits array
-  //   const newOtpDigits = [...otpDigits];
-  //   newOtpDigits[index] = value;
-  //   setOtpDigits(newOtpDigits);
-
-  //   // Update the main form data with combined OTP
-  //   setFormData((prev) => ({ ...prev, otp: newOtpDigits.join("") }));
-
-  //   // Auto-focus next input if value is entered
-  //   if (value && index < 3) {
-  //     const nextInput = document.querySelector(
-  //       `input[name=otp-${index + 1}]`,
-  //     ) as HTMLInputElement;
-  //     if (nextInput) nextInput.focus();
-  //   }
-  // };
 
   const handleOTPChange = (index: number, value: string) => {
     // Only allow numbers
@@ -838,89 +710,11 @@ function ApplicationForm() {
       setErrorMessage("");
 
       try {
-        // const customerResponse = await fetch("/api/customers/create", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({
-        //     full_name: formData.fullName,
-        //     email: formData.email,
-        //     mobile_number: formData.mobile,
-        //     service_code:
-        //       formData.passportType === "normal"
-        //         ? `NP${formData.bookSize}`
-        //         : `TP${formData.bookSize}`,
-        //     encryptId: formData.encryptId,
-        //   }),
-        // });
-
-        // const customerData = await customerResponse.json();
-
-        // if (!customerResponse.ok && customerResponse.status !== 200) {
-        //   const firstError = Object.values(customerData.errors || {})[0];
-
-        //   setErrorMessage(
-        //     Array.isArray(firstError) ? firstError[0] : "Validation error",
-        //   );
-
-        //   window.scrollTo({
-        //     top: 0,
-        //     behavior: "smooth",
-        //   });
-
-        //   return;
-        // }
-
-        // if (customerResponse.status === 200) {
-        //   const nextStepFromAPI = customerData?.next_step;
-        //   const registrationStep = customerData?.registration_step;
-
-        //   const stepMapping: any = {
-        //     otp_verification: 2,
-        //     additional_information: 3,
-        //     service_selection: 4,
-        //     payment: 4,
-        //   };
-
-        //   if (registrationStep >= 2) {
-        //     setOtpVerified(true);
-        //   }
-
-        //   setStep(stepMapping[nextStepFromAPI] || 1);
-        //   return;
-        // }
-
-        // if (customerResponse.status === 201) {
-        //   console.log("Customer created successfully, sending OTP...");
-        //   const otpResponse = await fetch("/api/otp/send", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //       mobile_number: formData.mobile,
-        //       purpose: "registration",
-        //     }),
-        //   });
-
-        //   const otpData = await otpResponse.json();
-
-        //   if (!otpResponse.ok) {
-        //     setErrorMessage(
-        //       otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
-        //     );
-        //     return;
-        //   }
-
-        //   setOtpSent(true);
-        //   setStep(2);
-        // }
-        // if (
-        //   customerResponse.status === 200 ||
-        //   customerResponse.status === 201
-        // ) {
-        // console.log("Customer saved/updated successfully");
         const serviceCode =
           formData.passportType === "normal"
             ? `NP${formData.bookSize}`
             : `TP${formData.bookSize}`;
+
         const checkResponse = await axiosServer.post("/check-user", {
           mobile_number: formData.mobile,
           email: formData.email,
@@ -1031,7 +825,7 @@ function ApplicationForm() {
         }
 
         if (data.is_lead === false) {
-          console.log("New customer. Sending OTP...");
+          // console.log("New customer. Sending OTP...");
 
           const otpResponse = await fetch("/api/otp/send", {
             method: "POST",
@@ -1055,50 +849,13 @@ function ApplicationForm() {
 
             return;
           }
-          console.log("OTP sent successfully.");
+          // console.log("OTP sent successfully.");
 
           setOtpSent(true);
           setStep(2);
 
           return;
         }
-        // }
-
-        // if (!checkResponse.status) {
-        //   setErrorMessage(checkResponse.data.message || "Failed to check user");
-        //   return;
-        // }
-        // // ALWAYS SEND OTP
-        // const otpResponse = await fetch("/api/otp/send", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     mobile_number: formData.mobile,
-        //     purpose: "registration",
-        //   }),
-        // });
-
-        // const otpData = await otpResponse.json();
-
-        // if (!otpResponse.ok) {
-        //   setErrorMessage(
-        //     otpData.errors?.mobile_number?.[0] || "Failed to send OTP",
-        //   );
-
-        //   return;
-        // }
-
-        // OTP SENT SUCCESSFULLY
-        // setOtpSent(true);
-
-        // ALWAYS GO TO OTP STEP
-        // setOtpSent(true);
-        // setStep(2);
-
-        // return;
-        // }
       } catch (error: any) {
         console.error("Unexpected Error:", error);
 
@@ -1309,223 +1066,6 @@ function ApplicationForm() {
     });
   };
 
-  // const completePayment = async () => {
-  //   if (typeof window === "undefined") return;
-
-  //   setLoading(true);
-  //   setErrorMessage("");
-
-  //   try {
-  //     const token = localStorage.getItem("token");
-
-  //     if (!token) {
-  //       setErrorMessage("Session expired. Please login again.");
-  //       return;
-  //     }
-
-  //     let serviceCode: string | undefined;
-
-  //     if (formData.passportType === "normal" && formData.bookSize === "36") {
-  //       serviceCode = "NP36";
-  //     } else if (
-  //       formData.passportType === "normal" &&
-  //       formData.bookSize === "60"
-  //     ) {
-  //       serviceCode = "NP60";
-  //     } else if (
-  //       formData.passportType === "tatkal" &&
-  //       formData.bookSize === "36"
-  //     ) {
-  //       serviceCode = "TP36";
-  //     } else if (
-  //       formData.passportType === "tatkal" &&
-  //       formData.bookSize === "60"
-  //     ) {
-  //       serviceCode = "TP60";
-  //     }
-
-  //     if (!serviceCode) {
-  //       setErrorMessage("Invalid service selection");
-  //       return;
-  //     }
-
-  //     await axiosServer.post(
-  //       "/customer/select-service",
-  //       {
-  //         service_code: serviceCode,
-  //         book_size: String(formData.bookSize),
-  //         passport_type: formData.passportType,
-  //         nationality: formData.nationality,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const orderRes = await axiosServer.post(
-  //       "/create-order",
-  //       {
-  //         service_code: serviceCode,
-  //         mobile: formData.mobile,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const order = orderRes.data;
-
-  //     const loaded = await loadRazorpayScript();
-  //     if (!loaded) {
-  //       setErrorMessage("Razorpay SDK failed to load");
-  //       return;
-  //     }
-
-  //     const rzp = new window.Razorpay({
-  //       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
-  //       amount: order.amount,
-  //       currency: "INR",
-  //       name: "Passport Service",
-  //       description: "Application Fee",
-  //       order_id: order.id,
-
-  //       prefill: {
-  //         name: order.name,
-  //         email: order.email,
-  //         contact: order.mobile,
-  //       },
-
-  //       // handler: async function (response: any) {
-  //       //   try {
-  //       //     await axiosServer.post(
-  //       //       "/verify-payment",
-  //       //       {
-  //       //         razorpay_order_id: response.razorpay_order_id,
-  //       //         razorpay_payment_id: response.razorpay_payment_id,
-  //       //         razorpay_signature: response.razorpay_signature,
-  //       //       },
-  //       //       {
-  //       //         headers: {
-  //       //           Authorization: `Bearer ${token}`,
-  //       //         },
-  //       //       },
-  //       //     );
-
-  //       //     window.location.href = "/payment-response?status=success";
-  //       //   } catch {
-  //       //     setErrorMessage("Payment verification failed. Please try again.");
-  //       //   }
-  //       // },
-
-  //       // handler: function (response: any) {
-  //       //   window.location.href = `/payment-response?status=success`;
-
-  //       //   axiosServer
-  //       //     .post(
-  //       //       "/verify-payment",
-  //       //       {
-  //       //         razorpay_order_id: response.razorpay_order_id,
-  //       //         razorpay_payment_id: response.razorpay_payment_id,
-  //       //         razorpay_signature: response.razorpay_signature,
-  //       //       },
-  //       //       {
-  //       //         headers: {
-  //       //           Authorization: `Bearer ${token}`,
-  //       //         },
-  //       //       },
-  //       //     )
-  //       //     .catch(console.error);
-  //       // },
-
-  //       handler: async function (response: any) {
-  //         try {
-  //           await axiosServer.post(
-  //             "/verify-payment",
-  //             {
-  //               razorpay_order_id: response.razorpay_order_id,
-  //               razorpay_payment_id: response.razorpay_payment_id,
-  //               razorpay_signature: response.razorpay_signature,
-  //             },
-  //             {
-  //               headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //               },
-  //             },
-  //           );
-
-  //           window.location.href = "/payment-response?status=success";
-  //         } catch (err) {
-  //           console.error(err);
-
-  //           window.location.href = "/payment-response?status=failed";
-  //         }
-  //       },
-
-  //       modal: {
-  //         ondismiss: async function () {
-  //           console.log("Payment popup closed by user");
-
-  //           // try {
-  //           //   await axiosServer.post(
-  //           //     "/payment-failed",
-  //           //     {
-  //           //       razorpay_order_id: order.id,
-  //           //       reason: "User closed payment popup",
-  //           //     },
-  //           //     {
-  //           //       headers: {
-  //           //         Authorization: `Bearer ${token}`,
-  //           //       },
-  //           //     },
-  //           //   );
-  //           // } catch (err) {
-  //           //   console.error("Failed to update dismiss status:", err);
-  //           // }
-
-  //           // refresh current page
-  //           window.location.reload();
-  //         },
-  //       },
-  //     });
-
-  //     // rzp.on("payment.failed", async function (response) {
-  //     //   try {
-  //     //     await axiosServer.post(
-  //     //       "/payment-failed",
-  //     //       {
-  //     //         razorpay_order_id: response.error.metadata.order_id,
-  //     //         razorpay_payment_id: response.error.metadata.payment_id,
-  //     //       },
-  //     //       {
-  //     //         headers: {
-  //     //           Authorization: `Bearer ${token}`,
-  //     //         },
-  //     //       },
-  //     //     );
-  //     //   } catch (err) {
-  //     //     console.error("Failed to update payment failure:", err);
-  //     //   }
-
-  //     //   // reload current page
-  //     //   window.location.reload();
-  //     // });
-
-  //     rzp.open();
-  //   } catch (err: any) {
-  //     console.error("MAIN ERROR:", err.response?.data || err);
-
-  //     setErrorMessage(
-  //       err.response?.data?.message || "Something went wrong during payment",
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const completePayment = async () => {
     if (typeof window === "undefined") return;
 
@@ -1539,48 +1079,6 @@ function ApplicationForm() {
         setErrorMessage("Session expired. Please login again.");
         return;
       }
-
-      // let serviceCode: string | undefined;
-
-      // if (formData.passportType === "normal" && formData.bookSize === "36") {
-      //   serviceCode = "NP36";
-      // } else if (
-      //   formData.passportType === "normal" &&
-      //   formData.bookSize === "60"
-      // ) {
-      //   serviceCode = "NP60";
-      // } else if (
-      //   formData.passportType === "tatkal" &&
-      //   formData.bookSize === "36"
-      // ) {
-      //   serviceCode = "TP36";
-      // } else if (
-      //   formData.passportType === "tatkal" &&
-      //   formData.bookSize === "60"
-      // ) {
-      //   serviceCode = "TP60";
-      // }
-
-      // if (!serviceCode) {
-      //   setErrorMessage("Invalid service selected");
-      //   return;
-      // }
-
-      // Select Service
-      // await axiosServer.post(
-      //   "/customer/select-service",
-      //   {
-      //     service_code: serviceCode,
-      //     book_size: String(formData.bookSize),
-      //     passport_type: formData.passportType,
-      //     nationality: formData.nationality,
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   },
-      // );
 
       // Create Razorpay Order
       const { data: order } = await axiosServer.post(
@@ -1648,6 +1146,7 @@ function ApplicationForm() {
             console.log(error.response?.data);
 
             // window.location.reload();
+            localStorage.clear();
             window.location.href = "/payment-response?status=failed";
           }
         },
@@ -1684,7 +1183,7 @@ function ApplicationForm() {
           console.error("Payment Failed API Error", err);
         }
         // window.location.reload();
-
+        localStorage.clear();
         window.location.href = "/payment-response?status=failed";
       });
 

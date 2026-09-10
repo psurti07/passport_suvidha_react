@@ -30,12 +30,6 @@ export async function POST(request: NextRequest) {
 
     const errors: ValidationErrors = {};
 
-    // if (!body.first_name?.trim()) {
-    //   errors.first_name = ["First name is required"];
-    // } else if (!/^[A-Za-z ]+$/.test(body.first_name)) {
-    //   errors.first_name = ["Only letters allowed"];
-    // }
-
     if (!body.full_name?.trim()) {
       errors.full_name = ["Full name is required"];
     }

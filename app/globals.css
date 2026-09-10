@@ -701,16 +701,45 @@ body::-webkit-scrollbar {
 
 .button {}
 
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 60s linear infinite;
+}
+
+.marquee-content {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 @keyframes marquee {
-  0% {
-    transform: translateX(100%);
+  from {
+    transform: translateX(0);
   }
 
-  100% {
-    transform: translateX(-100%);
+  to {
+    transform: translateX(-50%);
   }
 }
 
-.animate-marquee {
-  animation: marquee 15s linear infinite;
+.landing-marquee {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: landing-marquee-scroll 60s linear infinite;
+}
+
+.marquee-item {
+  flex-shrink: 0;
+  display: block;
+}
+
+@keyframes landing-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }

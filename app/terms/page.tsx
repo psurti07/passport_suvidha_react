@@ -55,9 +55,6 @@ export default function TermsCondition() {
                     <Shield className="h-5 w-5 text-navy" />
                     <CardTitle>Terms and Conditions Overview</CardTitle>
                   </div>
-                  {/* <CardDescription>
-                    PassportSuvidha is committed to protecting your privacy and ensuring the security of your personal information.
-                  </CardDescription> */}
                 </CardHeader>
                 <CardContent className="prose prose-slate max-w-none">
                   <p>
@@ -70,23 +67,6 @@ export default function TermsCondition() {
                     be bound by these Terms. If you do not agree to these Terms,
                     you must immediately discontinue use of the services.
                   </p>
-                  {/* <p>
-                    We take your privacy seriously and are committed to maintaining the confidentiality and security of your personal information. This policy is designed to help you understand what information we collect, why we collect it, and how you can update, manage, and delete your information.
-                  </p> */}
-                  {/* <div className="bg-navy/5 p-4 rounded-lg my-6 flex items-start gap-3">
-                    <AlertTriangle className="h-5 w-5 text-navy mt-0.5" />
-                    <div>
-                      <h4 className="text-navy font-medium mb-1">
-                        Important Notice
-                      </h4>
-                      <p className="text-sm text-muted-foreground m-0">
-                        PassportSuvidha processes sensitive personal information
-                        as required for passport applications. This information
-                        is handled with the utmost care and in compliance with
-                        all applicable privacy laws and regulations.
-                      </p>
-                    </div>
-                  </div> */}
                 </CardContent>
               </Card>
 

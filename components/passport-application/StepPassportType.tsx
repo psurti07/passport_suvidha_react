@@ -364,15 +364,45 @@ const StepPassportType = ({
             </CardFooter>
           </motion.div>
 
-          <div className=" w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
-            <div className="animate-marquee whitespace-nowrap py-2 px-6">
-              <span className="text-xs md:text-sm font-medium text-teal">
-                ⚠️ Passport Suvidha Company is a private consultancy and is not
-                affiliated with the Government of India or the Ministry of
-                External Affairs. ⚠️ पासपोर्ट सुविधा कंपनी एक प्राइवेट
-                कंसल्टेंसी है और यह भारत सरकार या विदेश मंत्रालय से जुड़ी हुई
-                नहीं है।
-              </span>
+          <div className="mb-6 flex justify-center">
+            <div className="w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
+              <div className="landing-marquee py-2">
+                {/* First copy */}
+                <div className="marquee-item px-6">
+                  <span className="text-xs md:text-sm font-medium text-teal">
+                    This website is owned by a Private Consultancy Firm
+                    BOUNDLESS PASSPORT SUVIDHA LLP (Passport Suvidha). We are
+                    not Authorised by any Government Department. The fee paid on
+                    this platform is towards consultancy fee. No Government Fee
+                    is collected by us. Passport application government fees
+                    paid separately on government website. यह वेबसाइट एक
+                    प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
+                    (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
+                    अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
+                    कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
+                    पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
+                    वेबसाइट पर करना होता है।
+                  </span>
+                </div>
+
+                {/* Second copy */}
+                <div className="marquee-item px-6">
+                  <span className="text-xs md:text-sm font-medium text-teal">
+                    This website is owned by a Private Consultancy Firm
+                    BOUNDLESS PASSPORT SUVIDHA LLP (Passport Suvidha). We are
+                    not Authorised by any Government Department. The fee paid on
+                    this platform is towards consultancy fee. No Government Fee
+                    is collected by us. Passport application government fees
+                    paid separately on government website. यह वेबसाइट एक
+                    प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
+                    (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
+                    अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
+                    कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
+                    पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
+                    वेबसाइट पर करना होता है।
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

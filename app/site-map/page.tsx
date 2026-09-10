@@ -93,24 +93,6 @@ export default function SiteMap() {
                           <span>About Us</span>
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link
-                          href="/contact"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Mail className="h-4 w-4" />
-                          <span>Contact</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/faq"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                          <span>FAQ</span>
-                        </Link>
-                      </li> */}
                     </ul>
                   </CardContent>
                 </Card>
@@ -127,15 +109,6 @@ export default function SiteMap() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <ul className="space-y-2">
-                      {/* <li>
-                        <Link
-                          href="/apply-passport"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileText className="h-4 w-4" />
-                          <span>Apply Now</span>
-                        </Link>
-                      </li> */}
                       <li>
                         <Link
                           href="/apply-passport"
@@ -184,56 +157,6 @@ export default function SiteMap() {
                     </ul>
                   </CardContent>
                 </Card>
-
-                {/* <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-burgundy"></div>
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Users className="h-5 w-5 text-burgundy" />
-                      <CardTitle className="text-xl">Account Pages</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/signin"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>Sign In</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/signup"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>Sign Up</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/forgot-password"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Shield className="h-4 w-4" />
-                          <span>Forgot Password</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/account"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>My Account</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card> */}
 
                 <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
                   <div className="h-1 w-full bg-gold"></div>
@@ -344,86 +267,10 @@ export default function SiteMap() {
                           <span>Application Status</span>
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link
-                          href="/help"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                          <span>Help Center</span>
-                        </Link>
-                      </li> */}
                     </ul>
                   </CardContent>
                 </Card>
-
-                {/* <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-teal"></div>
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="h-5 w-5 text-teal" />
-                      <CardTitle className="text-xl">Location Pages</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/locations"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <MapPin className="h-4 w-4" />
-                          <span>All Locations</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/locations/search"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Search className="h-4 w-4" />
-                          <span>Find Nearest Office</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/locations/appointment"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Calendar className="h-4 w-4" />
-                          <span>Book Appointment</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card> */}
               </div>
-
-              {/* <div className="bg-navy/5 rounded-xl p-6 border border-navy/10 mb-8">
-                <h3 className="text-xl font-medium text-navy mb-4 flex items-center gap-2">
-                  <Search className="h-5 w-5" />
-                  Search Our Site
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Can't find what you're looking for? Use our search function to quickly locate information across the
-                  entire website.
-                </p>
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="search"
-                        placeholder="Search for passport information..."
-                        className="pl-10 modern-input"
-                      />
-                    </div>
-                  </div>
-                  <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button">
-                    Search
-                  </Button>
-                </div>
-              </div> */}
 
               <div className="bg-teal/5 rounded-xl p-6 border border-teal/10">
                 <h3 className="text-xl font-medium text-teal mb-4">

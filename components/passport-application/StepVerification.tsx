@@ -182,15 +182,6 @@ const StepVerification = ({
                 </div>
               )}
 
-              {/* <Button
-                className="w-full rounded-xl bg-gradient-to-r from-navy to-teal text-white shadow-lg modern-button"
-                onClick={verifyOTP}
-                disabled={loading || formData.otp.length < 4}
-              >
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {loading ? "Verifying..." : "Verify Code"}
-              </Button> */}
-
               <div className="mt-4 text-sm text-slate-500">
                 {isResendDisabled ? (
                   <span>Resend in {formatTime(timeRemaining)}</span>
@@ -219,14 +210,6 @@ const StepVerification = ({
               Back
             </Button>
 
-            {/* <Button
-              onClick={nextStep}
-              disabled={!otpVerified}
-              className="rounded-md bg-gradient-to-r from-navy to-teal px-6 text-white shadow-lg modern-button"
-            >
-              Family Details
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button> */}
             <Button
               className="rounded-xl bg-gradient-to-r from-navy to-teal text-white shadow-lg modern-button"
               onClick={verifyOTP}

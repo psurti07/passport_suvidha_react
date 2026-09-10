@@ -66,25 +66,6 @@ export default function Home() {
   >("idle");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
-  const fullText = "Passport Suvidha Company is a Private Consultancy.";
-  // const [typedText, setTypedText] = useState("");
-  // const [startMarquee, setStartMarquee] = useState(false);
-
-  // useEffect(() => {
-  //   let index = 0;
-
-  //   const interval = setInterval(() => {
-  //     setTypedText(fullText.slice(0, index + 1));
-  //     index++;
-
-  //     if (index === fullText.length) {
-  //       clearInterval(interval);
-  //       setStartMarquee(true);
-  //     }
-  //   }, 80);
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
   useEffect(() => {
     const fetchWelcomeMessage = async () => {
@@ -114,7 +95,7 @@ export default function Home() {
 
     try {
       //  Get token (if logged in)
-      const token = localStorage.getItem("authToken");
+      // const token = localStorage.getItem("authToken");
 
       const response = await axiosServer.post(
         "/contact/enquiry",
@@ -241,10 +222,51 @@ export default function Home() {
         </div>
       )}
       <main className="flex-1">
-        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-28 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
+        <section className="w-full pb-12 sm:pb-16 md:pb-20 lg:pb-28 pt-6 sm:pb-8 md:pb-10 lg:pb-14 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
           <div className="blob-shape bg-teal/20 w-[300px] sm:w-[400px] md:w-[500px] h-[300px] sm:h-[400px] md:h-[500px] -left-32 sm:-left-48 md:-left-64 top-0"></div>
           <div className="blob-shape bg-gold/20 w-[400px] sm:w-[500px] md:w-[600px] h-[400px] sm:h-[500px] md:h-[600px] -right-48 sm:-right-64 md:-right-96 bottom-0 pulse-animation"></div>
           <div className="container px-4 md:px-6 relative">
+            <div className="mb-6 flex justify-center">
+              <div className="w-full overflow-hidden rounded-sm bg-white/10 shadow-sm">
+                <div className="marquee-track">
+                  {/* First copy */}
+                  <div className="marquee-content py-2 px-6">
+                    <span className="text-xs md:text-sm font-medium text-gold">
+                      This website is owned by a Private Consultancy Firm
+                      BOUNDLESS PASSPORT SUVIDHA LLP (Passport Suvidha). We are
+                      not Authorised by any Government Department. The fee paid
+                      on this platform is towards consultancy fee. No Government
+                      Fee is collected by us. Passport application government
+                      fees paid separately on government website. यह वेबसाइट एक
+                      प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
+                      (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
+                      अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
+                      कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
+                      पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
+                      वेबसाइट पर करना होता है।
+                    </span>
+                  </div>
+
+                  {/* Second copy */}
+                  <div className="marquee-content py-2 px-6">
+                    <span className="text-xs md:text-sm font-medium text-gold">
+                      This website is owned by a Private Consultancy Firm
+                      BOUNDLESS PASSPORT SUVIDHA LLP (Passport Suvidha). We are
+                      not Authorised by any Government Department. The fee paid
+                      on this platform is towards consultancy fee. No Government
+                      Fee is collected by us. Passport application government
+                      fees paid separately on government website. यह वेबसाइट एक
+                      प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
+                      (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
+                      अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
+                      कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
+                      पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
+                      वेबसाइट पर करना होता है।
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
               <div className="space-y-4 sm:space-y-6">
                 <div className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs sm:text-sm backdrop-blur-sm">
@@ -346,11 +368,18 @@ export default function Home() {
                 <div className=" w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
                   <div className="animate-marquee whitespace-nowrap py-2 px-6">
                     <span className="text-xs md:text-sm font-medium text-teal">
-                      ⚠️ Passport Suvidha Company is a private consultancy and
-                      is not affiliated with the Government of India or the
-                      Ministry of External Affairs.⚠️ पासपोर्ट सुविधा कंपनी एक
-                      प्राइवेट कंसल्टेंसी है और यह भारत सरकार या विदेश मंत्रालय
-                      से जुड़ी हुई नहीं है।
+                      This website is owned by a Private Consultancy Firm
+                      BOUNDLESS PASSPORT SUVIDHA LLP(Passport Suvidha). We are
+                      not Authorised by any Government Department. The fee paid
+                      on this platform is towards consultancy fee. No Government
+                      Fee is collected by us. Passport application government
+                      fees paid separately on government website. यह वेबसाइट एक
+                      प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
+                      (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
+                      अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
+                      कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
+                      पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
+                      वेबसाइट पर करना होता है।
                     </span>
                   </div>
                 </div>
@@ -1113,14 +1142,6 @@ export default function Home() {
                 </a>
               </div>
             </div>
-
-            {/* Bottom Note */}
-            {/* <div className="mt-8 text-center">
-              <p className="text-xs md:text-sm text-muted-foreground">
-                Trusted passport assistance services, helping customers across
-                India.
-              </p>
-            </div> */}
           </div>
         </section>
 

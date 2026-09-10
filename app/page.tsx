@@ -363,7 +363,7 @@ export default function Home() {
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center relative my-12">
               <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy">
                 <span>Our Services</span>
               </div>

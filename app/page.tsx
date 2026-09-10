@@ -364,26 +364,6 @@ export default function Home() {
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
             <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
-              <div className="mb-6 flex justify-center">
-                <div className=" w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
-                  <div className="animate-marquee whitespace-nowrap py-2 px-6">
-                    <span className="text-xs md:text-sm font-medium text-teal">
-                      This website is owned by a Private Consultancy Firm
-                      BOUNDLESS PASSPORT SUVIDHA LLP(Passport Suvidha). We are
-                      not Authorised by any Government Department. The fee paid
-                      on this platform is towards consultancy fee. No Government
-                      Fee is collected by us. Passport application government
-                      fees paid separately on government website. यह वेबसाइट एक
-                      प्राइवेट कंसल्टेंसी फर्म, 'बाउंडलेस पासपोर्ट सुविधा LLP'
-                      (पासपोर्ट सुविधा) की है। हम किसी भी सरकारी विभाग द्वारा
-                      अधिकृत नहीं हैं। इस प्लेटफ़ॉर्म पर दी जाने वाली फ़ीस
-                      कंसल्टेंसी फ़ीस है। हम कोई सरकारी फ़ीस नहीं लेते हैं।
-                      पासपोर्ट आवेदन के लिए सरकारी फ़ीस का भुगतान अलग से सरकारी
-                      वेबसाइट पर करना होता है।
-                    </span>
-                  </div>
-                </div>
-              </div>
               <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy">
                 <span>Our Services</span>
               </div>

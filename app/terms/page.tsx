@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+// import Image from "next/image";
 import {
   FileText,
   Shield,
@@ -33,14 +34,25 @@ export default function TermsCondition() {
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
         <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+          {/* <section className="w-full relative overflow-hidden">
+          <div className="relative h-[40vh] w-full bg-white lg:h-[60vh] lg:bg-[url('/terms/T&C_Desktop.png')] lg:bg-no-repeat lg:bg-left lg:bg-cover">
+            //  Mobile Hero Image 
+            <div className="absolute inset-0 block lg:hidden">
+              <Image
+                src="/terms/T&C_Mobile.png"
+                alt="Site Map"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+          </div> */}
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-3xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
                 Terms and Conditions
               </h1>
-              {/* <p className="text-muted-foreground md:text-xl">
-                How we collect, use, and protect your personal information
-              </p> */}
               <div className="mt-2 flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>Last Updated: March 21, 2026</span>

@@ -18,19 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { motion } from "framer-motion";
-import {
-  FileText,
-  Upload,
-  Trash2,
-  CheckCircle,
-  AlertCircle,
-  Download,
-  ArrowUpRight,
-} from "lucide-react";
-import { formatDate } from "@/lib/utils";
 import axiosServer from "@/lib/axiosServer";
 
 export default function ApplicationStatus() {
@@ -64,20 +52,26 @@ export default function ApplicationStatus() {
   }, []);
 
   const fetchProgress = async () => {
-    try {
-      const token = localStorage.getItem("authToken"); // or wherever you store it
+    setLoading(true);
 
-      const res = await axiosServer.get("/application-progress/status", {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const res = await axiosServer.get("/application-progress", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (res.data.status) {
-        setProgressData(res.data.data);
-      }
+      // console.log("Application progress:", res.data);
+
+      setProgressData(res.data.stages || []);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch application progress:", error);
+
+      setProgressData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +87,14 @@ export default function ApplicationStatus() {
 
   const getStatusBadgeClass = (color) => {
     return STATUS_COLOR_MAP[color || "gray"] || STATUS_COLOR_MAP.gray;
+  };
+
+  const getFileUrl = (item) => {
+    if (!item?.file_token || !item?.has_file) {
+      return null;
+    }
+
+    return `/api/application-files/${encodeURIComponent(item.file_token)}`;
   };
 
   return (
@@ -144,87 +146,92 @@ export default function ApplicationStatus() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  progressData.map((item, index) => (
-                    <TableRow key={index}>
-                      {/* Status Name */}
-                      {/* <TableCell className="font-medium">
+                  progressData.map((item, index) => {
+                    const fileUrl = getFileUrl(item);
+                    return (
+                      <TableRow key={index}>
+                        {/* Status Name */}
+                        {/* <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {item.status_name}
                         </div>
                       </TableCell> */}
-                      <TableCell className="font-medium">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${getStatusBadgeClass(
-                            item.colorclass,
-                          )}`}
-                        >
-                          {item.status_name
-                            ? item.status_name.replace(/_/g, " ")
-                            : "N/A"}
-                        </span>
-                      </TableCell>
+                        <TableCell className="font-medium">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${getStatusBadgeClass(
+                              item.colorclass,
+                            )}`}
+                          >
+                            {item.status_name
+                              ? item.status_name.replace(/_/g, " ")
+                              : "N/A"}
+                          </span>
+                        </TableCell>
 
-                      {/* Date */}
-                      <TableCell>
-                        {item.status_date
-                          ? new Date(item.status_date).toLocaleString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                              // hour: "2-digit",
-                              // minute: "2-digit",
-                              // hour12: true,
-                            })
-                          : "-"}
-                      </TableCell>
-                      {/* <TableCell>
+                        {/* Date */}
+                        <TableCell>
+                          {item.status_date
+                            ? new Date(item.status_date).toLocaleString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  // hour: "2-digit",
+                                  // minute: "2-digit",
+                                  // hour12: true,
+                                },
+                              )
+                            : "-"}
+                        </TableCell>
+                        {/* <TableCell>
                         {item.status_date
                           ? new Date(item.status_date).toLocaleString()
                           : "-"}
                       </TableCell> */}
 
-                      {/* Remark */}
-                      <TableCell className="align-top">
-                        <div className="w-[500px] lg:w-auto overflow-hidden whitespace-normal break-words leading-6">
-                          {item.remark || "-"}
-                        </div>
-                      </TableCell>
+                        {/* Remark */}
+                        <TableCell className="align-top">
+                          <div className="w-[500px] lg:w-auto overflow-hidden whitespace-normal break-words leading-6">
+                            {item.remark || "-"}
+                          </div>
+                        </TableCell>
 
-                      {/* File */}
-                      <TableCell>
-                        {item.file_url ? (
-                          <a
-                            href={item.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 underline"
-                          >
-                            {/* Icon */}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 mr-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
+                        {/* File */}
+                        <TableCell>
+                          {fileUrl ? (
+                            <a
+                              href={fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-blue-600 underline"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                              />
-                            </svg>
-                            {/* Text */}
-                            View File
-                          </a>
-                        ) : (
-                          <p className="text-muted-foreground text-xs">
-                            No File
-                          </p>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
+                              {/* External Link Icon */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                              </svg>
+                              View File
+                            </a>
+                          ) : (
+                            <p className="text-muted-foreground text-xs">
+                              No File
+                            </p>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>

@@ -36,72 +36,46 @@ export default function PortalDashboard() {
   const [isChecking, setIsChecking] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const [data, setData] = useState<any>(null);
-  const [progressData, setProgressData] = useState([]);
 
   const [customerMessage, setCustomerMessage] = useState("");
 
-  useEffect(() => {
-    fetchProgress();
-  }, []);
-
-  const fetchProgress = async () => {
-    try {
-      const token = localStorage.getItem("authToken");
-
-      const res = await axiosServer.get("/application-progress/status", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (res.data.status) {
-        setProgressData(res.data.data || []);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const remarkMap = React.useMemo(() => {
-    const map: Record<string, any> = {};
+    const map = {};
 
-    progressData?.forEach((item: any) => {
-      if (item?.slug) {
-        map[item.slug] = item;
+    applicationProgress?.stages?.forEach((item) => {
+      const key = item?.title;
+
+      if (key) {
+        map[key] = item;
       }
     });
 
     return map;
-  }, [progressData]);
+  }, [applicationProgress]);
 
-  const getRemarkBySlug = (slug: string) => {
-    return remarkMap?.[slug]?.remark || ""; // ✅ no fallback text
+  const getRemarkBySlug = (slug) => {
+    return remarkMap?.[slug]?.remark || "";
   };
 
   const renderRemark = (slug: string) => {
     const item = remarkMap?.[slug];
 
-    if (!item?.remark && !item?.file_url) return null;
+    if (!item?.remark) return null;
 
     return (
-      <div className="text-gray-600 text-sm mt-1 flex items-center gap-2">
-        {/* Remark text */}
-        {item?.remark && (
-          <span>
-            {item.remark.length > 50 ? (
-              <>
-                {item.remark.substring(0, 50)}...
-                <a
-                  href="/portal/application-status"
-                  className="text-blue-600 ml-1"
-                >
-                  Read Remark
-                </a>
-              </>
-            ) : (
-              item.remark
-            )}
-          </span>
+      <div className="text-gray-600 text-sm mt-1">
+        {item.remark.length > 50 ? (
+          <>
+            {item.remark.substring(0, 50)}...
+            <a
+              href="/portal/application-status"
+              className="text-blue-600 ml-1 hover:underline"
+            >
+              Read Remark
+            </a>
+          </>
+        ) : (
+          <span>{item.remark}</span>
         )}
       </div>
     );
@@ -110,84 +84,91 @@ export default function PortalDashboard() {
   // Stage helper functions
 
   const findStage = (title: string): ApplicationStage | null => {
-    if (!applicationProgress?.stages) return null;
-
-    const searchTitle = title.toLowerCase();
+    if (!applicationProgress?.stages?.length) return null;
 
     return (
       applicationProgress.stages.find(
-        (s) => s?.title?.toLowerCase() === searchTitle,
+        (stage: any) => stage?.title?.toLowerCase() === title.toLowerCase(),
       ) || null
     );
+  };
+
+  const isStageCompleted = (title: string): boolean => {
+    const stage = findStage(title);
+
+    return !!stage?.completed;
+  };
+
+  const isCurrentStage = (title) => {
+    const currentStage = applicationProgress?.current_stage;
+
+    return !!currentStage && currentStage.toLowerCase() === title.toLowerCase();
   };
 
   const findStageStatus = (title: string): string => {
     const stage = findStage(title);
 
-    if (!stage) return "bg-gray-100 border-gray-50";
+    if (!stage) {
+      return "bg-gray-100 border-gray-50";
+    }
 
-    if (stage.completed) {
+    if (isStageCompleted(title)) {
       return "bg-green-100 border-green-50";
     }
 
-    const currentStage = applicationProgress?.stages.find((s) => !s.completed);
-
-    if (stage.title === currentStage?.title) {
+    if (isCurrentStage(title)) {
       return "bg-blue-100 border-blue-50";
     }
 
     return "bg-gray-100 border-gray-50";
   };
 
-  const isStageCompleted = (title: string): boolean => {
-    return findStage(title)?.completed || false;
-  };
-
-  const isCurrentStage = (title: string): boolean => {
-    const currentStage = applicationProgress?.stages.find((s) => !s.completed);
-    return currentStage?.title === title;
-  };
-
   const getStageTextClass = (title: string): string => {
-    if (!applicationProgress?.stages) return "text-gray-600";
+    if (!findStage(title)) {
+      return "text-gray-400";
+    }
 
-    // completed OR current → normal text
     if (isStageCompleted(title) || isCurrentStage(title)) {
       return "";
     }
 
-    // not reached yet → faded text
-    return "text-gray-600";
-  };
-
-  const getStageTextColorClass = (title: string): string => {
-    if (isStageCompleted(title)) return "text-green-600";
-    if (isCurrentStage(title)) return "text-blue-600";
     return "text-gray-400";
   };
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
+  const getStageTextColorClass = (title: string): string => {
+    if (isStageCompleted(title)) {
+      return "text-green-600";
+    }
 
-    // Fix Laravel formats
-    let cleaned = dateString.replace(" ", "T");
-    cleaned = cleaned.split(".")[0];
+    if (isCurrentStage(title)) {
+      return "text-blue-600";
+    }
 
-    const date = new Date(cleaned);
-
-    if (isNaN(date.getTime())) return "";
-
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    return "text-gray-400";
   };
 
   const getStageDate = (title: string): string => {
+    const stage: any = findStage(title);
+
+    if (!stage?.status_date) {
+      return "";
+    }
+
+    return formatDate(stage.status_date);
+  };
+
+  const getFileUrl = (item: any) => {
+    if (!item?.file_token || !item?.has_file) {
+      return null;
+    }
+
+    return `/api/application-files/${encodeURIComponent(item.file_token)}`;
+  };
+
+  const getStageFileUrl = (title: string) => {
     const stage = findStage(title);
-    if (!stage?.date) return "";
-    return formatDate(stage.date);
+
+    return getFileUrl(stage);
   };
 
   // Animation variants
@@ -278,30 +259,22 @@ export default function PortalDashboard() {
   };
 
   const getProgressPercentage = () => {
-    // ✅ If no data → still show 10% (Application Submitted)
-    if (!applicationProgress?.stages?.length) return 10;
+    if (!applicationProgress?.stages?.length) {
+      return 10;
+    }
+
+    if (applicationProgress.progress_percentage != null) {
+      return Math.min(
+        100,
+        Math.max(0, Number(applicationProgress.progress_percentage)),
+      );
+    }
 
     const stages = applicationProgress.stages;
 
-    // ✅ Case 1: success → 100%
-    const hasSuccess = stages.some((s) => s?.title === "pov_success");
-    if (hasSuccess) return 100;
+    const completedCount = stages.filter((stage) => stage?.completed).length;
 
-    // ✅ Case 2: final attempt reached
-    const finalStage = stages[10];
-    if (
-      finalStage &&
-      finalStage.date &&
-      ["pov_failed", "pov_insufficient_documents"].includes(finalStage.title)
-    ) {
-      return 100;
-    }
-
-    // ✅ Count completed stages
-    const completedCount = stages.filter((s) => s?.date).length;
-
-    // ✅ Always minimum 10%
-    const progressMap = [10, 30, 50, 70, 85, 95];
+    const progressMap = [10, 30, 50, 70, 85, 95, 100];
 
     return progressMap[Math.min(completedCount, progressMap.length - 1)] || 10;
   };
@@ -765,18 +738,17 @@ export default function PortalDashboard() {
                             )}`}
                           >
                             Details Verification
-                            {remarkMap?.["details_verification"]?.file_url && (
+                            {getStageFileUrl("details_verification") && (
                               <a
-                                href={
-                                  remarkMap["details_verification"].file_url
-                                }
+                                href={getStageFileUrl("details_verification")}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="View File"
+                                className="text-blue-600 hover:text-blue-800"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                  className="h-4 w-4"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
@@ -825,18 +797,17 @@ export default function PortalDashboard() {
                             )}`}
                           >
                             Appointment Scheduled
-                            {remarkMap?.["appointment_scheduled"]?.file_url && (
+                            {getStageFileUrl("appointment_scheduled") && (
                               <a
-                                href={
-                                  remarkMap["appointment_scheduled"].file_url
-                                }
+                                href={getStageFileUrl("appointment_scheduled")}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                title="View File"
+                                title="View Appointment Letter"
+                                className="text-blue-600 hover:text-blue-800"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 mr-1 text-blue-600 ml-1"
+                                  className="h-4 w-4 mr-1"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
@@ -1053,13 +1024,13 @@ export default function PortalDashboard() {
                                     )}`}
                                   >
                                     Appointment Rescheduled 1
-                                    {remarkMap?.["appointment_rescheduled1"]
-                                      ?.file_url && (
+                                    {getStageFileUrl(
+                                      "appointment_rescheduled1",
+                                    ) && (
                                       <a
-                                        href={
-                                          remarkMap["appointment_rescheduled1"]
-                                            .file_url
-                                        }
+                                        href={getStageFileUrl(
+                                          "appointment_rescheduled1",
+                                        )}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         title="View File"
@@ -1303,15 +1274,13 @@ export default function PortalDashboard() {
                                             )}`}
                                           >
                                             Appointment Rescheduled 2
-                                            {remarkMap?.[
-                                              "appointment_rescheduled2"
-                                            ]?.file_url && (
+                                            {getStageFileUrl(
+                                              "appointment_rescheduled2",
+                                            ) && (
                                               <a
-                                                href={
-                                                  remarkMap[
-                                                    "appointment_rescheduled2"
-                                                  ].file_url
-                                                }
+                                                href={getStageFileUrl(
+                                                  "appointment_rescheduled1",
+                                                )}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 title="View File"
@@ -1576,15 +1545,13 @@ export default function PortalDashboard() {
                                                     )}`}
                                                   >
                                                     Appointment Rescheduled 3
-                                                    {remarkMap?.[
-                                                      "appointment_rescheduled3"
-                                                    ]?.file_url && (
+                                                    {getStageFileUrl(
+                                                      "appointment_rescheduled3",
+                                                    ) && (
                                                       <a
-                                                        href={
-                                                          remarkMap[
-                                                            "appointment_rescheduled3"
-                                                          ].file_url
-                                                        }
+                                                        href={getStageFileUrl(
+                                                          "appointment_rescheduled3",
+                                                        )}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         title="View File"

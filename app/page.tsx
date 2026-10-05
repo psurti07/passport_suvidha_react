@@ -45,6 +45,14 @@ import Image from "next/image";
 import axiosServer from "@/lib/axiosServer";
 import ReactCountryFlag from "react-country-flag";
 import { Receipt } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 // import { buildSeo } from "@/lib/buildSeo";
 
 // export async function generateMetadata() {
@@ -57,8 +65,8 @@ export default function Home() {
   const [contactSubject, setContactSubject] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [city, setCity] = useState("");
+  const [locations, setLocations] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [locations, setLocations] = useState([]);
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const [contactSubmitStatus, setContactSubmitStatus] = useState<
@@ -164,7 +172,12 @@ export default function Home() {
   };
 
   const handleSearch = async (value: string) => {
-    if (!value.trim()) return;
+    const searchValue = value.trim();
+
+    if (!searchValue) {
+      setLocations([]);
+      return;
+    }
 
     try {
       setIsSearching(true);
@@ -175,10 +188,12 @@ export default function Home() {
           : null;
 
       const response = await axiosServer.get(
-        `/locations?search=${value}`, // 👈 change API if needed
+        `/locations?search=${encodeURIComponent(searchValue)}`,
         {
           headers: {
-            ...(token && { Authorization: `Bearer ${token}` }),
+            ...(token && {
+              Authorization: `Bearer ${token}`,
+            }),
           },
         },
       );
@@ -186,18 +201,167 @@ export default function Home() {
       const data = response.data;
 
       if (data?.status === "success") {
-        setLocations(data.data); // store results
+        setLocations(data.data || []);
+
+        if (!data.data || data.data.length === 0) {
+          toast.error("No passport offices found");
+        }
       } else {
-        toast.error(data.message || "No locations found");
+        setLocations([]);
+        toast.error(data?.message || "No locations found");
       }
     } catch (error: any) {
       console.error("Search Error:", error);
 
-      toast.error(error.response?.data?.message || "Failed to fetch locations");
+      setLocations([]);
+
+      toast.error(
+        error?.response?.data?.message || "Failed to fetch locations",
+      );
     } finally {
       setIsSearching(false);
     }
   };
+
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    const updateCarousel = () => {
+      setCurrent(api.selectedScrollSnap());
+    };
+
+    // Initial values
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
+    // Listen for slide changes
+    api.on("select", updateCarousel);
+
+    return () => {
+      api.off("select", updateCarousel);
+    };
+  }, [api]);
+
+  // Auto scroll
+  useEffect(() => {
+    if (!api) return;
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [api]);
+
+  const reviews = [
+    {
+      name: "Divya Patel",
+      // location: "New Delhi",
+      rating: 3,
+      review:
+        "Passport Suvidha provided clear instructions and timely assistance, making the process smooth and reliable.",
+    },
+    {
+      name: "Jevin Pipaliya",
+      // location: "Ahmedabad",
+      rating: 4,
+      review:
+        "Very reliable and responsive service. I was unsure about the passport documentation requirements, but the team explained everything clearly and helped me avoid unnecessary delays. The entire experience was smooth and well-organized. Highly recommended",
+    },
+    {
+      name: "SAVANI KRISHA",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "Passport Suvidha is truly reliable. Their consulting made the entire application simple and easy to understand. I would definitely recommend them to others.",
+    },
+    {
+      name: "Rinkal Golakiya",
+      // location: "Pune",
+      rating: 4,
+      review:
+        "When I applied for my passport, I was concerned about delays and errors. Passport Suvidha gave me confidence by handling everything correctly. Their team was courteous, efficient, and highly professional. I received my passport on time, and I truly appreciate their reliable support.",
+    },
+    {
+      name: "Alkesh Patel",
+      // location: "Mumbai",
+      rating: 4,
+      review:
+        "I appreciated how quickly the staff responded to my queries. They ensured all documents were correct, which saved me from unnecessary delays",
+    },
+    {
+      name: "Himmat Bhai",
+      // location: "Mumbai",
+      rating: 3,
+      review:
+        "Passport Suvidha delivered top-notch service during my passport application. Their attention to detail and customer-first approach made the process smooth and reliable.",
+    },
+    {
+      name: "Kaushik Ghoghari",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "Passport Suvidha made my Tatkal passport application stress-free. They provided accurate guidance on the required documents and kept me updated throughout the process. Their professionalism and attention to detail were impressive. I would definitely use their services again. Himmatbhai tarsariya , Amreli.",
+    },
+    {
+      name: "Sejal Jasoliya",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "Passport Suvidha made my passport application journey effortless. Their guidance was clear, their support was timely, and their professionalism exceeded expectations.",
+    },
+    {
+      name: "Rashikbhai Kanani",
+      // location: "Mumbai",
+      rating: 3,
+      review:
+        "I had a great experience with Passport Suvidha. The team guided me through every step of my passport application and made the entire process simple and hassle-free. They were quick to respond to my queries and ensured all my documents were in order. Highly recommended for anyone looking for professional passport assistance.",
+    },
+    {
+      name: "Vipul Rathod",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "I am vipul, I am very satisfied with Passport Suvidha’s services. The team was professional, supportive, and made the passport application process smooth and easy. Highly recommended.",
+    },
+    {
+      name: "Poonam Roy",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "I used PassportSuvidha for both my new passport application and my father's passport renewal, and the experience was excellent. The team provided clear guidance on the required documents, helped with the application process, and ensured everything was completed correctly. Their prompt support and professional approach made the entire process smooth and hassle-free. I highly recommend PassportSuvidha for anyone looking for reliable passport assistance services.",
+    },
+    {
+      name: "Krishna Dhola",
+      // location: "Mumbai",
+      rating: 3,
+      review:
+        "Passport Suvidha turned what I thought would be a complicated process into a simple and well-organized journey. Their trustworthy service ensured every step was completed smoothly.",
+    },
+    {
+      name: "Krish Sutariya",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "Good passport application assistance with helpful customer service. The staff was patient and responsive throughout.",
+    },
+    {
+      name: "Deepak Sharma",
+      // location: "Mumbai",
+      rating: 3,
+      review:
+        "Reliable and trustworthy service. I would recommend Passport Suvidha to anyone needing passport assistance.",
+    },
+    {
+      name: "Tapaniya Sadulbhai",
+      // location: "Mumbai",
+      rating: 4,
+      review:
+        "Great customer service of Passport Suvidha! The team was friendly and supportive throughout the process Hareshbhai, Tataniya",
+    },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
@@ -275,7 +439,7 @@ export default function Home() {
                   </span>
                 </div>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
-                  Making Your{" "}
+                  Making Your
                   <span className="text-gold">Passport Services</span> Digitally
                   Seamless!
                 </h1>
@@ -358,12 +522,12 @@ export default function Home() {
 
         <section
           id="services"
-          className="w-full pb-12 sm:pb-16 md:pb-24 bg-white"
+          className="w-full py-12 sm:py-16 md:py-24 bg-white"
         >
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] left-0 bottom-0"></div>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center relative my-12">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center relative mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm text-navy">
                 <span>Our Services</span>
               </div>
@@ -378,6 +542,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+              {/* <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3"> */}
               <div className="group relative">
                 <div className="absolute -inset-2 bg-gradient-to-r from-navy to-navy/50 blur-2xl opacity-30 rounded-3xl"></div>
                 <Card className="relative text-card-foreground rounded-3xl border-0 bg-white shadow-xl card-hover">
@@ -445,6 +610,40 @@ export default function Home() {
                   </CardFooter>
                 </Card>
               </div>
+              {/* 
+              <div className="group relative">
+                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-teal/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full">
+                  <CardHeader className="pb-2">
+                    <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-teal/10 text-teal">
+                      <Clock className="h-6 sm:h-7 w-6 sm:w-7" />
+                    </div>
+                    <CardTitle className="text-lg sm:text-xl">
+                      Reissue Passport
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      Express Application
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm sm:text-base">
+                      Renew your passport or update your details with ease.
+                      Apply for a quick and hassle-free reissue.
+                    </p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-navy hover:bg-teal/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-teal group-hover:to-navy text-sm sm:text-base"
+                      asChild
+                    >
+                      <Link href="/apply-passport">
+                        Apply for Reissue
+                        <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div> */}
             </div>
           </div>
         </section>
@@ -597,7 +796,7 @@ export default function Home() {
             </div>
 
             <Tabs defaultValue="stats" className="max-w-5xl mx-auto">
-              <TabsList className="grid w-full h-full grid-row-1 md:grid-cols-3 gap-2 mb-8">
+              <TabsList className="grid w-full h-full grid-row-1 md:grid-cols-2 gap-2 mb-8">
                 <TabsTrigger
                   value="stats"
                   className="flex items-center justify-center text-sm md:text-base font-medium px-3 py-2.5 rounded-xl transition-colors hover:text-navy focus:text-navy w-full"
@@ -612,13 +811,13 @@ export default function Home() {
                   <Award className="w-4 h-4 mr-2 flex-shrink-0" />
                   <span className="truncate">24x7 Helpline</span>
                 </TabsTrigger>
-                <TabsTrigger
+                {/* <TabsTrigger
                   value="testimonials"
                   className="flex items-center justify-center text-sm md:text-base font-medium px-3 py-2.5 rounded-xl transition-colors hover:text-navy focus:text-navy w-full"
                 >
                   <Star className="w-4 h-4 mr-2 flex-shrink-0" />
                   <span className="truncate">Client Testimonials</span>
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
 
               <TabsContent value="stats">
@@ -988,7 +1187,7 @@ export default function Home() {
                   </div>
                 </a>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {/* Media Link 1 */}
                 <a
                   href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/how+passport+suvidha+is+redefining+the+passport+assistance+experience+in+india-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_0de67550a68e11f1abbee57769f7cd2c?sm=Y"
@@ -1121,6 +1320,139 @@ export default function Home() {
                   </div>
                 </a>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Media Link 1 */}
+                <a
+                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+passport+assistance+guidance+and+support+under+one+digital+platform-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_1ba61bf0be5311f1bff09c49ac89e8e4?sm=Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-3xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-navy to-teal" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-xl
+                bg-gradient-to-br from-navy/10 to-teal/10
+                text-navy
+                transition-all duration-300
+                group-hover:from-navy group-hover:to-teal
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Media Coverage
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Transforming Passport Assistance
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Discover how PassportSuvidha is making passport
+                        assistance simpler, more reliable, and convenient for
+                        applicants across India.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Media Link 2 */}
+                <a
+                  href="https://hindustanmetro.com/passport-suvidha-brings-passport-assistance-guidance-and-support-under-one-digital-platform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-2xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal to-navy" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-3xl
+                bg-gradient-to-br from-teal/10 to-navy/10
+                text-teal
+                transition-all duration-300
+                group-hover:from-teal group-hover:to-navy
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Featured Article
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Enhancing the Passport Experience
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Explore how PassportSuvidha is delivering convenient,
+                        professional, and dependable support to simplify the
+                        passport application process.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -1190,6 +1522,82 @@ export default function Home() {
                         </Button>
                       </div>
                       <div className="space-y-4" id="locationsList">
+                        {locations.length > 0 ? (
+                          locations.map((location) => (
+                            <div
+                              key={location.pfc_id}
+                              className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white"
+                            >
+                              <div className="flex flex-col md:flex-row items-start justify-between gap-4">
+                                {/* Location Information */}
+                                <div className="space-y-1">
+                                  <h4 className="font-medium text-navy">
+                                    {location.name}
+                                  </h4>
+
+                                  <p className="text-sm text-muted-foreground">
+                                    {location.pbo_name}
+                                  </p>
+
+                                  <p className="text-sm text-muted-foreground">
+                                    {location.address}
+                                  </p>
+
+                                  <p className="text-sm text-muted-foreground">
+                                    {location.city} - {location.pincode}
+                                  </p>
+
+                                  <p className="text-sm text-muted-foreground">
+                                    Phone: {location.phone}
+                                  </p>
+
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span
+                                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                                        location.status === "Operational"
+                                          ? "bg-green-100 text-green-700"
+                                          : location.status === "Planned"
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : "bg-gray-100 text-gray-700"
+                                      }`}
+                                    >
+                                      {location.status}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Directions Button */}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex items-center gap-1 border-navy text-navy hover:bg-navy hover:text-white rounded-full"
+                                  onClick={() => {
+                                    const url = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`;
+
+                                    window.open(url, "_blank");
+                                  }}
+                                >
+                                  <MapPin className="h-4 w-4" />
+                                  Directions
+                                </Button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="rounded-xl border border-dashed p-8 text-center">
+                            <MapPin className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
+
+                            <p className="font-medium text-gray-700">
+                              No passport offices found
+                            </p>
+
+                            <p className="text-sm text-muted-foreground mt-1">
+                              Search using your city.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      {/* <div className="space-y-4" id="locationsList">
                         <div className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white cursor-pointer">
                           <div className="flex flex-col md:flex-row items-start justify-between">
                             <div>
@@ -1259,7 +1667,7 @@ export default function Home() {
                             </Button>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="relative overflow-hidden rounded-3xl flex-1">
                       {/* Map */}
@@ -1427,8 +1835,141 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Contact Section */}
+        {/* Review Section */}
         <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+          <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
+                <span>Reviews</span>
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+                  What Our Users Say
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  See what people say about their passport application
+                  experience
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto max-w-5xl relative">
+              {/* Background Glow */}
+              <div className="absolute -inset-4 rounded-3xl " />
+              <Carousel
+                setApi={setApi}
+                opts={{ align: "start", loop: true }}
+                className="relative w-full"
+              >
+                <CarouselContent>
+                  {reviews.map((review, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="basis-full md:basis-1/2"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 * index }}
+                        className="p-2"
+                      >
+                        <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
+                          {/* Gradient Top Border */}
+                          <div className="h-2 w-full bg-gradient-to-r from-teal to-navy" />
+
+                          <CardHeader>
+                            <div className="flex gap-1 mb-2">
+                              {Array(review.rating)
+                                .fill(0)
+                                .map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className="h-4 w-4 fill-gold text-gold"
+                                  />
+                                ))}
+                            </div>
+                          </CardHeader>
+
+                          <CardContent className="space-y-4">
+                            <p className="italic text-muted-foreground leading-relaxed">
+                              "{review.review}"
+                            </p>
+
+                            <div>
+                              <p className="font-medium text-navy">
+                                {review.name}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {/* <CarouselPrevious
+                  className="
+                    left-0
+                    h-12 w-12
+                    rounded-full
+                    border-0
+                    bg-gradient-to-r from-teal to-navy
+                    text-white
+                    shadow-xl
+                    transition-all duration-300
+                    hover:scale-110
+                    hover:shadow-2xl
+                    disabled:opacity-40
+                  "
+                />
+                <CarouselNext
+                  className="
+                    right-0
+                    h-12 w-12
+                    rounded-full
+                    border-0
+                    bg-gradient-to-r from-teal to-navy
+                    text-white
+                    shadow-xl
+                    transition-all duration-300
+                    hover:scale-110
+                    hover:shadow-2xl
+                    disabled:opacity-40
+                  "
+                /> */}
+              </Carousel>
+              {/* Dots */}
+              <div className="mt-6 flex items-center justify-center gap-2">
+                {Array.from({ length: count }).map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      api?.scrollTo(index);
+                    }}
+                    aria-label={`Go to slide ${index + 1}`}
+                    aria-current={current === index ? "true" : undefined}
+                    className={`
+        h-2.5
+        rounded-full
+        transition-all
+        duration-500
+        ease-out
+        cursor-pointer
+        ${
+          current === index
+            ? "w-8 bg-navy shadow-sm"
+            : "w-2.5 bg-navy/20 hover:w-5 hover:bg-navy/40"
+        }
+      `}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">

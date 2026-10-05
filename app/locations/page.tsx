@@ -20,17 +20,59 @@ import {
   ArrowRight,
   Search,
   Loader2,
+  Building2,
 } from "lucide-react";
 import { toast } from "sonner";
 import axiosServer from "@/lib/axiosServer";
 
+interface Location {
+  pbo_id: number;
+  pbo_name: string;
+  pfc_id: number;
+  name: string;
+  city: string;
+  short_name: string;
+  address: string;
+  phone: string;
+  email: string;
+  latitude: number;
+  longitude: number;
+  status: string;
+  pincode: string;
+  pincode_validation?: {
+    valid: boolean;
+    message: string;
+  };
+  pincode_post_office?: {
+    Name: string;
+    BranchType: string;
+    DeliveryStatus: string;
+    Circle: string;
+    District: string;
+    Division: string;
+    Region: string;
+    Block: string;
+    State: string;
+    Country: string;
+    Pincode: string;
+  };
+}
+
 export default function Locations() {
   const [city, setCity] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null,
+  );
 
   const handleSearch = async (value: string) => {
-    if (!value.trim()) return;
+    const searchValue = value.trim();
+
+    if (!searchValue) {
+      setLocations([]);
+      return;
+    }
 
     try {
       setIsSearching(true);
@@ -40,23 +82,37 @@ export default function Locations() {
           ? localStorage.getItem("authToken")
           : null;
 
-      const response = await axiosServer.get(`/locations?search=${value}`, {
-        headers: {
-          ...(token && { Authorization: `Bearer ${token}` }),
+      const response = await axiosServer.get(
+        `/locations?search=${encodeURIComponent(searchValue)}`,
+        {
+          headers: {
+            ...(token && {
+              Authorization: `Bearer ${token}`,
+            }),
+          },
         },
-      });
+      );
 
       const data = response.data;
 
       if (data?.status === "success") {
-        setLocations(data.data); // store results
+        setLocations(data.data || []);
+
+        if (!data.data || data.data.length === 0) {
+          toast.error("No locations found");
+        }
       } else {
-        toast.error(data.message || "No locations found");
+        setLocations([]);
+        toast.error(data?.message || "No locations found");
       }
     } catch (error: any) {
       console.error("Search Error:", error);
 
-      toast.error(error.response?.data?.message || "Failed to fetch locations");
+      setLocations([]);
+
+      toast.error(
+        error?.response?.data?.message || "Failed to fetch locations",
+      );
     } finally {
       setIsSearching(false);
     }
@@ -128,7 +184,7 @@ export default function Locations() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 gap-8 max-w-6xl mx-auto">
               {/* Using grid-rows-1 to ensure same height and h-full on cards */}
-              <div className="group relative grid-rows-1">
+              {/* <div className="group relative grid-rows-1">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
                 <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
                   <CardHeader className="pb-2">
@@ -170,9 +226,101 @@ export default function Locations() {
                     </Button>
                   </CardFooter>
                 </Card>
-              </div>
+              </div> */}
 
-              <div className="group relative grid-rows-1">
+              {/* Locations */}
+              {locations.length > 0 && (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold">
+                      Select Passport Office
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground">
+                      We found {locations.length} passport office
+                      {locations.length > 1 ? "s" : ""} for your search.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    {locations.map((location) => (
+                      <div
+                        key={location.pfc_id}
+                        className={`rounded-2xl border p-5 cursor-pointer transition-all
+                    ${
+                      selectedLocation?.pfc_id === location.pfc_id
+                        ? "border-teal bg-teal/5 shadow-md"
+                        : "border-gray-200 hover:border-teal/50 hover:shadow-sm"
+                    }`}
+                        onClick={() => setSelectedLocation(location)}
+                      >
+                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                          {/* Office information */}
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                              <div className="h-10 w-10 rounded-full bg-teal/10 flex items-center justify-center">
+                                <Building2 className="h-5 w-5 text-teal" />
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold text-lg">
+                                  {location.name}
+                                </h4>
+
+                                <p className="text-sm text-muted-foreground">
+                                  {location.pbo_name}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2 text-sm text-muted-foreground">
+                              <MapPin className="h-4 w-4 text-teal shrink-0 mt-0.5" />
+
+                              <span>{location.address}</span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-4 text-sm">
+                              <span>
+                                <strong>City:</strong> {location.city}
+                              </span>
+
+                              <span>
+                                <strong>PIN:</strong> {location.pincode}
+                              </span>
+
+                              <span>
+                                <strong>Phone:</strong> {location.phone}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Status / Select */}
+                          <div className="flex flex-col items-start md:items-end gap-3">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium
+                          ${
+                            location.status === "Operational"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                            >
+                              {location.status}
+                            </span>
+
+                            {selectedLocation?.pfc_id === location.pfc_id && (
+                              <span className="text-sm font-medium text-teal">
+                                ✓ Selected
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* <div className="group relative grid-rows-1">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-teal/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
                 <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
                   <CardHeader className="pb-2">
@@ -390,7 +538,7 @@ export default function Locations() {
                     </Button>
                   </CardFooter>
                 </Card>
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-16 max-w-4xl mx-auto">

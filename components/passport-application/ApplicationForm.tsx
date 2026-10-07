@@ -1355,6 +1355,7 @@ function ApplicationForm() {
               errorMessage={errorMessage}
               itemVariants={itemVariants}
               mobileNumber={formData.mobile}
+              email={formData.email}
             />
           </motion.div>
         )}

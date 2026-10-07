@@ -42,6 +42,7 @@ interface StepFamilyDetailsProps {
   itemVariants?: any;
   errorMessage?: any;
   mobileNumber?: string;
+  email?: string;
 }
 
 const StepFamilyDetails = ({
@@ -54,6 +55,7 @@ const StepFamilyDetails = ({
   itemVariants,
   errorMessage,
   mobileNumber,
+  email,
 }: StepFamilyDetailsProps) => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [touched, setTouched] = useState({
@@ -112,7 +114,10 @@ const StepFamilyDetails = ({
       ? "Emergency contact email is required"
       : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emergencyContactEmail)
         ? "Enter a valid email address"
-        : "",
+        : formData.emergencyContactEmail.trim().toLowerCase() ===
+            email.trim().toLowerCase()
+          ? "Emergency contact email cannot be the same as your email"
+          : "",
   };
 
   const maritalOptions = [

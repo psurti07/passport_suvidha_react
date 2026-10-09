@@ -541,10 +541,12 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-              {/* <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3"> */}
+            {/* <div className="mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8"> */}
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
               <div className="group relative">
-                <div className="absolute -inset-2 bg-gradient-to-r from-navy to-navy/50 blur-2xl opacity-30 rounded-3xl"></div>
+                {/* <div className="absolute -inset-2 bg-gradient-to-r from-navy to-navy/50 blur-2xl opacity-30 rounded-3xl"></div> */}
+                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+
                 <Card className="relative text-card-foreground rounded-3xl border-0 bg-white shadow-xl card-hover">
                   <CardHeader className="pb-2">
                     <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
@@ -610,12 +612,14 @@ export default function Home() {
                   </CardFooter>
                 </Card>
               </div>
-              {/* 
+
               <div className="group relative">
-                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-teal/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full">
+                {/* <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-teal/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div> */}
+                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+
+                <Card className="card-hover rounded-3xl border-0 shadow-xl relative bg-white h-full">
                   <CardHeader className="pb-2">
-                    <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-teal/10 text-teal">
+                    <div className="mb-2 flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-full bg-teal/10 text-navy">
                       <Clock className="h-6 sm:h-7 w-6 sm:w-7" />
                     </div>
                     <CardTitle className="text-lg sm:text-xl">
@@ -643,7 +647,7 @@ export default function Home() {
                     </Button>
                   </CardFooter>
                 </Card>
-              </div> */}
+              </div>
             </div>
           </div>
         </section>
@@ -1320,7 +1324,7 @@ export default function Home() {
                   </div>
                 </a>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {/* Media Link 1 */}
                 <a
                   href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+brings+passport+assistance+guidance+and+support+under+one+digital+platform-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_1ba61bf0be5311f1bff09c49ac89e8e4?sm=Y"
@@ -1436,6 +1440,138 @@ export default function Home() {
                         Explore how PassportSuvidha is delivering convenient,
                         professional, and dependable support to simplify the
                         passport application process.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Media Link 1 */}
+                <a
+                  href="https://hindustanmetro.com/passport-suvidha-focuses-on-simplifying-passport-applications-through-digital-assistance"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-3xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-navy to-teal" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-xl
+                bg-gradient-to-br from-navy/10 to-teal/10
+                text-navy
+                transition-all duration-300
+                group-hover:from-navy group-hover:to-teal
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Media Coverage
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Your Passport Journey, Made Easier
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Get reliable passport assistance, expert guidance, and a
+                        smoother application experience with PassportSuvidha.
+                      </p>
+
+                      <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">
+                        Read Article
+                        <ArrowUpRight
+                          className="
+                    h-4 w-4
+                    transition-transform duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+                {/* Media Link 2 */}
+                <a
+                  href="https://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/passport+suvidha+focuses+on+simplifying+passport+applications+through+digital+assistance-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_3bb70af0c2ca11f1a97ee05f82c51e6a?sm=Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+            group relative overflow-hidden
+            rounded-2xl
+            bg-white
+            p-6
+            shadow-lg
+            transition-all duration-300
+            hover:-translate-y-1
+            hover:shadow-xl
+          "
+                >
+                  {/* Gradient Accent */}
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal to-navy" />
+
+                  <div className="flex items-start gap-4">
+                    {/* Icon */}
+                    <div
+                      className="
+                flex h-12 w-12 shrink-0 items-center justify-center
+                rounded-3xl
+                bg-gradient-to-br from-teal/10 to-navy/10
+                text-teal
+                transition-all duration-300
+                group-hover:from-teal group-hover:to-navy
+                group-hover:text-white
+              "
+                    >
+                      <Newspaper className="h-6 w-6" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-teal mb-1">
+                        Featured Article
+                      </p>
+
+                      <h3 className="text-lg font-semibold text-navy group-hover:text-teal transition-colors">
+                        Easy Passport Assistance
+                      </h3>
+
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        Navigate your passport application with confidence
+                        through PassportSuvidha’s convenient support, clear
+                        guidance, and hassle-free assistance at every step.
                       </p>
 
                       <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-navy group-hover:text-teal transition-colors">

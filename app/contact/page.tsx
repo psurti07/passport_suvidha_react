@@ -34,6 +34,7 @@ import { Label } from "@/components/ui/label";
 import axiosServer from "@/lib/axiosServer";
 import ReactCountryFlag from "react-country-flag";
 import { Receipt } from "lucide-react";
+import Image from "next/image";
 
 export default function Contact() {
   // const { toast } = useToast();
@@ -130,7 +131,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+        {/* <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-3xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading mb-2">
@@ -139,8 +140,37 @@ export default function Contact() {
               <p className="text-muted-foreground md:text-xl">
                 Get in touch with our support team for assistance
               </p>
+            </div> */}
+        <section className="w-full relative overflow-hidden">
+          <div className="relative w-full bg-white">
+            {/* Mobile and tablet image */}
+            <div className="block lg:hidden">
+              <Image
+                src="/header/mobile/contactUs.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
             </div>
 
+            {/* Desktop image */}
+            <div className="hidden lg:block">
+              <Image
+                src="/header/desktop/contactUs.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+          </div>
+
+          <div className="container px-4 md:px-6 relative my-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
               <div className="space-y-8">
                 <div className="floating-card">

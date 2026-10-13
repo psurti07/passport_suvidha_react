@@ -19,6 +19,7 @@ import {
   Loader2,
   Info,
   Star,
+  AlertTriangle,
 } from "lucide-react";
 import {
   Carousel,
@@ -503,10 +504,10 @@ const StepPassportType = ({
             </CardFooter>
           </motion.div>
 
-          <div className="mb-6 flex justify-center">
+          {/* <div className="mb-6 flex justify-center">
             <div className="w-full overflow-hidden rounded-sm bg-teal/5 shadow-sm">
               <div className="landing-marquee py-2">
-                {/* First copy */}
+                First copy
                 <div className="marquee-item px-6">
                   <span className="text-xs md:text-sm font-medium text-teal">
                     This website is owned by a Private Consultancy Firm
@@ -524,7 +525,7 @@ const StepPassportType = ({
                   </span>
                 </div>
 
-                {/* Second copy */}
+                Second copy
                 <div className="marquee-item px-6">
                   <span className="text-xs md:text-sm font-medium text-teal">
                     This website is owned by a Private Consultancy Firm
@@ -543,7 +544,43 @@ const StepPassportType = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          <section className="w-full pt-8 pb-10 md:pb-16 bg-white">
+            {/* <div className="container"> */}
+              <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-6 w-6 text-amber-600 shrink-0 mt-1" />
+
+                  <div>
+                    <h3 className="text-base sm:text-md font-semibold text-amber-900">
+                      Important Disclaimer
+                    </h3>
+
+                    <p className="mt-3 text-xs sm:text-sm lg:text-sm text-amber-800 leading-6 sm:leading-7">
+                      Passport Suvidha is a private consultancy service and is
+                      not affiliated with, endorsed by, or operated by the
+                      Government of India, Passport Seva, or any government
+                      authority. We provide application assistance, document
+                      guidance, appointment support, and customer assistance
+                      services. Government fees, processing timelines, approval
+                      decisions, and passport issuance remain solely under the
+                      jurisdiction of the relevant government authorities.
+                      <br />
+                      <br /> पासपोर्ट सुविधा एक प्राइवेट कंसल्टेंसी सर्विस है और
+                      यह भारत सरकार, पासपोर्ट सेवा या किसी भी सरकारी अथॉरिटी से
+                      जुड़ी हुई, उनके द्वारा समर्थित या उनके द्वारा संचालित नहीं
+                      है। हम एप्लीकेशन में मदद, डॉक्यूमेंट से जुड़ी सलाह,
+                      अपॉइंटमेंट में सहायता और कस्टमर सपोर्ट जैसी सर्विस देते
+                      हैं। सरकारी फीस, प्रोसेसिंग का समय, मंज़ूरी के फ़ैसले और
+                      पासपोर्ट जारी करने का काम पूरी तरह से संबंधित सरकारी
+                      अथॉरिटी के अधिकार क्षेत्र में आता है।
+                    </p>
+                  </div>
+                </div>
+            </div>
+              {/* </div> */}
+          </section>
 
           {/* Review Section */}
           <section className="w-full py-10 md:py-16 bg-white relative overflow-hidden">

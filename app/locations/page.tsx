@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import axiosServer from "@/lib/axiosServer";
+import Image from "next/image";
 
 interface Location {
   pbo_id: number;
@@ -121,7 +122,7 @@ export default function Locations() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+        {/* <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-3xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
@@ -130,61 +131,88 @@ export default function Locations() {
               <p className="text-muted-foreground md:text-xl mt-2">
                 Find your nearest passport office or Seva Kendra
               </p>
+            </div> */}
+        <section className="w-full relative overflow-hidden">
+          <div className="relative w-full bg-white">
+            {/* Mobile and tablet image */}
+            <div className="block lg:hidden">
+              <Image
+                src="/header/mobile/location.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
             </div>
 
-            <div className="relative max-w-4xl mx-auto mb-16">
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
-              <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
-                <CardHeader>
-                  <CardTitle className="text-2xl flex items-center gap-2">
-                    <Search className="h-5 w-5 text-navy" />
-                    Find Passport Offices
-                  </CardTitle>
-                  <CardDescription>
-                    Enter your PIN code or city to find passport offices near
-                    you
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-1">
-                      <Input
-                        placeholder="Enter PIN code or city"
-                        className="modern-input h-12"
-                        required
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                      />
-                    </div>
-                    <Button
-                      className="bg-gradient-to-r from-navy to-teal text-white 
+            {/* Desktop image */}
+            <div className="hidden lg:block">
+              <Image
+                src="/header/desktop/location.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+          </div>
+
+          <div className="container relative max-w-4xl mx-auto my-16">
+            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
+            <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Search className="h-5 w-5 text-navy" />
+                  Find Passport Offices
+                </CardTitle>
+                <CardDescription>
+                  Enter your PIN code or city to find passport offices near you
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1">
+                    <Input
+                      placeholder="Enter PIN code or city"
+                      className="modern-input h-12"
+                      required
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    className="bg-gradient-to-r from-navy to-teal text-white 
                       hover:opacity-90 
                       disabled:opacity-50 disabled:cursor-not-allowed 
                       rounded-xl modern-button h-12 px-6 flex items-center gap-2 text-base font-medium"
-                      aria-label="Search locations"
-                      disabled={!city?.trim() || isSearching}
-                      onClick={() => handleSearch(city)}
-                    >
-                      {isSearching ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Searching...
-                        </>
-                      ) : (
-                        <>
-                          <MapPin className="h-5 w-5" />
-                          Search Locations
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    aria-label="Search locations"
+                    disabled={!city?.trim() || isSearching}
+                    onClick={() => handleSearch(city)}
+                  >
+                    {isSearching ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Searching...
+                      </>
+                    ) : (
+                      <>
+                        <MapPin className="h-5 w-5" />
+                        Search Locations
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 gap-8 max-w-6xl mx-auto">
-              {/* Using grid-rows-1 to ensure same height and h-full on cards */}
-              {/* <div className="group relative grid-rows-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 gap-8 max-w-6xl mx-auto">
+            {/* Using grid-rows-1 to ensure same height and h-full on cards */}
+            {/* <div className="group relative grid-rows-1">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
                 <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
                   <CardHeader className="pb-2">
@@ -228,99 +256,99 @@ export default function Locations() {
                 </Card>
               </div> */}
 
-              {/* Locations */}
-              {locations.length > 0 && (
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-semibold">
-                      Select Passport Office
-                    </h3>
+            {/* Locations */}
+            {locations.length > 0 && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold">
+                    Select Passport Office
+                  </h3>
 
-                    <p className="text-sm text-muted-foreground">
-                      We found {locations.length} passport office
-                      {locations.length > 1 ? "s" : ""} for your search.
-                    </p>
-                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    We found {locations.length} passport office
+                    {locations.length > 1 ? "s" : ""} for your search.
+                  </p>
+                </div>
 
-                  <div className="grid grid-cols-1 gap-4">
-                    {locations.map((location) => (
-                      <div
-                        key={location.pfc_id}
-                        className={`rounded-2xl border p-5 cursor-pointer transition-all
+                <div className="grid grid-cols-1 gap-4">
+                  {locations.map((location) => (
+                    <div
+                      key={location.pfc_id}
+                      className={`rounded-2xl border p-5 cursor-pointer transition-all
                     ${
                       selectedLocation?.pfc_id === location.pfc_id
                         ? "border-teal bg-teal/5 shadow-md"
                         : "border-gray-200 hover:border-teal/50 hover:shadow-sm"
                     }`}
-                        onClick={() => setSelectedLocation(location)}
-                      >
-                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                          {/* Office information */}
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 rounded-full bg-teal/10 flex items-center justify-center">
-                                <Building2 className="h-5 w-5 text-teal" />
-                              </div>
-
-                              <div>
-                                <h4 className="font-semibold text-lg">
-                                  {location.name}
-                                </h4>
-
-                                <p className="text-sm text-muted-foreground">
-                                  {location.pbo_name}
-                                </p>
-                              </div>
+                      onClick={() => setSelectedLocation(location)}
+                    >
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        {/* Office information */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-full bg-teal/10 flex items-center justify-center">
+                              <Building2 className="h-5 w-5 text-teal" />
                             </div>
 
-                            <div className="flex gap-2 text-sm text-muted-foreground">
-                              <MapPin className="h-4 w-4 text-teal shrink-0 mt-0.5" />
+                            <div>
+                              <h4 className="font-semibold text-lg">
+                                {location.name}
+                              </h4>
 
-                              <span>{location.address}</span>
-                            </div>
-
-                            <div className="flex flex-wrap gap-4 text-sm">
-                              <span>
-                                <strong>City:</strong> {location.city}
-                              </span>
-
-                              <span>
-                                <strong>PIN:</strong> {location.pincode}
-                              </span>
-
-                              <span>
-                                <strong>Phone:</strong> {location.phone}
-                              </span>
+                              <p className="text-sm text-muted-foreground">
+                                {location.pbo_name}
+                              </p>
                             </div>
                           </div>
 
-                          {/* Status / Select */}
-                          <div className="flex flex-col items-start md:items-end gap-3">
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium
+                          <div className="flex gap-2 text-sm text-muted-foreground">
+                            <MapPin className="h-4 w-4 text-teal shrink-0 mt-0.5" />
+
+                            <span>{location.address}</span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-4 text-sm">
+                            <span>
+                              <strong>City:</strong> {location.city}
+                            </span>
+
+                            <span>
+                              <strong>PIN:</strong> {location.pincode}
+                            </span>
+
+                            <span>
+                              <strong>Phone:</strong> {location.phone}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Status / Select */}
+                        <div className="flex flex-col items-start md:items-end gap-3">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium
                           ${
                             location.status === "Operational"
                               ? "bg-green-100 text-green-700"
                               : "bg-red-100 text-red-700"
                           }`}
-                            >
-                              {location.status}
-                            </span>
+                          >
+                            {location.status}
+                          </span>
 
-                            {selectedLocation?.pfc_id === location.pfc_id && (
-                              <span className="text-sm font-medium text-teal">
-                                ✓ Selected
-                              </span>
-                            )}
-                          </div>
+                          {selectedLocation?.pfc_id === location.pfc_id && (
+                            <span className="text-sm font-medium text-teal">
+                              ✓ Selected
+                            </span>
+                          )}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* <div className="group relative grid-rows-1">
+            {/* <div className="group relative grid-rows-1">
                 <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-teal/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
                 <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
                   <CardHeader className="pb-2">
@@ -539,53 +567,53 @@ export default function Locations() {
                   </CardFooter>
                 </Card>
               </div> */}
-            </div>
+          </div>
 
-            <div className="mt-16 max-w-4xl mx-auto">
-              <div className="relative">
-                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
-                <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
-                  <CardHeader>
-                    <CardTitle className="text-2xl flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-navy" />
-                      Apply for Passport
-                    </CardTitle>
-                    <CardDescription>
-                      Choose your passport type and apply online
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium">Normal Passport</h3>
-                        <p className="text-sm text-muted-foreground">
-                          Standard processing time with regular fees. Ideal for
-                          planned travel and general purposes.
-                        </p>
-                        <Link href="/apply-passport">
-                          <Button className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button mt-4">
-                            Apply for Normal Passport
-                          </Button>
-                        </Link>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium">Tatkal Passport</h3>
-                        <p className="text-sm text-muted-foreground">
-                          Expedited processing with higher fees for urgent
-                          passport requirements.
-                        </p>
-                        <Link href="/apply-passport">
-                          <Button className="w-full bg-gradient-to-r from-burgundy to-navy text-white hover:opacity-90 rounded-xl modern-button mt-4">
-                            Apply for Tatkal Passport
-                          </Button>
-                        </Link>
-                      </div>
+          <div className="mb-16 max-w-4xl mx-auto">
+            <div className="relative">
+              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
+              <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
+                <CardHeader>
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-navy" />
+                    Apply for Passport
+                  </CardTitle>
+                  <CardDescription>
+                    Choose your passport type and apply online
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-medium">Normal Passport</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Standard processing time with regular fees. Ideal for
+                        planned travel and general purposes.
+                      </p>
+                      <Link href="/apply-passport">
+                        <Button className="w-full bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button mt-4">
+                          Apply for Normal Passport
+                        </Button>
+                      </Link>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-medium">Tatkal Passport</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Expedited processing with higher fees for urgent
+                        passport requirements.
+                      </p>
+                      <Link href="/apply-passport">
+                        <Button className="w-full bg-gradient-to-r from-burgundy to-navy text-white hover:opacity-90 rounded-xl modern-button mt-4">
+                          Apply for Tatkal Passport
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
+          {/* </div> */}
         </section>
       </main>
     </div>

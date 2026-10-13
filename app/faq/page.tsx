@@ -24,6 +24,7 @@ import {
   Globe,
   Mail,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function FAQ() {
   return (
@@ -32,18 +33,47 @@ export default function FAQ() {
       <div className="blob-shape bg-teal/10 w-[500px] h-[500px] -right-64 bottom-0"></div>
 
       <main className="flex-1">
-        <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+        {/* <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden"> */}
+        <section className="w-full relative overflow-hidden">
+          <div className="relative w-full bg-white">
+            {/* Mobile and tablet image */}
+            <div className="block lg:hidden">
+              <Image
+                src="/header/mobile/faq.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+
+            {/* Desktop image */}
+            <div className="hidden lg:block">
+              <Image
+                src="/header/desktop/faq.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+          </div>
+
           <div className="container px-4 md:px-6 relative">
-            <div className="max-w-3xl mx-auto text-center mb-12">
+            {/* <div className="max-w-3xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading mb-2">
                 Frequently Asked Questions
               </h1>
               <p className="text-muted-foreground md:text-xl">
                 Find answers to common questions about passport applications
               </p>
-            </div>
+            </div> */}
 
-            {/* <div className="relative max-w-3xl mx-auto mb-16">
+            <div className="relative max-w-6xl mx-auto my-16">
               <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-navy/20 via-teal/20 to-navy/20 blur-xl opacity-50"></div>
               <Card className="rounded-3xl border-0 shadow-xl overflow-hidden relative">
                 <CardHeader>
@@ -51,12 +81,17 @@ export default function FAQ() {
                     <Search className="h-5 w-5 text-navy" />
                     Search FAQ
                   </CardTitle>
-                  <CardDescription>Search for answers to your passport questions</CardDescription>
+                  <CardDescription>
+                    Search for answers to your passport questions
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <Input placeholder="Type your question here..." className="modern-input h-12" />
+                      <Input
+                        placeholder="Type your question here..."
+                        className="modern-input h-12"
+                      />
                     </div>
                     <Button className="bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button h-12">
                       Search
@@ -64,9 +99,9 @@ export default function FAQ() {
                   </div>
                 </CardContent>
               </Card>
-            </div> */}
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto my-8">
               <div className="md:col-span-1">
                 <div className="sticky top-28 space-y-4">
                   <h3 className="text-lg font-medium text-navy">Categories</h3>

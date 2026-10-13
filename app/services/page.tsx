@@ -386,12 +386,12 @@ export default function Services() {
       >
         {/* Pricing Section with Animation */}
         <motion.section
-          className="py-12 sm:py-16 md:py-24 relative overflow-hidden"
+          className="w-full relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="container px-4 md:px-6 relative">
+          {/* <div className="container px-4 md:px-6 relative">
             <motion.div
               className="max-w-3xl mx-auto text-center mb-12"
               initial={{ opacity: 0, y: 20 }}
@@ -407,373 +407,393 @@ export default function Services() {
                   timeline
                 </p>
               </div>
-            </motion.div>
+            </motion.div> */}
+          {/* <section className="w-full relative overflow-hidden"> */}
+          <div className="relative w-full bg-white">
+            {/* Mobile and tablet image */}
+            <div className="block lg:hidden">
+              <Image
+                src="/header/mobile/service.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="group relative">
-                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
-                  <div className="h-2 w-full bg-navy rounded-t-3xl"></div>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
-                        <Clock className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-xl">
-                          Normal Passport
-                        </CardTitle>
-                        <CardDescription>
-                          For non-urgent passport needs
-                        </CardDescription>
-                      </div>
+            {/* Desktop image */}
+            <div className="hidden lg:block">
+              <Image
+                src="/header/desktop/service.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+          </div>
+
+          <div className="container grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto my-16">
+            <div className="group relative">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
+                <div className="h-2 w-full bg-navy rounded-t-3xl"></div>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
+                      <Clock className="h-7 w-7" />
                     </div>
-                    <div className="mt-6">
-                      <div className="grid grid-cols-1 gap-6">
-                        <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
-                          <div className="text-sm font-medium text-navy/70">
-                            36 pages
-                          </div>
-                          <div className="text-2xl font-bold text-navy mt-1">
-                            ₹{normal36?.service_total_amount}
-                          </div>
-                          <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            {/* <div className="flex justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Normal Passport</CardTitle>
+                      <CardDescription>
+                        For non-urgent passport needs
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <div className="grid grid-cols-1 gap-6">
+                      <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
+                        <div className="text-sm font-medium text-navy/70">
+                          36 pages
+                        </div>
+                        <div className="text-2xl font-bold text-navy mt-1">
+                          ₹{normal36?.service_total_amount}
+                        </div>
+                        <div className="text-sm text-navy/70 mt-1 space-y-1">
+                          {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal36?.service_gov_amount}</span>
                             </div> */}
-                            <div className="flex justify-between">
-                              <span>Service Charge:</span>
-                              <span>₹{normal36?.service_charges}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>GST (18%):</span>
-                              <span>
-                                ₹{gstCalculation(normal36?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Service Charge:</span>
+                            <span>₹{normal36?.service_charges}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>GST (18%):</span>
+                            <span>
+                              ₹{gstCalculation(normal36?.service_charges)}
+                            </span>
                           </div>
                         </div>
-                        <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
-                          <div className="text-sm font-medium text-navy/70">
-                            60 pages
-                          </div>
-                          <div className="text-2xl font-bold text-navy mt-1">
-                            ₹{normal60?.service_total_amount}
-                          </div>
-                          <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            {/* <div className="flex justify-between">
+                      </div>
+                      <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
+                        <div className="text-sm font-medium text-navy/70">
+                          60 pages
+                        </div>
+                        <div className="text-2xl font-bold text-navy mt-1">
+                          ₹{normal60?.service_total_amount}
+                        </div>
+                        <div className="text-sm text-navy/70 mt-1 space-y-1">
+                          {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal60?.service_gov_amount}</span>
                             </div> */}
-                            <div className="flex justify-between">
-                              <span>Service Charge:</span>
-                              <span>₹{normal60?.service_charges}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>GST (18%):</span>
-                              <span>
-                                ₹{gstCalculation(normal60?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Service Charge:</span>
+                            <span>₹{normal60?.service_charges}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>GST (18%):</span>
+                            <span>
+                              ₹{gstCalculation(normal60?.service_charges)}
+                            </span>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <div className="space-y-3">
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          15-25 days processing time
-                        </span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Choice of 36 or 60 pages
-                        </span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Valid for 10 years (adults)
-                        </span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">Regular mail delivery</span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Online application assistance
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
-
-                        <p className="text-sm font-semibold text-amber-900">
-                          Important:{" "}
-                          <span className="font-medium">
-                            This fee is for consultation only. Government
-                            charges will be applicable separately.
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Link href="/apply-passport" className="w-full">
-                      <Button className="w-full bg-navy hover:bg-navy/80 rounded-xl modern-button">
-                        Apply Normal
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              </div>
-
-              <div className="group relative">
-                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-navy opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
-                  <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                    <div className="bg-gradient-to-r from-teal to-navy text-white text-xs font-medium px-4 py-1 rounded-full">
-                      URGENT SERVICE
                     </div>
                   </div>
-                  <div className="h-2 w-full bg-gradient-to-r from-teal to-navy rounded-t-3xl"></div>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-teal/10 text-teal">
-                        <Zap className="h-7 w-7" />
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
                       </div>
-                      <div>
-                        <CardTitle className="text-xl">
-                          Tatkal Passport
-                        </CardTitle>
-                        <CardDescription>
-                          For urgent passport needs
-                        </CardDescription>
-                      </div>
+                      <span className="text-sm">
+                        15-25 days processing time
+                      </span>
                     </div>
-                    <div className="mt-6">
-                      <div className="grid grid-cols-1 gap-6">
-                        <div className="p-4 rounded-xl bg-teal/5 hover:bg-teal/10 transition-colors">
-                          <div className="text-sm font-medium text-teal/70">
-                            36 pages
-                          </div>
-                          <div className="text-2xl font-bold text-teal mt-1">
-                            ₹{tatkal36?.service_total_amount}
-                          </div>
-                          <div className="space-y-1 mt-2">
-                            {/* <div className="text-sm text-teal/70 flex justify-between">
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">Choice of 36 or 60 pages</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">
+                        Valid for 10 years (adults)
+                      </span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">Regular mail delivery</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">
+                        Online application assistance
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+
+                      <p className="text-sm font-semibold text-amber-900">
+                        Important:{" "}
+                        <span className="font-medium">
+                          This fee is for consultation only. Government charges
+                          will be applicable separately.
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Link href="/apply-passport" className="w-full">
+                    <Button className="w-full bg-navy hover:bg-navy/80 rounded-xl modern-button">
+                      Apply Normal
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            </div>
+
+            <div className="group relative">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-teal to-navy opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
+                <div className="absolute -top-4 left-0 right-0 flex justify-center">
+                  <div className="bg-gradient-to-r from-teal to-navy text-white text-xs font-medium px-4 py-1 rounded-full">
+                    URGENT SERVICE
+                  </div>
+                </div>
+                <div className="h-2 w-full bg-gradient-to-r from-teal to-navy rounded-t-3xl"></div>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-teal/10 text-teal">
+                      <Zap className="h-7 w-7" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl">Tatkal Passport</CardTitle>
+                      <CardDescription>
+                        For urgent passport needs
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <div className="grid grid-cols-1 gap-6">
+                      <div className="p-4 rounded-xl bg-teal/5 hover:bg-teal/10 transition-colors">
+                        <div className="text-sm font-medium text-teal/70">
+                          36 pages
+                        </div>
+                        <div className="text-2xl font-bold text-teal mt-1">
+                          ₹{tatkal36?.service_total_amount}
+                        </div>
+                        <div className="space-y-1 mt-2">
+                          {/* <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
                               <span>₹{tatkal36?.service_gov_amount}</span>
                             </div> */}
-                            <div className="text-sm text-teal/70 flex justify-between">
-                              <span>Service Charge</span>
-                              <span>₹{tatkal36?.service_charges}</span>
-                            </div>
-                            <div className="text-sm text-teal/70 flex justify-between">
-                              <span>GST (18%)</span>
-                              <span>
-                                ₹{gstCalculation(tatkal36?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="text-sm text-teal/70 flex justify-between">
+                            <span>Service Charge</span>
+                            <span>₹{tatkal36?.service_charges}</span>
+                          </div>
+                          <div className="text-sm text-teal/70 flex justify-between">
+                            <span>GST (18%)</span>
+                            <span>
+                              ₹{gstCalculation(tatkal36?.service_charges)}
+                            </span>
                           </div>
                         </div>
-                        <div className="p-4 rounded-xl bg-teal/5 hover:bg-teal/10 transition-colors">
-                          <div className="text-sm font-medium text-teal/70">
-                            60 pages
-                          </div>
-                          <div className="text-2xl font-bold text-teal mt-1">
-                            ₹{tatkal60?.service_total_amount}
-                          </div>
-                          <div className="space-y-1 mt-2">
-                            {/* <div className="text-sm text-teal/70 flex justify-between">
+                      </div>
+                      <div className="p-4 rounded-xl bg-teal/5 hover:bg-teal/10 transition-colors">
+                        <div className="text-sm font-medium text-teal/70">
+                          60 pages
+                        </div>
+                        <div className="text-2xl font-bold text-teal mt-1">
+                          ₹{tatkal60?.service_total_amount}
+                        </div>
+                        <div className="space-y-1 mt-2">
+                          {/* <div className="text-sm text-teal/70 flex justify-between">
                               <span>Gov. Fees</span>
                               <span>₹{tatkal60?.service_gov_amount}</span>
                             </div> */}
-                            <div className="text-sm text-teal/70 flex justify-between">
-                              <span>Service Charge</span>
-                              <span>₹{tatkal60?.service_charges}</span>
-                            </div>
-                            <div className="text-sm text-teal/70 flex justify-between">
-                              <span>GST (18%)</span>
-                              <span>
-                                ₹{gstCalculation(tatkal60?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="text-sm text-teal/70 flex justify-between">
+                            <span>Service Charge</span>
+                            <span>₹{tatkal60?.service_charges}</span>
+                          </div>
+                          <div className="text-sm text-teal/70 flex justify-between">
+                            <span>GST (18%)</span>
+                            <span>
+                              ₹{gstCalculation(tatkal60?.service_charges)}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <div className="space-y-3">
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
-                          <Check className="h-3 w-3 text-teal" />
-                        </div>
-                        <span className="text-sm">1-7 days working time</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
+                        <Check className="h-3 w-3 text-teal" />
                       </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
-                          <Check className="h-3 w-3 text-teal" />
-                        </div>
-                        <span className="text-sm">
-                          Choice of 36 or 60 pages
+                      <span className="text-sm">1-7 days working time</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
+                        <Check className="h-3 w-3 text-teal" />
+                      </div>
+                      <span className="text-sm">Choice of 36 or 60 pages</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
+                        <Check className="h-3 w-3 text-teal" />
+                      </div>
+                      <span className="text-sm">
+                        Valid for 10 years (adults)
+                      </span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
+                        <Check className="h-3 w-3 text-teal" />
+                      </div>
+                      <span className="text-sm">Express delivery</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
+                        <Check className="h-3 w-3 text-teal" />
+                      </div>
+                      <span className="text-sm">24/7 support assistance</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+
+                      <p className="text-sm font-semibold text-amber-900">
+                        Important:{" "}
+                        <span className="font-medium">
+                          This fee is for consultation only. Government charges
+                          will be applicable separately.
                         </span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
-                          <Check className="h-3 w-3 text-teal" />
-                        </div>
-                        <span className="text-sm">
-                          Valid for 10 years (adults)
-                        </span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
-                          <Check className="h-3 w-3 text-teal" />
-                        </div>
-                        <span className="text-sm">Express delivery</span>
-                      </div>
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-teal/10">
-                          <Check className="h-3 w-3 text-teal" />
-                        </div>
-                        <span className="text-sm">24/7 support assistance</span>
-                      </div>
+                      </p>
                     </div>
-                    <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Link href="/apply-passport" className="w-full">
+                    <Button className="w-full bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button">
+                      Apply Tatkal
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            </div>
 
-                        <p className="text-sm font-semibold text-amber-900">
-                          Important:{" "}
-                          <span className="font-medium">
-                            This fee is for consultation only. Government
-                            charges will be applicable separately.
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Link href="/apply-passport" className="w-full">
-                      <Button className="w-full bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button">
-                        Apply Tatkal
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              </div>
+            <div className="group relative">
+              <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
 
-              <div className="group relative">
-                <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-navy to-navy/50 opacity-0 blur transition duration-300 group-hover:opacity-100"></div>
+              <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
+                <div className="h-2 w-full bg-navy rounded-t-3xl"></div>
 
-                <Card className="card-hover rounded-3xl border-0 shadow-lg relative bg-white h-full flex flex-col">
-                  <div className="h-2 w-full bg-navy rounded-t-3xl"></div>
-
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
-                        <FileText className="h-7 w-7" />
-                      </div>
-
-                      <div>
-                        <CardTitle className="text-xl">
-                          Reissue Passport
-                        </CardTitle>
-
-                        <CardDescription>
-                          Renew or Update Passport
-                        </CardDescription>
-                      </div>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-navy/10 text-navy">
+                      <FileText className="h-7 w-7" />
                     </div>
 
-                    <div className="mt-6">
-                      <div className="grid grid-cols-1 gap-6">
-                        <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
-                          <div className="text-sm font-medium text-navy/70">
-                            36 pages
-                          </div>
-                          <div className="text-2xl font-bold text-navy mt-1">
-                            ₹{normal36?.service_total_amount}
-                          </div>
-                          <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            {/* <div className="flex justify-between">
+                    <div>
+                      <CardTitle className="text-xl">
+                        Reissue Passport
+                      </CardTitle>
+
+                      <CardDescription>
+                        Renew or Update Passport
+                      </CardDescription>
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <div className="grid grid-cols-1 gap-6">
+                      <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
+                        <div className="text-sm font-medium text-navy/70">
+                          36 pages
+                        </div>
+                        <div className="text-2xl font-bold text-navy mt-1">
+                          ₹{normal36?.service_total_amount}
+                        </div>
+                        <div className="text-sm text-navy/70 mt-1 space-y-1">
+                          {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal36?.service_gov_amount}</span>
                             </div> */}
-                            <div className="flex justify-between">
-                              <span>Service Charge:</span>
-                              <span>₹{normal36?.service_charges}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>GST (18%):</span>
-                              <span>
-                                ₹{gstCalculation(normal36?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Service Charge:</span>
+                            <span>₹{normal36?.service_charges}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>GST (18%):</span>
+                            <span>
+                              ₹{gstCalculation(normal36?.service_charges)}
+                            </span>
                           </div>
                         </div>
-                        <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
-                          <div className="text-sm font-medium text-navy/70">
-                            60 pages
-                          </div>
-                          <div className="text-2xl font-bold text-navy mt-1">
-                            ₹{normal60?.service_total_amount}
-                          </div>
-                          <div className="text-sm text-navy/70 mt-1 space-y-1">
-                            {/* <div className="flex justify-between">
+                      </div>
+                      <div className="p-4 rounded-xl bg-navy/5 hover:bg-navy/10 transition-colors">
+                        <div className="text-sm font-medium text-navy/70">
+                          60 pages
+                        </div>
+                        <div className="text-2xl font-bold text-navy mt-1">
+                          ₹{normal60?.service_total_amount}
+                        </div>
+                        <div className="text-sm text-navy/70 mt-1 space-y-1">
+                          {/* <div className="flex justify-between">
                               <span>Gov. Fees:</span>
                               <span>₹{normal60?.service_gov_amount}</span>
                             </div> */}
-                            <div className="flex justify-between">
-                              <span>Service Charge:</span>
-                              <span>₹{normal60?.service_charges}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>GST (18%):</span>
-                              <span>
-                                ₹{gstCalculation(normal60?.service_charges)}
-                              </span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Service Charge:</span>
+                            <span>₹{normal60?.service_charges}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>GST (18%):</span>
+                            <span>
+                              ₹{gstCalculation(normal60?.service_charges)}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </CardHeader>
+                  </div>
+                </CardHeader>
 
-                  <CardContent className="flex-grow">
-                    <div className="space-y-3">
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Tatkal: 1–7 days | Normal: 15–25 days
-                        </span>
+                <CardContent className="flex-grow">
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
                       </div>
+                      <span className="text-sm">
+                        Tatkal: 1–7 days | Normal: 15–25 days
+                      </span>
+                    </div>
 
-                      {/* <div className="flex items-start">
+                    {/* <div className="flex items-start">
                         <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
                           <Check className="h-3 w-3 text-navy" />
                         </div>
@@ -782,66 +802,64 @@ export default function Services() {
                         </span>
                       </div> */}
 
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Choice of 36 or 60 pages
-                        </span>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
                       </div>
-
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">
-                          Valid for 10 years (adults)
-                        </span>
-                      </div>
-
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">Express delivery</span>
-                      </div>
-
-                      <div className="flex items-start">
-                        <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
-                          <Check className="h-3 w-3 text-navy" />
-                        </div>
-                        <span className="text-sm">24/7 support assistance</span>
-                      </div>
+                      <span className="text-sm">Choice of 36 or 60 pages</span>
                     </div>
 
-                    <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
-
-                        <p className="text-sm font-semibold text-amber-900">
-                          Important:{" "}
-                          <span className="font-medium">
-                            This fee is for consultation only. Government
-                            charges will be applicable separately.
-                          </span>
-                        </p>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
                       </div>
+                      <span className="text-sm">
+                        Valid for 10 years (adults)
+                      </span>
                     </div>
-                  </CardContent>
 
-                  <CardFooter>
-                    <Link href="/apply-passport" className="w-full">
-                      <Button className="w-full bg-navy text-white hover:opacity-90 rounded-xl modern-button">
-                        Apply for Reissue
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              </div>
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">Express delivery</span>
+                    </div>
+
+                    <div className="flex items-start">
+                      <div className="mr-2 mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-navy/10">
+                        <Check className="h-3 w-3 text-navy" />
+                      </div>
+                      <span className="text-sm">24/7 support assistance</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-lg border border-amber-300 bg-amber-100 px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <Info className="h-5 w-5 text-amber-700 flex-shrink-0" />
+
+                      <p className="text-sm font-semibold text-amber-900">
+                        Important:{" "}
+                        <span className="font-medium">
+                          This fee is for consultation only. Government charges
+                          will be applicable separately.
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+
+                <CardFooter>
+                  <Link href="/apply-passport" className="w-full">
+                    <Button className="w-full bg-navy text-white hover:opacity-90 rounded-xl modern-button">
+                      Apply for Reissue
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
             </div>
           </div>
+          {/* </div> */}
         </motion.section>
 
         {/* Application Journey Section */}

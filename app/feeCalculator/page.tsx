@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 interface FeeData {
   service_gov_amount: number;
@@ -257,10 +258,10 @@ export default function FeeCalculatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f0fdfa] via-white to-[#ecfeff] py-10 px-4">
+    <div>
       {/* HEADER */}
 
-      <div className="flex flex-col items-center justify-center space-y-4 text-center relative  mb-12">
+      {/* <div className="flex flex-col items-center justify-center space-y-4 text-center relative  mb-12">
         <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
           <span>Government of India • Passport Services</span>
         </div>
@@ -273,225 +274,254 @@ export default function FeeCalculatorPage() {
             details and service type
           </p>
         </div>
-      </div>
+      </div> */}
+      <section className="w-full relative overflow-hidden">
+        <div className="relative w-full bg-white">
+          {/* Mobile and tablet image */}
+          <div className="block lg:hidden">
+            <Image
+              src="/header/mobile/feeCalculator.png"
+              alt="FAQ"
+              width={1920}
+              height={600}
+              priority
+              sizes="100vw"
+              className="block w-full h-auto"
+            />
+          </div>
 
-      {/* CARD */}
-      <div className="max-w-4xl mx-auto">
-        <Card className="shadow-xl border-0 rounded-2xl">
-          <CardContent className="p-5 space-y-5">
-            {/* TOP FIELDS */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {error && (
-                <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-600">
-                  {error}
-                </div>
-              )}
-              {/* Application Type */}
-              <div className="space-y-2">
-                <Label className="text-[#0b1f3a] font-medium">
-                  Application Type <span className="text-red-500">*</span>
-                </Label>
+          {/* Desktop image */}
+          <div className="hidden lg:block">
+            <Image
+              src="/header/desktop/feeCalculator.png"
+              alt="FAQ"
+              width={1920}
+              height={600}
+              priority
+              sizes="100vw"
+              className="block w-full h-auto"
+            />
+          </div>
+        </div>
 
-                <Select
-                  value={formData.applicationType}
-                  onValueChange={(v) => updateField("applicationType", v)}
-                >
-                  <SelectTrigger className={fieldHeight}>
-                    <SelectValue placeholder="Select Application Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="passport">Passport</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Service Type */}
-              {showServiceType && (
+        {/* CARD */}
+        <div className="container max-w-4xl mx-auto my-16">
+          <Card className="shadow-xl border-0 rounded-2xl">
+            <CardContent className="p-5 space-y-5">
+              {/* TOP FIELDS */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {error && (
+                  <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-600">
+                    {error}
+                  </div>
+                )}
+                {/* Application Type */}
                 <div className="space-y-2">
                   <Label className="text-[#0b1f3a] font-medium">
-                    Type of Service <span className="text-red-500">*</span>
+                    Application Type <span className="text-red-500">*</span>
                   </Label>
 
                   <Select
-                    value={formData.serviceType}
-                    onValueChange={(v) => updateField("serviceType", v)}
+                    value={formData.applicationType}
+                    onValueChange={(v) => updateField("applicationType", v)}
                   >
                     <SelectTrigger className={fieldHeight}>
-                      <SelectValue placeholder="Select Service Type" />
+                      <SelectValue placeholder="Select Application Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="fresh">Fresh Passport</SelectItem>
+                      <SelectItem value="passport">Passport</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Service Type */}
+                {showServiceType && (
+                  <div className="space-y-2">
+                    <Label className="text-[#0b1f3a] font-medium">
+                      Type of Service <span className="text-red-500">*</span>
+                    </Label>
+
+                    <Select
+                      value={formData.serviceType}
+                      onValueChange={(v) => updateField("serviceType", v)}
+                    >
+                      <SelectTrigger className={fieldHeight}>
+                        <SelectValue placeholder="Select Service Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fresh">Fresh Passport</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+
+              <Separator />
+
+              {/* AGE */}
+              {showAge && (
+                <div>
+                  <Label className="block mb-4 font-semibold text-[#0b1f3a]">
+                    Applicant Age <span className="text-red-500">*</span>
+                  </Label>
+
+                  <RadioGroup
+                    value={formData.ageGroup}
+                    onValueChange={(v) => updateField("ageGroup", v)}
+                    className="grid md:grid-cols-3 gap-4"
+                  >
+                    {ageOptions.map((item) => (
+                      <Label
+                        key={item.value}
+                        htmlFor={item.value}
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className={`${radioCard} ${
+                            formData.ageGroup === item.value ? selectedCard : ""
+                          }`}
+                        >
+                          <RadioGroupItem value={item.value} id={item.value} />
+                          <span className="text-[#0b1f3a] font-medium">
+                            {item.label}
+                          </span>
+                        </div>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </div>
               )}
-            </div>
 
-            <Separator />
+              {/* BOOKLET */}
+              {showBooklet && (
+                <div>
+                  <Label className="block mb-4 font-semibold text-[#0b1f3a]">
+                    Number of Pages <span className="text-red-500">*</span>
+                  </Label>
 
-            {/* AGE */}
-            {showAge && (
-              <div>
-                <Label className="block mb-4 font-semibold text-[#0b1f3a]">
-                  Applicant Age <span className="text-red-500">*</span>
-                </Label>
-
-                <RadioGroup
-                  value={formData.ageGroup}
-                  onValueChange={(v) => updateField("ageGroup", v)}
-                  className="grid md:grid-cols-3 gap-4"
-                >
-                  {ageOptions.map((item) => (
-                    <Label
-                      key={item.value}
-                      htmlFor={item.value}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={`${radioCard} ${
-                          formData.ageGroup === item.value ? selectedCard : ""
-                        }`}
+                  <RadioGroup
+                    value={formData.bookletPages}
+                    onValueChange={(v) => updateField("bookletPages", v)}
+                    className="grid md:grid-cols-2 gap-4"
+                  >
+                    {bookletOptions.map((item) => (
+                      <Label
+                        key={item.value}
+                        htmlFor={item.value}
+                        className="cursor-pointer"
                       >
-                        <RadioGroupItem value={item.value} id={item.value} />
-                        <span className="text-[#0b1f3a] font-medium">
-                          {item.label}
-                        </span>
-                      </div>
-                    </Label>
-                  ))}
-                </RadioGroup>
-              </div>
-            )}
+                        <div
+                          className={`${radioCard} ${
+                            formData.bookletPages === item.value
+                              ? selectedCard
+                              : ""
+                          }`}
+                        >
+                          <RadioGroupItem value={item.value} id={item.value} />
+                          <span className="text-[#0b1f3a]">{item.label}</span>
+                        </div>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </div>
+              )}
 
-            {/* BOOKLET */}
-            {showBooklet && (
-              <div>
-                <Label className="block mb-4 font-semibold text-[#0b1f3a]">
-                  Number of Pages <span className="text-red-500">*</span>
-                </Label>
+              {/* VALIDITY */}
+              {showValidity && (
+                <div>
+                  <Label className="block mb-4 font-semibold text-[#0b1f3a]">
+                    Validity <span className="text-red-500">*</span>
+                  </Label>
 
-                <RadioGroup
-                  value={formData.bookletPages}
-                  onValueChange={(v) => updateField("bookletPages", v)}
-                  className="grid md:grid-cols-2 gap-4"
-                >
-                  {bookletOptions.map((item) => (
-                    <Label
-                      key={item.value}
-                      htmlFor={item.value}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={`${radioCard} ${
-                          formData.bookletPages === item.value
-                            ? selectedCard
-                            : ""
-                        }`}
+                  <RadioGroup
+                    value={formData.validity}
+                    onValueChange={(v) => updateField("validity", v)}
+                    className="grid md:grid-cols-2 gap-4"
+                  >
+                    {validityOptions.map((item) => (
+                      <Label
+                        key={item.value}
+                        htmlFor={item.value}
+                        className="cursor-pointer"
                       >
-                        <RadioGroupItem value={item.value} id={item.value} />
-                        <span className="text-[#0b1f3a]">{item.label}</span>
-                      </div>
-                    </Label>
-                  ))}
-                </RadioGroup>
-              </div>
-            )}
+                        <div
+                          className={`${radioCard} ${
+                            formData.validity === item.value ? selectedCard : ""
+                          }`}
+                        >
+                          <RadioGroupItem value={item.value} id={item.value} />
+                          <span className="text-[#0b1f3a]">{item.label}</span>
+                        </div>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </div>
+              )}
 
-            {/* VALIDITY */}
-            {showValidity && (
-              <div>
-                <Label className="block mb-4 font-semibold text-[#0b1f3a]">
-                  Validity <span className="text-red-500">*</span>
-                </Label>
+              {/* SCHEME */}
+              {showScheme && (
+                <div>
+                  <Label className="block mb-4 font-semibold text-[#0b1f3a]">
+                    Scheme <span className="text-red-500">*</span>
+                  </Label>
 
-                <RadioGroup
-                  value={formData.validity}
-                  onValueChange={(v) => updateField("validity", v)}
-                  className="grid md:grid-cols-2 gap-4"
-                >
-                  {validityOptions.map((item) => (
-                    <Label
-                      key={item.value}
-                      htmlFor={item.value}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={`${radioCard} ${
-                          formData.validity === item.value ? selectedCard : ""
-                        }`}
+                  <RadioGroup
+                    value={formData.scheme}
+                    onValueChange={(v) => updateField("scheme", v)}
+                    className="grid md:grid-cols-2 gap-4"
+                  >
+                    {schemeOptions.map((item) => (
+                      <Label
+                        key={item.value}
+                        htmlFor={item.value}
+                        className="cursor-pointer"
                       >
-                        <RadioGroupItem value={item.value} id={item.value} />
-                        <span className="text-[#0b1f3a]">{item.label}</span>
-                      </div>
-                    </Label>
-                  ))}
-                </RadioGroup>
-              </div>
-            )}
+                        <div
+                          className={`${radioCard} ${
+                            formData.scheme === item.value ? selectedCard : ""
+                          }`}
+                        >
+                          <RadioGroupItem value={item.value} id={item.value} />
+                          <span className="text-[#0b1f3a]">{item.label}</span>
+                        </div>
+                      </Label>
+                    ))}
+                  </RadioGroup>
+                </div>
+              )}
 
-            {/* SCHEME */}
-            {showScheme && (
-              <div>
-                <Label className="block mb-4 font-semibold text-[#0b1f3a]">
-                  Scheme <span className="text-red-500">*</span>
-                </Label>
-
-                <RadioGroup
-                  value={formData.scheme}
-                  onValueChange={(v) => updateField("scheme", v)}
-                  className="grid md:grid-cols-2 gap-4"
+              {/* ACTIONS */}
+              <div className="flex gap-3 w-[300px] m-auto">
+                <Button
+                  disabled={!canCalculate}
+                  onClick={handleSubmit}
+                  className="flex-1 h-[52px] bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
                 >
-                  {schemeOptions.map((item) => (
-                    <Label
-                      key={item.value}
-                      htmlFor={item.value}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={`${radioCard} ${
-                          formData.scheme === item.value ? selectedCard : ""
-                        }`}
-                      >
-                        <RadioGroupItem value={item.value} id={item.value} />
-                        <span className="text-[#0b1f3a]">{item.label}</span>
-                      </div>
-                    </Label>
-                  ))}
-                </RadioGroup>
-              </div>
-            )}
+                  Calculate Fee
+                </Button>
 
-            {/* ACTIONS */}
-            <div className="flex gap-3 w-[300px] m-auto">
-              <Button
-                disabled={!canCalculate}
-                onClick={handleSubmit}
-                className="flex-1 h-[52px] bg-gradient-to-r from-navy to-teal text-white hover:opacity-90 rounded-xl modern-button"
-              >
-                Calculate Fee
-              </Button>
-
-              <Button
-                onClick={clearAll}
-                variant="outline"
-                className="h-[52px] px-6 text-[#0b1f3a] hover:opacity-90 rounded-xl modern-button"
-              >
-                Clear
-              </Button>
-            </div>
-            {fee && (
-              <div className="mt-6 p-4 rounded-xl bg-green-50 text-bold border border-green-200 text-green-900 text-sm ">
-                <p>
-                  Goverment Fees :
-                  <span className="text-lg font-bold">
-                    ₹{fee.service_gov_amount.toLocaleString("en-IN")}
-                  </span>
-                </p>
+                <Button
+                  onClick={clearAll}
+                  variant="outline"
+                  className="h-[52px] px-6 text-[#0b1f3a] hover:opacity-90 rounded-xl modern-button"
+                >
+                  Clear
+                </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+              {fee && (
+                <div className="mt-6 p-4 rounded-xl bg-green-50 text-bold border border-green-200 text-green-900 text-sm ">
+                  <p>
+                    Goverment Fees :
+                    <span className="text-lg font-bold">
+                      ₹{fee.service_gov_amount.toLocaleString("en-IN")}
+                    </span>
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
       {/* NOTE SECTION */}
       {/* <div className="max-w-4xl mx-auto mt-6">

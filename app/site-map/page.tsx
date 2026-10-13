@@ -18,12 +18,13 @@ import {
   BadgeIndianRupee,
   AlertTriangle,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function SiteMap() {
   return (
     <div className="flex flex-col relative overflow-hidden">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
+        {/* <section className="w-full py-12 md:py-16 lg:py-20 relative overflow-hidden">
           <div className="container px-4 md:px-6 relative">
             <div className="max-w-3xl mx-auto text-center mb-12">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
@@ -32,279 +33,307 @@ export default function SiteMap() {
               <p className="text-muted-foreground md:text-xl mt-2">
                 A complete overview of all pages on the PassportSuvidha website
               </p>
+            </div> */}
+        <section className="w-full relative overflow-hidden">
+          <div className="relative w-full bg-white">
+            {/* Mobile and tablet image */}
+            <div className="block lg:hidden">
+              <Image
+                src="/header/mobile/siteMap.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
             </div>
 
-            <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-navy"></div>
-                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Home className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl md:!text-xl">
-                        Main Pages
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4 p-0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Home className="h-4 w-4" />
-                          <span>Home</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/services"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileCheck className="h-4 w-4" />
-                          <span>Services</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/requirements"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileImage className="h-4 w-4" />
-                          <span>Requirements</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/locations"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <MapPin className="h-4 w-4" />
-                          <span>Locations</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/about"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>About Us</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+            {/* Desktop image */}
+            <div className="hidden lg:block">
+              <Image
+                src="/header/desktop/siteMap.png"
+                alt="FAQ"
+                width={1920}
+                height={600}
+                priority
+                sizes="100vw"
+                className="block w-full h-auto"
+              />
+            </div>
+          </div>
 
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-teal"></div>
-                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FileCheck className="h-5 w-5 text-teal" />
-                      <CardTitle className="text-xl md:!text-xl">
-                        Application Pages
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/apply-passport"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileText className="h-4 w-4" />
-                          <span>Passport Application</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/check-application-status"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Search className="h-4 w-4" />
-                          <span>Check Status</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/services"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <CreditCard className="h-4 w-4" />
-                          <span>Services & Pricing</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/requirements"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Clock className="h-4 w-4" />
-                          <span>Processing Times</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/signin"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>Sign In</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+          <div className="container max-w-5xl mx-auto my-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+              <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                <div className="h-1 w-full bg-navy"></div>
+                <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Home className="h-5 w-5 text-navy" />
+                    <CardTitle className="text-xl md:!text-xl">
+                      Main Pages
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4 p-0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Home className="h-4 w-4" />
+                        <span>Home</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/services"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <FileCheck className="h-4 w-4" />
+                        <span>Services</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/requirements"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <FileImage className="h-4 w-4" />
+                        <span>Requirements</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/locations"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        <span>Locations</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/about"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Users className="h-4 w-4" />
+                        <span>About Us</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-gold"></div>
-                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Shield className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl md:!text-xl">
-                        Legal Pages
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/privacy-policy"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Shield className="h-4 w-4" />
-                          <span>Privacy Policy</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/terms-of-service"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileCheck className="h-4 w-4" />
-                          <span>Terms of Service</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/accessibility"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Users className="h-4 w-4" />
-                          <span>Accessibility</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/disclaimer"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <AlertTriangle className="h-4 w-4" />
-                          <span>Disclaimer</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/refund-policy"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <BadgeIndianRupee className="h-4 w-4" />
-                          <span>Refund Policy</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/site-map"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <FileText className="h-4 w-4" />
-                          <span>Site Map</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+              <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                <div className="h-1 w-full bg-teal"></div>
+                <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileCheck className="h-5 w-5 text-teal" />
+                    <CardTitle className="text-xl md:!text-xl">
+                      Application Pages
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/apply-passport"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <FileText className="h-4 w-4" />
+                        <span>Passport Application</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/check-application-status"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Search className="h-4 w-4" />
+                        <span>Check Status</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/services"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <CreditCard className="h-4 w-4" />
+                        <span>Services & Pricing</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/requirements"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Clock className="h-4 w-4" />
+                        <span>Processing Times</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/signin"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Users className="h-4 w-4" />
+                        <span>Sign In</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-                <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
-                  <div className="h-1 w-full bg-navy"></div>
-                  <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
-                    <div className="flex items-center gap-2 mb-2">
-                      <HelpCircle className="h-5 w-5 text-navy" />
-                      <CardTitle className="text-xl md:!text-xl">
-                        Support Pages
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/faq"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                          <span>FAQ</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/contact"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Mail className="h-4 w-4" />
-                          <span>Contact Us</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/check-application-status"
-                          className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
-                        >
-                          <Search className="h-4 w-4" />
-                          <span>Application Status</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                <div className="h-1 w-full bg-gold"></div>
+                <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="h-5 w-5 text-navy" />
+                    <CardTitle className="text-xl md:!text-xl">
+                      Legal Pages
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/privacy-policy"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Shield className="h-4 w-4" />
+                        <span>Privacy Policy</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/terms-of-service"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <FileCheck className="h-4 w-4" />
+                        <span>Terms of Service</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/accessibility"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Users className="h-4 w-4" />
+                        <span>Accessibility</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/disclaimer"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        <span>Disclaimer</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/refund-policy"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <BadgeIndianRupee className="h-4 w-4" />
+                        <span>Refund Policy</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/site-map"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <FileText className="h-4 w-4" />
+                        <span>Site Map</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-              <div className="bg-teal/5 rounded-xl p-6 border border-teal/10">
-                <h3 className="text-xl font-medium text-teal mb-4">
-                  Need Help Finding Something?
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  If you can't find what you're looking for, our customer
-                  support team is here to help. Contact us for assistance
-                  navigating our website or finding specific information.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    className="bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button"
-                    asChild
-                  >
-                    <Link href="/contact">
-                      <Mail className="mr-2 h-4 w-4" />
-                      Contact Support
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-xl border-teal/20 hover:text-teal  hover:bg-teal/5"
-                    asChild
-                  >
-                    <Link href="/faq">
-                      <HelpCircle className="mr-2 h-4 w-4" />
-                      View FAQ
-                    </Link>
-                  </Button>
-                </div>
+              <Card className="rounded-xl border-0 shadow-lg overflow-hidden h-full">
+                <div className="h-1 w-full bg-navy"></div>
+                <CardHeader className="!p-4 md:!p-0 md:!px-[10px] md:!pt-[24px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <HelpCircle className="h-5 w-5 text-navy" />
+                    <CardTitle className="text-xl md:!text-xl">
+                      Support Pages
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/faq"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                        <span>FAQ</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/contact"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Mail className="h-4 w-4" />
+                        <span>Contact Us</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/check-application-status"
+                        className="flex items-center gap-2 text-navy hover:text-teal transition-colors"
+                      >
+                        <Search className="h-4 w-4" />
+                        <span>Application Status</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="bg-teal/5 rounded-xl p-6 border border-teal/10">
+              <h3 className="text-xl font-medium text-teal mb-4">
+                Need Help Finding Something?
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                If you can't find what you're looking for, our customer support
+                team is here to help. Contact us for assistance navigating our
+                website or finding specific information.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  className="bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button"
+                  asChild
+                >
+                  <Link href="/contact">
+                    <Mail className="mr-2 h-4 w-4" />
+                    Contact Support
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-xl border-teal/20 hover:text-teal  hover:bg-teal/5"
+                  asChild
+                >
+                  <Link href="/faq">
+                    <HelpCircle className="mr-2 h-4 w-4" />
+                    View FAQ
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
+          {/* </div> */}
         </section>
       </main>
     </div>

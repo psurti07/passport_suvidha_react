@@ -454,7 +454,7 @@ export default function Home() {
                       size="lg"
                       className="w-full sm:w-auto px-6 sm:px-8 bg-gradient-to-r from-gold to-gold/80 text-navy hover:opacity-90 rounded-full modern-button text-sm sm:text-base"
                     >
-                      Apply for Passport
+                      Get passport consultation
                     </Button>
                   </Link>
                   <Link href="/services" className="w-full sm:w-auto">
@@ -567,11 +567,11 @@ export default function Home() {
                   </CardContent>
                   <CardFooter>
                     <Button
-                      className="w-full bg-navy hover:bg-navy/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-navy group-hover:to-teal text-sm sm:text-base"
+                      className="w-full bg-navy hover:bg-navy/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-navy group-hover:to-teal text-sm"
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Apply Normal
+                        Get Normal Passport consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>
@@ -601,11 +601,11 @@ export default function Home() {
                   </CardContent>
                   <CardFooter>
                     <Button
-                      className="w-full bg-teal hover:bg-teal/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-teal group-hover:to-navy text-sm sm:text-base"
+                      className="w-full bg-teal hover:bg-teal/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-teal group-hover:to-navy text-sm"
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Apply Tatkal
+                        Get Tatkal Passport consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>
@@ -637,11 +637,11 @@ export default function Home() {
                   </CardContent>
                   <CardFooter>
                     <Button
-                      className="w-full bg-navy hover:bg-teal/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-teal group-hover:to-navy text-sm sm:text-base"
+                      className="w-full bg-navy hover:bg-teal/80 rounded-xl modern-button group-hover:bg-gradient-to-r group-hover:from-teal group-hover:to-navy text-sm"
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Apply for Reissue
+                        Get Re-Issue Passport consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>

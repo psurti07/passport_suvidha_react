@@ -16,7 +16,11 @@ interface PersonalDetailsRequestBody {
   education_qualification: string;
   employment_type: string;
   police_station_name: string;
-  place_of_birth: string;
+  // place_of_birth: string;
+  birth_city: string;
+  birth_state: string;
+  birth_district: string;
+  // is_ps_gov_emp: 0 | 1;
   nationality: "Indian";
   organisation_name: string;
 }
@@ -76,9 +80,31 @@ export async function POST(request: NextRequest) {
       errors.date_of_birth = ["Date must be in YYYY-MM-DD format"];
     }
 
-    if (!body.place_of_birth?.trim()) {
-      errors.place_of_birth = ["Place of birth is required"];
+    // if (!body.place_of_birth?.trim()) {
+    //   errors.place_of_birth = ["Place of birth is required"];
+    // }
+
+    if (!body.birth_city?.trim()) {
+      errors.birth_city = ["Birth city is required."];
     }
+
+    if (!body.birth_state?.trim()) {
+      errors.birth_state = ["Please select your birth state."];
+    }
+
+    if (!body.birth_district?.trim()) {
+      errors.birth_district = ["Birth district is required."];
+    }
+
+    // if (
+    //   body.is_ps_gov_emp === undefined ||
+    //   body.is_ps_gov_emp === null ||
+    //   !["0", "1"].includes(String(body.is_ps_gov_emp))
+    // ) {
+    //   errors.is_ps_gov_emp = [
+    //     "Please select whether your parent or spouse is a government employee.",
+    //   ];
+    // }
 
     if (!body.education_qualification?.trim()) {
       errors.education_qualification = ["Education qualification is required"];

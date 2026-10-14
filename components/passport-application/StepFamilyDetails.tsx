@@ -26,6 +26,7 @@ interface FamilyForm {
   motherName?: string;
   maritalStatus?: string;
   spouseName?: string;
+  isPsGovEmp?: string;
   emergencyContactMobile?: string;
   emergencyContactName?: string;
   emergencyContactEmail?: string;
@@ -63,6 +64,7 @@ const StepFamilyDetails = ({
     motherName: false,
     maritalStatus: false,
     spouseName: false,
+    isPsGovEmp: false,
     emergencyContactName: false,
     emergencyContactMobile: false,
     emergencyContactEmail: false,
@@ -93,6 +95,10 @@ const StepFamilyDetails = ({
       isMarried && !formData.spouseName?.trim()
         ? "Spouse name is required"
         : "",
+
+    isPsGovEmp: !["0", "1"].includes(String(formData.isPsGovEmp))
+      ? "Please select whether your parent or spouse is a government employee"
+      : "",
 
     emergencyContactName: !formData.emergencyContactName?.trim()
       ? "Emergency contact name is required"
@@ -315,6 +321,55 @@ const StepFamilyDetails = ({
                       )}
                     </motion.div>
                   )}
+
+                  {/* Parent / Spouse Government Employee */}
+                  <div className="space-y-3">
+                    <Label>Is your parent/spouse a government employee?</Label>
+
+                    <div className="flex items-center gap-6">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="isPsGovEmp"
+                          value="1"
+                          checked={formData.isPsGovEmp === "1"}
+                          onChange={handleChange}
+                          onBlur={() =>
+                            setTouched((prev) => ({
+                              ...prev,
+                              isPsGovEmp: true,
+                            }))
+                          }
+                          className="h-4 w-4 accent-blue-600"
+                        />
+                        <span>Yes</span>
+                      </label>
+
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="isPsGovEmp"
+                          value="0"
+                          checked={formData.isPsGovEmp === "0"}
+                          onChange={handleChange}
+                          onBlur={() =>
+                            setTouched((prev) => ({
+                              ...prev,
+                              isPsGovEmp: true,
+                            }))
+                          }
+                          className="h-4 w-4 accent-blue-600"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+
+                    {touched.isPsGovEmp && errors.isPsGovEmp && (
+                      <p className="text-xs text-red-600 mt-1">
+                        {errors.isPsGovEmp}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </motion.div>
 

@@ -614,15 +614,7 @@ export default function ProfilePage() {
                   </h3>
 
                   <div
-                    className={`grid grid-cols-1 md:grid-cols-2 ${
-                      (
-                        isEditing
-                          ? formData.marital_status === "married"
-                          : profile?.marital_status === "married"
-                      )
-                        ? "xl:grid-cols-4"
-                        : "xl:grid-cols-3"
-                    } gap-5`}
+                    className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-3`}
                   >
                     {/* Father's Name */}
                     <div className="space-y-2">
@@ -706,7 +698,9 @@ export default function ProfilePage() {
                         </div>
                       )}
                     </div>
+                  </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-3">
                     {/* Spouse Name */}
                     {(isEditing
                       ? formData.marital_status === "married"
@@ -733,6 +727,65 @@ export default function ProfilePage() {
                         )}
                       </div>
                     )}
+
+                    {/* Parent / Spouse Government Employee */}
+                    <div className="space-y-2">
+                      {isEditing && (
+                        <Label>
+                          Is your parent/spouse a government employee?
+                        </Label>
+                      )}
+
+                      {isEditing ? (
+                        <div className="flex items-center gap-6">
+                          {" "}
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            {" "}
+                            <input
+                              type="radio"
+                              name="is_ps_gov_emp"
+                              value="1"
+                              checked={
+                                String(formData.is_ps_gov_emp ?? "") === "1" ||
+                                formData.is_ps_gov_emp === true
+                              }
+                              onChange={handleChange}
+                              className="h-4 w-4 accent-blue-600"
+                            />{" "}
+                            <span>Yes</span>{" "}
+                          </label>{" "}
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            {" "}
+                            <input
+                              type="radio"
+                              name="is_ps_gov_emp"
+                              value="0"
+                              checked={
+                                String(formData.is_ps_gov_emp ?? "") === "0" ||
+                                formData.is_ps_gov_emp === false
+                              }
+                              onChange={handleChange}
+                              className="h-4 w-4 accent-blue-600"
+                            />{" "}
+                            <span>No</span>{" "}
+                          </label>{" "}
+                        </div>
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Is your parent/spouse a government employee?
+                          </p>
+
+                          <p className="font-semibold">
+                            {profile?.is_ps_gov_emp === true
+                              ? "Yes"
+                              : profile?.is_ps_gov_emp === false
+                                ? "No"
+                                : "-"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -1120,7 +1173,7 @@ export default function ProfilePage() {
                   </h3>
 
                   <div
-                    className={`grid grid-cols-1 md:grid-cols-2 ${formData.employment_type === "Government" ? "xl:grid-cols-4" : "xl:grid-cols-3"}  gap-5`}
+                    className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5`}
                   >
                     {/* Gender */}
                     <div className="space-y-2">
@@ -1169,7 +1222,7 @@ export default function ProfilePage() {
                       )}
                     </div>
                     {/* Place of Birth */}
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       {isEditing && <Label>Place of Birth</Label>}
 
                       {isEditing ? (
@@ -1187,6 +1240,84 @@ export default function ProfilePage() {
                           </p>
                           <p className="font-semibold">
                             {profile.place_of_birth || "-"}
+                          </p>
+                        </div>
+                      )}
+                    </div> */}
+                    {/* Birth City */}
+                    <div className="space-y-2">
+                      {isEditing && (
+                        <Label htmlFor="birth_city">Birth City</Label>
+                      )}
+
+                      {isEditing ? (
+                        <Input
+                          id="birth_city"
+                          name="birth_city"
+                          value={formData.birth_city || ""}
+                          onChange={handleChange}
+                          className="modern-input"
+                          placeholder="Enter birth city"
+                        />
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Birth City
+                          </p>
+                          <p className="font-semibold">
+                            {profile.birth_city || "-"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {/* Birth State */}
+                    <div className="space-y-2">
+                      {isEditing && (
+                        <Label htmlFor="birth_state">Birth State</Label>
+                      )}
+
+                      {isEditing ? (
+                        <Input
+                          id="birth_state"
+                          name="birth_state"
+                          value={formData.birth_state || ""}
+                          onChange={handleChange}
+                          className="modern-input"
+                          placeholder="Enter birth state"
+                        />
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Birth State
+                          </p>
+                          <p className="font-semibold">
+                            {profile.birth_state || "-"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {/* Birth District */}
+                    <div className="space-y-2">
+                      {isEditing && (
+                        <Label htmlFor="birth_district">Birth District</Label>
+                      )}
+
+                      {isEditing ? (
+                        <Input
+                          id="birth_district"
+                          name="birth_district"
+                          value={formData.birth_district || ""}
+                          onChange={handleChange}
+                          className="modern-input"
+                          placeholder="Enter birth district"
+                        />
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Birth District
+                          </p>
+                          <p className="font-semibold">
+                            {profile.birth_district || "-"}
                           </p>
                         </div>
                       )}
@@ -1306,6 +1437,64 @@ export default function ProfilePage() {
                       )}
                     </div>
 
+                    {/* Parent / Spouse Government Employee */}
+                    {/* <div className="space-y-2">
+                      {isEditing && (
+                        <Label>
+                          Is your parent/spouse a government employee?
+                        </Label>
+                      )}
+
+                      {isEditing ? (
+                        <div className="flex items-center gap-6">
+                          {" "}
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            {" "}
+                            <input
+                              type="radio"
+                              name="is_ps_gov_emp"
+                              value="1"
+                              checked={
+                                String(formData.is_ps_gov_emp ?? "") === "1" ||
+                                formData.is_ps_gov_emp === true
+                              }
+                              onChange={handleChange}
+                              className="h-4 w-4 accent-blue-600"
+                            />{" "}
+                            <span>Yes</span>{" "}
+                          </label>{" "}
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            {" "}
+                            <input
+                              type="radio"
+                              name="is_ps_gov_emp"
+                              value="0"
+                              checked={
+                                String(formData.is_ps_gov_emp ?? "") === "0" ||
+                                formData.is_ps_gov_emp === false
+                              }
+                              onChange={handleChange}
+                              className="h-4 w-4 accent-blue-600"
+                            />{" "}
+                            <span>No</span>{" "}
+                          </label>{" "}
+                        </div>
+                      ) : (
+                        <div className="bg-muted/40 hover:bg-muted/60 transition p-3 rounded-xl border shadow-sm">
+                          <p className="text-xs text-muted-foreground">
+                            Is your parent/spouse a government employee?
+                          </p>
+
+                          <p className="font-semibold">
+                            {profile?.is_ps_gov_emp === true
+                              ? "Yes"
+                              : profile?.is_ps_gov_emp === false
+                                ? "No"
+                                : "-"}
+                          </p>
+                        </div>
+                      )}
+                    </div> */}
                     {/* Organisation Name */}
                     {formData.employment_type === "Government" && (
                       <div className="space-y-2">

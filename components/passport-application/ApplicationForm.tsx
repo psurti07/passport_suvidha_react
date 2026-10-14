@@ -51,7 +51,11 @@ interface FormData {
   gender: string;
   dateOfBirth: string;
   policeStationName: string;
-  placeOfBirth: string;
+  // placeOfBirth: string;
+  birthCity: string;
+  birthState: string;
+  birthDistrict: string;
+  isPsGovEmp: 0 | 1;
   education_qualification: string;
   employment_type: string;
   organisation_name: string;
@@ -183,8 +187,12 @@ function ApplicationForm() {
     gender: "",
     dateOfBirth: "",
     policeStationName: "",
-    placeOfBirth: "",
+    // placeOfBirth: "",
     education_qualification: "",
+    birthCity: "",
+    birthState: "",
+    birthDistrict: "",
+    isPsGovEmp: "0",
     employment_type: "",
     organisation_name: "",
     nationality: "India",
@@ -774,7 +782,12 @@ function ApplicationForm() {
               dateOfBirth: customer.date_of_birth
                 ? customer.date_of_birth.replace(/-/g, "/")
                 : prev.dateOfBirth,
-              placeOfBirth: customer.place_of_birth ?? prev.placeOfBirth,
+              // placeOfBirth: customer.place_of_birth ?? prev.placeOfBirth,
+
+              birthCity: customer.birth_city ?? prev.birthCity,
+              birthState: customer.birth_state ?? prev.birthState,
+              birthDistrict: customer.birth_district ?? prev.birthDistrict,
+              isPsGovEmp: customer.is_ps_gov_emp ?? prev.isPsGovEmp,
 
               policeStationName:
                 customer.police_station_name ?? prev.policeStationName,
@@ -918,6 +931,7 @@ function ApplicationForm() {
             mother_name: formData.motherName,
             marital_status: formData.maritalStatus,
             spouse_name: formData.spouseName,
+            is_ps_gov_emp: formData.isPsGovEmp,
             emergency_contact_name: formData.emergencyContactName,
             emergency_contact_mobile: formData.emergencyContactMobile,
             emergency_contact_email: formData.emergencyContactEmail,
@@ -998,7 +1012,11 @@ function ApplicationForm() {
             police_station_name: formData.policeStationName,
             date_of_birth: formattedDob,
             // date_of_birth: formData.dateOfBirth,
-            place_of_birth: formData.placeOfBirth,
+            // place_of_birth: formData.placeOfBirth,
+            birth_city: formData.birthCity,
+            birth_state: formData.birthState,
+            birth_district: formData.birthDistrict,
+            is_ps_gov_emp: formData.isPsGovEmp,
             education_qualification: formData.education_qualification,
             employment_type: formData.employment_type,
             organisation_name: formData.organisation_name,

@@ -6,6 +6,7 @@ interface FamilyDetailsRequestBody {
   mother_name: string;
   marital_status: string;
   spouse_name?: string;
+  is_ps_gov_emp: 0 | 1;
   emergency_contact_name: string;
   emergency_contact_mobile: string;
   emergency_contact_email: string;
@@ -68,6 +69,16 @@ export async function POST(request: NextRequest) {
       !body.spouse_name?.trim()
     ) {
       errors.spouse_name = ["Spouse name is required"];
+    }
+
+    if (
+      body.is_ps_gov_emp === undefined ||
+      body.is_ps_gov_emp === null ||
+      !["0", "1"].includes(String(body.is_ps_gov_emp))
+    ) {
+      errors.is_ps_gov_emp = [
+        "Please select whether your parent or spouse is a government employee.",
+      ];
     }
 
     // Emergency Contact Name

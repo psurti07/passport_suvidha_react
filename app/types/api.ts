@@ -34,7 +34,11 @@ export interface ProfileData {
   police_station_name: string;
   gender: string;
   date_of_birth: string;
-  place_of_birth: string;
+  // place_of_birth: string;
+  birth_city: string;
+  birth_state: string;
+  birth_district: string;
+  is_ps_gov_emp: boolean;
   nationality: string;
   payment_info_id: number | null;
   service_code: string;

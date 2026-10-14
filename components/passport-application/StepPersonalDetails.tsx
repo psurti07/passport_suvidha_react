@@ -79,7 +79,11 @@ const StepPersonalDetails = ({
     education_qualification: false,
     employment_type: false,
     policeStationName: false,
-    placeOfBirth: false,
+    // placeOfBirth: false,
+    birthCity: false,
+    birthState: false,
+    birthDistrict: false,
+    // isPsGovEmp: false,
     organisation_name: false,
   });
 
@@ -152,11 +156,32 @@ const StepPersonalDetails = ({
     employment_type: !(formData.employment_type || "").trim()
       ? "Employment Type is required"
       : "",
-    placeOfBirth: !formData.placeOfBirth.trim()
-      ? "Place of birth is required"
-      : /\d/.test(formData.placeOfBirth)
-        ? "Place of birth should not contain digits"
+    // placeOfBirth: !formData.placeOfBirth.trim()
+    //   ? "Place of birth is required"
+    //   : /\d/.test(formData.placeOfBirth)
+    //     ? "Place of birth should not contain digits"
+    //     : "",
+    birthCity: !(formData.birthCity || "").trim()
+      ? "Birth city is required"
+      : /\d/.test(formData.birthCity)
+        ? "Birth city should not contain digits"
         : "",
+    birthState: !(formData.birthState || "").trim()
+      ? "Birth state is required"
+      : /\d/.test(formData.birthState)
+        ? "Birth state should not contain digits"
+        : "",
+    birthDistrict: !(formData.birthDistrict || "").trim()
+      ? "Birth district is required"
+      : /\d/.test(formData.birthDistrict)
+        ? "Birth district should not contain digits"
+        : "",
+    // isPsGovEmp:
+    //   formData.isPsGovEmp === undefined ||
+    //   formData.isPsGovEmp === null ||
+    //   !["0", "1"].includes(String(formData.isPsGovEmp))
+    //     ? "Please select whether your parent or spouse is a government employee"
+    //     : "",
     organisation_name:
       formData.employment_type === "Government" &&
       !formData.organisation_name?.trim()
@@ -204,7 +229,11 @@ const StepPersonalDetails = ({
     !errors.dateOfBirth &&
     !errors.education_qualification &&
     !errors.employment_type &&
-    !errors.placeOfBirth &&
+    // !errors.placeOfBirth &&
+    !errors.birthCity &&
+    !errors.birthState &&
+    !errors.birthDistrict &&
+    // !errors.isPsGovEmp &&
     !errors.organisation_name &&
     !errors.isAddressPermanent &&
     !errors.permanentAddress &&
@@ -769,7 +798,8 @@ const StepPersonalDetails = ({
 
                 <motion.div variants={itemVariants} className="space-y-4">
                   <h3 className="text-lg font-medium">Personal Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6"> */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="gender">Gender</Label>
                       <Select
@@ -892,7 +922,8 @@ const StepPersonalDetails = ({
                         </p>
                       )}
                     </div>
-                    <div className="space-y-2">
+                  </div>
+                  {/* <div className="space-y-2">
                       <Label htmlFor="placeOfBirth">
                         Place of Birth (Village/Town/City)
                       </Label>
@@ -914,7 +945,205 @@ const StepPersonalDetails = ({
                           {errors.placeOfBirth}
                         </p>
                       )}
+                    </div> */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                    {/* Birth City */}
+                    <div className="space-y-2">
+                      <Label htmlFor="birthCity">
+                        Birth City / Village / Town
+                      </Label>
+                      <Input
+                        id="birthCity"
+                        name="birthCity"
+                        value={formData.birthCity || ""}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          setTouched((prev) => ({ ...prev, birthCity: true }))
+                        }
+                        placeholder="Enter birth city, village or town"
+                        className="modern-input focus-animation"
+                      />
+                      {touched.birthCity && errors.birthCity && (
+                        <p className="text-xs text-red-600 mt-1">
+                          {errors.birthCity}
+                        </p>
+                      )}
                     </div>
+
+                    {/* Birth District */}
+                    <div className="space-y-2">
+                      <Label htmlFor="birthDistrict">Birth District</Label>
+
+                      <Input
+                        id="birthDistrict"
+                        name="birthDistrict"
+                        value={formData.birthDistrict || ""}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          setTouched((prev) => ({
+                            ...prev,
+                            birthDistrict: true,
+                          }))
+                        }
+                        placeholder="Enter birth district"
+                        className="modern-input focus-animation"
+                      />
+
+                      {touched.birthDistrict && errors.birthDistrict && (
+                        <p className="mt-1 text-xs text-red-600">
+                          {errors.birthDistrict}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Birth State */}
+                    <div className="space-y-2">
+                      <Label htmlFor="birthState">Birth State</Label>
+
+                      <Select
+                        value={formData.birthState || ""}
+                        onValueChange={(value) => {
+                          handleSelectChange("birthState", value);
+
+                          if (!touched.birthState) {
+                            setTouched((prev) => ({
+                              ...prev,
+                              birthState: true,
+                            }));
+                          }
+                        }}
+                      >
+                        <SelectTrigger
+                          id="birthState"
+                          className="modern-input focus-animation w-full"
+                        >
+                          <SelectValue placeholder="Select birth state" />
+                        </SelectTrigger>
+
+                        <SelectContent className="max-h-[200px] overflow-y-auto">
+                          <SelectItem value="Andaman and Nicobar Islands">
+                            Andaman and Nicobar Islands
+                          </SelectItem>
+                          <SelectItem value="Andhra Pradesh">
+                            Andhra Pradesh
+                          </SelectItem>
+                          <SelectItem value="Arunachal Pradesh">
+                            Arunachal Pradesh
+                          </SelectItem>
+                          <SelectItem value="Assam">Assam</SelectItem>
+                          <SelectItem value="Bihar">Bihar</SelectItem>
+                          <SelectItem value="Chandigarh">Chandigarh</SelectItem>
+                          <SelectItem value="Chhattisgarh">
+                            Chhattisgarh
+                          </SelectItem>
+                          <SelectItem value="Dadra and Nagar Haveli and Daman and Diu">
+                            Dadra and Nagar Haveli and Daman and Diu
+                          </SelectItem>
+                          <SelectItem value="Delhi">Delhi</SelectItem>
+                          <SelectItem value="Goa">Goa</SelectItem>
+                          <SelectItem value="Gujarat">Gujarat</SelectItem>
+                          <SelectItem value="Haryana">Haryana</SelectItem>
+                          <SelectItem value="Himachal Pradesh">
+                            Himachal Pradesh
+                          </SelectItem>
+                          <SelectItem value="Jammu and Kashmir">
+                            Jammu and Kashmir
+                          </SelectItem>
+                          <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+                          <SelectItem value="Karnataka">Karnataka</SelectItem>
+                          <SelectItem value="Kerala">Kerala</SelectItem>
+                          <SelectItem value="Ladakh">Ladakh</SelectItem>
+                          <SelectItem value="Lakshadweep">
+                            Lakshadweep
+                          </SelectItem>
+                          <SelectItem value="Madhya Pradesh">
+                            Madhya Pradesh
+                          </SelectItem>
+                          <SelectItem value="Maharashtra">
+                            Maharashtra
+                          </SelectItem>
+                          <SelectItem value="Manipur">Manipur</SelectItem>
+                          <SelectItem value="Meghalaya">Meghalaya</SelectItem>
+                          <SelectItem value="Mizoram">Mizoram</SelectItem>
+                          <SelectItem value="Nagaland">Nagaland</SelectItem>
+                          <SelectItem value="Odisha">Odisha</SelectItem>
+                          <SelectItem value="Puducherry">Puducherry</SelectItem>
+                          <SelectItem value="Punjab">Punjab</SelectItem>
+                          <SelectItem value="Rajasthan">Rajasthan</SelectItem>
+                          <SelectItem value="Sikkim">Sikkim</SelectItem>
+                          <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                          <SelectItem value="Telangana">Telangana</SelectItem>
+                          <SelectItem value="Tripura">Tripura</SelectItem>
+                          <SelectItem value="Uttar Pradesh">
+                            Uttar Pradesh
+                          </SelectItem>
+                          <SelectItem value="Uttarakhand">
+                            Uttarakhand
+                          </SelectItem>
+                          <SelectItem value="West Bengal">
+                            West Bengal
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      {touched.birthState && errors.birthState && (
+                        <p className="mt-1 text-xs text-red-600">
+                          {errors.birthState}
+                        </p>
+                      )}
+                    </div>
+                    {/* </div> */}
+
+                    {/* Parent / Spouse Government Employee */}
+                    {/* <div className="space-y-3">
+                      <Label>
+                        Is your parent/spouse a government employee?
+                      </Label>
+
+                      <div className="flex items-center gap-6">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="isPsGovEmp"
+                            value="1"
+                            checked={formData.isPsGovEmp === "1"}
+                            onChange={handleChange}
+                            onBlur={() =>
+                              setTouched((prev) => ({
+                                ...prev,
+                                isPsGovEmp: true,
+                              }))
+                            }
+                            className="h-4 w-4 accent-blue-600"
+                          />
+                          <span>Yes</span>
+                        </label>
+
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="isPsGovEmp"
+                            value="0"
+                            checked={formData.isPsGovEmp === "0"}
+                            onChange={handleChange}
+                            onBlur={() =>
+                              setTouched((prev) => ({
+                                ...prev,
+                                isPsGovEmp: true,
+                              }))
+                            }
+                            className="h-4 w-4 accent-blue-600"
+                          />
+                          <span>No</span>
+                        </label>
+                      </div>
+
+                      {touched.isPsGovEmp && errors.isPsGovEmp && (
+                        <p className="text-xs text-red-600 mt-1">
+                          {errors.isPsGovEmp}
+                        </p>
+                      )}
+                    </div> */}
                   </div>
                   <div
                     className={`grid grid-cols-1  gap-6 ${formData.employment_type === "Government" ? "md:grid-cols-3 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-2"}`}

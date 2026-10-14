@@ -562,8 +562,8 @@ export default function Services() {
                 </CardContent>
                 <CardFooter>
                   <Link href="/apply-passport" className="w-full">
-                    <Button className="w-full bg-navy hover:bg-navy/80 rounded-xl modern-button">
-                      Apply Normal
+                    <Button className="text-sm w-full bg-navy hover:bg-navy/80 rounded-xl modern-button">
+                      Get Normal Passport consultation
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -696,8 +696,8 @@ export default function Services() {
                 </CardContent>
                 <CardFooter>
                   <Link href="/apply-passport" className="w-full">
-                    <Button className="w-full bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button">
-                      Apply Tatkal
+                    <Button className="text-sm w-full bg-gradient-to-r from-teal to-navy text-white hover:opacity-90 rounded-xl modern-button">
+                      Get Tatkal Passport consultation
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -850,8 +850,8 @@ export default function Services() {
 
                 <CardFooter>
                   <Link href="/apply-passport" className="w-full">
-                    <Button className="w-full bg-navy text-white hover:opacity-90 rounded-xl modern-button">
-                      Apply for Reissue
+                    <Button className="text-sm w-full bg-navy text-white hover:opacity-90 rounded-xl modern-button">
+                      Get Re-Issue Passport consultation
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>

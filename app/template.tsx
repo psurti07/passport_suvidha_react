@@ -15,6 +15,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     "/test-apply-passport",
     "/cardoffer",
     "/staroffer",
+    "/bumperoffer",
     "/schedule-slot",
     "/schedule-success",
     "/process",

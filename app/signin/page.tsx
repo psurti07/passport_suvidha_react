@@ -293,14 +293,14 @@ export default function SignIn() {
           <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-navy/20 to-teal/20 blur-xl opacity-70"></div>
           <Card className="rounded-2xl border-0 shadow-xl overflow-hidden relative">
             <CardHeader className="pb-4 text-center">
-              <div className="mx-auto mb-2 flex h-24 w-24 items-center justify-center rounded-full bg-navy/10">
+              <div className="mx-auto mb-2 flex h-24 w-40 items-center justify-center rounded-full">
                 <div className="relative">
                   <Image
-                    src="/icon/passport-suvidha-icon.png"
+                    src="/logo/passport-suvidha.png"
                     alt="Passport Suvidha Logo"
-                    width={100}
+                    width={250}
                     height={100}
-                    className="h-24 w-24"
+                    // className="h-24 w-24"
                   />
                 </div>
               </div>
@@ -599,7 +599,7 @@ export default function SignIn() {
               </Link>
             </div> */}
             <div className="text-center">
-              © {new Date().getFullYear()} Boundless Passport Suvidha LLP. All
+              {new Date().getFullYear()} © Boundless Passport Suvidha LLP. All
               rights reserved.
             </div>
           </div>

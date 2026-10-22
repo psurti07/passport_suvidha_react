@@ -512,7 +512,7 @@ export default function PortalLayout({
 
           {/* Right: Copyright */}
           <div className="text-xs text-muted-foreground text-center md:text-right">
-            <p>© {new Date().getFullYear()} Boundless Passport Suvidha LLP</p>
+            <p> {new Date().getFullYear()} © Boundless Passport Suvidha LLP</p>
             <p>All rights reserved</p>
           </div>
         </div>

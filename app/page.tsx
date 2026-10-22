@@ -231,18 +231,18 @@ export default function Home() {
     if (!api) return;
 
     const updateCarousel = () => {
+      setCount(api.scrollSnapList().length);
       setCurrent(api.selectedScrollSnap());
     };
 
-    // Initial values
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap());
+    updateCarousel();
 
-    // Listen for slide changes
     api.on("select", updateCarousel);
+    api.on("reInit", updateCarousel);
 
     return () => {
       api.off("select", updateCarousel);
+      api.off("reInit", updateCarousel);
     };
   }, [api]);
 
@@ -327,13 +327,6 @@ export default function Home() {
         "I am vipul, I am very satisfied with Passport Suvidha’s services. The team was professional, supportive, and made the passport application process smooth and easy. Highly recommended.",
     },
     {
-      name: "Poonam Roy",
-      // location: "Mumbai",
-      rating: 5,
-      review:
-        "I used PassportSuvidha for both my new passport application and my father's passport renewal, and the experience was excellent. The team provided clear guidance on the required documents, helped with the application process, and ensured everything was completed correctly. Their prompt support and professional approach made the entire process smooth and hassle-free. I highly recommend PassportSuvidha for anyone looking for reliable passport assistance services.",
-    },
-    {
       name: "Krishna Dhola",
       // location: "Mumbai",
       rating: 3,
@@ -361,6 +354,13 @@ export default function Home() {
       review:
         "Great customer service of Passport Suvidha! The team was friendly and supportive throughout the process Hareshbhai, Tataniya",
     },
+    {
+      name: "Poonam Roy",
+      // location: "Mumbai",
+      rating: 5,
+      review:
+        "I used PassportSuvidha for both my new passport application and my father's passport renewal, and the experience was excellent. The team provided clear guidance on the required documents, helped with the application process, and ensured everything was completed correctly. Their prompt support and professional approach made the entire process smooth and hassle-free. I highly recommend PassportSuvidha for anyone looking for reliable passport assistance services.",
+    },
   ];
 
   return (
@@ -368,13 +368,16 @@ export default function Home() {
       {isWelcomeOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md shadow-lg">
-            {/* <h2 className="text-lg sm:text-xl font-semibold mb-3">
-        Welcome 👋
-      </h2> */}
+            <h2 className="text-lg sm:text-xl font-semibold mb-4">
+              Welcome 👋
+            </h2>
 
-            <p className="text-sm sm:text-base text-gray-600 mb-4 break-words">
-              {welcomeMessage}
-            </p>
+            <div
+              className="text-sm sm:text-base text-gray-600 mb-4 break-words welcome-message"
+              dangerouslySetInnerHTML={{
+                __html: welcomeMessage || "",
+              }}
+            />
 
             <button
               onClick={() => setIsWelcomeOpen(false)}
@@ -385,6 +388,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
       <main className="flex-1">
         <section className="w-full pb-12 sm:pb-16 md:pb-20 lg:pb-28 pt-6 sm:pb-8 md:pb-10 lg:pb-14 bg-gradient-to-b from-navy via-navy/90 to-navy/80 text-white relative overflow-hidden">
           <div className="blob-shape bg-teal/20 w-[300px] sm:w-[400px] md:w-[500px] h-[300px] sm:h-[400px] md:h-[500px] -left-32 sm:-left-48 md:-left-64 top-0"></div>
@@ -440,8 +444,8 @@ export default function Home() {
                 </div>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
                   Making Your
-                  <span className="text-gold">Passport Services</span> Digitally
-                  Seamless!
+                  <span className="text-gold"> Passport Services</span>{" "}
+                  Digitally Seamless!
                 </h1>
                 <p className="max-w-[600px] text-sm sm:text-base md:text-lg lg:text-xl text-white/80">
                   Be it Tatkal or Normal Passport, our online secure platform is
@@ -454,7 +458,7 @@ export default function Home() {
                       size="lg"
                       className="w-full sm:w-auto px-6 sm:px-8 bg-gradient-to-r from-gold to-gold/80 text-navy hover:opacity-90 rounded-full modern-button text-sm sm:text-base"
                     >
-                      Get passport consultation
+                      Get Passport Consultation
                     </Button>
                   </Link>
                   <Link href="/services" className="w-full sm:w-auto">
@@ -571,7 +575,7 @@ export default function Home() {
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Get Normal Passport consultation
+                        Get Normal Passport Consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>
@@ -605,7 +609,7 @@ export default function Home() {
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Get Tatkal Passport consultation
+                        Get Tatkal Passport Consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>
@@ -641,7 +645,7 @@ export default function Home() {
                       asChild
                     >
                       <Link href="/apply-passport">
-                        Get Re-Issue Passport consultation
+                        Get Re-Issue Passport Consultation
                         <ChevronRight className="ml-2 h-3 sm:h-4 w-3 sm:w-4" />
                       </Link>
                     </Button>
@@ -705,7 +709,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="text-lg sm:text-xl font-semibold text-navy">
-                      5k+ Satisfied Customers
+                      1.2+ Satisfied Customers
                     </h3>
                     <p className="text-sm sm:text-base text-muted-foreground">
                       We're growing big, day by day!

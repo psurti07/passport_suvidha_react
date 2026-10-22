@@ -384,7 +384,7 @@ const StepFamilyDetails = ({
               <div className="mt-6">
                 <CardTitle className="md:text-xl font-semibold tracking-tight text-xl flex items-center gap-2 gradient-heading">
                   <Phone className="h-5 w-5 text-navy" />
-                  Emergency Contact Details
+                  Family details for passport Use
                 </CardTitle>
               </div>
 

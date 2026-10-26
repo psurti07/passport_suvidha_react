@@ -22,7 +22,6 @@ import {
 import {
   Clock,
   FileText,
-  MapPin,
   Phone,
   Mail,
   ChevronRight,
@@ -37,6 +36,11 @@ import {
   Loader2,
   Newspaper,
   ArrowUpRight,
+  MapPin,
+  Pause,
+  Play,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -255,6 +259,130 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [api]);
 
+  const [customerStoriesApi, setCustomerStoriesApi] = useState<CarouselApi>();
+
+  const [customerStoriesCurrent, setCustomerStoriesCurrent] = useState(0);
+  const [customerStoriesCount, setCustomerStoriesCount] = useState(0);
+  const [customerStoriesPaused, setCustomerStoriesPaused] = useState(false);
+
+  useEffect(() => {
+    if (!customerStoriesApi) return;
+
+    const updateCustomerStories = () => {
+      setCustomerStoriesCurrent(customerStoriesApi.selectedScrollSnap());
+      setCustomerStoriesCount(customerStoriesApi.scrollSnapList().length);
+    };
+
+    updateCustomerStories();
+
+    customerStoriesApi.on("select", updateCustomerStories);
+    customerStoriesApi.on("reInit", updateCustomerStories);
+
+    return () => {
+      customerStoriesApi.off("select", updateCustomerStories);
+      customerStoriesApi.off("reInit", updateCustomerStories);
+    };
+  }, [customerStoriesApi]);
+
+  useEffect(() => {
+    if (
+      !customerStoriesApi ||
+      customerStoriesPaused ||
+      customerStoriesCount <= 1
+    ) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      customerStoriesApi.scrollNext();
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [customerStoriesApi, customerStoriesPaused, customerStoriesCount]);
+
+  const customerStories = [
+    {
+      id: "gopi-kato",
+      fullName: "Gopi Kato",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "West Siang",
+      state: "Arunachal Pradesh",
+      imageUrl: "/customers/gopi-kato.jpg",
+      imagePosition: "center 40%",
+    },
+    {
+      id: "supratik-nag",
+      fullName: "Supratik Nag",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Darjiling",
+      state: "West Bengal",
+      imageUrl: "/customers/supratik-nag.jpg",
+      imagePosition: "center 100%",
+    },
+    {
+      id: "jacob-paron",
+      fullName: "Jacob Paron",
+      service: "Tatkal Passport",
+      pages: 60,
+      city: "East Siang",
+      state: "Arunachal Pradesh",
+      imageUrl: "/customers/jacob-paron.jpg",
+      imagePosition: "center 30%",
+    },
+    {
+      id: "brajmohan-singh",
+      fullName: "Brajmohan Singh",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Hardoi",
+      state: "Uttar Pradesh",
+      imageUrl: "/customers/brajmohan-singh.jpg",
+      imagePosition: "center 15%",
+    },
+    {
+      id: "mugala-saul",
+      fullName: "Mugala Saul",
+      service: "Normal Passport",
+      pages: 36,
+      city: "KarimNagar",
+      state: "Telangana",
+      imageUrl: "/customers/mugala-saul.jpg",
+      imagePosition: "center 70%",
+    },
+    {
+      id: "jitendra-anand-jha",
+      fullName: "Jitendra Anand Jha",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Thane",
+      state: "Maharashtra",
+      imageUrl: "/customers/jitendra-anand-jha.jpg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "rajesh-kumar-palai",
+      fullName: "Rajesh Kumar Palai",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Cuttack",
+      state: "Odisha",
+      imageUrl: "/customers/rajesh-kumar-palai.jpg",
+      imagePosition: "center 50%",
+    },
+    {
+      id: "ankur",
+      fullName: "Ankur",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "North East Delhi",
+      state: "Delhi",
+      imageUrl: "/customers/ankur.jpg",
+      imagePosition: "center 35%",
+    },
+  ];
+
   const reviews = [
     {
       name: "Divya Patel",
@@ -366,25 +494,39 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
       {isWelcomeOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md shadow-lg">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+          <div className="flex max-h-[55vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white p-4 shadow-lg sm:p-5">
+            {/* Header */}
+            {/* <h2 className="mb-3 shrink-0 text-lg font-semibold text-navy sm:text-xl">
               Welcome 👋
-            </h2>
+            </h2> */}
 
+            {/* Scrollable message */}
+
+            {/* Scrollable message */}
             <div
-              className="text-sm sm:text-base text-gray-600 mb-4 break-words welcome-message"
+              className="welcome-message min-h-0 flex-1 overflow-y-auto break-words pr-2 text-sm leading-6 text-gray-600 sm:text-base
+    [&_a]:text-blue-600
+    [&_a]:underline
+    [&_a]:font-semibold
+    [&_a]:cursor-pointer
+    [&_a:hover]:text-blue-800
+    [&_a]:decoration-1
+    [&_a]:underline-offset-2"
               dangerouslySetInnerHTML={{
                 __html: welcomeMessage || "",
               }}
             />
 
-            <button
-              onClick={() => setIsWelcomeOpen(false)}
-              className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded-lg text-sm sm:text-base hover:bg-gray-800 transition"
-            >
-              Close
-            </button>
+            {/* Footer */}
+            <div className="mt-3 flex shrink-0 justify-end border-t border-gray-100 pt-3">
+              <button
+                onClick={() => setIsWelcomeOpen(false)}
+                className="rounded-lg bg-navy px-5 py-2 text-sm text-white transition hover:bg-teal"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -1975,8 +2117,200 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Review Section */}
+        {/* Customer Testimonials Section */}
         <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+          <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
+            {/* Heading */}
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="space-y-2">
+                <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl gradient-heading">
+                  Customer Stories
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Applicants across India have trusted us with their passports.
+                </p>
+              </div>
+            </div>
+
+            {/* Customer carousel */}
+            <Carousel
+              setApi={setCustomerStoriesApi}
+              opts={{
+                align: "start",
+                loop: true,
+                slidesToScroll: 1,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-0 sm:-ml-3">
+                {customerStories.map((customer, index) => {
+                  const isTatkal = customer.service.startsWith("Tatkal");
+
+                  return (
+                    <CarouselItem
+                      key={customer.id}
+                      className="basis-full pl-0 sm:basis-1/2 sm:pl-3 lg:basis-1/3 xl:basis-1/4"
+                    >
+                      <motion.article
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.4,
+                          delay: (index % 4) * 0.07,
+                        }}
+                        className="h-full rounded-[27px] border border-slate-200/90 bg-white p-[7px] shadow-[0_2px_8px_rgba(15,23,42,0.025)]"
+                      >
+                        {/* Customer photo */}
+                        <div className="relative aspect-[0.9] overflow-hidden rounded-[21px] bg-slate-100 sm:aspect-[0.85] lg:aspect-[0.78]">
+                          <img
+                            src={customer.imageUrl}
+                            alt={`${customer.fullName} with passport`}
+                            loading="lazy"
+                            style={{ objectPosition: customer.imagePosition }}
+                            className="h-full w-full object-cover"
+                          />
+
+                          {/* Service badge */}
+                          <span
+                            className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[10px] font-medium shadow-sm sm:text-[11px] ${
+                              isTatkal
+                                ? "bg-[#ffdf00] text-slate-950"
+                                : "bg-white text-[#07559b]"
+                            }`}
+                          >
+                            {customer.service} · {customer.pages} pages
+                          </span>
+                        </div>
+
+                        {/* Customer details */}
+                        <div className="px-2 pb-2 pt-4">
+                          <h3 className="truncate text-[16px] font-semibold leading-5 text-[#101c2e]">
+                            {customer.fullName}
+                          </h3>
+
+                          <div className="mt-1.5 flex items-start gap-1.5 text-[12px] leading-5 text-slate-500">
+                            <MapPin
+                              size={14}
+                              className="mt-0.5 shrink-0 text-[#1685d1]"
+                            />
+                            <span>
+                              {customer.city}, {customer.state}
+                            </span>
+                          </div>
+
+                          {/* Decorative passport-style text */}
+                          {/* <p
+                              aria-hidden="true"
+                              className="mt-4 overflow-hidden whitespace-nowrap font-mono text-[8px] tracking-[2px] text-slate-400"
+                            >
+                              {`P<IND${customer.fullName.replace(/[^a-z]/gi, "").toUpperCase()}<<<<<<<<<<<<`}
+                            </p> */}
+                        </div>
+                      </motion.article>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+            </Carousel>
+
+            {/* progress line */}
+            <div className="relative mt-5 h-[2px] overflow-hidden rounded-full bg-slate-200">
+              <motion.div
+                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#05377C] to-[#20C997]"
+                animate={{
+                  width: `${
+                    ((customerStoriesCurrent + 1) /
+                      Math.max(customerStoriesCount, 1)) *
+                    100
+                  }%`,
+                }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              />
+            </div>
+
+            {/* Dots and navigation */}
+            <div className="mt-4 flex items-center justify-between gap-4">
+              <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
+                {Array.from({ length: customerStoriesCount }).map(
+                  (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setCustomerStoriesPaused(true);
+                        customerStoriesApi?.scrollTo(index);
+                      }}
+                      aria-label={`Go to customer slide ${index + 1}`}
+                      aria-current={
+                        customerStoriesCurrent === index ? "true" : undefined
+                      }
+                      className={`h-2.5 shrink-0 rounded-full transition-all duration-300 ease-in-out ${
+                        customerStoriesCurrent === index
+                          ? "w-8 bg-gradient-to-r from-navy to-teal shadow-sm"
+                          : "w-2.5 bg-navy/20 hover:bg-teal/60"
+                      }`}
+                    />
+                  ),
+                )}
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2">
+                {/* Pause / Play */}
+                <button
+                  type="button"
+                  onClick={() => setCustomerStoriesPaused((value) => !value)}
+                  aria-label={
+                    customerStoriesPaused ? "Resume autoplay" : "Pause autoplay"
+                  }
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+      border border-navy/20 bg-white text-navy shadow-sm
+      transition-all duration-300
+      hover:border-teal hover:bg-gradient-to-r
+      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  {customerStoriesPaused ? (
+                    <Play size={16} />
+                  ) : (
+                    <Pause size={16} />
+                  )}
+                </button>
+
+                {/* Previous */}
+                <button
+                  type="button"
+                  onClick={() => customerStoriesApi?.scrollPrev()}
+                  aria-label="Previous customer stories"
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+      border border-navy/20 bg-white text-navy shadow-sm
+      transition-all duration-300
+      hover:border-teal hover:bg-gradient-to-r
+      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  <ArrowLeft size={19} />
+                </button>
+
+                {/* Next */}
+                <button
+                  type="button"
+                  onClick={() => customerStoriesApi?.scrollNext()}
+                  aria-label="Next customer stories"
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+      border border-navy/20 bg-white text-navy shadow-sm
+      transition-all duration-300
+      hover:border-teal hover:bg-gradient-to-r
+      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  <ArrowRight size={19} />
+                </button>
+              </div>
+            </div>
+            {/* </div> */}
+          </div>
+        </section>
+
+        {/* Review Section */}
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
@@ -2109,7 +2443,7 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">

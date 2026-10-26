@@ -20,6 +20,10 @@ import {
   Info,
   Star,
   AlertTriangle,
+  MapPin,
+  Play,
+  Pause,
+  ArrowRight,
 } from "lucide-react";
 import {
   Carousel,
@@ -167,6 +171,130 @@ const StepPassportType = ({
   itemVariants,
   windowSize,
 }: StepPassportTypeProps) => {
+  const [customerStoriesApi, setCustomerStoriesApi] = useState<CarouselApi>();
+
+  const [customerStoriesCurrent, setCustomerStoriesCurrent] = useState(0);
+  const [customerStoriesCount, setCustomerStoriesCount] = useState(0);
+  const [customerStoriesPaused, setCustomerStoriesPaused] = useState(false);
+
+  useEffect(() => {
+    if (!customerStoriesApi) return;
+
+    const updateCustomerStories = () => {
+      setCustomerStoriesCurrent(customerStoriesApi.selectedScrollSnap());
+      setCustomerStoriesCount(customerStoriesApi.scrollSnapList().length);
+    };
+
+    updateCustomerStories();
+
+    customerStoriesApi.on("select", updateCustomerStories);
+    customerStoriesApi.on("reInit", updateCustomerStories);
+
+    return () => {
+      customerStoriesApi.off("select", updateCustomerStories);
+      customerStoriesApi.off("reInit", updateCustomerStories);
+    };
+  }, [customerStoriesApi]);
+
+  useEffect(() => {
+    if (
+      !customerStoriesApi ||
+      customerStoriesPaused ||
+      customerStoriesCount <= 1
+    ) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      customerStoriesApi.scrollNext();
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [customerStoriesApi, customerStoriesPaused, customerStoriesCount]);
+
+  const customerStories = [
+    {
+      id: "gopi-kato",
+      fullName: "Gopi Kato",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "West Siang",
+      state: "Arunachal Pradesh",
+      imageUrl: "/customers/gopi-kato.jpg",
+      imagePosition: "center 40%",
+    },
+    {
+      id: "supratik-nag",
+      fullName: "Supratik Nag",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Darjiling",
+      state: "West Bengal",
+      imageUrl: "/customers/supratik-nag.jpg",
+      imagePosition: "center 100%",
+    },
+    {
+      id: "jacob-paron",
+      fullName: "Jacob Paron",
+      service: "Tatkal Passport",
+      pages: 60,
+      city: "East Siang",
+      state: "Arunachal Pradesh",
+      imageUrl: "/customers/jacob-paron.jpg",
+      imagePosition: "center 30%",
+    },
+    {
+      id: "brajmohan-singh",
+      fullName: "Brajmohan Singh",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Hardoi",
+      state: "Uttar Pradesh",
+      imageUrl: "/customers/brajmohan-singh.jpg",
+      imagePosition: "center 15%",
+    },
+    {
+      id: "mugala-saul",
+      fullName: "Mugala Saul",
+      service: "Normal Passport",
+      pages: 36,
+      city: "KarimNagar",
+      state: "Telangana",
+      imageUrl: "/customers/mugala-saul.jpg",
+      imagePosition: "center 70%",
+    },
+    {
+      id: "jitendra-anand-jha",
+      fullName: "Jitendra Anand Jha",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Thane",
+      state: "Maharashtra",
+      imageUrl: "/customers/jitendra-anand-jha.jpg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "rajesh-kumar-palai",
+      fullName: "Rajesh Kumar Palai",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Cuttack",
+      state: "Odisha",
+      imageUrl: "/customers/rajesh-kumar-palai.jpg",
+      imagePosition: "center 50%",
+    },
+    {
+      id: "ankur",
+      fullName: "Ankur",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "North East Delhi",
+      state: "Delhi",
+      imageUrl: "/customers/ankur.jpg",
+      imagePosition: "center 35%",
+    },
+  ];
+
   const [services, setServices] = React.useState<any[]>([]);
 
   const [api, setApi] = useState<CarouselApi>();
@@ -356,8 +484,8 @@ const StepPassportType = ({
 
   return (
     <>
-      <div className="min-h-screen px-4 md:py-6 sm:px-6 lg:px-8">
-        <div className="w-full max-w-5xl mx-auto">
+      <div className="min-h-screen">
+        <div className="w-full pb-2 md:py-10 max-w-5xl mx-auto px-4 md:py-6 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-white md:p-6 shadow-xl">
             <CardHeader className="pb-6">
               <motion.div variants={itemVariants}>
@@ -545,79 +673,271 @@ const StepPassportType = ({
               </div>
             </div>
           </div> */}
+        </div>
+        {/* Customer Testimonials Section */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-navy/5 to-teal/5 py-8 md:py-10">
+          <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
+            {/* Heading */}
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="space-y-2">
+                <h2 className="text-3xl md:text-4xl font-bold gradient-heading">
+                  Customer Stories
+                </h2>
+                <p className="mt-3 text-muted-foreground text-xs lg:text-sm max-w-2xl mx-auto">
+                  Applicants across India have trusted us with their passports.
+                </p>
+              </div>
+            </div>
 
-          {/* Review Section */}
-          <section className="w-full py-10 md:py-16 bg-white relative overflow-hidden">
-            <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
-              <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-                {/* <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
+            {/* Customer carousel */}
+            <Carousel
+              setApi={setCustomerStoriesApi}
+              opts={{
+                align: "start",
+                loop: true,
+                slidesToScroll: 1,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-0 sm:-ml-3">
+                {customerStories.map((customer, index) => {
+                  const isTatkal = customer.service.startsWith("Tatkal");
+
+                  return (
+                    <CarouselItem
+                      key={customer.id}
+                      className="basis-full pl-0 sm:basis-1/2 sm:pl-3 lg:basis-1/3 xl:basis-1/4"
+                    >
+                      <motion.article
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.4,
+                          delay: (index % 4) * 0.07,
+                        }}
+                        className="h-full rounded-[27px] border border-slate-200/90 bg-white p-[7px] shadow-[0_2px_8px_rgba(15,23,42,0.025)]"
+                      >
+                        {/* Customer photo */}
+                        <div className="relative aspect-[0.9] overflow-hidden rounded-[21px] bg-slate-100 sm:aspect-[0.85] lg:aspect-[0.78]">
+                          <img
+                            src={customer.imageUrl}
+                            alt={`${customer.fullName} with passport`}
+                            loading="lazy"
+                            style={{ objectPosition: customer.imagePosition }}
+                            className="h-full w-full object-cover"
+                          />
+
+                          {/* Service badge */}
+                          <span
+                            className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[10px] font-medium shadow-sm sm:text-[11px] ${
+                              isTatkal
+                                ? "bg-[#ffdf00] text-slate-950"
+                                : "bg-white text-[#07559b]"
+                            }`}
+                          >
+                            {customer.service} · {customer.pages} pages
+                          </span>
+                        </div>
+
+                        {/* Customer details */}
+                        <div className="px-2 pb-2 pt-4">
+                          <h3 className="truncate text-base font-semibold leading-5 text-[#101c2e]">
+                            {customer.fullName}
+                          </h3>
+
+                          <div className="mt-1.5 flex items-start gap-1 text-sm leading-5 text-muted-foreground">
+                            <MapPin
+                              size={14}
+                              className="mt-0.5 shrink-0 text-[#1685d1]"
+                            />
+                            <span className="text-sm leading-5 text-muted-foreground">
+                              {customer.city}, {customer.state}
+                            </span>
+                          </div>
+
+                          {/* Decorative passport-style text */}
+                          {/* <p
+                                              aria-hidden="true"
+                                              className="mt-4 overflow-hidden whitespace-nowrap font-mono text-[8px] tracking-[2px] text-slate-400"
+                                            >
+                                              {`P<IND${customer.fullName.replace(/[^a-z]/gi, "").toUpperCase()}<<<<<<<<<<<<`}
+                                            </p> */}
+                        </div>
+                      </motion.article>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+            </Carousel>
+
+            {/* progress line */}
+            <div className="relative mt-5 h-[2px] overflow-hidden rounded-full bg-slate-200">
+              <motion.div
+                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#05377C] to-[#20C997]"
+                animate={{
+                  width: `${
+                    ((customerStoriesCurrent + 1) /
+                      Math.max(customerStoriesCount, 1)) *
+                    100
+                  }%`,
+                }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              />
+            </div>
+
+            {/* Dots and navigation */}
+            <div className="mt-4 flex items-center justify-between gap-4">
+              <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
+                {Array.from({ length: customerStoriesCount }).map(
+                  (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setCustomerStoriesPaused(true);
+                        customerStoriesApi?.scrollTo(index);
+                      }}
+                      aria-label={`Go to customer slide ${index + 1}`}
+                      aria-current={
+                        customerStoriesCurrent === index ? "true" : undefined
+                      }
+                      className={`h-2.5 shrink-0 rounded-full transition-all duration-300 ease-in-out ${
+                        customerStoriesCurrent === index
+                          ? "w-8 bg-gradient-to-r from-navy to-teal shadow-sm"
+                          : "w-2.5 bg-navy/20 hover:bg-teal/60"
+                      }`}
+                    />
+                  ),
+                )}
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2">
+                {/* Pause / Play */}
+                <button
+                  type="button"
+                  onClick={() => setCustomerStoriesPaused((value) => !value)}
+                  aria-label={
+                    customerStoriesPaused ? "Resume autoplay" : "Pause autoplay"
+                  }
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+                      border border-navy/20 bg-white text-navy shadow-sm
+                      transition-all duration-300
+                      hover:border-teal hover:bg-gradient-to-r
+                      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  {customerStoriesPaused ? (
+                    <Play size={16} />
+                  ) : (
+                    <Pause size={16} />
+                  )}
+                </button>
+
+                {/* Previous */}
+                <button
+                  type="button"
+                  onClick={() => customerStoriesApi?.scrollPrev()}
+                  aria-label="Previous customer stories"
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+                      border border-navy/20 bg-white text-navy shadow-sm
+                      transition-all duration-300
+                      hover:border-teal hover:bg-gradient-to-r
+                      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  <ArrowLeft size={19} />
+                </button>
+
+                {/* Next */}
+                <button
+                  type="button"
+                  onClick={() => customerStoriesApi?.scrollNext()}
+                  aria-label="Next customer stories"
+                  className="flex h-12 w-12 items-center justify-center rounded-full
+                      border border-navy/20 bg-white text-navy shadow-sm
+                      transition-all duration-300
+                      hover:border-teal hover:bg-gradient-to-r
+                      hover:from-navy hover:to-teal hover:text-white hover:shadow-md"
+                >
+                  <ArrowRight size={19} />
+                </button>
+              </div>
+            </div>
+            {/* </div> */}
+          </div>
+        </section>
+
+        {/* Review Section */}
+        <section className="w-full  px-4 md:py-6 sm:px-6 lg:px-8 py-8 md:py-10 bg-white relative overflow-hidden">
+          <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              {/* <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
               <span>Reviews</span>
             </div> */}
-                <div className="space-y-2">
-                  <h2 className="text-3xl md:text-4xl font-bold gradient-heading">
-                    What Our Users Say
-                  </h2>
-                  <p className="mt-3 text-muted-foreground text-xs lg:text-sm max-w-2xl mx-auto">
-                    See what people say about their passport application
-                    experience
-                  </p>
-                </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl md:text-4xl font-bold gradient-heading">
+                  What Our Users Say
+                </h2>
+                <p className="mt-3 text-muted-foreground text-xs lg:text-sm max-w-2xl mx-auto">
+                  See what people say about their passport application
+                  experience
+                </p>
               </div>
-              <div className="mx-auto max-w-5xl relative">
-                {/* Background Glow */}
-                <div className="absolute -inset-4 rounded-3xl " />
-                <Carousel
-                  setApi={setApi}
-                  opts={{ align: "start", loop: true }}
-                  className="relative w-full"
-                >
-                  <CarouselContent>
-                    {reviews.map((review, index) => (
-                      <CarouselItem
-                        key={index}
-                        className="basis-full md:basis-1/2"
+            </div>
+            <div className="mx-auto max-w-5xl relative">
+              {/* Background Glow */}
+              <div className="absolute -inset-4 rounded-3xl " />
+              <Carousel
+                setApi={setApi}
+                opts={{ align: "start", loop: true }}
+                className="relative w-full"
+              >
+                <CarouselContent>
+                  {reviews.map((review, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="basis-full md:basis-1/2"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 * index }}
+                        className="p-2"
                       >
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: 0.1 * index }}
-                          className="p-2"
-                        >
-                          <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
-                            {/* Gradient Top Border */}
-                            <div className="h-2 w-full bg-gradient-to-r from-teal to-navy" />
+                        <Card className="rounded-3xl border-0 shadow-lg overflow-hidden bg-white">
+                          {/* Gradient Top Border */}
+                          <div className="h-2 w-full bg-gradient-to-r from-teal to-navy" />
 
-                            <CardHeader>
-                              <div className="flex gap-1 mb-2">
-                                {Array(review.rating)
-                                  .fill(0)
-                                  .map((_, i) => (
-                                    <Star
-                                      key={i}
-                                      className="h-4 w-4 fill-gold text-gold"
-                                    />
-                                  ))}
-                              </div>
-                            </CardHeader>
+                          <CardHeader>
+                            <div className="flex gap-1 mb-2">
+                              {Array(review.rating)
+                                .fill(0)
+                                .map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className="h-4 w-4 fill-gold text-gold"
+                                  />
+                                ))}
+                            </div>
+                          </CardHeader>
 
-                            <CardContent className="space-y-4">
-                              <p className="italic text-muted-foreground leading-relaxed">
-                                "{review.review}"
+                          <CardContent className="space-y-4">
+                            <p className="italic text-muted-foreground leading-relaxed">
+                              "{review.review}"
+                            </p>
+
+                            <div>
+                              <p className="font-medium text-navy">
+                                {review.name}
                               </p>
-
-                              <div>
-                                <p className="font-medium text-navy">
-                                  {review.name}
-                                </p>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </motion.div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  {/* <CarouselPrevious
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {/* <CarouselPrevious
                         className="
                           left-0
                           h-12 w-12
@@ -647,19 +967,19 @@ const StepPassportType = ({
                           disabled:opacity-40
                         "
                       /> */}
-                </Carousel>
-                {/* Dots */}
-                <div className="mt-6 flex items-center justify-center gap-2">
-                  {Array.from({ length: count }).map((_, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => {
-                        api?.scrollTo(index);
-                      }}
-                      aria-label={`Go to slide ${index + 1}`}
-                      aria-current={current === index ? "true" : undefined}
-                      className={`
+              </Carousel>
+              {/* Dots */}
+              <div className="mt-6 flex items-center justify-center gap-2">
+                {Array.from({ length: count }).map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      api?.scrollTo(index);
+                    }}
+                    aria-label={`Go to slide ${index + 1}`}
+                    aria-current={current === index ? "true" : undefined}
+                    className={`
               h-2.5
               rounded-full
               transition-all
@@ -672,49 +992,49 @@ const StepPassportType = ({
                   : "w-2.5 bg-navy/20 hover:w-5 hover:bg-navy/40"
               }
             `}
-                    />
-                  ))}
-                </div>
+                  />
+                ))}
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="w-full pt-8 pb-10 md:pb-16 bg-white">
-            {/* <div className="container"> */}
-            <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="h-6 w-6 text-amber-600 shrink-0 mt-1" />
+        <section className="w-full pt-8 pb-10  px-4 md:py-6 sm:px-6 lg:px-8 md:pb-16 bg-white">
+          {/* <div className="container"> */}
+          {/* <div className="bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8"> */}
+          <div className="container mx-auto bg-amber-50 border border-amber-200 rounded-3xl p-4 sm:p-6 lg:p-8 max-w-5xl relative">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-6 w-6 text-amber-600 shrink-0 mt-1" />
 
-                <div>
-                  <h3 className="text-base sm:text-md font-semibold text-amber-900">
-                    Important Disclaimer
-                  </h3>
+              <div>
+                <h3 className="text-base sm:text-md font-semibold text-amber-900">
+                  Important Disclaimer
+                </h3>
 
-                  <p className="mt-3 text-xs sm:text-sm lg:text-sm text-amber-800 leading-6 sm:leading-7">
-                    Passport Suvidha is a private consultancy service and is not
-                    affiliated with, endorsed by, or operated by the Government
-                    of India, Passport Seva, or any government authority. We
-                    provide application assistance, document guidance,
-                    appointment support, and customer assistance services.
-                    Government fees, processing timelines, approval decisions,
-                    and passport issuance remain solely under the jurisdiction
-                    of the relevant government authorities.
-                    <br />
-                    <br /> पासपोर्ट सुविधा एक प्राइवेट कंसल्टेंसी सर्विस है और
-                    यह भारत सरकार, पासपोर्ट सेवा या किसी भी सरकारी अथॉरिटी से
-                    जुड़ी हुई, उनके द्वारा समर्थित या उनके द्वारा संचालित नहीं
-                    है। हम एप्लीकेशन में मदद, डॉक्यूमेंट से जुड़ी सलाह,
-                    अपॉइंटमेंट में सहायता और कस्टमर सपोर्ट जैसी सर्विस देते हैं।
-                    सरकारी फीस, प्रोसेसिंग का समय, मंज़ूरी के फ़ैसले और पासपोर्ट
-                    जारी करने का काम पूरी तरह से संबंधित सरकारी अथॉरिटी के
-                    अधिकार क्षेत्र में आता है।
-                  </p>
-                </div>
+                <p className="mt-3 text-xs sm:text-sm lg:text-sm text-amber-800 leading-6 sm:leading-7">
+                  Passport Suvidha is a private consultancy service and is not
+                  affiliated with, endorsed by, or operated by the Government of
+                  India, Passport Seva, or any government authority. We provide
+                  application assistance, document guidance, appointment
+                  support, and customer assistance services. Government fees,
+                  processing timelines, approval decisions, and passport
+                  issuance remain solely under the jurisdiction of the relevant
+                  government authorities.
+                  <br />
+                  <br /> पासपोर्ट सुविधा एक प्राइवेट कंसल्टेंसी सर्विस है और यह
+                  भारत सरकार, पासपोर्ट सेवा या किसी भी सरकारी अथॉरिटी से जुड़ी
+                  हुई, उनके द्वारा समर्थित या उनके द्वारा संचालित नहीं है। हम
+                  एप्लीकेशन में मदद, डॉक्यूमेंट से जुड़ी सलाह, अपॉइंटमेंट में
+                  सहायता और कस्टमर सपोर्ट जैसी सर्विस देते हैं। सरकारी फीस,
+                  प्रोसेसिंग का समय, मंज़ूरी के फ़ैसले और पासपोर्ट जारी करने का
+                  काम पूरी तरह से संबंधित सरकारी अथॉरिटी के अधिकार क्षेत्र में
+                  आता है।
+                </p>
               </div>
             </div>
-            {/* </div> */}
-          </section>
-        </div>
+          </div>
+          {/* </div> */}
+        </section>
       </div>
     </>
   );

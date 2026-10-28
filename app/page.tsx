@@ -1740,7 +1740,7 @@ export default function Home() {
         </section>
 
         {/* Locations Section */}
-        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+        {/* <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
@@ -1811,7 +1811,7 @@ export default function Home() {
                               className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white"
                             >
                               <div className="flex flex-col md:flex-row items-start justify-between gap-4">
-                                {/* Location Information */}
+                                Location Information
                                 <div className="space-y-1">
                                   <h4 className="font-medium text-navy">
                                     {location.name}
@@ -1848,7 +1848,7 @@ export default function Home() {
                                   </div>
                                 </div>
 
-                                {/* Directions Button */}
+                                Directions Button
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -1879,7 +1879,7 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      {/* <div className="space-y-4" id="locationsList">
+                      <div className="space-y-4" id="locationsList">
                         <div className="rounded-xl border p-4 transition-all hover:border-navy hover:shadow-md bg-white cursor-pointer">
                           <div className="flex flex-col md:flex-row items-start justify-between">
                             <div>
@@ -1949,10 +1949,10 @@ export default function Home() {
                             </Button>
                           </div>
                         </div>
-                      </div> */}
+                      </div>
                     </div>
                     <div className="relative overflow-hidden rounded-3xl flex-1">
-                      {/* Map */}
+                      Map
                       <div className="aspect-[4/3] md:aspect-auto md:h-full min-h-[250px] md:min-h-[450px]">
                         <iframe
                           src="https://maps.google.com/maps?q=Second%20Floor%20Shop%20No.%20227,%20Unique%20Square,%20Opposite%20Shubham%20K%20Mart,%20Singanpore%20Road,%20Singanpore,%20Surat,%20Gujarat%20395004&z=16&output=embed"
@@ -1962,7 +1962,7 @@ export default function Home() {
                         />
                       </div>
 
-                      {/* Open in Maps Button */}
+                      Open in Maps Button
                       <a
                         href="https://www.google.com/maps/search/?api=1&query=Second+Floor+Shop+No+227+Unique+Square+Opposite+Shubham+K+Mart+Singanpore+Road+Singanpore+Surat+Gujarat+395004"
                         target="_blank"
@@ -1986,12 +1986,12 @@ export default function Home() {
               </Card>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* <PassportLocator /> */}
 
         {/* FAQ Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5">
+        <section className="w-full py-20 md:py-24 bg-white">
           <div className="container px-4 md:px-6 relative">
             <div className="blob-shape bg-navy/10 w-[300px] h-[300px] right-0 top-0"></div>
             <div className="blob-shape bg-teal/10 w-[400px] h-[400px] left-0 bottom-0"></div>
@@ -2118,7 +2118,7 @@ export default function Home() {
         </section>
 
         {/* Customer Testimonials Section */}
-        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
             {/* Heading */}
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
@@ -2310,7 +2310,7 @@ export default function Home() {
         </section>
 
         {/* Review Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
@@ -2443,7 +2443,7 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">

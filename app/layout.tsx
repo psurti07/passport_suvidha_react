@@ -1,67 +1,36 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Toaster as SonnerToaster } from "sonner";
+import type { Metadata, Viewport } from 'next';
+import { Tracking } from '@/components/tracking/Tracking';
 
-import ScrollProgress from "@/components/ui/top-scroll";
-import Script from "next/script";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import FacebookPixel from "@/components/FacebookPixel";
-import GoogleTagManager from "@/components/GoogleTagManager";
+/**
+ * Root layout shared by both route groups:
+ *   app/(site)    — the redesigned pages (scoped stylesheet, redesign header/footer)
+ *   app/(legacy)  — the original application's pages (its own stylesheet, navbar/footer)
+ * It renders no styles or chrome of its own, so neither group affects the other.
+ * Tracking is mounted here once, for every page, and only when enabled (see .env.example).
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://passportsuvidha.com';
+const indexable = process.env.NEXT_PUBLIC_SITE_ENV === 'production';
 
-import { buildSeo } from "@/lib/buildSeo";
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  // Preview and staging deployments must never be indexed
+  robots: indexable ? undefined : { index: false, follow: false },
+};
 
-export async function generateMetadata() {
-  return buildSeo("home");
-}
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#00457E',
+};
 
-const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata: Metadata = {
-//   title: "Passport Assistance Services in India | New, Renewal & Tatkal Passport | PassportSuvidha",
-//   description: "Streamline your passport application process with PassportSuvidha. Fast, reliable, and professional passport services.",
-// }
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      {/* <!-- End Google Tag Manager --> */}
-      <body className={inter.className}>
-        <FacebookPixel />
-
-        <GoogleTagManager />
-
-        <ScrollProgress />
+    // The redesign's intro script adds classes to <html> before hydration
+    <html lang="en" suppressHydrationWarning>
+      <body>
         {children}
-        <SonnerToaster richColors position="top-right" />
-        <Script
-          src="https://sdk.cashfree.com/js/v3/cashfree.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "PassportSuvidha",
-              url: "https://passportsuvidha.com",
-              logo: "https://passportsuvidha.com/logo/ps-logo-1.png",
-              contactPoint: {
-                "@type": "ContactPoint",
-                telephone: "+91-6358292349",
-                contactType: "customer service",
-                areaServed: "IN",
-                availableLanguage: ["English", "Hindi"],
-              },
-            }),
-          }}
-        />
+        <Tracking />
       </body>
     </html>
   );

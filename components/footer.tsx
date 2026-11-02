@@ -311,7 +311,8 @@ export function Footer() {
           </div>
         </div>
       </footer>
-      {pathName !== "/apply-passport" && (
+      {/* Live chat: production only (NEXT_PUBLIC_ENABLE_CHAT=true), never on previews */}
+      {process.env.NEXT_PUBLIC_ENABLE_CHAT === "true" && pathName !== "/apply-passport" && (
         <Script
           id="messenger-widget-b"
           src="https://cdn.express-chat.com/website-bot.js"

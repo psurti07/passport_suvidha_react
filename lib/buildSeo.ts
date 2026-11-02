@@ -54,9 +54,10 @@ export async function buildSeo(slug: string): Promise<Metadata> {
       },
     },
 
+    // Only the production deployment is indexed (NEXT_PUBLIC_SITE_ENV=production)
     robots: {
-      index: true,
-      follow: true,
+      index: process.env.NEXT_PUBLIC_SITE_ENV === "production",
+      follow: process.env.NEXT_PUBLIC_SITE_ENV === "production",
     },
 
     alternates: {

@@ -21,6 +21,21 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  async headers() {
+    const rules = [
+      // Redesign assets (images, reels, fonts): file names are not hashed, so cache for a day
+      // and revalidate in the background for a week
+      {
+        source: '/assets/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }],
+      },
+    ]
+    // Preview and staging deployments must not be indexed
+    if (process.env.NEXT_PUBLIC_SITE_ENV !== 'production') {
+      rules.push({ source: '/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] })
+    }
+    return rules
+  },
 }
 
 mergeConfig(nextConfig, userConfig)

@@ -1,0 +1,239 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+  body {
+    @apply bg-paper font-sans text-body text-ink-700 antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply text-ink-900;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: rgb(var(--gold-400) / 0.45);
+    color: rgb(var(--ink-900));
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-radius: 6px;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+  .container-wide {
+    @apply mx-auto w-full max-w-wide px-4 sm:px-6 lg:px-8;
+  }
+  .section-y {
+    @apply py-14 lg:py-20;
+  }
+  .section-y-sm {
+    @apply py-12 lg:py-16;
+  }
+  .eyebrow {
+    @apply text-eyebrow uppercase text-navy-500;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Long-form reading (blog articles, legal pages). Content may come from a CMS. */
+  .prose-ps {
+    @apply text-[1.0625rem] leading-[1.8] text-ink-700 sm:text-[1.125rem];
+  }
+  .prose-ps > * + * {
+    @apply mt-6;
+  }
+  .prose-ps h2 {
+    @apply mt-14 scroll-mt-28 text-[1.625rem] font-bold leading-tight tracking-tight text-ink-900 sm:text-[1.875rem];
+  }
+  .prose-ps h3 {
+    @apply mt-10 scroll-mt-28 text-[1.25rem] font-semibold leading-snug text-ink-900;
+  }
+  .prose-ps h2 + *,
+  .prose-ps h3 + * {
+    @apply mt-4;
+  }
+  .prose-ps a {
+    @apply font-medium text-navy-700 underline decoration-navy-200 underline-offset-4 hover:decoration-navy-700;
+  }
+  .prose-ps strong {
+    @apply font-semibold text-ink-900;
+  }
+  .prose-ps ul,
+  .prose-ps ol {
+    @apply space-y-2 pl-6;
+  }
+  .prose-ps ul {
+    @apply list-disc marker:text-gold-500;
+  }
+  .prose-ps ol {
+    @apply list-decimal marker:font-semibold marker:text-navy-700;
+  }
+  .prose-ps blockquote {
+    @apply border-l-4 border-gold-400 bg-paper-warm py-4 pl-6 pr-4 text-[1.1875rem] font-medium italic leading-relaxed text-ink-900;
+  }
+  .prose-ps img {
+    @apply rounded-xl;
+  }
+  .prose-ps table {
+    @apply w-full border-collapse text-[0.9375rem];
+  }
+  .prose-ps th,
+  .prose-ps td {
+    @apply border-b border-line-200 px-3 py-2.5 text-left;
+  }
+
+  /* Horizontal snap carousel track (used by testimonials + video reels) */
+  .snap-track {
+    @apply flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .snap-track::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sheetIn {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Brand intro (components/layout/BrandIntro.tsx) ---------- */
+.intro-pending body {
+  background: rgb(var(--navy-900));
+}
+@keyframes introStreak {
+  0% { transform: scaleX(0); opacity: 0; }
+  30% { opacity: 1; }
+  70% { transform: scaleX(1); opacity: 0.9; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes introMark {
+  from { opacity: 0; transform: translateY(10px) scale(0.88); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes introLetter {
+  from { transform: translateY(110%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes introRule {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.intro-streak { animation: introStreak 900ms var(--ease-out) both; }
+.intro-fade { animation: fadeIn 600ms ease-out both; }
+.intro-mark { animation: introMark 650ms var(--ease-out) 350ms both; }
+.intro-letter { animation: introLetter 520ms var(--ease-out) calc(700ms + var(--i) * 35ms) both; }
+.intro-rule { animation: introRule 450ms var(--ease-out) 1250ms both; }
+
+@keyframes carouselProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes slowSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.animate-slow-spin { animation: slowSpin 90s linear infinite; }
+.animate-float { animation: floatY 6s ease-in-out infinite; }
+
+/*
+ * Entrance animations — applied by <Reveal>.
+ * Content is visible without JS (.no-js) and under reduced motion.
+ * Variants: up (default), fade, scale, image (soft clip reveal for media).
+ */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out),
+    clip-path 800ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal[data-variant='fade'] { transform: none; }
+.reveal[data-variant='scale'] { transform: scale(0.97); }
+.reveal[data-variant='slide'] { transform: translateX(24px); }
+.reveal[data-variant='image'] {
+  transform: scale(1.02);
+  clip-path: inset(6% 6% 6% 6% round 28px);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal[data-variant='image'].is-visible {
+  clip-path: inset(0 0 0 0 round 0);
+}
+/* While the brand intro is on screen, hold entrances so they play as it lifts. */
+.intro-active .reveal.is-visible {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .intro-active .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+  .animate-slow-spin,
+  .animate-float {
+    animation: none;
+  }
+}

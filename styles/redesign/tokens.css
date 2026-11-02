@@ -1,0 +1,83 @@
+/* ==========================================================================
+   Passport Suvidha — Design tokens
+   Brand navy (#00457E) and brand yellow (#FDDA00) are sampled from the
+   original logo. Everything else is derived from those two colours.
+   Colours are stored as "R G B" triplets so Tailwind can apply opacity.
+   ========================================================================== */
+:root {
+  /* Navy — primary */
+  --navy-50: 238 245 250;   /* #EEF5FA  soft blue */
+  --navy-100: 217 230 242;  /* #D9E6F2 */
+  --navy-200: 179 204 228;  /* #B3CCE4 */
+  --navy-300: 128 166 204;  /* #80A6CC */
+  --navy-500: 26 94 153;    /* #1A5E99 */
+  --navy-700: 0 69 126;     /* #00457E  logo navy */
+  --navy-800: 2 52 97;      /* #023461 */
+  --navy-900: 6 43 79;      /* #062B4F  dark navy */
+  --navy-950: 4 30 56;      /* #041E38  footer */
+
+  /* Gold — accent (never used as text colour on white) */
+  --gold-100: 255 248 204;  /* #FFF8CC */
+  --gold-400: 253 218 0;    /* #FDDA00  logo yellow */
+  --gold-500: 240 200 0;    /* #F0C800  hover */
+  --gold-700: 138 109 0;    /* #8A6D00  small text on white, AA */
+
+  /* Secondary */
+  --sky-500: 47 127 193;    /* #2F7FC1 */
+
+  /* Surfaces */
+  --paper: 255 255 255;
+  --paper-alt: 245 249 252; /* #F5F9FC  very light blue */
+  --parchment: 251 248 239; /* #FBF8EF */
+
+  /* Text */
+  --ink-900: 11 23 38;      /* #0B1726 */
+  --ink-700: 51 65 92;      /* #33415C */
+  --ink-500: 92 106 128;    /* #5C6A80 */
+  --ink-400: 99 111 131;    /* #636F83 — muted text, WCAG AA (≥4.5:1) on white and light surfaces */
+
+  /* Lines */
+  --line-200: 230 234 240;  /* #E6EAF0 */
+  --line-300: 213 220 229;  /* #D5DCE5 */
+
+  /* Feedback */
+  --success: 21 128 61;
+  --warning: 180 83 9;
+  --danger: 185 28 28;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  /* Shadows — navy-tinted, low opacity */
+  --shadow-xs: 0 1px 2px rgb(4 34 63 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(4 34 63 / 0.04), 0 4px 12px -2px rgb(4 34 63 / 0.06);
+  --shadow-md: 0 2px 4px rgb(4 34 63 / 0.04), 0 16px 32px -12px rgb(4 34 63 / 0.16);
+  --shadow-lg: 0 4px 8px rgb(4 34 63 / 0.06), 0 32px 64px -24px rgb(4 34 63 / 0.32);
+  --shadow-focus: 0 0 0 3px rgb(var(--paper)), 0 0 0 5px rgb(var(--navy-500));
+
+  /* Layout */
+  --container-content: 1160px;
+  --container-wide: 1240px;
+  --container-article: 720px;
+  --header-h: 92px;
+  /* Top info strip + floating header bar (responsive; read by Header/Layout) */
+  --topbar-h: 36px;
+  --hdrbar-h: 62px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 600ms;
+  --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
+}
+@media (min-width: 1024px) {
+  :root {
+    --topbar-h: 46px;
+    --hdrbar-h: 78px;
+  }
+}

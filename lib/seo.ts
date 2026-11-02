@@ -22,6 +22,8 @@ import { unstable_cache } from "next/cache";
 
 async function fetchSeo(slug: string) {
   //   console.log("Calling /seo API:", slug);
+  // No backend configured (local preview): use the defaults in buildSeo
+  if (!process.env.NEXT_PUBLIC_API_BASE_URL) return null;
 
   try {
     const { data } = await axiosServer.get(`/seo/${slug}`);

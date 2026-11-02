@@ -2,6 +2,8 @@ import axiosServer from "./axiosServer";
 import { unstable_cache } from "next/cache";
 
 async function fetchFacebookSettings() {
+  // No backend configured (local preview): nothing to load
+  if (!process.env.NEXT_PUBLIC_API_BASE_URL) return null;
   //   console.log("Calling /fb-pixel API");
 
   try {

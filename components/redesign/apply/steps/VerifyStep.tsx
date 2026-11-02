@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Loader2, MessageSquareText, PencilLine, RotateCw } from 'lucide-react-redesign';
 import { OtpInput } from '@/components/redesign/apply/OtpInput';
 import { StepFrame } from '@/components/redesign/apply/StepFrame';
-import { OTP_CONFIG } from '@/lib/redesign/config/applyFlow';
+import { APPLY_CONTENT } from '@/lib/redesign/config/applyContent';
+import { DEMO_OTP, OTP_CONFIG } from '@/lib/redesign/config/applyFlow';
 import { applicationAdapter } from '@/lib/redesign/services/applicationService';
 import { useSubmitLock, type ApplyWizard } from '@/lib/redesign/hooks/useApplyWizard';
 import { cn } from '@/lib/redesign/utils/cn';
@@ -153,6 +154,8 @@ export function VerifyStep({ wizard }: { wizard: ApplyWizard }) {
           {(status === 'error' || status === 'expired') && message && <span className="font-medium text-danger">{message}</span>}
           {status === 'idle' && message && <span className="text-ink-500">{message}</span>}
         </div>
+
+        {demo && <p data-demo-notice className="mt-2 text-center text-[0.75rem] text-ink-500">{APPLY_CONTENT.demoNotice.otp(DEMO_OTP.valid)}</p>}
 
         <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-small">
           {secondsLeft > 0 ? (

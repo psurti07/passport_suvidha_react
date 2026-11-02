@@ -60,7 +60,7 @@ export type ApplyResult<T = undefined> =
   | { ok: false; code: ApplyErrorCode; message: string; fieldErrors?: Record<string, string> };
 
 export interface ApplicationAdapter {
-  /** True for the local demo implementation; the UI shows a "Demo mode" banner. */
+  /** True for the local demo implementation; the UI shows short test notes beside OTP and payment. */
   readonly demo: boolean;
   sendOtp(basic: BasicDetails): Promise<ApplyResult<{ resendAfterSeconds: number }>>;
   /** Verifies the code and registers the applicant. Returns the step to continue from. */

@@ -15,14 +15,13 @@ export const REDESIGN_ROUTES = [
   '/faq',
   '/testimonials',
   '/blogs',
-  '/apply-new',
+  '/apply-passport',
   '/disclaimer',
   '/site-map',
 ] as const;
 
 /** Original application routes kept unchanged (see docs/ROUTE_COMPATIBILITY.md). */
 export const LEGACY_ROUTES = [
-  '/apply-passport',
   '/signin',
   '/check-application-status',
   '/feeCalculator',

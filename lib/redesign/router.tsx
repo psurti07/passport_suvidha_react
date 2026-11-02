@@ -18,6 +18,7 @@ import {
 } from 'next/navigation';
 import { forwardRef, useCallback, useEffect, useMemo, useState, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import { isRedesignPath } from '@/lib/redesign/routes';
+import { withAttribution } from '@/lib/redesign/attribution';
 
 type To = string;
 
@@ -27,7 +28,10 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
   children?: ReactNode;
 }
 
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link({ to, replace, ...rest }, ref) {
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link({ to: target, replace, ...rest }, ref) {
+  // Set after mount so the server and first client render match
+  const [to, setTo] = useState(target);
+  useEffect(() => setTo(withAttribution(target)), [target]);
   // External, mail/tel, new-tab and non-redesign routes: plain anchor
   if (/^(https?:|mailto:|tel:)/.test(to) || rest.target === '_blank' || !isRedesignPath(to)) {
     return <a ref={ref} href={to} {...rest} />;

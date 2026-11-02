@@ -151,6 +151,8 @@ export function ReviewStep({ wizard }: { wizard: ApplyWizard }) {
             {busy ? payCopy.busyLabel : total !== undefined ? payCopy.payLabel(inr.format(total)) : payCopy.payLabelNoAmount}
           </Button>
 
+          {applicationAdapter.demo && <p data-demo-notice className="mt-2 text-center text-[0.75rem] text-ink-500">{APPLY_CONTENT.demoNotice.payment}</p>}
+
           {alert && (
             <div
               role={alert.tone === 'error' ? 'alert' : 'status'}

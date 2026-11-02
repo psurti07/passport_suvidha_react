@@ -46,6 +46,12 @@ export const APPLY_CONTENT = {
     unavailable: 'Online payment is not available yet, so no payment has been taken. Please call us to complete your application.',
   },
 
+  /** Short notes beside the OTP and payment actions. Shown only while the demo adapter runs. */
+  demoNotice: {
+    otp: (code: string) => `Test code: ${code}. No SMS is sent in this version.`,
+    payment: 'Test version: this button does not take a payment.',
+  },
+
   edit: {
     notice: (title: string) => `You are editing ${title}. Your other details are kept.`,
     saveLabel: 'Save & return to review',

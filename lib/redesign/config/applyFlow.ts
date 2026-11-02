@@ -10,8 +10,9 @@ import { USE_MOCKS } from '@/lib/redesign/services/apiClient';
  * APPLY_DEMO_MODE — true on non-production deployments while no backend is connected
  * (NEXT_PUBLIC_USE_MOCKS / no NEXT_PUBLIC_API_BASE_URL). The journey then runs on a local
  * simulation: no OTP is sent and nothing leaves the browser. It is never real identity
- * verification. The page carries no demo banners; a small test-environment indicator
- * (components/redesign/apply/TestModeIndicator.tsx) gives the test codes instead.
+ * verification. The page carries no demo banners: short notes beside the OTP and payment
+ * actions, and a small test-environment indicator (components/redesign/apply/TestModeIndicator.tsx),
+ * say what is simulated.
  *
  * With NEXT_PUBLIC_SITE_ENV=production the simulation can never run: without a backend
  * the flow reports that online applications are unavailable (see applicationService.ts).

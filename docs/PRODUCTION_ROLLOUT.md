@@ -12,28 +12,22 @@
 
 ## Environment
 
-`.env.production` supplies the public production flags. The live server must still provide
-`NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_FRONTEND_URL`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`,
-`NEXT_PUBLIC_RAZORPAY_KEY` and `NEXT_PUBLIC_CASHFREE_MODE`. `NEXT_PUBLIC_*` values are fixed at build time, so
-build on the server or with these values present. Staging must override the flags: see `.env.example`.
+A default build is the frontend demo: Apply Now on the demo adapter, all pages `noindex`, tracking and chat off.
+**It must not replace the live site.** Going live needs the "Going live" block in `.env.example`, plus the
+original application's values. `NEXT_PUBLIC_*` values are fixed at build time, so they must be present when building.
 
 ## Apply Now
 
-| URL | What runs | Live site |
-|---|---|---|
-| `/apply-passport` | Original form, unchanged: real OTP, Razorpay, conversion events | Yes |
-| `/apply-new` | Approved new design, not connected to the backend | 404 unless `NEXT_PUBLIC_ENABLE_REDESIGN_APPLY=true` |
-
-Before the new flow replaces the original (see BACKEND_INTEGRATION.md): connect and test OTP, submission,
-basic-details update, fees, payment success, failure and callback, and conversion events. Then move the route to
-`/apply-passport`, and remove the original one.
+`/apply-passport` renders the approved 5-step flow. The original form is no longer routed.
+A production build never simulates: it uses the backend, or refuses each step when none is set.
+`docs/APPLY_NOW_DEVELOPER_HANDOVER.md` lists what the client's developer has to connect before release.
 
 ## Staging checks before production
 
 Run on a staging deployment, with the real backend and gateway test mode:
 
 1. Sign-in and portal, application status, fee calculator, offer pages and their payment responses.
-2. `/apply-passport`: OTP, all steps, payment success and failure, conversion event only after a verified payment.
+2. `/apply-passport`: OTP, all steps, edits from Review & Pay, resume link, payment success and failure, conversion event only after a verified payment.
 3. Contact form delivery (`/contact/enquiry`) and location search (`/locations`).
 4. GTM, GA4, Google Ads and Meta Pixel each fire once. Live chat loads.
 

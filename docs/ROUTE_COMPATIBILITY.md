@@ -23,7 +23,7 @@ reach every page untouched.
 | `/site-map` | Site map | Redesigned | Static |
 | any unknown URL | 404 | Redesigned 404 | — |
 
-**Update at integration:** `/apply-passport` currently serves the original flow, and the new design is at `/apply-new` (docs/PRODUCTION_ROLLOUT.md). The original form ignores `?service=`, so service pages do not preselect Tatkal until the new flow is connected.
+`?service=tatkal-passport` on `/apply-passport` preselects Tatkal (used by the service pages). Campaign parameters (`utm_*`, `gclid`, `fbclid` and similar) from the landing URL are carried to Apply Now links.
 
 ## Original routes kept unchanged — `app/(legacy)`
 

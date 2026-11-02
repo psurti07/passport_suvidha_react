@@ -11,9 +11,9 @@ The redesigned Passport Suvidha website, built on the original Next.js applicati
 
 Every existing URL is unchanged (docs/ROUTE_COMPATIBILITY.md).
 
-> **Apply Now.** `/apply-passport` is the original working flow (real OTP and payment). The approved
-> new Apply Now is at `/apply-new`, which is a 404 unless `NEXT_PUBLIC_ENABLE_REDESIGN_APPLY=true`, and is
-> not connected to the backend yet. See docs/PRODUCTION_ROLLOUT.md before deploying.
+> **Apply Now is a frontend-only demo** (test OTP `1234`, nothing is sent, no payment). A default build is also
+> `noindex` with tracking off, so it must not replace the live site. See
+> docs/APPLY_NOW_DEVELOPER_HANDOVER.md and docs/PRODUCTION_ROLLOUT.md.
 
 ## Requirements
 
@@ -83,6 +83,7 @@ docs/                   guides and reports (below)
 | [docs/TRACKING_INTEGRATION.md](docs/TRACKING_INTEGRATION.md) | GA4, Ads, GTM, Pixel, chat — what to check before enabling |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Environments, hosting, rollout |
 | [docs/QA_REPORT.md](docs/QA_REPORT.md) | Tests performed and results |
+| [docs/APPLY_NOW_DEVELOPER_HANDOVER.md](docs/APPLY_NOW_DEVELOPER_HANDOVER.md) | Demo OTP, adapters, form data, validation; connecting OTP, backend and payment |
 | [docs/PRODUCTION_ROLLOUT.md](docs/PRODUCTION_ROLLOUT.md) | **Read before deploying** — environment values, staging checks, rollback |
 
 ## Origin

@@ -88,4 +88,4 @@ docs/                   guides and reports (below)
 ## Origin
 
 The redesign was developed separately and integrated on top of this repository's history at
-commit `99f1cad795746c15b2edb000ecd821f77b84a5c3`.
+commit `09ffc780c41246fe44d5ec00fd47654150c8e47f`.

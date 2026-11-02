@@ -225,6 +225,72 @@ const requiredDocuments = [
   },
 ];
 
+const customerVideoReviews = [
+  {
+    id: 1,
+    name: "Jacob Paron",
+    city: "East Siang, Arunachal Pradesh",
+    service: "Tatkal Passport",
+    videoUrl: "/customers/videos/jacob-paron.mp4",
+  },
+  {
+    id: 2,
+    name: "Jugal Kishore",
+    city: "Jaipur, Rajasthan",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/jugal-kishore.mp4",
+  },
+  {
+    id: 3,
+    name: "Narendra Singh Chundawat",
+    city: "Rajsamand, Rajasthan",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/narendra-singh-chundawat.mp4",
+  },
+  {
+    id: 4,
+    name: "Rajesh Kumar Negi",
+    city: "Himachal Pradesh",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/rajesh-kumar-negi.mp4",
+  },
+  {
+    id: 5,
+    name: "Ashutosh Mahajan",
+    city: "Amritsar, Punjab",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/ashutosh-mahajan.mp4",
+  },
+  {
+    id: 6,
+    name: "Rasikbhai Kanani",
+    city: "Surat, Gujarat",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/rasikbhai-kanani.mp4",
+  },
+  {
+    id: 7,
+    name: "Patil Dayanand Santaram",
+    city: "Maharstra, Kolhapur",
+    service: "Tatkal Passport",
+    videoUrl: "/customers/videos/patil-dayanand-santaram.mp4",
+  },
+  {
+    id: 8,
+    name: "Monika Gohil",
+    city: "Surat, Gujarat",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/monika-gohil.mp4",
+  },
+  {
+    id: 9,
+    name: "Satyamoorthi Jeyaguru",
+    city: "Sivaganga, Tamil Nadu",
+    service: "Normal Passport",
+    videoUrl: "/customers/videos/satyamoorthi-jeyaguru.mp4",
+  },
+];
+
 const StepBasicInfo = ({
   formData,
   handleChange,
@@ -386,6 +452,136 @@ const StepBasicInfo = ({
       city: "North East Delhi",
       state: "Delhi",
       imageUrl: "/customers/ankur.jpg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "rajesh-kumar-negi",
+      fullName: "Rajesh kumar negi",
+      service: "Normal Passport",
+      pages: 60,
+      city: "Shimla",
+      state: "Himachal Pradesh",
+      imageUrl: "/customers/rajesh-kumar-negi.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "manohar-singh-naruka",
+      fullName: "Manohar Singh Naruka",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jodhpur",
+      state: "Rajasthan",
+      imageUrl: "/customers/manohar-singh-naruka.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "rahul-chourasiya",
+      fullName: "Rahul Chourasiya",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jodhpur",
+      state: "Rajasthan",
+      imageUrl: "/customers/rahul-chourasiya.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "ashutosh-mahajan",
+      fullName: "Ashutosh Mahajan",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Amritsar",
+      state: "Punjab",
+      imageUrl: "/customers/ashutosh-mahajan.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "mahesha-g",
+      fullName: "Mahesha G",
+      service: "Tatkal Passport",
+      pages: 60,
+      city: "Karantaka",
+      state: "Tumkur",
+      imageUrl: "/customers/mahesha-g.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "patil-dayanand-santaram",
+      fullName: "Patil Dayanand Santaram",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Maharstra",
+      state: "Kolhapur",
+      imageUrl: "/customers/patil-dayanand-santaram.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "lenkappa",
+      fullName: "Lenkappa",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Tumkur",
+      state: "Karnataka",
+      imageUrl: "/customers/lenkappa.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "amol-kamble",
+      fullName: "Amol Kamble",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Chandrapur",
+      state: "Maharashtra",
+      imageUrl: "/customers/amol-kamble.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "vikas-kumar",
+      fullName: "Vikas Kumar",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Lucknow",
+      state: "Uttar Pradesh",
+      imageUrl: "/customers/vikas-kumar.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "jugal-kishore",
+      fullName: "Jugal Kishore",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jaipur",
+      state: "Rajasthan",
+      imageUrl: "/customers/jugal-kishore.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "narendra-singh",
+      fullName: "Narendra Singh",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Rajsamand",
+      state: "Rajasthan",
+      imageUrl: "/customers/narendra-singh.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "mridul-dey",
+      fullName: "Mridul Dey",
+      service: "Normal Passport",
+      pages: 36,
+      city: "South Tripura",
+      state: "Tripura",
+      imageUrl: "/customers/mridul-dey.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "sahil-mehta",
+      fullName: "Sahil Mehta",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Shimla",
+      state: "Himachal Pradesh",
+      imageUrl: "/customers/sahil-mehta.jpeg",
       imagePosition: "center 35%",
     },
   ];
@@ -1113,7 +1309,7 @@ const StepBasicInfo = ({
       </div>
 
       {/* Customer Testimonials Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy/5 to-teal/5 mt-10 lg:mt-0 py-10 lg:py-16">
+      <section className="relative overflow-hidden bg-white mt-10 lg:mt-0 py-10 lg:py-16">
         <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
           {/* Heading */}
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
@@ -1302,8 +1498,108 @@ const StepBasicInfo = ({
         </div>
       </section>
 
+      {/* Customer Testimonials Section Video*/}
+      <section className="w-full py-10 lg:py-16 my-10 lg:my-0 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidde">
+        <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
+          {/* Section Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto mb-10 max-w-3xl text-center"
+          >
+            {/* <div className="mb-4 inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm font-medium text-navy">
+              Customer Testimonials
+            </div> */}
+
+            <h2 className="text-3xl md:text-4xl font-bold gradient-heading">
+              Happy Journeys
+            </h2>
+
+            <p className="mt-3 text-muted-foreground text-xs lg:text-sm max-w-2xl mx-auto">
+              Real customers, real experiences! See how Passport Suvidha made
+              passport applications easier and hassle-free.
+            </p>
+          </motion.div>
+
+          {/* Video Carousel */}
+          <Carousel
+            opts={{
+              align: "start",
+              loop: customerVideoReviews.length > 4,
+            }}
+            className="mx-auto w-full max-w-7xl"
+          >
+            <CarouselContent className="-ml-4 pb-3">
+              {customerVideoReviews.map((review, index) => (
+                <CarouselItem
+                  key={review.id}
+                  className="pl-4 basis-full sm:basis-1/3 lg:basis-1/4"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    className="h-full"
+                  >
+                    <Card className="h-full overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                      {/* Video */}
+                      <div className="relative h-[400px] w-full overflow-hidden bg-black sm:h-[300px] lg:h-[280px]">
+                        <video
+                          className="h-full w-full object-cover"
+                          controls
+                          playsInline
+                          preload="metadata"
+                          style={{
+                            objectPosition:
+                              review.videoPosition || "center center",
+                          }}
+                        >
+                          <source src={review.videoUrl} type="video/mp4" />
+                          Your browser does not support video playback.
+                        </video>
+                      </div>
+
+                      {/* Customer Details */}
+                      {/* <CardContent className="space-y-3 p-4"> */}
+                      <div className="space-y-3 p-4">
+                        <div className="min-w-0">
+                          <h3 className="truncate text-base font-bold leading-tight text-navy">
+                            {review.name}
+                          </h3>
+
+                          <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                            <MapPin className="h-4 w-4 shrink-0 text-teal" />
+                            <span className="truncate">{review.city}</span>
+                          </p>
+                        </div>
+
+                        <div>
+                          <span className="inline-flex max-w-full items-center rounded-full bg-teal/10 px-3 py-1.5 text-xs font-semibold text-teal">
+                            <span className="truncate">{review.service}</span>
+                          </span>
+                        </div>
+                      </div>
+                      {/* </CardContent> */}
+                    </Card>
+                  </motion.div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            {/* Navigation */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <CarouselPrevious className="static h-9 w-9 translate-y-0 border-navy/20 bg-white text-navy shadow-sm hover:bg-navy hover:text-white" />
+              <CarouselNext className="static h-9 w-9 translate-y-0 border-navy/20 bg-white text-navy shadow-sm hover:bg-navy hover:text-white" />
+            </div>
+          </Carousel>
+        </div>
+      </section>
+
       {/* How it work section */}
-      <section className="py-10 lg:py-16  bg-gradient-to-b from-white to-slate-50">
+      <section className="py-10 lg:py-16 my-10 lg:my-0 bg-gradient-to-b from-white to-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto mb-12 ">

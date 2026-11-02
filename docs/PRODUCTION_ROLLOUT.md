@@ -39,5 +39,5 @@ Run on a staging deployment, with the real backend and gateway test mode:
 
 ## Rollback
 
-The previous code is on branch `backup/pre-redesign-2026-11-02` (`99f1cad795746c15b2edb000ecd821f77b84a5c3`).
+The previous code is on branch `backup/pre-redesign-2026-11-02` (`09ffc780c41246fe44d5ec00fd47654150c8e47f`).
 Revert the integration commit on `main` and redeploy. Keep a copy of the server's current build before deploying.

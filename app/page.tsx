@@ -41,6 +41,8 @@ import {
   Play,
   ArrowLeft,
   ArrowRight,
+  ShieldCheckIcon,
+  UserRound,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,6 +51,8 @@ import Image from "next/image";
 import axiosServer from "@/lib/axiosServer";
 import ReactCountryFlag from "react-country-flag";
 import { Receipt } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
+import { useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -381,6 +385,146 @@ export default function Home() {
       imageUrl: "/customers/ankur.jpg",
       imagePosition: "center 35%",
     },
+    {
+      id: "rajesh-kumar-negi",
+      fullName: "Rajesh kumar negi",
+      service: "Normal Passport",
+      pages: 60,
+      city: "Shimla",
+      state: "Himachal Pradesh",
+      imageUrl: "/customers/rajesh-kumar-negi.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "manohar-singh-naruka",
+      fullName: "Manohar Singh Naruka",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jodhpur",
+      state: "Rajasthan",
+      imageUrl: "/customers/manohar-singh-naruka.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "rahul-chourasiya",
+      fullName: "Rahul Chourasiya",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jodhpur",
+      state: "Rajasthan",
+      imageUrl: "/customers/rahul-chourasiya.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "ashutosh-mahajan",
+      fullName: "Ashutosh Mahajan",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Amritsar",
+      state: "Punjab",
+      imageUrl: "/customers/ashutosh-mahajan.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "mahesha-g",
+      fullName: "Mahesha G",
+      service: "Tatkal Passport",
+      pages: 60,
+      city: "Karantaka",
+      state: "Tumkur",
+      imageUrl: "/customers/mahesha-g.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "patil-dayanand-santaram",
+      fullName: "Patil Dayanand Santaram",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Maharstra",
+      state: "Kolhapur",
+      imageUrl: "/customers/patil-dayanand-santaram.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "lenkappa",
+      fullName: "Lenkappa",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Tumkur",
+      state: "Karnataka",
+      imageUrl: "/customers/lenkappa.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "amol-kamble",
+      fullName: "Amol Kamble",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Chandrapur",
+      state: "Maharashtra",
+      imageUrl: "/customers/amol-kamble.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "vikas-kumar",
+      fullName: "Vikas Kumar",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Lucknow",
+      state: "Uttar Pradesh",
+      imageUrl: "/customers/vikas-kumar.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "jugal-kishore",
+      fullName: "Jugal Kishore",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Jaipur",
+      state: "Rajasthan",
+      imageUrl: "/customers/jugal-kishore.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "narendra-singh",
+      fullName: "Narendra Singh",
+      service: "Normal Passport",
+      pages: 36,
+      city: "Rajsamand",
+      state: "Rajasthan",
+      imageUrl: "/customers/narendra-singh.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "mridul-dey",
+      fullName: "Mridul Dey",
+      service: "Normal Passport",
+      pages: 36,
+      city: "South Tripura",
+      state: "Tripura",
+      imageUrl: "/customers/mridul-dey.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "sahil-mehta",
+      fullName: "Sahil Mehta",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Shimla",
+      state: "Himachal Pradesh",
+      imageUrl: "/customers/sahil-mehta.jpeg",
+      imagePosition: "center 35%",
+    },
+    {
+      id: "dinesh-beradiya",
+      fullName: "Dinesh Beradiya",
+      service: "Tatkal Passport",
+      pages: 36,
+      city: "Mumbai",
+      state: "Maharashtra",
+      imageUrl: "/customers/dinesh-beradiya.jpeg",
+      imagePosition: "center 35%",
+    },
   ];
 
   const reviews = [
@@ -490,6 +634,80 @@ export default function Home() {
         "I used PassportSuvidha for both my new passport application and my father's passport renewal, and the experience was excellent. The team provided clear guidance on the required documents, helped with the application process, and ensured everything was completed correctly. Their prompt support and professional approach made the entire process smooth and hassle-free. I highly recommend PassportSuvidha for anyone looking for reliable passport assistance services.",
     },
   ];
+
+  const customerVideoReviews = [
+    {
+      id: 1,
+      name: "Jacob Paron",
+      city: "East Siang, Arunachal Pradesh",
+      service: "Tatkal Passport",
+      videoUrl: "/customers/videos/jacob-paron.mp4",
+    },
+    {
+      id: 2,
+      name: "Jugal Kishore",
+      city: "Jaipur, Rajasthan",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/jugal-kishore.mp4",
+    },
+    {
+      id: 3,
+      name: "Narendra Singh Chundawat",
+      city: "Rajsamand, Rajasthan",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/narendra-singh-chundawat.mp4",
+    },
+    {
+      id: 4,
+      name: "Rajesh Kumar Negi",
+      city: "Himachal Pradesh",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/rajesh-kumar-negi.mp4",
+    },
+    {
+      id: 5,
+      name: "Ashutosh Mahajan",
+      city: "Amritsar, Punjab",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/ashutosh-mahajan.mp4",
+    },
+    {
+      id: 6,
+      name: "Rasikbhai Kanani",
+      city: "Surat, Gujarat",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/rasikbhai-kanani.mp4",
+    },
+    {
+      id: 7,
+      name: "Patil Dayanand Santaram",
+      city: "Maharstra, Kolhapur",
+      service: "Tatkal Passport",
+      videoUrl: "/customers/videos/patil-dayanand-santaram.mp4",
+    },
+    {
+      id: 8,
+      name: "Monika Gohil",
+      city: "Surat, Gujarat",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/monika-gohil.mp4",
+    },
+    {
+      id: 9,
+      name: "Satyamoorthi Jeyaguru",
+      city: "Sivaganga, Tamil Nadu",
+      service: "Normal Passport",
+      videoUrl: "/customers/videos/satyamoorthi-jeyaguru.mp4",
+    },
+  ];
+
+  const autoplayPlugin = useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    }),
+  );
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
@@ -665,7 +883,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         <section
           id="services"
           className="w-full py-12 sm:py-16 md:py-24 bg-white"
@@ -797,7 +1014,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Why PassportSuvidha Emerges as The Best? */}
         <section
           className="w-full py-12 sm:py-16 md:py-24 bg-gradient-to-br 
@@ -917,7 +1133,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Why Choose Us Section */}
         <section className="w-full py-20 md:py-24 bg-white">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw]">
@@ -1173,7 +1388,6 @@ export default function Home() {
             </Tabs>
           </div>
         </section>
-
         {/* Media Coverage Section */}
         <section className="w-full py-16 md:py-20 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw]">
@@ -1738,7 +1952,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Locations Section */}
         {/* <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
@@ -1987,9 +2200,7 @@ export default function Home() {
             </div>
           </div>
         </section> */}
-
         {/* <PassportLocator /> */}
-
         {/* FAQ Section */}
         <section className="w-full py-20 md:py-24 bg-white">
           <div className="container px-4 md:px-6 relative">
@@ -2116,7 +2327,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Customer Testimonials Section */}
         <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
@@ -2134,13 +2344,12 @@ export default function Home() {
 
             {/* Customer carousel */}
             <Carousel
-              setApi={setCustomerStoriesApi}
               opts={{
                 align: "start",
-                loop: true,
-                slidesToScroll: 1,
+                loop: customerVideoReviews.length > 4,
               }}
-              className="w-full"
+              plugins={[autoplayPlugin.current]}
+              className="mx-auto w-full max-w-7xl"
             >
               <CarouselContent className="-ml-0 sm:-ml-3">
                 {customerStories.map((customer, index) => {
@@ -2309,8 +2518,110 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Customer Testimonials Section Video*/}
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidde">
+          <div className="container mx-auto px-4 md:px-6 max-w-5xl ">
+            {/* Section Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mx-auto mb-10 max-w-3xl text-center"
+            >
+              <div className="mb-4 inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm font-medium text-navy">
+                Customer Testimonials
+              </div>
+
+              <h2 className="text-3xl font-bold tracking-tight gradient-heading sm:text-4xl md:text-5xl">
+                Happy Journeys
+              </h2>
+
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
+                Hear directly from our happy customers about their passport
+                application experience with Passport Suvidha.
+              </p>
+            </motion.div>
+
+            {/* Video Carousel */}
+
+            <Carousel
+              opts={{
+                align: "start",
+                loop: customerVideoReviews.length > 4,
+              }}
+              plugins={[autoplayPlugin.current]}
+              className="mx-auto w-full max-w-7xl"
+            >
+              <CarouselContent className="-ml-4 pb-3">
+                {customerVideoReviews.map((review, index) => (
+                  <CarouselItem
+                    key={review.id}
+                    className="pl-4 basis-full sm:basis-1/3 lg:basis-1/4"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="h-full"
+                    >
+                      <Card className="h-full overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        {/* Video */}
+                        <div className="relative h-[400px] w-full overflow-hidden bg-black sm:h-[300px] lg:h-[280px]">
+                          <video
+                            className="h-full w-full object-cover"
+                            controls
+                            playsInline
+                            preload="metadata"
+                            style={{
+                              objectPosition:
+                                review.videoPosition || "center center",
+                            }}
+                          >
+                            <source src={review.videoUrl} type="video/mp4" />
+                            Your browser does not support video playback.
+                          </video>
+                        </div>
+
+                        {/* Customer Details */}
+                        {/* <CardContent className="space-y-3 p-4"> */}
+                        <div className="space-y-3 p-4">
+                          <div className="min-w-0">
+                            <h3 className="truncate text-base font-bold leading-tight text-navy">
+                              {review.name}
+                            </h3>
+
+                            <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                              <MapPin className="h-4 w-4 shrink-0 text-teal" />
+                              <span className="truncate">{review.city}</span>
+                            </p>
+                          </div>
+
+                          <div>
+                            <span className="inline-flex max-w-full items-center rounded-full bg-teal/10 px-3 py-1.5 text-xs font-semibold text-teal">
+                              <span className="truncate">{review.service}</span>
+                            </span>
+                          </div>
+                        </div>
+                        {/* </CardContent> */}
+                      </Card>
+                    </motion.div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+
+              {/* Navigation */}
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <CarouselPrevious className="static h-9 w-9 translate-y-0 border-navy/20 bg-white text-navy shadow-sm hover:bg-navy hover:text-white" />
+                <CarouselNext className="static h-9 w-9 translate-y-0 border-navy/20 bg-white text-navy shadow-sm hover:bg-navy hover:text-white" />
+              </div>
+            </Carousel>
+          </div>
+        </section>
+
         {/* Review Section */}
-        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">
@@ -2441,9 +2752,8 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Contact Section */}
-        <section className="w-full py-20 md:py-24 bg-gradient-to-br from-navy/5 to-teal/5 relative overflow-hidden">
+        <section className="w-full py-20 md:py-24 bg-white relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-[100vw] relative">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-full bg-navy/5 px-4 py-1.5 text-sm text-navy">

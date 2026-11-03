@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -52,7 +52,6 @@ import axiosServer from "@/lib/axiosServer";
 import ReactCountryFlag from "react-country-flag";
 import { Receipt } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -268,6 +267,70 @@ export default function Home() {
   const [customerStoriesCurrent, setCustomerStoriesCurrent] = useState(0);
   const [customerStoriesCount, setCustomerStoriesCount] = useState(0);
   const [customerStoriesPaused, setCustomerStoriesPaused] = useState(false);
+
+  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
+  const activeVideoRef = useRef<number | null>(null);
+
+  const autoplayPlugin = useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    }),
+  );
+
+  const handleVideoPlay = (videoId: number) => {
+    // Mark the currently playing video.
+    activeVideoRef.current = videoId;
+
+    // Stop Happy Journeys carousel autoplay.
+    autoplayPlugin.current.stop();
+
+    // Pause every other video.
+    videoRefs.current.forEach((video, id) => {
+      if (id !== videoId && !video.paused) {
+        video.pause();
+      }
+    });
+  };
+
+  const handleVideoPause = (videoId: number) => {
+    // Ignore pause events from videos that are no longer active.
+    if (activeVideoRef.current !== videoId) return;
+
+    activeVideoRef.current = null;
+
+    // Resume carousel autoplay.
+    autoplayPlugin.current.play();
+  };
+
+  const handleVideoEnded = (videoId: number) => {
+    if (activeVideoRef.current !== videoId) return;
+
+    activeVideoRef.current = null;
+
+    // Resume carousel autoplay.
+    autoplayPlugin.current.play();
+  };
+
+  useEffect(() => {
+    if (!customerStoriesApi) return;
+
+    const updateCustomerStories = () => {
+      setCustomerStoriesCurrent(customerStoriesApi.selectedScrollSnap());
+      setCustomerStoriesCount(customerStoriesApi.scrollSnapList().length);
+    };
+
+    updateCustomerStories();
+
+    customerStoriesApi.on("select", updateCustomerStories);
+    customerStoriesApi.on("reInit", updateCustomerStories);
+
+    return () => {
+      customerStoriesApi.off("select", updateCustomerStories);
+      customerStoriesApi.off("reInit", updateCustomerStories);
+    };
+  }, [customerStoriesApi]);
 
   useEffect(() => {
     if (!customerStoriesApi) return;
@@ -700,14 +763,6 @@ export default function Home() {
       videoUrl: "/customers/videos/satyamoorthi-jeyaguru.mp4",
     },
   ];
-
-  const autoplayPlugin = useRef(
-    Autoplay({
-      delay: 2500,
-      stopOnInteraction: false,
-      stopOnMouseEnter: true,
-    }),
-  );
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
@@ -2570,10 +2625,20 @@ export default function Home() {
                         {/* Video */}
                         <div className="relative h-[400px] w-full overflow-hidden bg-black sm:h-[300px] lg:h-[280px]">
                           <video
+                            ref={(element) => {
+                              if (element) {
+                                videoRefs.current.set(review.id, element);
+                              } else {
+                                videoRefs.current.delete(review.id);
+                              }
+                            }}
                             className="h-full w-full object-cover"
                             controls
                             playsInline
                             preload="metadata"
+                            onPlay={() => handleVideoPlay(review.id)}
+                            onPause={() => handleVideoPause(review.id)}
+                            onEnded={() => handleVideoEnded(review.id)}
                             style={{
                               objectPosition:
                                 review.videoPosition || "center center",
